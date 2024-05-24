@@ -6,6 +6,8 @@ namespace ProjectOC.DataNS
     public struct Data
     {
         #region Data
+        [LabelText("数据"), ShowInInspector, ReadOnly]
+        private IDataObj data;
         [LabelText("数据ID"), ShowInInspector, ReadOnly]
         private string id;
         [LabelText("能否存入"), ShowInInspector, ReadOnly]
@@ -30,13 +32,15 @@ namespace ProjectOC.DataNS
         public bool CanOut => canOut;
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public int StorageAll => Storage + StorageReserve;
-        [LabelText("总存放量"), ShowInInspector, ReadOnly]
+        [LabelText("是否设置数据"), ShowInInspector, ReadOnly]
         public bool HaveSetData => !string.IsNullOrEmpty(id);
         #endregion
 
-        public Data(string id, int maxCapacity)
+        #region Constructor
+        public Data(IDataObj data, int maxCapacity)
         {
-            this.id = id;
+            id = data?.GetDataID() ?? "";
+            this.data = data;
             canIn = true;
             canOut = true;
             MaxCapacity = maxCapacity;
@@ -45,6 +49,19 @@ namespace ProjectOC.DataNS
             StorageReserve = 0;
             EmptyReserve = 0;
         }
+        public Data(int maxCapacity)
+        {
+            id = "";
+            data = null;
+            canIn = true;
+            canOut = true;
+            MaxCapacity = maxCapacity;
+            Storage = 0;
+            Empty = maxCapacity;
+            StorageReserve = 0;
+            EmptyReserve = 0;
+        }
+        #endregion
 
         #region Get
         public int GetAmount(DataOpType type)
@@ -66,28 +83,32 @@ namespace ProjectOC.DataNS
             }
             return 0;
         }
+        public IDataObj GetData() { return data; }
         #endregion
 
         #region Set
-        public void Clear()
+        public void Reset()
         {
             id = "";
+            data = null;
             Storage = 0;
             Empty = MaxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
         }
-
-        public void ChangeID(string id)
+        public void ChangeData(IDataObj data)
         {
-            Clear();
-            this.id = id ?? "";
+            Reset();
+            SetData(data);
+        }
+        private void SetData(IDataObj data)
+        {
+            id = data.GetDataID();
+            this.data = data;
         }
 
         public void ChangeCanIn(bool canIn) { this.canIn = canIn; }
-
         public void ChangeCanOut(bool canOut) { this.canOut = canOut; }
-
         public void ChangeAmount(DataOpType type, int amount)
         {
             switch (type)

@@ -49,7 +49,8 @@ AnimationClip:
     path: PlayerViewer
   m_ScaleCurves: []
   m_FloatCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -68,12 +69,14 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.31
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -87,7 +90,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -106,12 +111,14 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 2
+        value: 1.68
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -125,7 +132,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -144,7 +153,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -163,7 +174,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -182,7 +195,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -201,7 +216,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -220,7 +237,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -239,7 +258,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -258,7 +279,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -277,6 +300,7 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
+    flags: 16
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -292,6 +316,8 @@ AnimationClip:
       typeID: 4
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 697034049
       attribute: 4
@@ -299,6 +325,8 @@ AnimationClip:
       typeID: 4
       customType: 4
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 605858901
@@ -306,6 +334,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 1394318531
@@ -313,6 +343,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 3390229881
@@ -320,6 +352,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 3094524615
@@ -327,6 +361,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 1984117138
@@ -334,6 +370,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 200606012
@@ -341,6 +379,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 0
       attribute: 1107639624
@@ -348,6 +388,8 @@ AnimationClip:
       typeID: 143
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4151435452
       attribute: 605858901
@@ -355,6 +397,8 @@ AnimationClip:
       typeID: 136
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4151435452
       attribute: 1394318531
@@ -362,6 +406,8 @@ AnimationClip:
       typeID: 136
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4151435452
       attribute: 3390229881
@@ -369,6 +415,8 @@ AnimationClip:
       typeID: 136
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4151435452
       attribute: 3094524615
@@ -376,6 +424,8 @@ AnimationClip:
       typeID: 136
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     - serializedVersion: 2
       path: 4151435452
       attribute: 1984117138
@@ -383,6 +433,8 @@ AnimationClip:
       typeID: 136
       customType: 0
       isPPtrCurve: 0
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
     pptrCurveMapping: []
   m_AnimationClipSettings:
     serializedVersion: 2
@@ -405,7 +457,8 @@ AnimationClip:
     m_HeightFromFeet: 0
     m_Mirror: 0
   m_EditorCurves:
-  - curve:
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -424,12 +477,14 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: -0.31
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -443,7 +498,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -462,12 +519,14 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 2
+        value: 1.68
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -481,7 +540,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -500,7 +561,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -519,7 +582,9 @@ AnimationClip:
     path: PlayerViewer
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -538,7 +603,9 @@ AnimationClip:
     path: PlayerViewer
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -557,7 +624,9 @@ AnimationClip:
     path: PlayerViewer
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -576,7 +645,9 @@ AnimationClip:
     path: PlayerViewer
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -595,7 +666,9 @@ AnimationClip:
     path: PlayerViewer
     classID: 4
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -614,7 +687,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -633,7 +708,9 @@ AnimationClip:
     path: 
     classID: 143
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -652,7 +729,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -671,7 +750,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -690,7 +771,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -709,7 +792,9 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
-  - curve:
+    flags: 16
+  - serializedVersion: 2
+    curve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -728,6 +813,7 @@ AnimationClip:
     path: PlayerTerrainDetect
     classID: 136
     script: {fileID: 0}
+    flags: 16
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0

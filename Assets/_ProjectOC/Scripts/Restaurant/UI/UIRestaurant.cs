@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ProjectOC.RestaurantNS.UI.UIRestaurant;
 using System.Linq;
+using ML.Engine.Utility;
 
 namespace ProjectOC.RestaurantNS.UI
 {
@@ -62,7 +63,7 @@ namespace ProjectOC.RestaurantNS.UI
         private bool IsInitBtnList = false;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
             DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Restaurant").Find("Food").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
             DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, 
@@ -172,7 +173,7 @@ namespace ProjectOC.RestaurantNS.UI
             else if (CurMode == Mode.ChangeFood)
             {
                 CurMode = Mode.Restaurant;
-                Restaurant.ChangeData(DataIndex, FoodItemIDs[FoodIndex]);
+                Restaurant.ChangeData(DataIndex, new DataNS.ItemIDDataObj(FoodItemIDs[FoodIndex]));
             }
             Refresh();
         }

@@ -165,7 +165,7 @@ namespace ML.Engine.UI
             this.SBPosDic.Clear();
             this.TwoDimSelectedButtons.Clear();
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(this.readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
             if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
@@ -522,41 +522,6 @@ namespace ML.Engine.UI
             }
             OnFinishAdd?.Invoke();
         }
-
-        //同步变量
-        public class Synchronizer
-        {
-            private int CheckNum;
-            private int curCheckNum;
-            private Action OnAllFinish;
-            private System.Object lockObject = new System.Object();
-
-            private bool isTrigger;
-            public Synchronizer(int checkNum, Action OnAllFinish)
-            {
-                //Debug.Log("checkNum " + checkNum);
-                this.curCheckNum = 0;
-                this.CheckNum = checkNum;
-                this.OnAllFinish = OnAllFinish;
-                this.isTrigger = false;
-            }
-
-            public void Check()
-            {
-                lock(lockObject)
-                {
-                    ++curCheckNum;
-                    //Debug.Log("Check " + curCheckNum);
-                    if (isTrigger == false && curCheckNum == CheckNum)
-                    {
-                        OnAllFinish?.Invoke();
-                        isTrigger = true;
-                    }
-                }
-            }
-        }
-
-
         public void AddBtns(int num, string prefabpath, Action OnAllBtnAdded = null, List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
         {
             Synchronizer Checker = new Synchronizer(num, OnAllBtnAdded);

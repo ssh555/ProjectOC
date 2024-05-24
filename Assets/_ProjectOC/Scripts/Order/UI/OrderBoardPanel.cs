@@ -348,7 +348,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
             if(isNeedRefreshOrderUrgentDelegation)
             {
-                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2 , () =>
+                Synchronizer synchronizer = new Synchronizer(2 , () =>
                 {
                     this.OrderDelegationUIBtnListContainer.InitBtnlistInfo();
                     this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
@@ -403,7 +403,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             
             if(isNeedRefreshOrderNormalDelegation)
             {
-                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal).Count, () =>
+                Synchronizer synchronizer = new Synchronizer(OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal).Count, () =>
                 {
                     this.OrderDelegationUIBtnListContainer.InitBtnlistInfo();
                     this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
@@ -528,7 +528,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             if(isNeedRefreshAcceptedOrder)
             {
                 OrderManager.Instance.RefreshAcceptedList();
-                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(OrderManager.Instance.AcceptedOrders.Count, () =>
+                Synchronizer synchronizer = new Synchronizer(OrderManager.Instance.AcceptedOrders.Count, () =>
                 {
                     this.AcceptedOrderBtnList.InitBtnInfo();
                     this.AcceptedOrderBtnList.InitSelectBtn();

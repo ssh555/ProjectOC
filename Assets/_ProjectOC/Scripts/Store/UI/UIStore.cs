@@ -1,4 +1,5 @@
 using ML.Engine.TextContent;
+using ML.Engine.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -69,7 +70,7 @@ namespace ProjectOC.StoreNS.UI
         private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
             DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
             DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
@@ -94,7 +95,7 @@ namespace ProjectOC.StoreNS.UI
         protected void UpdateBtnInfo()
         {
             IsInitBtnList = false;
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
             if (DataBtnList.BtnCnt != Store.DataContainer.GetCapacity())
             {
                 DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
@@ -362,7 +363,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.ChangeData(DataIndex, ItemDatas[ItemIndex]);
+                Store.ChangeData(DataIndex, new DataNS.ItemIDDataObj(ItemDatas[ItemIndex]));
                 CurMode = Mode.Store;
             }
             else if (CurMode == Mode.ChangeIcon)
@@ -371,7 +372,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore);
+                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore as WorldStore);
                 UpdateBtnInfo();
             }
             Refresh();

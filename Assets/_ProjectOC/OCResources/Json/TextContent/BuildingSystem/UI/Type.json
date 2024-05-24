@@ -286,5 +286,12 @@
             "Chinese": "养殖生物繁育仪",
             "English": "CreatureBreed"
         }
+    },
+    {
+        "name": "Biostore",
+        "description": {
+            "Chinese": "生物仓库",
+            "English": "Biostore"
+        }
     }
 ]

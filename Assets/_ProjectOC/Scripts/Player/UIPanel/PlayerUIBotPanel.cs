@@ -270,10 +270,6 @@ namespace ProjectOC.Player.UI
                 this.UIBtnList.EnableBtnList();
                 isEnterSelect = false;
             }
-            
-
-
-            
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = null;
         }

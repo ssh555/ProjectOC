@@ -157,6 +157,8 @@ namespace ProjectOC.WorkerNS
             {
                 k = (int)(Config.SkillStdLowBound + standardDeviation * System.Math.Log(u * beta / (1 - u) * beta + (1 - u) * (beta / alpha)));
             }
+            k = System.Math.Min(k, 60);
+            k = System.Math.Max(k, 0);
             for (int i = 0; i < 6; i++)
             {
                 int min = System.Math.Max(k - (5 - i) * 10, 0);
