@@ -55,7 +55,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         base.Enter();
         this.MapLayerUIBtnList.EnableBtnList();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
     }
 
     #endregion
@@ -76,6 +76,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
             DetectMainIslandCurRegion();
             this.Refresh();
         };
+        //初始化主岛的位置
+        this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
     }
     protected override void UnregisterInput()
     {
@@ -230,7 +232,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     public struct IslandRudderPanelStruct
     {
         public KeyTip AcceptedOrderCancel;
-
     }
     protected override void InitTextContentPathData()
     {
@@ -248,7 +249,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         MapLayerUIBtnList.OnSelectButtonChanged += () =>
         {
             MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
-            DetectMainIslandCurRegion();
+            //进入新区域
+            MM.UnlockMapRegion(CurRegion);
             this.Refresh();
         };
     }

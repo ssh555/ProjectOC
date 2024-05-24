@@ -24,6 +24,7 @@ namespace ProjectOC.MineSystem
     [System.Serializable]
     public class MineSystemManager : ML.Engine.Manager.LocalManager.ILocalManager, ITickComponent
     {
+        #region BigMap
         [LabelText("大地图缩放比例"), ReadOnly, ShowInInspector]
         private float gridScale;
         public float GridScale {  get { return gridScale; } set {  gridScale = value; } }
@@ -63,22 +64,21 @@ namespace ProjectOC.MineSystem
         private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
         private int curRegionNum = -1;
         [ShowInInspector]
-        public int CurRegionNum { get { return curRegionNum; } }
+        public int CurRegionNum { get { return curRegionNum; }}
         [ShowInInspector]
         private int lastRegionNum = -1;
-
+        #endregion
 
         #region SmallMap
         [ShowInInspector]
         private MineralMapData mineralMapData;
         public MineralMapData MineralMapData { get { return mineralMapData; } }
-
-        private Dictionary<(int,int),MineralMapData> Region_LayerToMineralMapDataDic = new Dictionary<(int, int), MineralMapData> ();
-
+        /// <summary>
+        /// 记录所有生产节点的矿圈位置数据  小地图索引-> 该小地图的PlaceCircleData字典
+        /// </summary>
+        [ShowInInspector]
+        private Dictionary<string, PlaceCircleData> PlacedCircleDataDic = new Dictionary<string, PlaceCircleData>();
         #endregion
-
-
-
 
         #region Tick
         public int tickPriority { get; set; }
@@ -96,6 +96,7 @@ namespace ProjectOC.MineSystem
             }
         }
         #endregion
+
         #region Base
         SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
@@ -215,9 +216,7 @@ namespace ProjectOC.MineSystem
                             }
                         }
                     }
-
                     Texture2D texture2D = this.IndexToTextureDic[int.Parse(smd.name.Split('_')[1])];
-
                     MineralMapData mineralMapData = new MineralMapData(smd.name, MineDatas, texture2D);
                     mineralMapDatas.Add(smd.name, mineralMapData); 
                 }
@@ -366,13 +365,43 @@ namespace ProjectOC.MineSystem
         }
 
         /// <summary>
-        /// 
+        /// 加入矿圈数据
         /// </summary>
-        public List<MineData> GetMiningData()
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId)
         {
-            return new List<MineData>();
+            if(!this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curRegionNum, curMapLayerIndex));
+                this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+            }
+            else
+            {
+                this.PlacedCircleDataDic[ProNodeId].PlaceCirclePosition = CirclePos;
+            }
         }
 
+        /// <summary>
+        /// 生产节点销毁时调用 移除矿圈数据
+        /// </summary>
+        public void RemoveMineralCircleData(Vector2 CirclePos, string ProNodeId)
+        {
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                this.PlacedCircleDataDic.Remove(ProNodeId);
+            }
+        }
+
+        /// <summary>
+        /// 获取矿圈数据
+        /// </summary>
+        public PlaceCircleData GetMineralCircleData(string ProNodeId)
+        {
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                return this.PlacedCircleDataDic[ProNodeId];
+            }
+            return null;
+        }
         #endregion
     }
 }

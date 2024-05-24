@@ -67,8 +67,6 @@ namespace ProjectOC.MineSystem
             public string MineralMapID;
             [LabelText("采矿地图中的矿物数据"), ReadOnly, ShowInInspector]
             public List<MineData> MineDatas;
-            [LabelText("采矿地图中矿圈中心位置"), ReadOnly, ShowInInspector]
-            public Vector2 CirclePos;
             [LabelText("采矿地图背景素材"), ReadOnly, ShowInInspector]
             public Texture2D texture2D;
 
@@ -77,6 +75,28 @@ namespace ProjectOC.MineSystem
                 MineralMapID = mineralMapID;
                 MineDatas = mineDatas;
                 this.texture2D = texture2D;
+            }
+        }
+
+        /// <summary>
+        /// 所有生产节点的矿圈数据
+        /// </summary>
+        public class PlaceCircleData
+        {
+            [LabelText("所属生产节点ID"), ReadOnly, ShowInInspector]
+            public string ProNodeID;
+            [LabelText("小地图索引元组(区块号,层数号)"), ReadOnly, ShowInInspector]
+            public (int,int) SmallMapTuple;
+            [LabelText("采矿圈中心位置"), ReadOnly, ShowInInspector]
+            public Vector2 PlaceCirclePosition;
+            [LabelText("是否放置了采矿圈"), ReadOnly, ShowInInspector]
+            public bool isPlacedCircle;
+
+            public PlaceCircleData(string proNodeID,(int,int) smallMapTuple)
+            {
+                ProNodeID = proNodeID;
+                SmallMapTuple = smallMapTuple;
+                isPlacedCircle = true;
             }
         }
 

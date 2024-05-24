@@ -19,11 +19,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         this.cursorNavigation = this.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
         var Content = this.cursorNavigation.transform.Find("Scroll View").Find("Viewport").Find("Content");
         this.MainIsland = Content.Find("MainIsland").GetComponent<RectTransform>();
-        this.Target = Content.Find("Target").GetComponent<RectTransform>();
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
     }
-
     #endregion
 
     #region Override
@@ -39,7 +37,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         base.OnExit();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
-        ClearTemp();
     }                                                           
 
     protected override void Exit()
@@ -53,13 +50,11 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     {
         base.Enter();
         this.MapLayerUIBtnList.EnableBtnList();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
     }
-
     #endregion
 
     #region Internal
-    private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
     private void InitData()
     {
         GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
@@ -145,13 +140,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
 
     #region UI
-    #region temp
-    private void ClearTemp()
-    {
-/*        GameManager.DestroyObj(icon_genderfemaleSprite);
-        GameManager.DestroyObj(icon_gendermaleSprite);*/
-    }
-    #endregion
 
     #region UI对象引用
     private MineSystemManager MM => LocalGameManager.Instance.MineSystemManager;
@@ -159,7 +147,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     private GraphCursorNavigation cursorNavigation;
 
     private RectTransform MainIsland;
-    private RectTransform Target;
     private Slider slider;
 
     private Transform BigMapInstanceTrans;
