@@ -179,12 +179,12 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         #endregion
 
         #region TriggerCheck
-        protected new Collider collider;
+        protected Collider _collider;
         private void Awake()
         {
             this.ParentBPart = this.GetComponentInParent<IBuildingPart>();
-            this.collider = this.GetComponent<Collider>();
-            this.collider.isTrigger = true;
+            this._collider = this.GetComponent<Collider>();
+            this._collider.isTrigger = true;
 
         }
 
@@ -227,12 +227,12 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         private void OnEnable()
         {
-            this.collider.enabled = true;
+            this._collider.enabled = true;
         }
 
         private void OnDisable()
         {
-            this.collider.enabled = false;
+            this._collider.enabled = false;
         }
 
         private void OnDestroy()
@@ -247,7 +247,11 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         public void OnDrawGizmos()
         {
-            if (BuildingManager.Instance == null || !IsShowSocket)
+            if (BuildingManager.Instance == null
+#if UNITY_EDITOR
+                || !IsShowSocket
+#endif
+                )
             {
                 return;
             }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ProjectOC.MineSystem.MineSystemData;
+using static ProjectOC.Order.OrderManager;
 /// <summary>
 /// 采矿系统数据
 /// </summary>
@@ -40,18 +41,15 @@ namespace ProjectOC.MineSystem
             public string MapRegionID;
             [LabelText("是否为障碍物"), ReadOnly, ShowInInspector]
             public bool IsBlock;
-            [LabelText("区块位置"), ReadOnly, ShowInInspector]
-            public Vector2 position;
             [LabelText("区块地图层解锁数组"), ReadOnly, ShowInInspector]
             public bool[] isUnlockLayer;
             [LabelText("小地图数组"), ReadOnly, ShowInInspector]
             public string[] mineralDataID;
 
-            public MapRegionData(string mapRegionID, bool isBlock, Vector2 position)
+            public MapRegionData(string mapRegionID, bool isBlock)
             {
                 MapRegionID = mapRegionID;
                 IsBlock = isBlock;
-                this.position = position;
                 this.isUnlockLayer = new bool[MineSystemData.MAPDEPTH];
                 this.mineralDataID = new string[MineSystemData.MAPDEPTH];
             }
@@ -64,10 +62,16 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("采矿地图ID"), ReadOnly, ShowInInspector]
             public string MineralMapID;
-            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
-            public string PrefabPath;
+/*            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
+            public string PrefabPath;*/
             [LabelText("采矿地图中的矿物数据"), ReadOnly, ShowInInspector]
             public List<MineData> MineDatas;
+
+            public MineralMapData(string mineralMapID, List<MineData> mineDatas)
+            {
+                MineralMapID = mineralMapID;
+                MineDatas = mineDatas;
+            }
         }
 
         /// <summary>
@@ -76,11 +80,18 @@ namespace ProjectOC.MineSystem
         public class MineData
         {
             [LabelText("矿物ID"), ReadOnly, ShowInInspector]
-            public string MineralMapID;
+            public string MineID;
             [LabelText("矿物位置"), ReadOnly, ShowInInspector]
             public Vector2 position;
             [LabelText("剩余开采次数"), ReadOnly, ShowInInspector]
             public int RemainMineNum;
+
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum)
+            {
+                MineID = mineralMapID;
+                this.position = position;
+                RemainMineNum = remainMineNum;
+            }
         }
 
         /// <summary>
@@ -117,6 +128,18 @@ namespace ProjectOC.MineSystem
                     return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// 矿物表数据
+        /// </summary>
+        [System.Serializable]
+        public struct MineralTableData
+        {
+            public string ID;
+            public string Icon;
+            public List<ML.Engine.InventorySystem.Formula> MineEff;
+            public int MineNum;
         }
     }
 }

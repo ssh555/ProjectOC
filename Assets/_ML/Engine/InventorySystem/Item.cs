@@ -1,5 +1,5 @@
+using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 #if ENABLE_NETWORK && ML_NGO_SUPPROT
 using Unity.Netcode;
@@ -8,10 +8,7 @@ using Unity.Netcode;
 
 namespace ML.Engine.InventorySystem
 {
-    /// <summary>
-    /// 物品
-    /// </summary>
-    [System.Serializable]
+    [LabelText("物品"), System.Serializable]
     public abstract class Item
     {
         #region Field|Property
@@ -84,8 +81,6 @@ namespace ML.Engine.InventorySystem
             this.Amount -= amount;
         }
 
-
-
         /// <summary>
         /// 合并 Item
         /// </summary>
@@ -110,53 +105,30 @@ namespace ML.Engine.InventorySystem
             return new WorldItem.WorldItemData(amount);
         }
 
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+
         #region 按ID比较
         public class SortByID : IComparer<Item>
         {
             public int Compare(Item x, Item y)
             {
-                if (x == null)
+                if (x == null || y == null)
                 {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
+                    return (x == null).CompareTo((y == null));
                 }
-                if(y == null)
-                {
-                    return -1;
-                }
-
                 return string.Compare(x.ID, y.ID);
             }
-
-            //int IComparer<Fruit>.Compare(Fruit x, Fruit y)
-            //{
-            //    return x.Name.CompareTo(y.Name);
-            //}
         }
         public class Sort : IComparer<Item>
         {
             public int Compare(Item x, Item y)
             {
-                if (x == null)
+                if (x == null || y == null)
                 {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                    return (x == null).CompareTo((y == null));
                 }
                 var xs = ItemManager.Instance.GetSortNum(x.ID);
                 var ys = ItemManager.Instance.GetSortNum(y.ID);
@@ -164,10 +136,7 @@ namespace ML.Engine.InventorySystem
                 {
                     return xs.CompareTo(ys);
                 }
-                else
-                {
-                    return string.Compare(x.ID, y.ID);
-                }
+                return string.Compare(x.ID, y.ID);
             }
         }
         #endregion

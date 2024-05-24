@@ -53,6 +53,7 @@ namespace Animancer
             }
         }
 
+
         /************************************************************************************************************************/
 
         [SerializeField, Tooltip("The animation that will be played")]
