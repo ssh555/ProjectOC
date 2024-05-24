@@ -131,7 +131,7 @@ namespace ProjectOC.MineSystem
                 LoadBigMapTableData();
             });
 
-            //2 初始化初始化区块列表
+            //2 初始化区块列表
             synchronizerInOrder.AddCheckAction(2, () => {
                 LoadMapRegionData();
             });
@@ -145,7 +145,6 @@ namespace ProjectOC.MineSystem
             synchronizerInOrder.AddCheckAction(4, () => {
                 LoadSmallMapMineData();
             });
-
 
             synchronizerInOrder.StartExecution();
             #endregion
@@ -164,7 +163,6 @@ namespace ProjectOC.MineSystem
             curMapLayerIndex = 0;
             #endregion
         }
-
 
         public void OnRegister()
         {
