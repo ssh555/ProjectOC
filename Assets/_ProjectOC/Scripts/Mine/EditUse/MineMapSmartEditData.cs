@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using OpenCover.Framework.Model;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectOC.MineSystem
@@ -50,3 +50,6 @@ namespace ProjectOC.MineSystem
     }
 }
 
+
+
+#endif

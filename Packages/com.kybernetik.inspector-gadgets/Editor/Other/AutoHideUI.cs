@@ -206,7 +206,6 @@ You can turn this feature on/off via the Inspector Gadgets tab in the Edit/Prefe
             if (!FocusOnSelection)
             {
                 var rootRect = Selection.activeTransform.root.GetComponentInChildren<RectTransform>();
-
                 if (rootRect != null)
                 {
                     var corners = new Vector3[4];

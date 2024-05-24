@@ -1,12 +1,8 @@
 // Animancer // https://kybernetik.com.au/animancer // Copyright 2018-2023 Kybernetik //
 
 using Animancer.Units;
-using BehaviorDesigner.Editor;
-using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
