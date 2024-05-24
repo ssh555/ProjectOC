@@ -27,15 +27,17 @@ namespace ProjectOC.WorkerNS
             LevelCurrent = 0;
             ChangeLevel(level);
         }
-        public void AlterEff(int value)
+        public Skill AlterEff(int value)
         {
             Eff += value;
+            return this;
         }
-        public void AlterExpRate(int value)
+        public Skill AlterExpRate(int value)
         {
             ExpRate += value;
+            return this;
         }
-        public void AlterExp(int value)
+        public Skill AlterExp(int value)
         {
             int cur = (int)(Exp + value * ExpRate);
             cur = cur >= 0 ? cur : 0;
@@ -55,14 +57,16 @@ namespace ProjectOC.WorkerNS
                 }
             }
             LevelCurrent = cur;
+            return this;
         }
-        public void ChangeLevel(int level)
+        public Skill ChangeLevel(int level)
         {
             if (0 <= level && level <= 10)
             {
                 Exp = level > 0 ? ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel[level - 1] : 0;
                 LevelCurrent = level;
             }
+            return this;
         }
         public int GetEff()
         {

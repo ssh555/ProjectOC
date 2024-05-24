@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace ProjectOC.StoreNS
     public abstract class IStore : DataNS.DataContainerOwner
     {
         #region Data
-        [LabelText("世界仓库"), ReadOnly, HideInInspector]
+        [LabelText("世界仓库"), ReadOnly, ShowInInspector, NonSerialized]
         public IWorldStore WorldStore;
         [ShowInInspector, ReadOnly]
         public string UID { get { return WorldStore?.InstanceID ?? ""; } }

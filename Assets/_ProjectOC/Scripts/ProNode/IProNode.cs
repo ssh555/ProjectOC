@@ -9,7 +9,7 @@ namespace ProjectOC.ProNodeNS
     public abstract class IProNode : DataNS.DataContainerOwner, WorkerNS.IEffectObj
     {
         #region Data
-        [HideInInspector]
+        [ShowInInspector, NonSerialized]
         public IWorldProNode WorldProNode;
         [ReadOnly]
         public string ID = "";

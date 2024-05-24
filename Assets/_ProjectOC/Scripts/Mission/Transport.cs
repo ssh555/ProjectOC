@@ -1,6 +1,6 @@
 using Sirenix.OdinInspector;
-using UnityEngine;
 using ProjectOC.DataNS;
+using System;
 
 namespace ProjectOC.MissionNS
 {
@@ -10,11 +10,11 @@ namespace ProjectOC.MissionNS
         #region Data
         [LabelText("搬运的数据"), ReadOnly, ShowInInspector]
         public IDataObj Data;
-        [LabelText("搬运所属的任务"), HideInInspector]
+        [LabelText("搬运所属的任务"), ShowInInspector, NonSerialized]
         public MissionTransport Mission;
-        [LabelText("取货地"), HideInInspector]
+        [LabelText("取货地"), ShowInInspector, NonSerialized]
         public IMissionObj Source;
-        [LabelText("送货地"), HideInInspector]
+        [LabelText("送货地"), ShowInInspector, NonSerialized]
         public IMissionObj Target;
         #endregion
 
@@ -144,10 +144,6 @@ namespace ProjectOC.MissionNS
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
             Data = null;
-            Mission = null;
-            Source = null;
-            Target = null;
-            Worker = null;
         }
         #endregion
     }

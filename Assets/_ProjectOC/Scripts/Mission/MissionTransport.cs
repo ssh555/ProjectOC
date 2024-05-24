@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
 using ProjectOC.DataNS;
+using System;
 
 namespace ProjectOC.MissionNS
 {
@@ -11,9 +11,9 @@ namespace ProjectOC.MissionNS
         #region Data
         [LabelText("搬运数据"), ReadOnly]
         public IDataObj Data { get; private set; }
-        [LabelText("任务发起者"), HideInInspector]
+        [LabelText("任务发起者"), ShowInInspector, NonSerialized]
         public IMissionObj Initiator;
-        [LabelText("分配的搬运"), ReadOnly, ShowInInspector]
+        [LabelText("分配的搬运"), ReadOnly, ShowInInspector, NonSerialized]
         private List<Transport> Transports = new List<Transport>();
         [LabelText("搬运类型"), ReadOnly]
         public MissionTransportType Type;

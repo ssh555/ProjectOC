@@ -302,15 +302,15 @@ namespace ProjectOC.WorkerNS
                 flag = true;
                 if (effect.ParamStr.StartsWith("Eff"))
                 {
-                    Skill[skillType].AlterEff(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterEff(effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("ExpRate"))
                 {
-                    Skill[skillType].AlterExpRate(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterExpRate(effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("LevelCurrent"))
                 {
-                    Skill[skillType].ChangeLevel(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].ChangeLevel(effect.ParamInt);
                 }
                 else
                 {
@@ -383,15 +383,15 @@ namespace ProjectOC.WorkerNS
             {
                 if (effect.ParamStr.StartsWith("Eff"))
                 {
-                    Skill[skillType].AlterEff(-effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterEff(-effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("ExpRate"))
                 {
-                    Skill[skillType].AlterExpRate(-effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterExpRate(-effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("LevelCurrent"))
                 {
-                    Skill[skillType].ChangeLevel(0);
+                    Skill[skillType] = Skill[skillType].ChangeLevel(0);
                 }
             }
         }
@@ -600,7 +600,7 @@ namespace ProjectOC.WorkerNS
         }
         public void AlterExp(SkillType workType, int value)
         {
-            Skill[workType].AlterExp(value);
+            Skill[workType] = Skill[workType].AlterExp(value);
         }
         public void SettleTransport()
         {
@@ -639,7 +639,7 @@ namespace ProjectOC.WorkerNS
         #region Transport
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int WeightCurrent => Transport?.Weight ?? 0;
-        [LabelText("搬运"), ReadOnly]
+        [LabelText("搬运"), ReadOnly, NonSerialized]
         public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
         public bool HaveTransport { get => Transport != null && Transport.IsValid; }
