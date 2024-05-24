@@ -38,7 +38,7 @@ namespace ProjectOC.ProNodeNS
             MineTransThreshold = mineConfig.MineTransThreshold;
             DataContainer.OnDataChangeEvent -= OnContainerDataChangeEvent;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEventForMineData;
-            OnLevelChangeEvent += () => { RemoveMine(true); };
+            OnLevelChangeEvent += () => { RemoveMine(); (this as WorkerNS.IWorkerContainer).RemoveWorker(); };
         }
         public void ChangeMine(List<MineSystemData.MineData> mines)
         {
@@ -69,12 +69,11 @@ namespace ProjectOC.ProNodeNS
                 }
             }
         }
-        public void RemoveMine(bool removeWorker = false)
+        public void RemoveMine()
         {
             StopRun();
             ClearData();
             StackReserves.Clear();
-            if (removeWorker) { (this as WorkerNS.IWorkerContainer).RemoveWorker(); }
         }
         protected void OnContainerDataChangeEventForMineData()
         {
@@ -216,7 +215,8 @@ namespace ProjectOC.ProNodeNS
         }
         public void OnPositionChange(Vector3 differ)
         {
-            RemoveMine(true);
+            RemoveMine();
+            (this as WorkerNS.IWorkerContainer).RemoveWorker();
         }
         public void SetWorkerRelateData()
         {
