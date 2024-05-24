@@ -58,7 +58,7 @@ namespace ProjectOC.StoreNS
 
         public Dictionary<IStore, int> GetPutOutStore(string id, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
-            return GetPutOutStore(new DataNS.ItemIDDataObj(id), amount, priorityType = 0, judgeInteracting = false, judgeCanOut = false);
+            return GetPutOutStore(new DataNS.ItemIDDataObj(id), amount, priorityType, judgeInteracting, judgeCanOut);
         }
         /// <summary>
         /// 获取满足取出条件的仓库
