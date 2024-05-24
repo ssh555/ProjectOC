@@ -69,11 +69,11 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &5747549775640189457
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,8 +85,8 @@ GameObject:
   - component: {fileID: 8304890838943445439}
   - component: {fileID: 6177175568748305543}
   - component: {fileID: 6229577386683574168}
-  - component: {fileID: 4239802105467026612}
   - component: {fileID: 7446438347498083116}
+  - component: {fileID: 5971637760625806502}
   m_Layer: 7
   m_Name: Interact_Projector_Base1_1
   m_TagString: Untagged
@@ -163,29 +163,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4239802105467026612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5747549775640189457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  classification:
-    Category1: 1
-    Category2: 106
-    Category3: 100
-    Category4: 1
-  instanceID: 
-  canPlaceInPlaceMode: 1
-  mode: 0
-  baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
-  activeSocketIndex: 0
 --- !u!65 &7446438347498083116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -207,6 +184,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.775806, y: 2.227497, z: 4.775806}
   m_Center: {x: 0, y: 1.49, z: 0}
+--- !u!114 &5971637760625806502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5747549775640189457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ecedce2965864b45a9a23e75ce1be6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classification:
+    Category1: 1
+    Category2: 106
+    Category3: 100
+    Category4: 1
+  instanceID: 
+  canPlaceInPlaceMode: 1
+  mode: 0
+  baseRotation: {x: 0, y: 0, z: 0, w: 1}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
+  activeSocketIndex: 0
 --- !u!1 &7804245621464953898
 GameObject:
   m_ObjectHideFlags: 0

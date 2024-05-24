@@ -253,7 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 1
-    Category2: 102
+    Category2: 104
     Category3: 100
     Category4: 1
   instanceID: 
@@ -262,8 +262,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   activeSocketIndex: 0
-  Restaurant:
-    Transports: []
+  Restaurant: {}
 --- !u!1 &2719868293284502090
 GameObject:
   m_ObjectHideFlags: 0

@@ -639,29 +639,11 @@ namespace ProjectOC.WorkerNS
 
         #region Transport
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
-        public int WeightCurrent
-        {
-            get
-            {
-                int result = 0;
-                foreach (var kv in TransportDict)
-                {
-                    if (ManagerNS.LocalGameManager.Instance != null)
-                    {
-                        int weight = ManagerNS.LocalGameManager.Instance.ItemManager?.GetWeight(kv.Key) ?? 0;
-                        result += weight * kv.Value;
-                    }
-                }
-                return result;
-            }
-        }
+        public int WeightCurrent => Transport?.Weight ?? 0;
         [LabelText("搬运"), ReadOnly]
         public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
-        public bool HaveTransport { get => Transport != null && !string.IsNullOrEmpty(Transport.ID); }
-
-        [LabelText("搬运物品"), ReadOnly]
-        public Dictionary<string, int> TransportDict = new Dictionary<string, int>();
+        public bool HaveTransport { get => Transport != null && Transport.IsValid; }
         #endregion
 
         #region TimeStatus
@@ -731,7 +713,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否在生产节点值班"), ShowInInspector, ReadOnly]
         public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
-        public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
+        public ProNodeNS.IProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.IProNode : null;
         [LabelText("喵喵窝"), ShowInInspector, ReadOnly]
         public FeatureSeat FeatSeat => HasContainer(WorkerContainerType.Feature) ? GetContainer(WorkerContainerType.Feature) as FeatureSeat : null;
         #endregion

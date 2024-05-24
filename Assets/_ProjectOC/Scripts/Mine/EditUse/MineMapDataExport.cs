@@ -11,6 +11,52 @@ namespace ProjectOC.MineSystem
 {
     public class MineMapDataExport : MonoBehaviour
     {
+        #region 检测岛屿区域
+        [Button("检测岛屿区域")]
+        void CheckButtonRegion()
+        {
+            //Transform
+            RectTransform referenceRectTransform;
+            Transform island1, island2;
+            referenceRectTransform = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/NormalRegion").transform as RectTransform;
+            island1 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/IslandPos1").transform;
+            island2 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/IslandTransf/IslandPos2").transform;
+            
+            //策划大地图数据
+            string _jsonData = File.ReadAllText(bigMapDataJson);
+            int[,] data = JsonConvert.DeserializeObject<int[,]>(_jsonData);
+            
+            
+            GetTransformPos(island1,"Island1:  ");
+            GetTransformPos(island2,"Island2:  ");
+            
+            //从Transform转为局部坐标，从左下到右上 0,0 ->1,1
+            void GetTransformPos(Transform _transf,string debugText)
+            {
+                Vector3 worldPosition = _transf.position;
+                Vector2 localPosition;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(referenceRectTransform, worldPosition, null, out localPosition);
+                Vector2 referenceSize = referenceRectTransform.rect.size;
+                
+                Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
+                anchorPosition = new Vector2(anchorPosition.x,1-anchorPosition.y);
+                
+                //float [0-1]  -> int[0 - width-1]
+                int width = data.GetLength(0);
+                Vector2Int gridPos = new Vector2Int(
+                    Mathf.Clamp((int)(anchorPosition.x * (width)) , 0,width-1),
+                    Mathf.Clamp((int)(anchorPosition.y * (width)) , 0,width-1));
+                //注意GridPos的Y和X是一致的
+                Debug.Log($"{debugText}{anchorPosition} Region:({gridPos.y},{gridPos.x})   {data[gridPos.y,gridPos.x]}");
+            }
+
+            
+        }
+        
+
+        #endregion
+
+        #region 导出数据
         List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();
         Color dataTileColor = new Color(44, 46, 47);
         Color emptyTileColor = new Color(161, 162, 166);
@@ -28,7 +74,6 @@ namespace ProjectOC.MineSystem
         }
 
         private string smallMapFoldPath = "Assets/_ProjectOC/OCResources/MineSystem/MineEditorData";
-        private string smallMapDataNamePre = "SmallMapEditData_";
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
         private string bigMapPrefabPath =
             "Assets/_ProjectOC/OCResources/MineSystem/Prefabs/UIPrefab/Prefab_MineSystem_UI_BigMap_copy.prefab";
@@ -248,5 +293,7 @@ namespace ProjectOC.MineSystem
                 importer.SaveAndReimport();
             }
         }
+        
+        #endregion
     }
 }

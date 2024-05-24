@@ -69,6 +69,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -137,7 +139,7 @@ GameObject:
   - component: {fileID: 3007222747239964334}
   - component: {fileID: 6736365939124491212}
   - component: {fileID: 696786700147558266}
-  - component: {fileID: 7726414522168789734}
+  - component: {fileID: 1507794672651375385}
   m_Layer: 7
   m_Name: ProNode_DiveStation_Base1_1
   m_TagString: Untagged
@@ -233,7 +235,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.0696306, y: 0.9, z: 2.701781}
   m_Center: {x: 0.0021269917, y: 0.48947853, z: 0.12297082}
---- !u!114 &7726414522168789734
+--- !u!114 &1507794672651375385
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,7 +244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8001793843351765973}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
+  m_Script: {fileID: 11500000, guid: 9553bd0e193098f4496e2d2c54167a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -256,13 +258,4 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
-  powerSupportRange: 1.54
-  ProNode:
-    WorldProNode: {fileID: 0}
-    ID: 
-    Level: 0
-    TransportPriority: 0
-    Recipe:
-      ID: 
-    MissionTransports: []
-    LevelUpgradeEff: 
+  powerSupportRange: 1

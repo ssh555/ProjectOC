@@ -69,11 +69,11 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &4931678342748883029
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 1
-    Category2: 100
+    Category2: 102
     Category3: 100
     Category4: 1
   instanceID: 
@@ -262,12 +262,6 @@ MonoBehaviour:
     WorldStore: {fileID: 0}
     Name: 
     StoreType: 0
-    StoreDatas: []
-    Transports: []
     Level: 0
-    TransportPriority: 0
     IsInteracting: 0
     WorldIconItemID: 
-    LevelMax: 0
-    LevelStoreCapacity: 
-    LevelStoreDataCapacity: 

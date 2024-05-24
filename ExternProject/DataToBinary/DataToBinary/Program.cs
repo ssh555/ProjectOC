@@ -64,6 +64,8 @@ namespace ExcelToJson
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "Mineral.json", type = typeof(ProjectOC.MineSystem.MineralTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 5, BinaryFilePath = rootPath + "Creature.json", type = typeof(ML.Engine.InventorySystem.CreatureTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6, BinaryFilePath = rootPath + "WorkerName.json", type = typeof(ProjectOC.WorkerNS.WorkerNameTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7, BinaryFilePath = rootPath + "WorkerEcho.json", type = typeof(ProjectOC.WorkerNS.WorkerEchoTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });

@@ -122,6 +122,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -137,7 +139,7 @@ GameObject:
   - component: {fileID: 3598774503978828493}
   - component: {fileID: 9066234947163838391}
   - component: {fileID: 8788728738029621665}
-  - component: {fileID: 9164606221619924991}
+  - component: {fileID: 2841267494788649195}
   m_Layer: 7
   m_Name: ProNode_WaterPurifier_Base1_2
   m_TagString: Untagged
@@ -233,7 +235,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 23.752502, y: 7.06, z: 13.25293}
   m_Center: {x: -0.47326565, y: 3.7887342, z: 0.8263693}
---- !u!114 &9164606221619924991
+--- !u!114 &2841267494788649195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -242,7 +244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3691990917349564993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
+  m_Script: {fileID: 11500000, guid: 94ac4806da9258547bd7b8ca1c811d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -256,13 +258,4 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
-  powerSupportRange: 1.6
-  ProNode:
-    WorldProNode: {fileID: 0}
-    ID: 
-    Level: 0
-    TransportPriority: 0
-    Recipe:
-      ID: 
-    MissionTransports: []
-    LevelUpgradeEff: 
+  powerSupportRange: 1

@@ -69,6 +69,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -84,7 +86,7 @@ GameObject:
   - component: {fileID: 8939078480212709075}
   - component: {fileID: 5770002458550244193}
   - component: {fileID: 6664957848084872915}
-  - component: {fileID: 8900190668823453640}
+  - component: {fileID: 6286546160918173405}
   m_Layer: 7
   m_Name: ProNode_Kitchen_Base1_3
   m_TagString: Untagged
@@ -180,7 +182,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.26, y: 1.19, z: 1.3}
   m_Center: {x: 0.00048208237, y: 0.69, z: -0.00000029802322}
---- !u!114 &8900190668823453640
+--- !u!114 &6286546160918173405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,7 +191,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3096818339684634200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
+  m_Script: {fileID: 11500000, guid: 9553bd0e193098f4496e2d2c54167a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -203,16 +205,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
-  powerSupportRange: 1.47
-  ProNode:
-    WorldProNode: {fileID: 0}
-    ID: 
-    Level: 0
-    TransportPriority: 0
-    Recipe:
-      ID: 
-    MissionTransports: []
-    LevelUpgradeEff: 
+  powerSupportRange: 1
 --- !u!1 &4133946536498373094
 GameObject:
   m_ObjectHideFlags: 0

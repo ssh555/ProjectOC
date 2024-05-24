@@ -53,7 +53,7 @@ namespace ML.Engine.UI
             }
             set
             {
-                if(value is PanelButton)
+                if(value is CustomButton)
                 {
                     //绑定PanelButton 的按键
                 }
@@ -472,7 +472,6 @@ namespace ML.Engine.UI
         public void AddBtn(GameObject prefab, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, Action OnFinishAdd = null, string BtnText = null, bool NeedRefreshBtnInfo = true)
         {
             // 实例化
-            
             if(prefab.GetComponent<SelectedButton>() == null)
             {
                 prefab.transform.AddComponent<SelectedButton>();
@@ -528,41 +527,6 @@ namespace ML.Engine.UI
             }
             OnFinishAdd?.Invoke();
         }
-
-        //同步变量
-        public class Synchronizer
-        {
-            private int CheckNum;
-            private int curCheckNum;
-            private Action OnAllFinish;
-            private System.Object lockObject = new System.Object();
-
-            private bool isTrigger;
-            public Synchronizer(int checkNum, Action OnAllFinish)
-            {
-                //Debug.Log("checkNum " + checkNum);
-                this.curCheckNum = 0;
-                this.CheckNum = checkNum;
-                this.OnAllFinish = OnAllFinish;
-                this.isTrigger = false;
-            }
-
-            public void Check()
-            {
-                lock(lockObject)
-                {
-                    ++curCheckNum;
-                    //Debug.Log("Check " + curCheckNum);
-                    if (isTrigger == false && curCheckNum == CheckNum)
-                    {
-                        OnAllFinish?.Invoke();
-                        isTrigger = true;
-                    }
-                }
-            }
-        }
-
-
         public void AddBtns(int num, string prefabpath, Action OnAllBtnAdded = null, List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
         {
             Synchronizer Checker = new Synchronizer(num, OnAllBtnAdded);
@@ -620,7 +584,6 @@ namespace ML.Engine.UI
                             this.UIBtnListContainer?.RefreshEdge();
                         }
                     }
-                    
                     Checker.Check();
                 };
             }

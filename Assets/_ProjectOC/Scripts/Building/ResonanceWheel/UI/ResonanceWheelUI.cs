@@ -745,7 +745,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + WorkerCategory.Random));
             }
             );
-            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2, () => {isInitPool = true;Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(2, () => {isInitPool = true;Refresh(); });
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
                 synchronizer.Check();
