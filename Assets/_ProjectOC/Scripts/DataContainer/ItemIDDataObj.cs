@@ -8,10 +8,7 @@ namespace ProjectOC.DataNS
     {
         [LabelText("ŒÔ∆∑ID"), ReadOnly, ShowInInspector]
         private string ID;
-        public ItemIDDataObj(string id)
-        {
-            ID = id;
-        }
+        public ItemIDDataObj(string id) { ID = id; }
         public string GetDataID() { return ID ?? ""; }
         public int GetDataWeight()
         {
@@ -19,7 +16,7 @@ namespace ProjectOC.DataNS
         }
         public bool DataEquales(IDataObj other)
         {
-            return (other != null && other is ItemIDDataObj otherObj) ? ID == otherObj.ID : false;
+            return other != null && other is ItemIDDataObj otherObj && ID == otherObj.ID;
         }
         public void AddToPlayerInventory(int num)
         {

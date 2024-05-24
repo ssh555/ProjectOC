@@ -146,11 +146,13 @@ namespace ProjectOC.WorkerNS
             {
                 Seats[0].WorkerFeatureIDs.Add("");
                 Seats[0].FeatureIDs.Add(set2.ToList()[Random.Next(0, set2.Count)]);
+                Seats[0].IsChanged.Add(true);
             }
             if (cnt2 < 3 && set1.Count > 0)
             {
                 Seats[1].WorkerFeatureIDs.Add("");
                 Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count)]);
+                Seats[1].IsChanged.Add(true);
             }
             IsExchangeEnd = true;
             OnExchangeEndEvent?.Invoke();
@@ -246,6 +248,7 @@ namespace ProjectOC.WorkerNS
             if (CorrectType != FeatureCorrectType.Reverse)
             {
                 int index = Random.Next(0, Seat.FeatureIDs.Count);
+                Seat.IsChanged[index] = true;
                 string featID = Seat.FeatureIDs[index];
                 string newFeatID = "";
                 switch (CorrectType)
