@@ -21,16 +21,12 @@ namespace ProjectOC.StoreNS
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
-                foreach (var data in datas)
-                {
-                    StoreIconTableDict.Add(data.ID, data);
-                }
+                foreach (var data in datas) { StoreIconTableDict.Add(data.ID, data); }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
             {
-                StoreConfigAsset data = handle.Result;
-                Config = new StoreConfig(data.Config);
+                Config = new StoreConfig(handle.Result.Config);
             };
         }
         #endregion
@@ -62,34 +58,7 @@ namespace ProjectOC.StoreNS
 
         public Dictionary<IStore, int> GetPutOutStore(string id, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
-            Dictionary<IStore, int> result = new Dictionary<IStore, int>();
-            if (!string.IsNullOrEmpty(id) && amount > 0)
-            {
-                int resultAmount = 0;
-                List<IStore> stores = GetStores(priorityType);
-                foreach (IStore store in stores)
-                {
-                    if (!judgeInteracting || !store.IsInteracting)
-                    {
-                        int storeAmount = store.DataContainer.GetAmount(id, DataNS.DataOpType.Storage, false, judgeCanOut);
-                        if (storeAmount > 0)
-                        {
-                            if (resultAmount + storeAmount >= amount)
-                            {
-                                result.Add(store, amount - resultAmount);
-                                resultAmount = amount;
-                                break;
-                            }
-                            else
-                            {
-                                result.Add(store, storeAmount);
-                                resultAmount += storeAmount;
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
+            return GetPutOutStore(new DataNS.ItemIDDataObj(id), amount, priorityType = 0, judgeInteracting = false, judgeCanOut = false);
         }
         /// <summary>
         /// 获取满足取出条件的仓库

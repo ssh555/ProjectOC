@@ -148,11 +148,8 @@ namespace ProjectOC.ProNodeNS
         {
             if (CanWorking())
             {
-                if (!IsOnProduce)
-                {
-                    TimerForProduce.Reset(GetTimeCost());
-                    return true;
-                }
+                if(!IsOnProduce) { TimerForProduce.Reset(GetTimeCost()); }
+                return true;
             }
             return false;
         }

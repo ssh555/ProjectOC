@@ -46,18 +46,29 @@ namespace ProjectOC.ProNodeNS
 
         #region Spawn
         private Dictionary<string, IWorldProNode> WorldProNodeDict = new Dictionary<string, IWorldProNode>();
-        public IProNode SpawnProNode(string id)
+        public IProNode SpawnProNode(string id, IWorldProNode worldProNode)
         {
-            if (IsValidID(id))
+            if (IsValidID(id) && worldProNode != null)
             {
-                ProNodeType type = GetProNodeType(id);
-                if (type == ProNodeType.Auto)
+                if (worldProNode is AutoWorldProNode)
                 {
                     return new AutoProNode(ProNodeTableDict[id]);
                 }
-                else
+                else if (worldProNode is ManualWorldProNode)
                 {
                     return new ManualProNode(ProNodeTableDict[id]);
+                }
+                else if (worldProNode is BreedWoldProNode)
+                {
+                    return new BreedProNode(ProNodeTableDict[id]);
+                }
+                else if (worldProNode is CreatureWorldProNode)
+                {
+                    return new CreatureProNode(ProNodeTableDict[id]);
+                }
+                else if (worldProNode is MineWorldProNode)
+                {
+                    return new MineProNode(ProNodeTableDict[id]);
                 }
             }
             return null;
@@ -67,7 +78,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (worldNode != null && IsValidID(nodeID))
             {
-                WorldNodeSetData(worldNode, SpawnProNode(nodeID));
+                WorldNodeSetData(worldNode, SpawnProNode(nodeID, worldNode));
             }
         }
 

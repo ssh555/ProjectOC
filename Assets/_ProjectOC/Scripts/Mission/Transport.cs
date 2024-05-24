@@ -45,22 +45,19 @@ namespace ProjectOC.MissionNS
         {
             if (mission.Data == null) { return; }
             Data = mission.Data;
-            bool isReplaceData = mission.ReplaceIndex >= 0;
             Mission = mission;
             Source = source;
             Target = target;
             Mission.AddTransport(this);
             Source.AddTransport(this);
             Target.AddTransport(this);
-
             MissionNum = missionNum;
             SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
+
+            bool isReplaceData = mission.ReplaceIndex >= 0;
             if (!isReplaceData) { TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty); }
             Worker = worker;
-            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0))
-            {
-                End();
-            }
+            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0)) { End(); }
             else
             {
                 Worker.Transport = this;
@@ -110,10 +107,7 @@ namespace ProjectOC.MissionNS
                     SoureceReserveNum -= Source.RemoveReservePutOut(Data, SoureceReserveNum);
                 }
             }
-            else
-            {
-                End();
-            }
+            else { End(); }
         }
         public void PutInTarget()
         {
@@ -128,10 +122,7 @@ namespace ProjectOC.MissionNS
                 End();
                 Mission.FinishNum += FinishNum;
             }
-            else
-            {
-                End();
-            }
+            else { End(); }
         }
         public void End()
         {
@@ -147,7 +138,7 @@ namespace ProjectOC.MissionNS
             }
             if (TargetReserveNum > 0)
             {
-                Target?.RemoveReservePutIn(Data, TargetReserveNum);
+                Target?.RemoveReservePutIn(Data, TargetReserveNum, Mission.ReserveEmpty);
             }
             Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
