@@ -23,7 +23,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
     }
-
     #endregion
 
     #region Override
@@ -33,7 +32,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         base.OnEnter();
         MM.RefreshUI += this.RefreshMainIsland;
         this.InitData();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
         MM.MainIslandData.OnisMovingChanged += RefreshTarget;
         this.cursorNavigation.ChangeRaycastCenter(this.MainIsland);
@@ -42,7 +40,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         base.OnExit();
         MM.RefreshUI -= this.RefreshMainIsland;
-        this.cursorNavigation.DisableGraphCursorNavigation();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         MM.MainIslandData.OnisMovingChanged -= RefreshTarget;
     }
@@ -51,12 +48,14 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         base.Exit();
         this.MapLayerUIBtnList.DisableBtnList();
+        this.cursorNavigation.DisableGraphCursorNavigation();
     }
 
-    protected override void Enter()
+    protected override void Enter()                                               
     {
         base.Enter();
         this.MapLayerUIBtnList.EnableBtnList();
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
     }
 
     #endregion

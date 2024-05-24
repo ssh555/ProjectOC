@@ -1,6 +1,7 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ProjectOC.InventorySystem.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
 using Sirenix.OdinInspector;
@@ -30,29 +31,29 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     {
         base.OnEnter();
         this.InitData();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged += DetectMainIslandCurRegion;
     }
     public override void OnExit()
     {
         base.OnExit();
-        this.cursorNavigation.DisableGraphCursorNavigation();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
         ClearTemp();
-    }
+    }                                                           
 
     protected override void Exit()
     {
         base.Exit();
         this.MapLayerUIBtnList.DisableBtnList();
+        this.cursorNavigation.DisableGraphCursorNavigation();
     }
 
     protected override void Enter()
     {
         base.Enter();
         this.MapLayerUIBtnList.EnableBtnList();
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
     }
 
     #endregion
@@ -94,11 +95,14 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if(!MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos))
+        if(MM.MineralMapData != null)                                               
         {
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("已有导航点，是否重新设置？", null, null, () => {
-                MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos, true);
-            }));
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
+            {
+                var panel = handle.Result.GetComponent<SmallMapPanel>();
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            };
         }
     }
 

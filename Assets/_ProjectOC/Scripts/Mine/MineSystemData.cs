@@ -32,7 +32,6 @@ namespace ProjectOC.MineSystem
             [LabelText("小地图数据"), ReadOnly, ShowInInspector]
             public Dictionary<string, MineralMapData> mineralMapDatas;
         }
-
         /// <summary>
         /// 区块数据
         /// </summary>
@@ -40,6 +39,8 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("区块ID"), ReadOnly, ShowInInspector]
             public string MapRegionID;
+            [LabelText("区块号"), ReadOnly, ShowInInspector]
+            public int MapRegionNo;
             [LabelText("是否为障碍物"), ReadOnly, ShowInInspector]
             public bool IsBlock;
             [LabelText("区块地图层解锁数组"), ReadOnly, ShowInInspector]
@@ -53,6 +54,7 @@ namespace ProjectOC.MineSystem
                 IsBlock = isBlock;
                 this.isUnlockLayer = new bool[MineSystemData.MAPDEPTH];
                 this.mineralDataID = new string[MineSystemData.MAPDEPTH];
+                MapRegionNo = int.Parse(MapRegionID.Split('_')[1]);
             }
         }
 
@@ -63,15 +65,18 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("采矿地图ID"), ReadOnly, ShowInInspector]
             public string MineralMapID;
-/*            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
-            public string PrefabPath;*/
             [LabelText("采矿地图中的矿物数据"), ReadOnly, ShowInInspector]
             public List<MineData> MineDatas;
+            [LabelText("采矿地图中矿圈中心位置"), ReadOnly, ShowInInspector]
+            public Vector2 CirclePos;
+            [LabelText("采矿地图背景素材"), ReadOnly, ShowInInspector]
+            public Texture2D texture2D;
 
-            public MineralMapData(string mineralMapID, List<MineData> mineDatas)
+            public MineralMapData(string mineralMapID, List<MineData> mineDatas, Texture2D texture2D)
             {
                 MineralMapID = mineralMapID;
                 MineDatas = mineDatas;
+                this.texture2D = texture2D;
             }
         }
 
@@ -81,17 +86,45 @@ namespace ProjectOC.MineSystem
         public class MineData
         {
             [LabelText("矿物ID"), ReadOnly, ShowInInspector]
-            public string MineID;
+            private string mineID;
+            public string MineID { get { return mineID; } }
             [LabelText("矿物位置"), ReadOnly, ShowInInspector]
-            public Vector2 position;
+            private Vector2 position;
+            public Vector2 Position { get { return position; } }
             [LabelText("剩余开采次数"), ReadOnly, ShowInInspector]
-            public int RemainMineNum;
-
-            public MineData(string mineralMapID, Vector2 position, int remainMineNum)
+            private int remainMineNum;
+            public int RemianMineNum { get { return remainMineNum; } }
+            [LabelText("一次开采获取数量"), ReadOnly, ShowInInspector]
+            private int gainNum;
+            public int GainNum { get { return gainNum; } }
+            //该矿物所属的区块号
+            private int regionNum;
+            public int RegionNum { get { return regionNum; }set { regionNum = value; } }
+            //该矿物所属的层次号
+            private int layerNum;
+            public int LayerNum { get { return layerNum; } set { layerNum = value; } }
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum,int gainNum)
             {
-                MineID = mineralMapID;
+                mineID = mineralMapID;
                 this.position = position;
-                RemainMineNum = remainMineNum;
+                this.remainMineNum = remainMineNum;
+                this.gainNum = gainNum;
+            }
+
+            /// <summary>
+            /// 当矿物采集完一次调用一次该函数 返回true表示该矿还可以继续采集 返回false表示该矿不能继续采集
+            /// </summary>
+            public bool Consume()
+            {
+                lock(this)
+                {
+                    if (remainMineNum >= 1)
+                    {
+                        remainMineNum--;
+                        return true;
+                    }
+                    return false;
+                }
             }
         }
 
@@ -154,6 +187,10 @@ namespace ProjectOC.MineSystem
             }
             
         }
+
+
+
+
 
         /// <summary>
         /// 矿物表数据

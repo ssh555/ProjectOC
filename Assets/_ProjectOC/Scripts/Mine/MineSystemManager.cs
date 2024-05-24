@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static ProjectOC.MineSystem.MineSystemData;
@@ -70,7 +71,13 @@ namespace ProjectOC.MineSystem
         #region SmallMap
         [ShowInInspector]
         private MineralMapData mineralMapData;
+        public MineralMapData MineralMapData { get { return mineralMapData; } }
+
+        private Dictionary<(int,int),MineralMapData> Region_LayerToMineralMapDataDic = new Dictionary<(int, int), MineralMapData> ();
+
         #endregion
+
+
 
 
         #region Tick
@@ -103,7 +110,7 @@ namespace ProjectOC.MineSystem
         {
             #region 异步初始化
 
-            synchronizerInOrder = new SynchronizerInOrder(4, () => {
+            synchronizerInOrder = new SynchronizerInOrder(5, () => {
                 for (int i = 0; i < this.mapRegionDatas.Count; i++)
                 {
                     for (int j = 0; j < mapRegionDatas[i].mineralDataID.Length; j++)
@@ -128,10 +135,17 @@ namespace ProjectOC.MineSystem
                 LoadMapRegionData();
             });
 
-            //3 读取小地图矿物的数据
+            //3 读取小地图背景图的数据
             synchronizerInOrder.AddCheckAction(3, () => {
+                LoadSmallMapTexture2DData();
+            });
+
+            //4 读取小地图矿物的数据
+            synchronizerInOrder.AddCheckAction(4, () => {
                 LoadSmallMapMineData();
             });
+
+
             synchronizerInOrder.StartExecution();
             #endregion
 
@@ -176,6 +190,9 @@ namespace ProjectOC.MineSystem
         private List<MineSmallMapEditData> SmallMapDatas;
         private Dictionary<string, MineralTableData> MineralTableDataDic = new Dictionary<string, MineralTableData>();
 
+        //小地图背景素材
+        private Dictionary<int,Texture2D> IndexToTextureDic = new Dictionary<int,Texture2D>();
+
         //策划大地图数据
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
         private string _jsonData;
@@ -193,11 +210,15 @@ namespace ProjectOC.MineSystem
                             if(this.MineralTableDataDic.ContainsKey(mine.MineID))
                             {
                                 int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
-                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum));
+                                //int GainNum = this.MineralTableDataDic[mine.MineID].
+                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum, 5));
                             }
                         }
                     }
-                    MineralMapData mineralMapData = new MineralMapData(smd.name, MineDatas);
+
+                    Texture2D texture2D = this.IndexToTextureDic[int.Parse(smd.name.Split('_')[1])];
+
+                    MineralMapData mineralMapData = new MineralMapData(smd.name, MineDatas, texture2D);
                     mineralMapDatas.Add(smd.name, mineralMapData); 
                 }
                 ).Completed += 
@@ -210,7 +231,7 @@ namespace ProjectOC.MineSystem
                         int t2 = Convert.ToInt32(b.name.Split('_')[1]);
                         return t1.CompareTo(t2);
                     });
-                    synchronizerInOrder.Check(3);
+                    synchronizerInOrder.Check(4);
                 };
         }
 
@@ -260,6 +281,20 @@ namespace ProjectOC.MineSystem
                 }
                 synchronizerInOrder.Check(2);
             };
+        }
+
+        private void LoadSmallMapTexture2DData()
+        {
+            GameManager.Instance.ABResourceManager.LoadAssetsAsync<Texture2D>("Texture2D_Mine_SmallMapTex",
+                (texture2D) => {
+                    int index = int.Parse(texture2D.name.Split('_')[2]);
+                    IndexToTextureDic.Add(index, texture2D);
+                }
+                ).Completed +=
+                (handle) =>
+                {
+                    synchronizerInOrder.Check(3);
+                };
         }
         #endregion
 
@@ -311,7 +346,6 @@ namespace ProjectOC.MineSystem
 
         public void ChangeCurMineralMapData(int curSelectRegion)
         {
-            Debug.Log("GetCurMineralMapData " + RegionNumToRegionDic.ContainsKey(curSelectRegion) + " " + curSelectRegion);
             if(!RegionNumToRegionDic.ContainsKey(curSelectRegion))
             {
                 this.mineralMapData = null;
@@ -322,9 +356,7 @@ namespace ProjectOC.MineSystem
                 this.mineralMapData = null;
                 return;
             }
-
             string MineralMapDataID = RegionNumToRegionDic[curSelectRegion].mineralDataID[CurMapLayerIndex];
-            Debug.Log(MineralMapDataID);
             if(!mineralMapDatas.ContainsKey(MineralMapDataID) )
             {
                 this.mineralMapData = null;
@@ -332,6 +364,15 @@ namespace ProjectOC.MineSystem
             }
             this.mineralMapData =  mineralMapDatas[MineralMapDataID];
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<MineData> GetMiningData()
+        {
+            return new List<MineData>();
+        }
+
         #endregion
     }
 }

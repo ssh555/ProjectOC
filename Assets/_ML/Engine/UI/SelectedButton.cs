@@ -19,7 +19,8 @@ namespace ML.Engine.UI
 
         public System.Action PreInteract;
         public System.Action PostInteract;
-        private Transform Selected = null;
+        private Transform selected = null;
+        public Transform Selected {  get { return selected; } }
         protected UIBtnList UIBtnList = null;
         protected override void Start()
         {
@@ -52,9 +53,9 @@ namespace ML.Engine.UI
         }
         public override void OnSelect(BaseEventData eventData)
         {
-            if(Selected != null) 
+            if(selected != null) 
             {
-                this.Selected.gameObject.SetActive(true);
+                this.selected.gameObject.SetActive(true);
             }
             else
             {
@@ -64,9 +65,9 @@ namespace ML.Engine.UI
         }
         public override void OnDeselect(BaseEventData eventData)
         {
-            if (Selected != null)
+            if (selected != null)
             {
-                this.Selected.gameObject.SetActive(false);
+                this.selected.gameObject.SetActive(false);
             }
             else
             {
@@ -95,8 +96,8 @@ namespace ML.Engine.UI
         public void Init()
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
-            Selected = this.transform.Find("Selected");
-            if(Selected != null) { Selected.gameObject.SetActive(false); }
+            selected = this.transform.Find("Selected");
+            if(selected != null) { selected.gameObject.SetActive(false); }
             this.targetGraphic = image;
         }
 

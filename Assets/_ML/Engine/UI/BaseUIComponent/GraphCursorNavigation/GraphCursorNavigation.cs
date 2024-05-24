@@ -22,14 +22,17 @@ namespace ML.Engine.UI
         /// Center 在Content 坐标系下的坐标
         /// </summary>
         [ShowInInspector]
-        public Vector3 CenterPos { get { return center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
+        public Vector3 CenterPos { get { if (center == null) return Vector3.zero; return center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
 
         private Vector2 LimitBound;
         private Vector2 minBounds;
         private Vector2 maxBounds;
 
+        [ShowInInspector]
         private InputAction BindNavigationInputAction = null;
+        [ShowInInspector]
         private InputAction BindZoomInInputAction = null;
+        [ShowInInspector]
         private InputAction BindZoomOutInputAction = null;
 
         private Transform content;
@@ -37,6 +40,10 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private UIBtnList uiBtnList;
         public UIBtnList UIBtnList { get { return uiBtnList; } }
+
+        private bool isEnable = false;
+        [ShowInInspector]
+        public bool IsEnale { get { return isEnable; } set { isEnable = value; } }
 
         #region 面板配置项
         [LabelText("边距配置（左右间距，上下间距）")]
@@ -185,6 +192,9 @@ namespace ML.Engine.UI
                 NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
                 NavagateMapTimer.OnEndEvent += () =>
                 {
+
+                    if(isEnable == false) { return; }
+
                     canControlCenterxLeft = false;
                     canControlCenterxRight = false;
                     canControlCenteryUP = false;
@@ -308,6 +318,7 @@ namespace ML.Engine.UI
                 ZoomOutTimer = new CounterDownTimer(ZoomOutTimeInterval, true, true, 1, 2);
                 ZoomOutTimer.OnEndEvent += () =>
                 {
+                    if (isEnable == false) { return; }
                     ZoomOut();
                 };
             }
@@ -331,6 +342,7 @@ namespace ML.Engine.UI
                 ZoomInTimer = new CounterDownTimer(ZoomInTimeInterval, true, true, 1, 2);
                 ZoomInTimer.OnEndEvent += () =>
                 {
+                    if (isEnable == false) { return; }
                     ZoomIn();
                 };
             }
@@ -393,6 +405,7 @@ namespace ML.Engine.UI
             }
             this.uiBtnList.EnableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            this.isEnable = true;
         }
 
         public void DisableGraphCursorNavigation()
@@ -405,6 +418,7 @@ namespace ML.Engine.UI
             }
             this.uiBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            this.isEnable = false;
         }
 
         public void InitUIBtnList()
