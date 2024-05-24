@@ -217,15 +217,17 @@ namespace ML.Engine.UI
             public string msg1;
             public string msg2;
             public List<Sprite> spriteList;
-            public UnityAction action;
+            public UnityAction ConfirmAction;
+            public UnityAction CancelAction;
 
             // ¹¹Ôìº¯Êý
-            public PopUpUIData(string message1, string message2, List<Sprite> sprites, UnityAction act)
+            public PopUpUIData(string message1, string message2, List<Sprite> sprites, UnityAction confirmAction,UnityAction cancelAction = null)
             {
                 msg1 = message1;
                 msg2 = message2;
                 spriteList = sprites;
-                action = act;
+                ConfirmAction = confirmAction;
+                CancelAction = cancelAction;
             }
         }
 

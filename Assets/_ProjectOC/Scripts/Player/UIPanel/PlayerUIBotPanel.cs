@@ -107,7 +107,7 @@ namespace ProjectOC.Player.UI
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
-            }
+            }                                                                         
             );
             this.UIBtnList.SetBtnAction("选项",
             () =>
@@ -134,7 +134,13 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("我的氏族",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
+                {
+                    var panel = handle.Result.GetComponent<SmallMapPanel>();
+                    panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                };
             }
             );
             this.UIBtnList.SetBtnAction("订单管理",
@@ -151,7 +157,6 @@ namespace ProjectOC.Player.UI
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
                 {
                     IslandRudderPanel islandRudderPanel = handle.Result.GetComponent<IslandRudderPanel>();
-
                     islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
                 };
@@ -160,7 +165,13 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                {
+                    SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                    selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                };
             }
             );
             this.UIBtnList.SetBtnAction("科技树",
