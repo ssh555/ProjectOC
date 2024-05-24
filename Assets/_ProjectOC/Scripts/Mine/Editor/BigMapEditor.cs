@@ -562,6 +562,7 @@ namespace ProjectOC.MineSystem
             SaveTextureAsPNG(_resTex,PATH);
             SetSpriteTextureAsset(PATH);
         }
+
         public Texture2D CreateTextureFromData(bool[] texData, int texWidth, int texHeight)
         {
             if (texData.Length != texWidth * texHeight)

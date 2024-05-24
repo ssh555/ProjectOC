@@ -128,7 +128,7 @@ namespace ML.Engine.UI
 
         [LabelText("面板配置项"), SerializeField]
         public BtnListContainerInitData btnListContainerInitData = BtnListContainerInitData.defaultTemplate;
-
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             // 根据 containerType 修改其他字段的值或状态
@@ -147,6 +147,7 @@ namespace ML.Engine.UI
                 btnListContainerInitData.isHorizontal = BtnListContainerInitData.defaultTemplate.isHorizontal;
             }
         }
+#endif
     }
 }
 

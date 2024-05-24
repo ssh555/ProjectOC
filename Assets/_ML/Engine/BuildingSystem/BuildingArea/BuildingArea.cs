@@ -34,7 +34,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// <summary>
         /// 区域碰撞检测Collider
         /// </summary>
-        protected new Collider collider;
+        protected Collider _collider;
 
         /// <summary>
         /// 获取在Area上匹配点的坐标
@@ -45,7 +45,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         public bool GetMatchPointOnArea(Vector3 point, out Vector3 pos, out Quaternion rot)
         {
             // 位于 Bound 内
-            Bounds bs = new Bounds(this.collider.bounds.center, this.collider.bounds.size);
+            Bounds bs = new Bounds(this._collider.bounds.center, this._collider.bounds.size);
             if (bs.extents.y < 0.01f)
             {
                 bs.extents = new Vector3(bs.extents.x, 0.01f, bs.extents.z);
@@ -111,8 +111,8 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 
         private void Awake()
         {
-            this.collider = this.GetComponent<Collider>();
-            this.collider.isTrigger = false;
+            this._collider = this.GetComponent<Collider>();
+            this._collider.isTrigger = false;
         }
 
         private void Start()
@@ -122,12 +122,12 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 
         private void OnEnable()
         {
-            this.collider.enabled = true;
+            this._collider.enabled = true;
         }
 
         private void OnDisable()
         {
-            this.collider.enabled = false;
+            this._collider.enabled = false;
         }
 
         private void OnDestroy()
@@ -141,7 +141,11 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 #endif
         private void OnDrawGizmos()
         {
-            if (BuildingManager.Instance == null || !IsShowArea)
+            if (BuildingManager.Instance == null
+#if UNITY_EDITOR
+                || !IsShowArea
+#endif
+                )
             {
                 return;
             }
