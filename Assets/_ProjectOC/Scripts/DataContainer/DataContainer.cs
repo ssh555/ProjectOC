@@ -137,11 +137,14 @@ namespace ProjectOC.DataNS
         }
         public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            foreach (Data data in Datas.ToArray())
+            if (Datas != null) 
             {
-                if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                foreach (Data data in Datas.ToArray())
                 {
-                    return true;
+                    if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
