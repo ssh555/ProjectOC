@@ -92,8 +92,17 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 
         //初始化矿圈位置信息
         PlaceCircleData placeCircleData = MM.GetMineralCircleData(proNodeId);
-        this.PlacedCircle.gameObject.SetActive(placeCircleData.isPlacedCircle);
-        this.PlacedCircle.anchoredPosition = placeCircleData.PlaceCirclePosition;
+        if(placeCircleData != null)
+        {
+            this.PlacedCircle.gameObject.SetActive(placeCircleData.isPlacedCircle);
+            this.PlacedCircle.anchoredPosition = placeCircleData.PlaceCirclePosition;
+        }
+        else
+        {
+            this.PlacedCircle.gameObject.SetActive(false);
+        }
+        //初始化slider
+        RefreshOnZoomMap();
     }
     private Vector2 localPosition;
 
@@ -200,7 +209,6 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         }
     }
     #endregion
-
 
     #region Resource
     #region TextContent
