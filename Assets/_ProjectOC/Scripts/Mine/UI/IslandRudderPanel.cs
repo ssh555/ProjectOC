@@ -1,38 +1,13 @@
-using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using ML.Engine.Timer;
 using ML.Engine.UI;
-using ML.Engine.Utility;
-using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
-using ProjectOC.MissionNS;
-using ProjectOC.Order;
-using ProjectOC.Player;
-using ProjectOC.TechTree;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.U2D;
 using UnityEngine.UI;
 using static IslandRudderPanel;
-using static ML.Engine.UI.UIBtnList;
-using static ML.Engine.UI.UIBtnListContainer;
-using static OrderBoardPanel;
-using static ProjectOC.MineSystem.MineSystemData;
-using static ProjectOC.Order.OrderManager;
-using static UnityEditor.PlayerSettings;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 {

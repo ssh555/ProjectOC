@@ -80,6 +80,8 @@
     <type fullname="ProjectOC.MainInteract.UI.OptionPanel" preserve="all" />
     <type fullname="ProjectOC.MainInteract.UI.StartMenuPanel" preserve="all" />
     <type fullname="ProjectOC.ManagerNS.LocalGameManager" preserve="all" />
+    <type fullname="ProjectOC.MineSystem.MineBigMapEditData" preserve="all" />
+    <type fullname="ProjectOC.MineSystem.MineSmallMapEditData" preserve="all" />
     <type fullname="ProjectOC.NPC.NPCCharacter" preserve="all" />
     <type fullname="ProjectOC.PinchFace.ChangeBoneWeightPinchSetting" preserve="all" />
     <type fullname="ProjectOC.PinchFace.ChangeColorPinchSetting" preserve="all" />
@@ -97,9 +99,13 @@
     <type fullname="ProjectOC.Player.PlayerModelAniamtionEvent" preserve="all" />
     <type fullname="ProjectOC.Player.UI.PlayerUIBotPanel" preserve="all" />
     <type fullname="ProjectOC.Player.UI.PlayerUIPanel" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.AutoWorldProNode" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.BreedWoldProNode" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.CreatureWorldProNode" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.ManualWorldProNode" preserve="all" />
     <type fullname="ProjectOC.ProNodeNS.ProNodeConfigAsset" preserve="all" />
-    <type fullname="ProjectOC.ProNodeNS.UI.UIProNode" preserve="all" />
-    <type fullname="ProjectOC.ProNodeNS.WorldProNode" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.UI.UIAutoProNode" preserve="all" />
+    <type fullname="ProjectOC.ProNodeNS.UI.UIManualProNode" preserve="all" />
     <type fullname="ProjectOC.ResonanceWheelSystem.UI.BeastPanel" preserve="all" />
     <type fullname="ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1" preserve="all" />
     <type fullname="ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2" preserve="all" />
@@ -107,6 +113,7 @@
     <type fullname="ProjectOC.RestaurantNS.RestaurantConfigAsset" preserve="all" />
     <type fullname="ProjectOC.RestaurantNS.UI.UIRestaurant" preserve="all" />
     <type fullname="ProjectOC.RestaurantNS.WorldRestaurant" preserve="all" />
+    <type fullname="ProjectOC.StoreNS.CreatureWorldStore" preserve="all" />
     <type fullname="ProjectOC.StoreNS.StoreConfigAsset" preserve="all" />
     <type fullname="ProjectOC.StoreNS.UI.UIStore" preserve="all" />
     <type fullname="ProjectOC.StoreNS.WorldStore" preserve="all" />
@@ -129,6 +136,7 @@
     <type fullname="ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.BuildingSystem.MonoBuildingManager" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.InventorySystem.CollectiveActor/DropItem" preserve="nothing" serialized="true" />
+    <type fullname="ML.Engine.InventorySystem.CreatureManager" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.InventorySystem.ItemManager" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.InventorySystem.RecipeManager" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.ClanNS.ClanManager" preserve="nothing" serialized="true" />
@@ -170,15 +178,12 @@
     <type fullname="ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.BuildingSystem.Config.BuildingSocket2SocketMatchAsset/SocketConfig" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.BuildingSystem.Config.BuildingSocket2SocketMatchAsset/SocketConfig/SocketData" preserve="nothing" serialized="true" />
-    <type fullname="ML.Engine.InventorySystem.Recipe" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.UI.UIBtnListContainerInitor/BtnListContainerInitData" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.Utility.UIObjectPool" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.ClanNS.Clan" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.ClanNS.RaycastConfig" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.DataNS.DataContainer" preserve="nothing" serialized="true" />
-    <type fullname="ProjectOC.ProNodeNS.ProNode" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.RestaurantNS.Restaurant" preserve="nothing" serialized="true" />
-    <type fullname="ProjectOC.StoreNS.Store" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.WorkerNS.FeatureSeat" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.WorkerNS.WorkerEcho" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.FSM.StateController" preserve="nothing" serialized="true" />
@@ -194,8 +199,15 @@
     <type fullname="ProjectOC.PinchFace.PinchCharacterCameraView/ViewPointStruct" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.PinchFace.PinchPartType1" preserve="nothing" serialized="true" />
     <type fullname="ProjectOC.PinchFace.PinchPartType2" preserve="nothing" serialized="true" />
-    <type fullname="ProjectOC.ProNodeNS.UI.UIProNode/APBarColorConfig" preserve="nothing" serialized="true" />
-    <type fullname="ProjectOC.ProNodeNS.UI.UIProNode/IconNumConfig" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.StoreNS.Store" preserve="nothing" serialized="true" />
+    <type fullname="ML.Engine.InventorySystem.Recipe" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.ProNodeNS.AutoProNode" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.ProNodeNS.ManualProNode" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.ProNodeNS.UI.UIManualProNode/APBarColorConfig" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.ProNodeNS.UI.UIManualProNode/IconNumConfig" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.MineSystem.MineBigMapEditData/BrushData" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.MineSystem.MineBigMapEditData/MineBrushData" preserve="nothing" serialized="true" />
+    <type fullname="ProjectOC.MineSystem.MineSmallMapEditData/SingleMineData" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Cinemachine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Cinemachine.CinemachineBrain" preserve="all" />
