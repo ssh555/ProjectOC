@@ -4,26 +4,15 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
-using ProjectOC.MissionNS;
 using ProjectOC.Order;
 using ProjectOC.Player;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.U2D;
 using UnityEngine.UI;
-using static ML.Engine.UI.UIBtnList;
 using static ML.Engine.UI.UIBtnListContainer;
 using static OrderBoardPanel;
 using static ProjectOC.Order.OrderManager;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 {
@@ -269,7 +258,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private bool isNeedRefreshAcceptedOrder = true;
     private bool isNeedRefreshOrderUrgentDelegation = true;
     private bool isNeedRefreshOrderNormalDelegation = true;
-    private int OrderDelegationCnt = 0;
+    //private int OrderDelegationCnt = 0;
 
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;

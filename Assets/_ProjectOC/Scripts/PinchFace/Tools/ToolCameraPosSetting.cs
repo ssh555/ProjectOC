@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 

@@ -124,6 +124,7 @@ namespace Animancer.Editor
             {
                 DoPropertyGUI(area, property, label, isPreviewing);
             }
+
         }
 
         /************************************************************************************************************************/

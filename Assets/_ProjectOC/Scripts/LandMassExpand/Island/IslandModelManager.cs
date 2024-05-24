@@ -70,7 +70,9 @@ namespace ProjectOC.LandMassExpand
                     IslandBase _grid = islandGrids[i, j];
                     if (_grid != null)
                     {
+#if UNITY_EDITOR
                         Gizmos.color = _grid.gizmosColor;
+#endif
                         Gizmos.DrawWireCube((new Vector3(i,0,j) - center)*mapGridSize,mapGridSize*Vector3.one);
                     }
                 }

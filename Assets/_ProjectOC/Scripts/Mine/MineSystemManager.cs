@@ -77,6 +77,7 @@ namespace ProjectOC.MineSystem
             }
         }
         #endregion
+        
         #region Base
         SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;

@@ -22,6 +22,7 @@ namespace Animancer
         { }
     }
 
+
     /// <inheritdoc/>
     /// https://kybernetik.com.au/animancer/api/Animancer/ClipTransition
     [Serializable]
