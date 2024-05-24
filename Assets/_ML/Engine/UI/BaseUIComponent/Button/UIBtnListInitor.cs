@@ -33,6 +33,8 @@ namespace ML.Engine.UI
             public bool hasBtnListContainer;
             [LabelText("是否读取UnActive Button")] 
             public bool readUnActiveButton;
+            [LabelText("是否禁用鼠标")]
+            public bool isBanMouse;
             [LabelText("滑动窗口")]
             public ScrollRect scrollRect;
 
@@ -44,6 +46,7 @@ namespace ML.Engine.UI
                 isWheel = false,
                 hasBtnListContainer = false,
                 readUnActiveButton = true,
+                isBanMouse = false,
                 scrollRect = null
             };
         }
