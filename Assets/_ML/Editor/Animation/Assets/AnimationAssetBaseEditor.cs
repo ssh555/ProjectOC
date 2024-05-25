@@ -8,6 +8,7 @@ using ML.Engine.Animation;
 using static ML.Engine.Animation.IAssetHasEvents;
 using UnityEngine.Events;
 using Animancer.Editor;
+using System.Diagnostics.Eventing.Reader;
 
 namespace ML.Editor.Animation
 {
@@ -50,7 +51,7 @@ namespace ML.Editor.Animation
 
     }
 
-
+    [System.Serializable]
     public class EventTrack : TrackWindow.Track
     {
         public EventTrack(IAssetHasEvents transition)
@@ -90,57 +91,46 @@ namespace ML.Editor.Animation
         }
 
 
+        [System.Serializable]
         internal class EventTrackSignal : TrackWindow.TrackSignal
         {
-            public IAssetHasEvents _assets => ((EventTrack)AttachedTrack).TargetTransition;
+            public IAssetHasEvents _asset => ((EventTrack)AttachedTrack).TargetTransition;
             public override string Name { get => Event.Name; set => Event.Name = value; }
             public override float NormalizedTime { get => Event.NormalizedTime; set => Event.NormalizedTime = value; }
             public AssetEvent Event;
 
             public override void OnDelete()
             {
-                _assets.Events.Remove(Event);
+                _asset.Events.Remove(Event);
             }
 
-            bool isFoldoutOpen = true;
+            SerializedObject serializedObject;
+            SerializedProperty eventProperty;
+            void OnEnable()
+            {
+                serializedObject = new SerializedObject(this);
+                eventProperty = serializedObject.FindProperty("Event.Event");
+            }
+
             public override void DoSelectedGUI()
             {
+                EditorGUI.BeginChangeCheck();
                 base.DoSelectedGUI();
 
-                //// 绘制可折叠框
-                //isFoldoutOpen = EditorGUILayout.Foldout(isFoldoutOpen, "事件", true);
-                //if (isFoldoutOpen)
-                //{
-                //    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                //    EditorGUI.indentLevel++;
+                // 编辑并显示 Event.Event 属性
 
-                //    // 编辑并显示 Name 属性
-                //    GUILayout.BeginHorizontal();
-                //    EditorGUILayout.LabelField("名字", GUILayout.Width(60));
-                //    Name = EditorGUILayout.TextField(Name);
-                //    GUILayout.EndHorizontal();
+                GUILayout.BeginHorizontal();
+                //EditorGUILayout.LabelField("时间点", GUILayout.Width(60));
+                serializedObject.Update();
+                EditorGUILayout.PropertyField(eventProperty, new GUIContent("事件"), true);
+                GUILayout.EndHorizontal();
 
-
-                //    // 编辑并显示 NormalizedTime 属性
-                //    GUILayout.BeginHorizontal();
-                //    EditorGUILayout.LabelField("时间点", GUILayout.Width(60));
-                //    NormalizedTime = EditorGUILayout.FloatField(NormalizedTime);
-                //    GUILayout.EndHorizontal();
-
-                //    //// 编辑并显示 Event.Event 属性
-                //    //SerializedObject serializedObject = new SerializedObject(this);
-                //    //SerializedProperty eventProperty = serializedObject.FindProperty("Event.Event");
-
-                //    //GUILayout.BeginHorizontal();
-                //    ////EditorGUILayout.LabelField("时间点", GUILayout.Width(60));
-                //    //EditorGUILayout.PropertyField(eventProperty, new GUIContent("事件"), true);
-                //    //GUILayout.EndHorizontal();
-
-                //    EditorGUI.indentLevel--;
-                //    EditorGUILayout.EndVertical();
-                //}
+                if (EditorGUI.EndChangeCheck())
+                {
+                    serializedObject.ApplyModifiedProperties();
+                    EditorUtility.SetDirty(_asset as ScriptableObject);
+                }
             }
-
         }
     }
 

@@ -116,9 +116,9 @@ namespace ML.Editor.Animation
 
             }
 
-            public T CreateSignal<T>() where T : TrackSignal, new()
+            public T CreateSignal<T>() where T : TrackSignal
             {
-                T signal = new T();
+                T signal = ScriptableObject.CreateInstance<T>();
                 this.Siganls.Add(signal);
                 signal.AttachedTrack = this;
                 return signal;
@@ -155,7 +155,8 @@ namespace ML.Editor.Animation
         /// <summary>
         /// 轨道标记
         /// </summary>
-        public class TrackSignal : UnityEngine.Object, ISelection
+        [System.Serializable]
+        public class TrackSignal : ScriptableObject, ISelection
         {
             /// <summary>
             /// 标记名称

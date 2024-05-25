@@ -22,8 +22,8 @@ MonoBehaviour:
     _Speed: 1
     _NormalizedStartTime: NaN
   _Events:
-  - Name: 
-    NormalizedTime: 0
+  - Name: TestEvent
+    NormalizedTime: 0.10414414
     Event:
       m_PersistentCalls:
         m_Calls: []
