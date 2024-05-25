@@ -412,13 +412,16 @@ namespace ProjectOC.ProNodeNS.UI
                 {
                     Transform mine = ProductBtnList.GetBtn(i).transform;
                     string productID = ProNode.DataContainer.GetID(i);
+                    int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
+                    int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
                     }
                     mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     mine.Find("Back").gameObject.SetActive(false);
-                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll).ToString();
+                    mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
+                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = stackAll.ToString();
                     mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
                 }
                 for (int i = mineCnt; i < ProductBtnList.BtnCnt; i++)
@@ -634,12 +637,15 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 Transform mine = ProductBtnList.GetBtn(i).transform;
                 string productID = ProNode.DataContainer.GetID(i);
+                int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
+                int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
                 if (!tempSprite.ContainsKey(productID))
                 {
                     tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
                 }
                 mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                 mine.Find("Back").gameObject.SetActive(false);
+                mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                 mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll).ToString();
                 mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
             }

@@ -1,6 +1,5 @@
 using ML.Engine.TextContent;
 using static ProjectOC.ProNodeNS.UI.UIManualProNode;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -507,6 +506,7 @@ namespace ProjectOC.ProNodeNS.UI
                     ProNode_Product.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
                     ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.Stack.ToString();
+                    ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                     #endregion
 
                     #region Raw
@@ -797,6 +797,7 @@ namespace ProjectOC.ProNodeNS.UI
             }
             if (ProNode.HasRecipe)
             {
+                ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                 ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                 for (int i = 0; i < ProNode.Recipe.Raw.Count; ++i)
                 {
