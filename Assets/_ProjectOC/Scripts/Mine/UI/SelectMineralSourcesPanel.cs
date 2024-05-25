@@ -160,8 +160,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     [ShowInInspector]
     public string ProNodeId { set { proNodeId = value; } get { return proNodeId; } }
 
-
-
     /// <summary>
     ///当前矿圈所圈住的矿物集合
     /// </summary>
