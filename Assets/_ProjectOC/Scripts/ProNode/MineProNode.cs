@@ -26,8 +26,7 @@ namespace ProjectOC.ProNodeNS
         public List<MineSystemData.MineData> MineDatas;
 
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
-        public WorkerNS.SkillType ExpType => ManagerNS.LocalGameManager.Instance != null ?
-            ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkerNS.SkillType.None;
+        public WorkerNS.SkillType ExpType = WorkerNS.SkillType.Collect;
 
         public MineProNode(ProNodeTableData config) : base(config) 
         {
@@ -114,7 +113,7 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + Worker?.GetEff(ExpType) ?? 0; }
+        public override int GetEff() { return EffBase + (Worker?.GetEff(ExpType) ?? 0); }
         public override int GetTimeCost() { return HasMine && GetEff() > 0 ? (int)Math.Ceiling((double)100 * MineTimeCost / GetEff()) : 0; }
         public override void Destroy()
         {
@@ -181,7 +180,7 @@ namespace ProjectOC.ProNodeNS
                     }
                 }
             }
-            Worker.SettleDuty(WorkerNS.SkillType.Collect, MineExp, RealAPCost_Duty);
+            Worker.SettleDuty(ExpType, MineExp, RealAPCost_Duty);
             if (!StartProduce()) { StopProduce(); }
             OnProduceEndEvent?.Invoke();
         }

@@ -165,6 +165,28 @@ namespace ProjectOC.ProNodeNS
         {
             return IsValidID(id) ? ProNodeTableDict[id].Type == ProNodeType.Auto : false;
         }
+        public UnityEngine.Color GetAPBarColor(int ap)
+        {
+            foreach (var config in Config.APBarColorConfigs)
+            {
+                if (config.Start <= ap && (config.End == 0 || ap <= config.End))
+                {
+                    return config.Color;
+                }
+            }
+            return default(UnityEngine.Color);
+        }
+        public int GetExpRateIconNum(int eff)
+        {
+            foreach (var config in Config.ExpRateIconNumConfigs)
+            {
+                if (config.Start <= eff && (config.End == 0 || eff <= config.End))
+                {
+                    return config.Num;
+                }
+            }
+            return 0;
+        }
         #endregion
     }
 }

@@ -64,9 +64,9 @@ namespace ProjectOC.WorkerNS
             FeatDelCostItemNum = config.FeatDelCostItemNum;
             FeatDelTime = config.FeatDelTime;
             FeatureMax = new List<int>();
-            FeatureMax.AddRange(FeatureMax);
+            FeatureMax.AddRange(config.FeatureMax);
             FeatureOdds = new List<int>();
-            FeatureOdds.AddRange(FeatureOdds);
+            FeatureOdds.AddRange(config.FeatureOdds);
         }
     }
 }

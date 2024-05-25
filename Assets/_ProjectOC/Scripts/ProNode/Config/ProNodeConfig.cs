@@ -33,6 +33,11 @@ namespace ProjectOC.ProNodeNS
         [LabelText("开采搬运阈值")]
         public int MineTransThreshold;
 
+        [LabelText("UI体力对应的体力条颜色")]
+        public List<APBarColorConfig> APBarColorConfigs;
+        [LabelText("UI学习速度对应的图标数量")]
+        public List<IconNumConfig> ExpRateIconNumConfigs;
+
         public ProNodeConfig(ProNodeConfig config)
         {
             EffBase = config.EffBase;
@@ -51,6 +56,31 @@ namespace ProjectOC.ProNodeNS
             MineExp = config.MineExp;
             MineStackThreshold = config.MineStackThreshold;
             MineTransThreshold = config.MineTransThreshold;
+
+            APBarColorConfigs = new List<APBarColorConfig>();
+            APBarColorConfigs.AddRange(config.APBarColorConfigs);
+            ExpRateIconNumConfigs = new List<IconNumConfig>();
+            ExpRateIconNumConfigs.AddRange(config.ExpRateIconNumConfigs);
         }
+    }
+    [System.Serializable]
+    public struct APBarColorConfig
+    {
+        [LabelText("初始体力值")]
+        public int Start;
+        [LabelText("结束体力值")]
+        public int End;
+        [LabelText("对应颜色")]
+        public UnityEngine.Color Color;
+    }
+    [System.Serializable]
+    public struct IconNumConfig
+    {
+        [LabelText("初始体力值")]
+        public int Start;
+        [LabelText("结束体力值")]
+        public int End;
+        [LabelText("对应数量")]
+        public int Num;
     }
 }

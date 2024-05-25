@@ -74,6 +74,10 @@ namespace ProjectOC.WorkerNS
             }
             return 0;
         }
+        public List<Feature> CreateFeature()
+        {
+            return CreateFeature(Config.FeatureMax, Config.FeatureOdds);
+        }
         public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds)
         {
             if (featureMax == null) { featureMax = Config.FeatureMax; }

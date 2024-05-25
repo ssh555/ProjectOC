@@ -191,7 +191,7 @@ namespace ProjectOC.WorkerNS
             }
             var features = workerEcho != null ? 
                 ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(null, null);
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);
