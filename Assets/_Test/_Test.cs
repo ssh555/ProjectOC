@@ -1,7 +1,9 @@
 using Animancer;
+using ML.Engine.Animation;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class _Test : MonoBehaviour
@@ -13,6 +15,7 @@ public class _Test : MonoBehaviour
 
     private void Awake()
     {
+        _clip.Events.AddCallback("TestEvent", DebugLog);
         _animancer.Play(_clip, 0, FadeMode.FromStart);
     }
 
@@ -28,5 +31,18 @@ public class _Test : MonoBehaviour
         {
             _animancer.Playable.DestroyGraph();
         };
+
+
+
+    }
+
+
+    public void DebugLog()
+    {
+        Debug.Log(_animancer.States.Current.NormalizedTime);
     }
 }
+
+
+
+

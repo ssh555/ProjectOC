@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1b6265969f5164aafa06e54c822123, type: 3}
   m_Name: Anim_M1DT_Test
   m_EditorClassIdentifier: 
-  mixerTransition1D: {fileID: 0}
+  mixerTransition1D:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations: []
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds: []
+    _DefaultParameter: 0
+    _ExtrapolateSpeed: 1

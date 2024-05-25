@@ -140,6 +140,25 @@ namespace ML.Editor.Animation
                 }
             }
 
+            public float Length
+            {
+                get
+                {
+                    // 尝试播放当前动画
+                    var state = Instance._Scene.Animancer.States[Transition];
+                    return state.Length;
+                }
+            }
+
+            public float FrameRate
+            {
+                get
+                {
+                    // 尝试播放当前动画
+                    var state = Instance._Scene.Animancer.States[Transition];
+                    return state.Clip.frameRate;
+                }
+            }
 
 
             /// <summary>
@@ -533,14 +552,14 @@ namespace ML.Editor.Animation
             /// <summary>
             /// 回退动画一帧
             /// </summary>
-            private void StepBackward()
-                => StepTime(-AnimancerSettings.FrameStep);
+            public void StepBackward()
+                => StepTime(-(1 / FrameRate));
 
             /// <summary>
             /// 前进动画一帧
             /// </summary>
-            private void StepForward()
-                => StepTime(AnimancerSettings.FrameStep);
+            public void StepForward()
+                => StepTime((1 / FrameRate));
 
             /// <summary>
             /// 基于当前动画更改时间步长
@@ -562,10 +581,36 @@ namespace ML.Editor.Animation
             }
 
             /// <summary>
+            /// 回到第一帧
+            /// </summary>
+            public void StepToFirstKey()
+            {
+                // 尝试播放
+                if (!TryShowTransitionPaused(out _, out _, out var state))
+                    return;
+
+                // 应用当前TimeOffset
+                NormalizedTime = 0;
+            }
+
+            /// <summary>
+            /// 到最后一帧
+            /// </summary>
+            public void StepToLastKey()
+            {
+                // 尝试播放
+                if (!TryShowTransitionPaused(out _, out _, out var state))
+                    return;
+
+                // 应用当前TimeOffset
+                NormalizedTime = 1;
+            }
+
+            /// <summary>
             /// 基于 Previous Animation 播放当前动画
             /// </summary>
             /// <param name="animancer"></param>
-            private void PlaySequence(AnimancerPlayable animancer)
+            public void PlaySequence(AnimancerPlayable animancer)
             {
                 if (_PreviousAnimation != null && _PreviousAnimation.length > 0)
                 {
@@ -625,8 +670,9 @@ namespace ML.Editor.Animation
                     }
                     else
                     {
-                        // TODO : 不可访问
+                        //// TODO: 不可访问
                         //animancer.Layers[0].IncrementCommandCount();
+                        animancer.PauseGraph();
                     }
                 };
                 warnings.Enable();
@@ -690,6 +736,10 @@ namespace ML.Editor.Animation
                     if (AnimancerPlayable.Current.States.TryGet(transition, out var state))
                     {
                         PreviewWindow.Instance._Animations._NormalizedTime = state.NormalizedTime;
+                        if(state.IsPlaying)
+                        {
+                            TrackWindow.Instance.Repaint();
+                        }
                     }
 
                 }

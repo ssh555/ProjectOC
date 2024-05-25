@@ -15,9 +15,14 @@ MonoBehaviour:
   clipTransition:
     _FadeDuration: 0.25
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 0.24154541
+      - 0.61489093
+      - NaN
       _Callbacks: []
-      _Names: []
+      _Names:
+      - Test
+      - Test2
     _Clip: {fileID: 7400000, guid: 4ae6a6e5c9379b94b8c5b5ca31f36f1a, type: 2}
     _Speed: 1
     _NormalizedStartTime: NaN

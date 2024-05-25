@@ -28,6 +28,22 @@ namespace ML.Editor.Animation
 
         public PreviewWindow Target => PreviewWindow.Instance;
 
+        /// <summary>
+        /// 当前选中
+        /// </summary>
+        public ISelection _curSelection;
+        public ISelection CurSelection
+        {
+            get => _curSelection;
+            set
+            {
+                _curSelection?.OnDeselected();
+                _curSelection = value;
+                _curSelection?.OnSelected();
+                this.Repaint();
+            }
+        }
+
         private void OnGUI()
         {
             GUILayout.Space(AnimancerGUI.StandardSpacing * 2);
@@ -64,6 +80,15 @@ namespace ML.Editor.Animation
                 if (animancer.IsGraphPlaying)
                     GUI.changed = true;
             }
+            EditorGUILayout.Separator();
+            PreviewWindow.Settings.DoHierarchyGUI();
+
+            // 选中的细节面板
+            EditorGUILayout.Separator();
+            AnimancerGUI.BeginVerticalBox(GUIStyle.none);
+            EditorGUILayout.LabelField("细节面板");
+            CurSelection?.DoSelectedGUI();
+            AnimancerGUI.EndVerticalBox(GUIStyle.none);
         }
 
         private void OnEnable()
@@ -75,6 +100,24 @@ namespace ML.Editor.Animation
         {
             if (Instance == this)
                 Instance = null;
+        }
+
+        public interface ISelection
+        {
+            public virtual void DoSelectedGUI()
+            {
+                EditorGUILayout.LabelField("未实现细节显示");
+            }
+
+            public virtual void OnSelected()
+            {
+
+            }
+
+            public virtual void OnDeselected()
+            {
+
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ML.Editor.Animation
                 // 预置模型设置
                 DoModelsGUI();
                 // 从预览的根物体开始显示绘制层级
-                DoHierarchyGUI();
+                //DoHierarchyGUI();
 
                 EditorGUI.indentLevel--;
 
@@ -383,7 +383,7 @@ namespace ML.Editor.Animation
             #endregion
 
             #region Scene Hierarchy
-            private static void DoHierarchyGUI()
+            public static void DoHierarchyGUI()
             {
                 GUILayout.BeginVertical(GUI.skin.box);
                 GUILayout.Label("Preview Scene Hierarchy");
@@ -395,6 +395,7 @@ namespace ML.Editor.Animation
 
             private static void DoHierarchyGUI(Transform root)
             {
+                EditorGUI.indentLevel++;
                 var area = AnimancerGUI.LayoutSingleLineRect();
 
                 if (_HierarchyButtonStyle == null)
@@ -410,15 +411,15 @@ namespace ML.Editor.Animation
                     Selection.activeTransform = root;
                     GUIUtility.ExitGUI();
                 }
+                EditorGUI.indentLevel--;
 
                 var childCount = root.childCount;
                 if (childCount == 0)
                     return;
-                EditorGUI.indentLevel--;
+
                 var expandedHierarchy = Instance._Scene.ExpandedHierarchy;
                 var index = expandedHierarchy != null ? expandedHierarchy.IndexOf(root) : -1;
                 var isExpanded = EditorGUI.Foldout(area, index >= 0, GUIContent.none);
-                EditorGUI.indentLevel++;
 
                 if (isExpanded)
                 {

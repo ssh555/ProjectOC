@@ -41,12 +41,12 @@ namespace ML.Editor.Animation
         private AnimationAssetBaseEditor assetEditor;
         public AnimationAssetBaseEditor AssetEditor => assetEditor;
 
-        [MenuItem("Window/ML/AnimancerAssetEditor", priority = 0)]
-        public static object ShowWindow()
+        [MenuItem("Window/ML/AnimationWindow", priority = 0)]
+        public static void ShowWindow()
         {
-            if (_container != null)
+            if (_instance != null)
             {
-                return _container;
+                return;
             }
             // 创建最外层容器
             _container = ML.Editor.EditorContainerWindow.CreateInstance();
@@ -108,7 +108,7 @@ namespace ML.Editor.Animation
             EditorContainerWindow.Show(_container, 0, true, false, true);
             EditorContainerWindow.OnResize(_container);
 
-            return _container;
+            return;
         }
 
         public static AnimationWindow OpenWithAsset(AnimationAssetBase asset)
@@ -133,6 +133,10 @@ namespace ML.Editor.Animation
             if (SelectedAsset != null && (assetEditor == null || assetEditor.target != SelectedAsset))
             {
                 assetEditor = UnityEditor.Editor.CreateEditor(SelectedAsset) as AnimationAssetBaseEditor;
+                if (assetEditor != null)
+                {
+                    assetEditor.Init();
+                }
             }
             if (assetEditor != null)
             {
@@ -156,9 +160,29 @@ namespace ML.Editor.Animation
             }
         }
 
+        private void OnEnable()
+        {
+            if(_instance == null)
+            {
+                _instance = this;
+            }
+            AssemblyReloadEvents.afterAssemblyReload += AssemblyReloadEvents_afterAssemblyReload;
+        }
+
+
+        private void AssemblyReloadEvents_afterAssemblyReload()
+        {
+            this.Close();
+            this.previewWindow.Close();
+            this.detailWindow.Close();
+            this.trackWindow.Close();
+            _instance = null;
+            OpenWithAsset(SelectedAsset);
+        }
+
         private void OnDisable()
         {
-            _container = null;
+            AssemblyReloadEvents.afterAssemblyReload -= AssemblyReloadEvents_afterAssemblyReload;
             if (_instance == this)
             {
                 _instance = null;
