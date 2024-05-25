@@ -421,7 +421,7 @@ namespace ProjectOC.ProNodeNS.UI
             if (CurMode == Mode.ProNode && CurProNodeMode == ProNodeSelectMode.Recipe)
             {
                 ItemIsDestroyed = true;
-                int num = ProNode.Stack;
+                int num = ProNode.StackAll;
                 num = num < 10 ? num : 10;
                 ProNode.Remove(0, num);
                 Refresh();
@@ -505,7 +505,7 @@ namespace ProjectOC.ProNodeNS.UI
                     }
                     ProNode_Product.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.Stack.ToString();
+                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.StackAll.ToString();
                     ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                     #endregion
 

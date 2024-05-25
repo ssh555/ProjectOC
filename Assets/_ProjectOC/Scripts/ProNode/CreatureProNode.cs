@@ -8,7 +8,7 @@ namespace ProjectOC.ProNodeNS
     public class CreatureProNode : IProNode
     {
         #region ProNode
-        public int ActivityThreshold;
+        public int OutputThreshold;
         public bool HasCreature => HasRecipe ? DataContainer.GetCapacity() == Recipe.Raw.Count + 3 : false;
         public ML.Engine.InventorySystem.CreatureItem Creature => HasCreature &&
             DataContainer.GetData(DataContainer.GetCapacity() - 2) is ML.Engine.InventorySystem.CreatureItem item ? item : null;
@@ -21,7 +21,7 @@ namespace ProjectOC.ProNodeNS
             lock (this)
             {
                 if (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature)) { return false; }
-                ActivityThreshold = 0;
+                OutputThreshold = 0;
                 DiscardReserve = 0;
                 if (creature != null && ChangeRecipe(creature.ProRecipeID))
                 {
@@ -91,7 +91,7 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Activity <= ActivityThreshold)
+                if (creature.Output <= OutputThreshold)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2);

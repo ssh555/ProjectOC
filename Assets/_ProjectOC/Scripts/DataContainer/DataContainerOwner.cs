@@ -68,10 +68,12 @@ namespace ProjectOC.DataNS
         }
         public void Remove(int index, int amount)
         {
-            if (amount > 0 && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
+            if (amount > 0 && DataContainer.GetAmount(index, DataOpType.StorageAll) >= amount)
             {
-                amount = DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
-                DataContainer.GetData(index).AddToPlayerInventory(amount);
+                int num = amount;
+                amount -= DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
+                amount -= DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.StorageReserve);
+                DataContainer.GetData(index).AddToPlayerInventory(num - amount);
             }
         }
         public void FastAdd(int index)
