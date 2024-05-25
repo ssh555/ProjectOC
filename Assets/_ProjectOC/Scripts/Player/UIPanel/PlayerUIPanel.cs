@@ -146,7 +146,15 @@ namespace ProjectOC.Player.UI
             {
                 foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
                 {
-                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(item));
+                    int maxAmount = ItemManager.Instance.GetMaxAmount(id);
+                    if (maxAmount < 500)
+                    {
+                        ItemManager.Instance.SpawnItems(id, maxAmount).ForEach(item => (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(item));
+                    }
+                    else
+                    {
+                        ItemManager.Instance.SpawnItems(id, 500).ForEach(item => (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(item));
+                    }
                 }
             }
             );

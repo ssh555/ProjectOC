@@ -90,7 +90,7 @@ namespace ProjectOC.ProNodeNS.UI
                 CreatureBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_CreatureTemplate.prefab", () => { synchronizer.Check(); });
             }
             else { synchronizer.Check(); }
-            num = num > 0 ? ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(Creatures[CreatureIndex].ProRecipeID).Count : 0;
+            num = num > 0 && 0 <= CreatureIndex && CreatureIndex < Creatures.Count ? ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(Creatures[CreatureIndex]?.ProRecipeID ?? "").Count : 0;
             if (num != RecipeRawBtnList.BtnCnt)
             {
                 RecipeRawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab", () => { synchronizer.Check(); });
@@ -436,7 +436,7 @@ namespace ProjectOC.ProNodeNS.UI
                         new Vector2(output.Find("Cur").GetComponent<RectTransform>().sizeDelta.x, (120f * creature.Output) / 50);
                     RectTransform curOutputThreshold = output.Find("Cur").Find("Output").GetComponent<RectTransform>();
                     curOutputThreshold.position = new Vector3(curOutputThreshold.position.x, (120f * ProNode.OutputThreshold) / 50, curOutputThreshold.position.z);
-                    output.Find("Cur").Find("Output").Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.OutputThreshold.ToString();
+                    output.Find("Output").Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.OutputThreshold.ToString();
                     output.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = creature.Output.ToString();
 
                     int initActivity = ManagerNS.LocalGameManager.Instance.CreatureManager.GetActivity(itemID);

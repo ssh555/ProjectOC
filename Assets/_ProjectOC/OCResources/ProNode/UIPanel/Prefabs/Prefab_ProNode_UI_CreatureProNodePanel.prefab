@@ -7219,7 +7219,7 @@ GameObject:
   - component: {fileID: 3562515873756447301}
   - component: {fileID: 4259536922216705994}
   m_Layer: 0
-  m_Name: IconCeature
+  m_Name: IconCreature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

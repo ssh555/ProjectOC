@@ -18,6 +18,7 @@ namespace ML.Engine.InventorySystem
             bool hasSex = ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetHasSex(config.id);
             Gender = (Gender)(hasSex ? UnityEngine.Random.Range(1, 3) : 0);
             Activity = ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetActivity(config.id);
+            Output = UnityEngine.Random.Range(1, 51);
         }
         public override WorldItem.IWorldItemData GetItemWorldData()
         {
