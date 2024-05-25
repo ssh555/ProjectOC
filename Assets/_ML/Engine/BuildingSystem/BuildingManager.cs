@@ -1056,6 +1056,7 @@ namespace ML.Engine.BuildingSystem
 
         public List<InventorySystem.Formula> GetRaw(string CID)
         {
+            Debug.Log("GetRaw " + CID);
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].raw;
