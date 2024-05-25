@@ -2037,6 +2037,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1064234286738810389, guid: 201dba5904027d24cbcdf293a0a5f889, type: 3}
+      propertyPath: _modifyclip
+      value: 
+      objectReference: {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
     - target: {fileID: 2777577105506369574, guid: 201dba5904027d24cbcdf293a0a5f889, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5790889

@@ -10,6 +10,7 @@ public class _Test : MonoBehaviour
 {
     [SerializeField]
     public ML.Engine.Animation.ClipTransitionAsset.UnShared _clip;
+    public ML.Engine.Animation.ClipTransitionAsset _modifyclip;
 
     public AnimancerComponent _animancer;
 
@@ -22,16 +23,17 @@ public class _Test : MonoBehaviour
     [Button("Play")]
     private void Play()
     {
-        //var state = _clip.CreateState();
+        ////var state = _clip.CreateState();
 
-        // Actually play the animation.
-        var state = _animancer.Play(_clip);
-        state.NormalizedTime = 0;
-        state.Events.OnEnd += () =>
-        {
-            _animancer.Playable.DestroyGraph();
-        };
+        //// Actually play the animation.
+        //var state = _animancer.Play(_clip);
+        //state.NormalizedTime = 0;
+        //state.Events.OnEnd += () =>
+        //{
+        //    _animancer.Playable.DestroyGraph();
+        //};
 
+        _modifyclip.clipTransition.Events.SetNormalizedTime(0, 0.23f);
 
 
     }

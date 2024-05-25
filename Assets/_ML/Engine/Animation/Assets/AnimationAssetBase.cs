@@ -2,8 +2,9 @@ using Animancer;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 namespace ML.Engine.Animation
 {
@@ -55,6 +56,8 @@ namespace ML.Engine.Animation
             /************************************************************************************************************************/
         }
 
+
+        public abstract ITransition GetPreviewTransition();
     }
 
 
@@ -64,5 +67,57 @@ namespace ML.Engine.Animation
     //{
 
     //}
+
+    //[Serializable]
+    public interface IAssetHasEvents
+    {
+        [Serializable]
+        public class AssetEvent
+        {
+            public string Name;
+            public float NormalizedTime;
+            public UnityEvent Event;
+        }
+        public List<AssetEvent> Events { get; }
+
+        public AnimancerEvent.Sequence GetEventsOptional()
+        {
+            //Events.Sort((a, b) => a.NormalizedTime.CompareTo(b.NormalizedTime));
+
+            var timeCount = Events.Count;
+            if (timeCount == 0)
+                return null;
+
+            var _Events = new AnimancerEvent.Sequence(timeCount);
+
+            for (int i = 0; i < timeCount; ++i)
+            {
+                Action callback = GetInvoker(Events[i].Event);
+                _Events.Add(new AnimancerEvent(Events[i].NormalizedTime, callback));
+                _Events.SetName(i, Events[i].Name);
+            }
+
+            return _Events;
+        }
+
+        public static Action GetInvoker(UnityEvent callback) => HasPersistentCalls(callback) ? callback.Invoke : AnimancerEvent.DummyCallback;
+
+        public static bool HasPersistentCalls(UnityEvent callback)
+        {
+            if (callback == null)
+                return false;
+
+            // UnityEvents do not allow us to check if any dynamic calls are present.
+            // But we are not giving runtime access to the events so it does not really matter.
+            // UltEvents does allow it (via the HasCalls property), but we might as well be consistent.
+
+#if ANIMANCER_ULT_EVENTS
+                    var calls = callback.PersistentCallsList;
+                    return calls != null && calls.Count > 0;
+#else
+            return callback.GetPersistentEventCount() > 0;
+#endif
+        }
+    }
 
 }

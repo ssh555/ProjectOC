@@ -10,11 +10,13 @@ namespace ML.Editor.Animation
     {
         protected EventTrack eventTrack;
 
+
         public override void Init()
         {
             base.Init();
             ClipTransitionAsset tmp = (ClipTransitionAsset)target;
-            eventTrack = new EventTrack(tmp.clipTransition);
+            eventTrack = new EventTrack(tmp);
+            
             eventTrack.End = tmp.clipTransition.Clip.frameRate * tmp.clipTransition.Clip.length;
         }
 

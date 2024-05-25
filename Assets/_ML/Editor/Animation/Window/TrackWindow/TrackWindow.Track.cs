@@ -130,6 +130,12 @@ namespace ML.Editor.Animation
                 return CreateSignal<T>(Mathf.Max((mousepos.x - 10), 0) / Instance._timeline.timelineScale / Timeline.tickSpacing / Instance._timeline.Framelength);
             }
 
+            public T CreateSignalOnMouse<T>(out float time) where T : TrackSignal, new()
+            {
+                time = Mathf.Max((mousepos.x - 10), 0) / Instance._timeline.timelineScale / Timeline.tickSpacing / Instance._timeline.Framelength;
+                return CreateSignal<T>();
+            }
+
             public T CreateSignal<T>(float time) where T : TrackSignal, new()
             {
                 var signal = CreateSignal<T>();
@@ -149,7 +155,7 @@ namespace ML.Editor.Animation
         /// <summary>
         /// 轨道标记
         /// </summary>
-        public class TrackSignal : ISelection
+        public class TrackSignal : UnityEngine.Object, ISelection
         {
             /// <summary>
             /// 标记名称
@@ -202,6 +208,8 @@ namespace ML.Editor.Animation
                     if (Event.current.button == 0 && Event.current.type == EventType.MouseDrag && AttachedTrack.PaintRect.Contains(Event.current.mousePosition))
                     {
                         //PreviewWindow.Instance.GetScene.Animancer.States.Current.Events.SetShouldNotModifyReason(null);
+                        //PreviewWindow.Instance.GetScene.Animancer.States.Destroy(PreviewWindow.Transition);
+
                         NormalizedTime = Mathf.Max((Event.current.mousePosition.x - AttachedTrack.PaintRect.x), 0) / Instance._timeline.timelineScale / Timeline.tickSpacing / Instance._timeline.Framelength;
                         Instance.Repaint();
                         DetailWindow.Instance.Repaint();
@@ -218,17 +226,33 @@ namespace ML.Editor.Animation
 
             public virtual void DoSelectedGUI()
             {
+                GUILayout.BeginVertical();
+
                 // 编辑并显示 Name 属性，限制宽度
-                Name = EditorGUILayout.TextField("名字", Name);
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("名字", GUILayout.Width(60));
+                Name = EditorGUILayout.TextField(Name);
+                GUILayout.EndHorizontal();
 
                 // 编辑并显示 Time 属性，限制宽度
-                NormalizedTime = EditorGUILayout.FloatField("时间点", NormalizedTime);
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("时间点", GUILayout.Width(60));
+                NormalizedTime = EditorGUILayout.FloatField(NormalizedTime);
+                GUILayout.EndHorizontal();
 
                 // 编辑并显示 MainColor 属性，限制宽度
-                MainColor = EditorGUILayout.ColorField("常规颜色", MainColor);
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("常规颜色", GUILayout.Width(60));
+                MainColor = EditorGUILayout.ColorField(MainColor);
+                GUILayout.EndHorizontal();
 
                 // 编辑并显示 SelectedColor 属性，限制宽度
-                SelectedColor = EditorGUILayout.ColorField("选中颜色", SelectedColor);
+                GUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("选中颜色", GUILayout.Width(60));
+                SelectedColor = EditorGUILayout.ColorField(SelectedColor);
+                GUILayout.EndHorizontal();
+
+                GUILayout.EndVertical();
             }
 
 
@@ -249,6 +273,10 @@ namespace ML.Editor.Animation
 
             protected virtual void AddItemsToMenu(GenericMenu menu)
             {
+                menu.AddItem(new GUIContent("取消选中"), false, () =>
+                {
+                    DetailWindow.Instance.CurSelection = null;
+                });
                 menu.AddItem(new GUIContent("删除"), false, () =>
                 {
                     AttachedTrack.DeleteSignal(this);
