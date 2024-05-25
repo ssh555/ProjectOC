@@ -99,6 +99,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             {
                 var panel = handle.Result.GetComponent<SmallMapPanel>();
                 panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.SelectMineralSourcesPanel = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
         }
@@ -151,6 +152,22 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     private Transform BigMapInstanceTrans;
     private Transform NormalRegions;
+
+    /// <summary>
+    ///该ui对应的生产节点 id 在push该ui时赋值
+    /// </summary>
+    private string proNodeId = "testID" + ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
+    [ShowInInspector]
+    public string ProNodeId { set { proNodeId = value; } get { return proNodeId; } }
+
+
+
+    /// <summary>
+    ///当前矿圈所圈住的矿物集合
+    /// </summary>
+    private List<MineData> curMiningData = new List<MineData>();
+    [ShowInInspector]
+    public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
     #endregion
 
     public override void Refresh()
