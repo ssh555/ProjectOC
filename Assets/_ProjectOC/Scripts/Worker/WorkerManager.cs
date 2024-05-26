@@ -97,9 +97,11 @@ namespace ProjectOC.WorkerNS
             result.RemoveAll(worker => worker.HaveFeatSeat);
             return result;
         }
-        public List<string> GetNotBanWorkerIDs(bool needSort = true)
+        public List<string> GetSortWorkerIDForFeatureUI()
         {
-            return GetNotBanWorkers(needSort).Select(x => x.ID).ToList();
+            List<Worker> workers = GetNotBanWorkers(false);
+            workers.Sort(new Worker.SortForFeatureUI());
+            return workers.Select(x => x.ID).ToList();
         }
 
         /// <summary>
