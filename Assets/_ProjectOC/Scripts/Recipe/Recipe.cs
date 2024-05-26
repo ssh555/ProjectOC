@@ -11,14 +11,10 @@ namespace ML.Engine.InventorySystem
         public string ID;
         public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
         #region 读表数据
-        [LabelText("排序"), ShowInInspector, ReadOnly]
-        public int Sort => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetSort(ID) : 999;
-        [LabelText("类目"), ShowInInspector, ReadOnly]
-        public RecipeCategory Category => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetCategory(ID) : RecipeCategory.None;
         [LabelText("原料"), ShowInInspector, ReadOnly]
         public List<Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<Formula>();
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(Formula);
+        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : new Formula() { id = "" };
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
         public string ProductID => Product.id;
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
@@ -29,16 +25,8 @@ namespace ML.Engine.InventorySystem
         public int ExpRecipe => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID) : 0;
         #endregion
 
-        public Recipe(RecipeTableData config)
-        {
-            ID = config.ID;
-        }
-
-        public void ClearData()
-        {
-            ID = "";
-        }
-
+        public Recipe(RecipeTableData config) { ID = config.ID; }
+        public void ClearData() { ID = ""; }
         public int GetRawNum(string itemID)
         {
             if (!string.IsNullOrEmpty(itemID))

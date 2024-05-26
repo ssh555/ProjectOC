@@ -53,7 +53,15 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Creature1?.Output ?? 0) * 3; }
+        public override int GetEff() 
+        {
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                return EffBase + (Creature1?.Output ?? 0) * 
+                    ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff;
+            }
+            return EffBase; 
+        }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { FastAdd(1); }
         public override void Destroy() { RemoveRecipe(); }
@@ -114,14 +122,14 @@ namespace ProjectOC.ProNodeNS
                     {
                         bounds.Add((4 * low + (high - low) * i) / 4);
                     }
-                    List<int> ranges = new List<int>() { 1, 10, 31, 52, 101 };
+                    List<int> ranges = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.OutputRanges;
                     int output = 0;
                     int rand = UnityEngine.Random.Range(1, 101);
                     for (int i = 0; i < 4; i++)
                     {
                         if (ranges[i] <= rand && rand <= ranges[i + 1] - 1)
                         {
-                            output = UnityEngine.Random.Range(bounds[i], bounds[i + 1]);
+                            output = UnityEngine.Random.Range(bounds[i], bounds[i + 1] + 1);
                             break;
                         }
                     }
