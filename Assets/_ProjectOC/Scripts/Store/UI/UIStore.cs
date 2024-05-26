@@ -1,5 +1,3 @@
-using ML.Engine.TextContent;
-using ML.Engine.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,9 +32,9 @@ namespace ProjectOC.StoreNS.UI
                 else if (curMode == Mode.ChangeItem || curMode == Mode.ChangeIcon)
                 {
                     ItemBtnList.EnableBtnList();
+                    string curItemID = curMode == Mode.ChangeItem ? Store.DataContainer.GetID(DataIndex) : Store.WorldIconItemID;
                     for (int i = 0; i < ItemBtnList.BtnCnt; ++i)
                     {
-                        string curItemID = curMode == Mode.ChangeItem ? Store.DataContainer.GetID(DataIndex) : Store.WorldIconItemID;
                         if (curItemID == ItemDatas[i])
                         {
                             ItemBtnList.MoveIndexIUISelected(i);
@@ -70,7 +68,7 @@ namespace ProjectOC.StoreNS.UI
         private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {
-            Synchronizer synchronizer = new Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
+            ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
             DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
             DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
@@ -87,32 +85,23 @@ namespace ProjectOC.StoreNS.UI
                 RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
                 RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
             }
-            else
-            {
-                synchronizer.Check();
-            }
+            else { synchronizer.Check(); }
         }
         protected void UpdateBtnInfo()
         {
             IsInitBtnList = false;
-            Synchronizer synchronizer = new Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
+            ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
             if (DataBtnList.BtnCnt != Store.DataContainer.GetCapacity())
             {
                 DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
             }
-            else
-            {
-                synchronizer.Check();
-            }
+            else { synchronizer.Check(); }
             var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
             if (HasUpgrade && RawBtnList.BtnCnt != raw.Count)
             {
                 RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
             }
-            else
-            {
-                synchronizer.Check();
-            }
+            else { synchronizer.Check(); }
         }
         #endregion
 
@@ -164,26 +153,26 @@ namespace ProjectOC.StoreNS.UI
         [System.Serializable]
         public struct StorePanel
         {
-            public TextContent text_Title;
-            public TextContent text_Empty;
-            public TextContent[] TransportPriority;
-            public TextContent text_Add;
-            public TextContent text_Remove;
-            public TextContent text_LvDesc1;
-            public TextContent text_LvDesc2;
+            public ML.Engine.TextContent.TextContent text_Title;
+            public ML.Engine.TextContent.TextContent text_Empty;
+            public ML.Engine.TextContent.TextContent[] TransportPriority;
+            public ML.Engine.TextContent.TextContent text_Add;
+            public ML.Engine.TextContent.TextContent text_Remove;
+            public ML.Engine.TextContent.TextContent text_LvDesc1;
+            public ML.Engine.TextContent.TextContent text_LvDesc2;
 
-            public KeyTip Upgrade;
-            public KeyTip NextPriority;
-            public KeyTip ChangeIcon;
-            public KeyTip UpgradeConfirm;
-            public KeyTip ChangeItem;
-            public KeyTip Remove1;
-            public KeyTip Remove10;
-            public KeyTip Switch;
-            public KeyTip FastAdd;
-            public KeyTip Confirm;
-            public KeyTip Back;
-            public KeyTip UpgradeBack;
+            public ML.Engine.TextContent.KeyTip Upgrade;
+            public ML.Engine.TextContent.KeyTip NextPriority;
+            public ML.Engine.TextContent.KeyTip ChangeIcon;
+            public ML.Engine.TextContent.KeyTip UpgradeConfirm;
+            public ML.Engine.TextContent.KeyTip ChangeItem;
+            public ML.Engine.TextContent.KeyTip Remove1;
+            public ML.Engine.TextContent.KeyTip Remove10;
+            public ML.Engine.TextContent.KeyTip Switch;
+            public ML.Engine.TextContent.KeyTip FastAdd;
+            public ML.Engine.TextContent.KeyTip Confirm;
+            public ML.Engine.TextContent.KeyTip Back;
+            public ML.Engine.TextContent.KeyTip UpgradeBack;
         }
         protected override void InitTextContentPathData()
         {
@@ -247,26 +236,14 @@ namespace ProjectOC.StoreNS.UI
         }
         private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.ChangeIcon)
-            {
-                CurMode = Mode.ChangeIcon;
-            }
-            else
-            {
-                CurMode = Mode.Store;
-            }
+            if (CurMode != Mode.ChangeIcon) { CurMode = Mode.ChangeIcon; }
+            else { CurMode = Mode.Store; }
             Refresh();
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.Upgrade && HasUpgrade)
-            {
-                CurMode = Mode.Upgrade;
-            }
-            else
-            {
-                CurMode = Mode.Store;
-            }
+            if (CurMode != Mode.Upgrade && HasUpgrade) { CurMode = Mode.Upgrade; }
+            else { CurMode = Mode.Store; }
             Refresh();
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -372,7 +349,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore as WorldStore);
+                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore);
                 UpdateBtnInfo();
             }
             Refresh();

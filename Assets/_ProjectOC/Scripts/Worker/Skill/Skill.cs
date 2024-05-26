@@ -27,42 +27,40 @@ namespace ProjectOC.WorkerNS
             LevelCurrent = 0;
             ChangeLevel(level);
         }
-        public void AlterEff(int value)
+        public Skill AlterEff(int value)
         {
             Eff += value;
+            return this;
         }
-        public void AlterExpRate(int value)
+        public Skill AlterExpRate(int value)
         {
             ExpRate += value;
+            return this;
         }
-        public void AlterExp(int value)
+        public Skill AlterExp(int value)
         {
             int cur = (int)(Exp + value * ExpRate);
             cur = cur >= 0 ? cur : 0;
-            cur = cur <= 10000 ? cur : 10000;
-            Exp = cur;
-            List<int> ExpToLevel = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel;
+            List<int> expToLevel = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel;
+            Exp = System.Math.Min(cur, expToLevel[expToLevel.Count - 1]);
             cur = 0;
-            for (int i = 0; i < ExpToLevel.Count; i++)
+            for (int i = 0; i < expToLevel.Count; i++)
             {
-                if (Exp >= ExpToLevel[i])
-                {
-                    cur = i + 1;
-                }
-                else
-                {
-                    break;
-                }
+                if (Exp >= expToLevel[i]) { cur = i + 1; }
+                else { break; }
             }
             LevelCurrent = cur;
+            return this;
         }
-        public void ChangeLevel(int level)
+        public Skill ChangeLevel(int level)
         {
-            if (0 <= level && level <= 10)
+            List<int> expToLevel = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel;
+            if (0 <= level && level <= expToLevel.Count)
             {
-                Exp = level > 0 ? ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel[level - 1] : 0;
+                Exp = level > 0 ? expToLevel[level - 1] : 0;
                 LevelCurrent = level;
             }
+            return this;
         }
         public int GetEff()
         {

@@ -21,12 +21,10 @@ namespace ProjectOC.WorkerNS
         [ShowInInspector]
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
-        private System.Random Random;
         private int level = 1;
         public int Level { get { return level; } }
         public void OnRegister()
         {
-            Random = new System.Random();
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("OCTableData", "WorkerEcho", (datas) =>
             {
                 foreach (var data in datas)

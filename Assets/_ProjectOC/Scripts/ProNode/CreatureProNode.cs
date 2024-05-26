@@ -8,7 +8,7 @@ namespace ProjectOC.ProNodeNS
     public class CreatureProNode : IProNode
     {
         #region ProNode
-        public int ActivityThreshold;
+        public int OutputThreshold;
         public bool HasCreature => HasRecipe ? DataContainer.GetCapacity() == Recipe.Raw.Count + 3 : false;
         public ML.Engine.InventorySystem.CreatureItem Creature => HasCreature &&
             DataContainer.GetData(DataContainer.GetCapacity() - 2) is ML.Engine.InventorySystem.CreatureItem item ? item : null;
@@ -21,7 +21,7 @@ namespace ProjectOC.ProNodeNS
             lock (this)
             {
                 if (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature)) { return false; }
-                ActivityThreshold = 0;
+                OutputThreshold = 0;
                 DiscardReserve = 0;
                 if (creature != null && ChangeRecipe(creature.ProRecipeID))
                 {
@@ -38,7 +38,15 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Creature?.Output ?? 0) * 3; }
+        public override int GetEff()
+        {
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                return EffBase + (Creature?.Output ?? 0) *
+                    ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff;
+            }
+            return EffBase;
+        }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { if (HasCreature) { for (int i = 1; i < DataContainer.GetCapacity() - 2; i++) { FastAdd(i); } } }
         public override void Destroy() { RemoveRecipe(); }
@@ -83,7 +91,7 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Activity <= ActivityThreshold)
+                if (creature.Output <= OutputThreshold)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2);
@@ -107,9 +115,12 @@ namespace ProjectOC.ProNodeNS
                 StackReserve = Stack - needAssignNum;
                 var creature = Creature;
                 creature.Activity -= 1;
-                if (creature.Activity < 0 && creature.Activity % 10 == 0 && creature.Output > 0)
+                int descCount = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescCount;
+                descCount = descCount > 0 ? descCount : 10;
+                if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
                 {
-                    creature.Output -= 1;
+                    int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
+                    creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
                 }
             }
             // 下一次生产

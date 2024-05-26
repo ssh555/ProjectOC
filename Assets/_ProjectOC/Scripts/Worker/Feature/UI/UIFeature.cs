@@ -35,7 +35,7 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     Workers.Clear();
                     Workers.Add("");
-                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetNotBanWorkerIDs());
+                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSortWorkerIDForFeatureUI());
                     IsInitBtnList = false;
                     WorkerBtnList.ChangBtnNum(Workers.Count, null, () => { IsInitBtnList = true; Refresh(); });
                     WorkerBtnList.EnableBtnList();

@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ML.Engine.InventorySystem
 {
@@ -14,16 +15,23 @@ namespace ML.Engine.InventorySystem
         public int Activity;
         public bool HasSex;
     }
-    [LabelText("仓库管理器"), System.Serializable]
+    [LabelText("生物管理器"), System.Serializable]
     public sealed class CreatureManager : Manager.LocalManager.ILocalManager
     {
         #region ILocalManager
+        [ShowInInspector]
         private Dictionary<string, CreatureTableData> TableDict = new Dictionary<string, CreatureTableData>();
         public ABResources.ABJsonAssetProcessor<CreatureTableData[]> ABJAProcessor;
         public void OnRegister()
         {
-            ABJAProcessor = new ABResources.ABJsonAssetProcessor<CreatureTableData[]>("OCTableData", "Creature", 
-                (datas) => { foreach (var data in datas) { TableDict.Add(data.ItemID, data); } }, "养殖表数据");
+            ABJAProcessor = new ABResources.ABJsonAssetProcessor<CreatureTableData[]>("OCTableData", "Creature", (datas) => 
+            { 
+                foreach (var data in datas) 
+                { 
+                    TableDict.Add(data.ItemID, data); 
+                } 
+            }, "养殖表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
         public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) ? TableDict.ContainsKey(id) : false; }

@@ -9,7 +9,7 @@ namespace ProjectOC.DataNS
     public class DataContainer
     {
         #region Data
-        [LabelText("存储数据"), ReadOnly]
+        [LabelText("存储数据"), ReadOnly, ShowInInspector]
         private Data[] Datas;
         private Dictionary<string, HashSet<int>> IndexDict;
         public event Action OnDataChangeEvent;
@@ -51,7 +51,7 @@ namespace ProjectOC.DataNS
             {
                 IndexDict[key].Clear();
             }
-            for (int i = 0; i < Datas.Length; i++)
+            for (int i = 0; i < GetCapacity(); i++)
             {
                 Data data = Datas[i];
                 if (data.HaveSetData)
@@ -73,7 +73,7 @@ namespace ProjectOC.DataNS
 
         #region Get
         public int GetCapacity() { return Datas?.Length ?? 0; }
-        public bool IsValidIndex(int index) { return 0 <= index && index < Datas.Length; }
+        public bool IsValidIndex(int index) { return Datas != null && 0 <= index && index < Datas.Length; }
         public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : ""; }
         public IDataObj GetData(int index) { return IsValidIndex(index) ? Datas[index].GetData() : null; }
         public bool GetCanIn(int index) { return IsValidIndex(index) && Datas[index].CanIn; }
@@ -137,14 +137,11 @@ namespace ProjectOC.DataNS
         }
         public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            if (Datas != null) 
+            for (int i = 0; i < GetCapacity(); i++)
             {
-                foreach (Data data in Datas.ToArray())
+                if (Datas[i].HaveSetData && Datas[i].GetAmount(type) > 0 && (!needCanIn || Datas[i].CanIn) && (!needCanOut || Datas[i].CanOut))
                 {
-                    if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -176,14 +173,14 @@ namespace ProjectOC.DataNS
         public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
-            foreach (Data data in Datas.ToArray())
+            for (int i = 0; i < GetCapacity(); i++)
             {
-                if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                if (Datas[i].HaveSetData && (!needCanIn || Datas[i].CanIn) && (!needCanOut || Datas[i].CanOut))
                 {
-                    int amount = data.GetAmount(type);
+                    int amount = Datas[i].GetAmount(type);
                     if (amount > 0)
                     {
-                        IDataObj key = data.GetData();
+                        IDataObj key = Datas[i].GetData();
                         if (!result.ContainsKey(key))
                         {
                             result.Add(key, 0);
@@ -215,7 +212,7 @@ namespace ProjectOC.DataNS
             {
                 Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
                 if (capacity < 0 || dataCapacity < 0) { return result; }
-                int oldCapacity = Datas.Length;
+                int oldCapacity = GetCapacity();
                 for (int i = capacity; i < oldCapacity; i++)
                 {
                     if (Datas[i].StorageAll > 0)
@@ -268,7 +265,7 @@ namespace ProjectOC.DataNS
             {
                 Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
                 if (capacity < 0 || dataCapacitys == null || dataCapacitys.Count < capacity) { return result; }
-                int oldCapacity = Datas.Length;
+                int oldCapacity = GetCapacity();
                 for (int i = capacity; i < oldCapacity; i++)
                 {
                     if (Datas[i].StorageAll > 0)
@@ -321,7 +318,7 @@ namespace ProjectOC.DataNS
             lock (this)
             {
                 if (addCapacity < 0 || dataCapacity < 0) { return; }
-                int oldCapacity = Datas.Length;
+                int oldCapacity = GetCapacity();
                 Array.Resize(ref Datas, oldCapacity + addCapacity);
                 for (int i = 0; i < addCapacity; i++)
                 {
@@ -335,7 +332,7 @@ namespace ProjectOC.DataNS
             lock (this)
             {
                 if (addCapacity < 0 || dataCapacitys == null || dataCapacitys.Count < addCapacity) { return; }
-                int oldCapacity = Datas.Length;
+                int oldCapacity = GetCapacity();
                 Array.Resize(ref Datas, oldCapacity + addCapacity);
                 for (int i = 0; i < addCapacity; i++)
                 {
