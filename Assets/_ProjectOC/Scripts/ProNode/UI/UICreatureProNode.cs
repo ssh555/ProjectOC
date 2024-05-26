@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UICreatureProNode;
-using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -55,7 +54,6 @@ namespace ProjectOC.ProNodeNS.UI
         private ML.Engine.UI.UIBtnList CreatureBtnList;
         private int CreatureIndex => CreatureBtnList?.GetCurSelectedPos1() ?? 0;
         private ML.Engine.UI.UIBtnList RecipeRawBtnList;
-        [ShowInInspector]
         private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {

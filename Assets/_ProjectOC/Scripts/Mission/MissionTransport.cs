@@ -5,13 +5,13 @@ using System;
 
 namespace ProjectOC.MissionNS
 {
-    [LabelText("搬运任务"), System.Serializable]
+    [LabelText("搬运任务"), Serializable]
     public class MissionTransport
     {
         #region Data
-        [LabelText("搬运数据"), ReadOnly]
+        [LabelText("搬运数据"), ReadOnly, ShowInInspector]
         public IDataObj Data { get; private set; }
-        [LabelText("任务发起者"), ShowInInspector, NonSerialized]
+        [LabelText("任务发起者"), ReadOnly, ShowInInspector, NonSerialized]
         public IMissionObj Initiator;
         [LabelText("分配的搬运"), ReadOnly, ShowInInspector, NonSerialized]
         private List<Transport> Transports = new List<Transport>();
@@ -44,12 +44,12 @@ namespace ProjectOC.MissionNS
         public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false)
         {
             if (data == null) { return; }
+            Type = type;
             Data = data;
+            MissionNum = missionNum;
             Initiator = imission;
             Initiator.AddMissionTranport(this);
-            Type = type;
             MissionInitiatorType = initiatorType;
-            MissionNum = missionNum;
             ReplaceIndex = replaceIndex;
             ReserveEmpty = reserveEmpty;
         }
@@ -78,10 +78,7 @@ namespace ProjectOC.MissionNS
         public void ChangeMissionNum(int num)
         {
             MissionNum = num;
-            if (MissionNum <= 0 || FinishNum >= MissionNum)
-            {
-                End();
-            }
+            if (MissionNum <= 0 || FinishNum >= MissionNum) { End(); }
         }
         public void UpdateDestionation()
         {

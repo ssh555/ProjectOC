@@ -6,7 +6,7 @@ namespace ProjectOC.ManagerNS
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         private float timeScale = 1f;
-        [LabelText("现实多少秒等于游戏内1分钟"), FoldoutGroup("配置"), ShowInInspector]
+        [LabelText("现实多少秒等于游戏内1分钟"), ReadOnly, ShowInInspector]
         public float TimeScale
         {
             get { return timeScale; }

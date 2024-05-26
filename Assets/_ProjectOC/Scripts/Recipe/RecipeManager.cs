@@ -22,10 +22,10 @@ namespace ML.Engine.InventorySystem
         #region Load And Data
         public Dictionary<RecipeCategory, List<string>> RecipeCategorys = new Dictionary<RecipeCategory, List<string>>();
         private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
-        public ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
+        public ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
         public void OnRegister()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OCTableData", "Recipe", (datas) =>
+            ABJAProcessor = new ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OCTableData", "Recipe", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -44,19 +44,13 @@ namespace ML.Engine.InventorySystem
         #region Spawn
         public Recipe SpawnRecipe(string id)
         {
-            if (IsValidID(id))
-            {
-                return new Recipe(RecipeTableDict[id]);
-            }
-            return default(Recipe);
+            return IsValidID(id) ? new Recipe(RecipeTableDict[id]) : default(Recipe);
         }
         #endregion
 
         #region Getter
-        public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) ? RecipeTableDict.ContainsKey(id) : false; }
-
+        public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) && RecipeTableDict.ContainsKey(id); }
         public UnityEngine.Sprite GetRecipeIcon(string id) { return IsValidID(id) ? ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id) : null; }
-
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
             List<string> result = new List<string>();
@@ -66,7 +60,6 @@ namespace ML.Engine.InventorySystem
             }
             return result;
         }
-
         public List<string> SortRecipeIDs(List<string> recipeIDs)
         {
             List<string> resultes = new List<string>();
@@ -85,15 +78,9 @@ namespace ML.Engine.InventorySystem
             }
             return resultes;
         }
-        
-        public string[] GetAllID() { return RecipeTableDict.Keys.ToArray(); }
-
         public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : ""; }
-
         public int GetSort(string id) { return IsValidID(id) ? RecipeTableDict[id].Sort : int.MaxValue; }
-
         public RecipeCategory GetCategory(string id) { return IsValidID(id) ? RecipeTableDict[id].Category : RecipeCategory.None; }
-
         public List<Formula> GetRaw(string id)
         {
             List<Formula> result = new List<Formula>();
@@ -103,11 +90,7 @@ namespace ML.Engine.InventorySystem
             }
             return result;
         }
-
-        public Formula GetProduct(string id) 
-        { 
-            return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = "", num = 0 }; 
-        }
+        public Formula GetProduct(string id) { return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = "" }; }
         public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 0; }
         public int GetExpRecipe(string id) { return IsValidID(id) ? RecipeTableDict[id].ExpRecipe : 0; }
         #endregion

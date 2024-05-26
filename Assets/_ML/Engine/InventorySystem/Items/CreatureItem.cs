@@ -30,7 +30,7 @@ namespace ML.Engine.InventorySystem
         public int GetDataWeight() { return Weight; }
         public bool DataEquales(ProjectOC.DataNS.IDataObj other)
         {
-            return (other != null && other is CreatureItem otherObj) ? ReferenceEquals(this, otherObj) : false;
+            return other != null && other is CreatureItem otherObj && ReferenceEquals(this, otherObj);
         }
         public void AddToPlayerInventory(int num)
         {

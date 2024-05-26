@@ -47,7 +47,8 @@ namespace ProjectOC.RestaurantNS
             {
                 Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
+            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, 
+                ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
         }
 
         public void Destroy()
@@ -68,7 +69,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        #region 方法
+        #region Method
         /// <summary>
         /// 先查找空座位，找不到空座位返回false，更新该座位的信息，让刁民寻路到该座位。
         /// </summary>
@@ -128,8 +129,7 @@ namespace ProjectOC.RestaurantNS
             int flag = DataContainer.ChangeAmount(index, 1, DataNS.DataOpType.Empty, DataNS.DataOpType.Storage);
             if (0 <= index && flag == 1)
             {
-                string itemID = DataContainer.GetID(index);
-                return ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
+                return ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(DataContainer.GetID(index));
             }
             return null;
         }
@@ -142,7 +142,7 @@ namespace ProjectOC.RestaurantNS
         {
             return MissionNS.MissionObjType.Restaurant;
         }
-        public override void PutIn(int index, DataNS.IDataObj data, int amount) { Debug.Log("Error Restaurant PutIn"); }
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) { }
         #endregion
     }
 }

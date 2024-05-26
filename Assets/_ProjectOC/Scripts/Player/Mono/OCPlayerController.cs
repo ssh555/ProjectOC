@@ -193,7 +193,8 @@ namespace ProjectOC.Player
                 int current = OCState.Inventory.RemoveItem(itemID, num) ? num : 0;
                 if (containStore && amount - current > 0)
                 {
-                    Dictionary<StoreNS.IStore, int> dict = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(itemID, amount - current, priority);
+                    Dictionary<StoreNS.IStore, int> dict = ManagerNS.LocalGameManager.Instance.StoreManager.
+                        GetPutOutStore(new DataNS.ItemIDDataObj(itemID), amount - current, priority);
                     foreach (var kv in dict)
                     {
                         current += kv.Key.RemoveItem(itemID, kv.Value) ? kv.Value : 0;

@@ -60,20 +60,27 @@ namespace ProjectOC.DataNS
         public void ChangeData(int index, IDataObj data, bool isAdd = true, bool updateTransport=true)
         {
             var tup = DataContainer.ChangeData(index, data, ChangeDataAutoSort);
-            if (isAdd && tup.Item1 != null)
+            if (tup.Item1 != null)
             {
-                tup.Item1.AddToPlayerInventory(tup.Item2);
+                if (isAdd) { tup.Item1.AddToPlayerInventory(tup.Item2); }
+                if (updateTransport) { (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1); }
             }
-            if (updateTransport) { (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1); }
         }
         public void Remove(int index, int amount)
         {
-            if (amount > 0 && DataContainer.GetAmount(index, DataOpType.StorageAll) >= amount)
+            if (amount > 0 && DataContainer.HaveSetData(index) && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
             {
-                int num = amount;
-                amount -= DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
-                amount -= DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.StorageReserve);
-                DataContainer.GetData(index).AddToPlayerInventory(num - amount);
+                amount = DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
+                DataContainer.GetData(index).AddToPlayerInventory(amount);
+            }
+        }
+        public void FastRemove(int index)
+        {
+            if (DataContainer.HaveSetData(index))
+            {
+                int storage = DataContainer.GetAmount(index, DataOpType.Storage);
+                DataContainer.GetData(index).AddToPlayerInventory(storage);
+                DataContainer.ChangeAmount(index, storage, DataOpType.Empty, DataOpType.Storage);
             }
         }
         public void FastAdd(int index)
@@ -97,7 +104,7 @@ namespace ProjectOC.DataNS
         public abstract void PutIn(int index, IDataObj data, int amount);
         public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false)
         {
-            if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, true, needSort:ChangeDataAutoSort) < 0) { return 0; }
+            if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, needCanIn: true, needSort: ChangeDataAutoSort) < 0) { return 0; }
             return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true);
         }
         public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false)

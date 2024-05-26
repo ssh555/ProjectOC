@@ -770,13 +770,13 @@ namespace ProjectOC.WorkerNS
         private event Action<Worker> OnArriveDisposableEvent;
         private bool IsArrive;
 
-        public void OnCollisionEnter(Collision collision)
-        {
-            if (HaveDestination && collision.transform.position == Target)
-            {
-                IsArrive = true;
-            }
-        }
+        //public void OnCollisionEnter(Collision collision)
+        //{
+        //    if (HaveDestination && collision.transform.position == Target)
+        //    {
+        //        IsArrive = true;
+        //    }
+        //}
 
         public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
         {

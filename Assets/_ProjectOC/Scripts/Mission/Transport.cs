@@ -19,7 +19,7 @@ namespace ProjectOC.MissionNS
         #endregion
 
         #region Property
-        [LabelText("负责该搬运的刁民"), ReadOnly]
+        [LabelText("负责该搬运的刁民"), ReadOnly, ShowInInspector, NonSerialized]
         public WorkerNS.Worker Worker;
         [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;

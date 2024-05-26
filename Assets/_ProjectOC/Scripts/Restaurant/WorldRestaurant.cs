@@ -5,7 +5,7 @@ namespace ProjectOC.RestaurantNS
 {
     public class WorldRestaurant : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction
     {
-        [LabelText("²ÍÌü"), ShowInInspector, ReadOnly, SerializeField]
+        [LabelText("²ÍÌü"), ShowInInspector, ReadOnly]
         public Restaurant Restaurant;
         public string InteractType { get; set; } = "WorldRestaurant";
         public Vector3 PosOffset { get; set; } = Vector3.zero;

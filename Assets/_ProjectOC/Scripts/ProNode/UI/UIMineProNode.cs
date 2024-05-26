@@ -353,7 +353,7 @@ namespace ProjectOC.ProNodeNS.UI
             if (CurMode == Mode.ProNode && CurProNodeMode == ProNodeSelectMode.Product)
             {
                 ItemIsDestroyed = true;
-                int num = ProNode.DataContainer.GetAmount(ProductIndex, DataNS.DataOpType.StorageAll);
+                int num = ProNode.DataContainer.GetAmount(ProductIndex, DataNS.DataOpType.Storage);
                 num = num < 10 ? num : 10;
                 ProNode.Remove(ProductIndex, num);
                 Refresh();
