@@ -682,63 +682,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &1898445371518809714
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5756722887124536023, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_Name
-      value: Interact_FeatureModifier_Base1_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.814
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.66
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826119384851196554, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 1879cae32df77d049b7b6d5c16e698a8, type: 3}
 --- !u!114 &2192986165455938996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,11 +710,10 @@ MonoBehaviour:
     WorldProNode: {fileID: 0}
     ID: 
     Level: 0
-    TransportPriority: 0
     Recipe:
       ID: 
-    MissionTransports: []
-    LevelUpgradeEff: 
+    EffBase: 0
+    StackReserve: 0
 --- !u!4 &2229680366214114976
 Transform:
   m_ObjectHideFlags: 0
@@ -1071,6 +1013,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -1220,6 +1164,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -1382,6 +1328,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -1569,6 +1517,8 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -1684,11 +1634,10 @@ MonoBehaviour:
     WorldProNode: {fileID: 0}
     ID: 
     Level: 0
-    TransportPriority: 0
     Recipe:
       ID: 
-    MissionTransports: []
-    LevelUpgradeEff: 
+    EffBase: 0
+    StackReserve: 0
 --- !u!1001 &8614924450409547889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1833,7 +1782,6 @@ SceneRoots:
   - {fileID: 4419915100050976579}
   - {fileID: 8790135513545979687}
   - {fileID: 4972961886002513}
-  - {fileID: 1898445371518809714}
   - {fileID: 6745766055252732737}
   - {fileID: 8614924450409547889}
   - {fileID: 235609985194987369}
