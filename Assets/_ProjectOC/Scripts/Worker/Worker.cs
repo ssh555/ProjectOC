@@ -818,7 +818,6 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
-            IsArrive = false;
             HaveDestination = false;
             if (Agent != null && Agent.enabled)
             {
