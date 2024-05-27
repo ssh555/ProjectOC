@@ -4,6 +4,7 @@ using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
+using ProjectOC.ProNodeNS.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         base.OnExit();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
+        this.uIMineProNode.ProNode.ChangeMine(curMiningData);
     }                                                           
 
     protected override void Exit()
@@ -166,6 +168,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     private List<MineData> curMiningData = new List<MineData>();
     [ShowInInspector]
     public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
+
+    private UIMineProNode uIMineProNode;
+    public UIMineProNode UIMineProNode { get {  return uIMineProNode; } set { uIMineProNode = value; } }
     #endregion
 
     public override void Refresh()
