@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.Order;
 using ProjectOC.Player;
+using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -89,15 +91,20 @@ namespace ProjectOC.MineSystem
 
         public void Tick(float deltatime)
         {
-            //触发get
-            var isReachTarget = mainIslandData.isReachTarget;
-            //主岛移动触发ui refresh
-            if (mainIslandData.IsMoving && !isReachTarget) 
+            if(mainIslandData != null)
             {
-                RefreshUI?.Invoke();
+                //触发get
+                var isReachTarget = mainIslandData.isReachTarget;
+                //主岛移动触发ui refresh
+                if (mainIslandData.IsMoving && !isReachTarget)
+                {
+                    RefreshUI?.Invoke();
+                }
             }
+            
         }
         #endregion
+
         #region Base
         SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
@@ -154,26 +161,32 @@ namespace ProjectOC.MineSystem
 
             #region 同步初始化
             //初始化大地图缩放比例
-            this.GridScale = 1;
+            this.GridScale = (MineSystemConfig.ZoomInLimit - MineSystemConfig.ZoomOutLimit) * MineSystemConfig.InitZoomRate + MineSystemConfig.ZoomOutLimit; ;
 
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];
 
             //初始化主岛数据
-            mainIslandData = new MainIslandData();
+            mainIslandData = new MainIslandData(mineSystemConfig.MainIslandSpeed);
 
             //默认选中
             curMapLayerIndex = 0;
             #endregion
         }
 
+        private MineSystemConfig mineSystemConfig;
+        public MineSystemConfig MineSystemConfig { get { return mineSystemConfig; }  }
         public void OnRegister()
         {
             if (instance == null)
             {
                 instance = this;
                 ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-                Init();
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<MineSystemConfigAsset>("Config_Mine").Completed += (handle) =>
+                {
+                    mineSystemConfig = new MineSystemConfig(handle.Result.Config);
+                    Init();
+                };
             }
         }
 

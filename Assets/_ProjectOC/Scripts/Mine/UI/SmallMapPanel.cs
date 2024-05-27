@@ -61,7 +61,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     private void InitData()
     {
         if (MM.MineralMapData == null) return;
-        this.CheckRange = 3 * this.EnlargeRate;
+        this.CheckRange = MM.MineSystemConfig.MiningCircleRadius * this.EnlargeRate;
         (this.cursorNavigation.Center as RectTransform).sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
         this.PlacedCircle.sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
         Synchronizer synchronizer = new Synchronizer(MM.MineralMapData.MineDatas.Count, () => { ChangeMiningData(); });

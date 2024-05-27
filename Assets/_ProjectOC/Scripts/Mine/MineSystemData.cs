@@ -179,7 +179,7 @@ namespace ProjectOC.MineSystem
         public class MainIslandData
         {
             [LabelText("移动速度"), ReadOnly, ShowInInspector]
-            private float moveSpeed = 1;
+            private float moveSpeed;
             [LabelText("主岛位置"), ReadOnly, ShowInInspector]
             private Vector2 curPos;
             public Vector2 CurPos { get { return curPos; } set { curPos = value; } }
@@ -200,8 +200,9 @@ namespace ProjectOC.MineSystem
             public Vector2 MovingDir { get { return (targetPos - curPos).normalized; } }
             private bool isPause;
             public bool IsPause { get { return isPause; } set { isPause = value; } }
-            public MainIslandData()
+            public MainIslandData(float moveSpeed)
             {
+                this.moveSpeed = moveSpeed;
                 lastPos = curPos;
                 isPause = false;
             }

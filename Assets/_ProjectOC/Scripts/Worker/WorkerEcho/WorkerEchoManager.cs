@@ -24,10 +24,7 @@ namespace ProjectOC.WorkerNS
         private int level = 1;
         public int Level { get { return level; } }
 
-        #region 
-        public List<int> IntList1 = new List<int>();
-        public List<int> IntList2 = new List<int>();
-        #endregion
+
 
         public void OnRegister()
         {
