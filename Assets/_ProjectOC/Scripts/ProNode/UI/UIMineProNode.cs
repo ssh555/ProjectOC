@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -56,10 +57,13 @@ namespace ProjectOC.ProNodeNS.UI
         private List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
 
         #region BtnList
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList ProductBtnList;
         private int ProductIndex => ProductBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList WorkerBtnList;
         private int WrokerIndex => WorkerBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList UpgradeBtnList;
 
         private bool IsInitBtnList;
