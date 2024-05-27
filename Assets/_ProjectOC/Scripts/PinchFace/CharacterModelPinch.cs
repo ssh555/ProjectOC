@@ -18,6 +18,12 @@ namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
+        #region Unity
+
+        
+
+        #endregion
+        
         #region ÄóÁ³º¯Êý
 
         public AsyncOperationHandle<GameObject> GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
@@ -391,7 +397,8 @@ namespace ProjectOC.PinchFace
             [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
             [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
-            Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
+            public Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
+            private List<PinchPart.PinchPartData> PinchPartDatas = new List<PinchPart.PinchPartData>();
             
             public class BoneData
             {
@@ -413,17 +420,16 @@ namespace ProjectOC.PinchFace
             
             void Awake()
             {
+                //Êý¾Ý³õÊ¼»¯
                 pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
                 CameraView.Init(pinchFaceManager);
                 
                 Array enumValues = Enum.GetValues(typeof(PinchPartType2));
                 for(int i = 0;i<enumValues.Length;i++)
                     replaceGo.Add(null);
-                
                 avatar = transform.Find("AnMiXiuBone");
                 characterSkinMeshRenderer = transform.Find("AnMiXiu_Mesh").GetComponent<SkinnedMeshRenderer>();
                 CataBonelog(boneDic,avatar);
-                
                 //¹Ç÷À×Öµä³õÊ¼»¯
                 boneWeightDictionary.Add(BoneWeightType.Head,new BoneData(boneDic["Head"]));
                 //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
@@ -432,7 +438,20 @@ namespace ProjectOC.PinchFace
                 boneWeightDictionary.Add(BoneWeightType.Leg,new BoneData(boneDic["Weight_Thin"]));
                 boneWeightDictionary.Add(BoneWeightType.HeadTop,new BoneData(boneDic["Add_HeadTop"]));
                 boneWeightDictionary.Add(BoneWeightType.Root,new BoneData(boneDic["Root"]));
+
+
+                if (pinchFaceManager.Config != null)
+                {
+                    ChangeType(PinchPartType3.HF_HairFront, 0);
+                    ChangeType(PinchPartType3.HD_Dai, 0);
+                    ChangeType(PinchPartType3.HB_HairBack, 0);
+                }
                 
+                // pinchFaceManager.RandomPinchPart(PinchPartType3.HF_HairFront,true,this);
+                // foreach (var _type3 in pinchFaceManager.RacePinchDatas[2].pinchPartType3s)
+                // {
+                //     pinchFaceManager.RandomPinchPart(_type3,true,this);
+                // }
                 this.enabled = false;
             }
             

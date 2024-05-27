@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
+using ProjectOC.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -26,7 +28,7 @@ namespace ProjectOC.PinchFace
             void GenerateCharacterModel()
             {
                 IsInit++;
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(pinchFaceManager.playerModelPrefabPath).Completed+=(handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync(pinchFaceManager.playerModelPrefabPath).Completed+=(handle) =>
                 {
                     uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
                     RectTransform _rtTransform = uICameraImage.transform as RectTransform;
@@ -52,30 +54,18 @@ namespace ProjectOC.PinchFace
         void Init_RedeceCheckCallBack()
         {
             IsInit--;
-            if (IsInit <= 0)
+            if (IsInit == 0)
             {
-                //生成随机的组件 头发
-                foreach (var _pinchPart in pinchParts)
-                {
-                    PinchPartType3 _type3 = _pinchPart.PinchPartType3;
-                    int typePrefabCount = pinchFaceManager.Config.typesDatas[(int)_type3 - 1].typeCount;
-                    if (typePrefabCount != 0)
-                    {
-                        foreach (var _pinchSetting in _pinchPart.pinchSettingComps)
-                        {
-                            if (_pinchSetting.GetType() == typeof(ChangeTypePinchSetting))
-                            {
-                                /////通过PinchPart调用
-                                ChangeTypePinchSetting _typePinch = _pinchSetting as ChangeTypePinchSetting;
-                                int _typeIndex = Random.Range(0, typePrefabCount);
-                                _pinchPart.Action_TypeBtn(_typePinch,_typeIndex);
-                                break;
-                            }
-                        }
-                    } 
-                }
+                RandomPinchPart();
+                // foreach (var _pinchPart in pinchParts)
+                // {
+                //     _pinchPart.PinchFaceCallBack();
+                // }
             }
         }
+
+        
+        
         
         public override void OnExit()
         {
@@ -92,6 +82,8 @@ namespace ProjectOC.PinchFace
             base.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed += ApplyPinchType;
+            ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed += RandomPinchPart;
         }
         protected override void UnregisterInput()
         {
@@ -99,13 +91,61 @@ namespace ProjectOC.PinchFace
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
             this.UIBtnListContainer.DisableUIBtnListContainer();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= ApplyPinchType;
+            ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed -= RandomPinchPart;
         }
 
+        void ApplyPinchType(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            Destroy(pinchFaceManager.ModelPinch.gameObject);
+            GameManager.Instance.UIManager.PopPanel();
+            ApplyPinchType();
+        }
+        void ApplyPinchType()
+        {
+            //应用Character ModelPinch
+            CharacterModelPinch _modelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
+                .currentCharacter.transform.Find("PlayerModel").GetComponentInChildren<CharacterModelPinch>();
+            foreach (var _pinchPart in pinchParts)
+            {
+                _pinchPart.ApplyPinchSetting(_modelPinch);
+            }
+        }
+        void RandomPinchPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            RandomPinchPart();
+        }
+        void RandomPinchPart()
+        {
+            //生成随机的组件 头发
+            foreach (var _pinchPart in pinchParts)
+            {
+                PinchPartType3 _type3 = _pinchPart.PinchPartType3;
+                //随机Type
+                int typePrefabCount = pinchFaceManager.Config.typesDatas[(int)_type3 - 1].typeCount;
+                if (typePrefabCount != 0)
+                {
+                    foreach (var _pinchSetting in _pinchPart.pinchSettingComps)
+                    {
+                        if (_pinchSetting.GetType() == typeof(ChangeTypePinchSetting))
+                        {
+                            /////通过PinchPart调用
+                            ChangeTypePinchSetting _typePinch = _pinchSetting as ChangeTypePinchSetting;
+                            int _typeIndex = Random.Range(0, typePrefabCount);
+                            _pinchPart.Action_TypeBtn(_typePinch,_typeIndex);
+                            break;
+                        }
+                    }
+                } 
+            }
+        }
+        
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //如果当前在btnList[7]
             if (CurrentState == CurrentMouseState.Left)
             {
+                ApplyPinchType();
                 Destroy(pinchFaceManager.ModelPinch.gameObject);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
             }
@@ -217,7 +257,7 @@ namespace ProjectOC.PinchFace
         private UIBtnListContainer UIBtnListContainer;
         public Transform containerTransf,commonBtnList;
         private RacePinchData raceData;
-        private List<PinchPart> pinchParts = new List<PinchPart>();
+        private List<PinchPart> pinchParts;
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
         private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic => pinchFaceManager.pinchPartType3Dic;
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
@@ -231,7 +271,7 @@ namespace ProjectOC.PinchFace
         private string pinchFaceSAPath = "SA_UI_PinchFace/SA_PinchFace.spriteatlasv2";
         private const int commonType3Count = 4;
         private int IsInit = 0;
-        
+        private bool NeedInitPinchPart = false;
         private PinchPartType2 curType2;
         public PinchPartType2 CurType2
         {
@@ -261,10 +301,16 @@ namespace ProjectOC.PinchFace
             raceData = _racePinchData;
             //体型、头发、眼睛、面妆
             int _pinchPartTypeCount = _racePinchData.pinchPartType3s.Count + commonType3Count;
-            for (int i = 0; i < _pinchPartTypeCount; i++)
+            if (pinchParts == null)
             {
-                pinchParts.Add(null);
+                NeedInitPinchPart = true;
+                pinchParts = new List<PinchPart>();
+                for (int i = 0; i < _pinchPartTypeCount; i++)
+                {
+                    pinchParts.Add(null);
+                } 
             }
+            
             
             
             for(int i = 0;i<raceData.pinchPartType3s.Count;i++)
@@ -353,6 +399,7 @@ namespace ProjectOC.PinchFace
             {
                 _index += raceData.pinchPartType3s.Count;
             }
+            
             pinchParts[_index].GeneratePinchPartSetting();
         }
 

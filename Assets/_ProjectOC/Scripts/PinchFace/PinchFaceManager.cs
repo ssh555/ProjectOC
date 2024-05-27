@@ -41,9 +41,19 @@ namespace ProjectOC.PinchFace
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>(pinchDataConfigPath).Completed+=(handle) =>
             {
                 Config = handle.Result;
+
+                PlayerCharacter playerCharacter =
+                    (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter;
+                if (playerCharacter != null)
+                {
+                    CharacterModelPinch _modelPinch = playerCharacter.GetComponentInChildren<CharacterModelPinch>();
+                    _modelPinch.ChangeType(PinchPartType3.HF_HairFront, 0);
+                    _modelPinch.ChangeType(PinchPartType3.HD_Dai, 0);
+                    _modelPinch.ChangeType(PinchPartType3.HB_HairBack, 0);
+                }
             };
 
-            GeneratePinchRaceUI();
+            //GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
             // GeneratePinchFaceUI(); 
         }
@@ -117,12 +127,17 @@ namespace ProjectOC.PinchFace
             return pinchPartType3s;
         }
 
-        public int RandomPinchPart(PinchPartType3 _type3,bool EquipModel)
+        public int RandomPinchPart(PinchPartType3 _type3,bool EquipModel,CharacterModelPinch _ModelPinch = null)
         {
+            if (_ModelPinch == null)
+            {
+                _ModelPinch = this.ModelPinch;
+            }
+            
             if (_type3 == PinchPartType3.HF_HairFront)
             {
-                RandomPinchPart(PinchPartType3.HB_HairBack, EquipModel);
-                RandomPinchPart(PinchPartType3.HD_Dai, EquipModel);
+                RandomPinchPart(PinchPartType3.HB_HairBack, EquipModel,_ModelPinch);
+                RandomPinchPart(PinchPartType3.HD_Dai, EquipModel,_ModelPinch);
             }
             
             int typePrefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
@@ -131,7 +146,7 @@ namespace ProjectOC.PinchFace
                 int _typeIndex = Random.Range(0, typePrefabCount);
                 if (EquipModel)
                 {
-                    ModelPinch.ChangeType(_type3, _typeIndex);
+                    _ModelPinch.ChangeType(_type3, _typeIndex);
                 }
 
                 return _typeIndex;
@@ -146,6 +161,7 @@ namespace ProjectOC.PinchFace
         private const string PinchRaceUIPath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePanel.prefab";
         private const string CustomRacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePartPanel.prefab";
         private const string PinchFacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_FacePanel.prefab";
+        [HideInInspector]
         public string playerModelPrefabPath = "Prefabs_PinchPart/PinchPart/Prefab_PinchModel.prefab";
         [SerializeField]
         public List<RacePinchData> RacePinchDatas;

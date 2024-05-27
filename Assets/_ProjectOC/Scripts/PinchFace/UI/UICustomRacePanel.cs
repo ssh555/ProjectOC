@@ -6,6 +6,7 @@ using ML.Engine.UI;
 using ProjectOC.ManagerNS;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-            selectBtnTemplate = transform.Find("RightPanel/Prefab_Pinch_BaseUISelectedBtn")
+            selectBtnTemplate = transform.Find("RightPanel/Container/Prefab_Pinch_BaseUISelectedBtn")
                 .GetComponent<SelectedButton>();
             rightContainerTransf = transform.Find("RightPanel/Container");
             GenerateCharacterModel();
@@ -62,6 +63,16 @@ namespace ProjectOC.PinchFace
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            
+            UIBtnListContainer.UIBtnLists[6].SetBtnAction(0,0,() =>
+            {
+                //完成种族创建，加入
+                raceData.raceName = "raceName: " + pinchFaceManager.RacePinchDatas.Count;
+                raceData.raceDescription = "raceDescription: " + pinchFaceManager.RacePinchDatas.Count;
+                pinchFaceManager.RacePinchDatas.Add(raceData);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                pinchFaceManager.GeneratePinchRaceUI();
+            });
         }
         protected override void UnregisterInput()
         {
@@ -130,14 +141,12 @@ namespace ProjectOC.PinchFace
         
         private void LeftButton_BtnAction()
         {
-            UIBtnListContainer.UIBtnLists[7].DeleteAllButton();  
-            
+            //UIBtnListContainer.UIBtnLists[7].DeleteAllButton();
             int _curListIndex = UIBtnListContainer.CurSelectUIBtnListIndex;
             Vector2Int _curPos = UIBtnListContainer.UIBtnLists[_curListIndex].GetCurSelectedPos2();
             int _curPosOne = _curPos.x * OneRowCount + _curPos.y;
             
             curType2 = pinchFaceManager.pinchPartType1Inclusion[_curListIndex-1][_curPosOne];
-            Debug.Log($"{_curListIndex-1},{_curPosOne}  {curType2.ToString()}");
             PinchPartType2 _type2 = curType2;
             PinchPartType _ppt = pinchFaceManager.pinchPartType2Dic[_type2];
 
@@ -153,6 +162,7 @@ namespace ProjectOC.PinchFace
 
             for (int i = 0;i < _ppt.pinchPartType3s.Count; i++)
             {
+                // Debug.Log(_ppt.pinchPartType3s[i].ToString());
                 int _index = i;
                 SelectedButton _btn = Instantiate(selectBtnTemplate,rightContainerTransf);
                 _btn.gameObject.SetActive(true);
@@ -162,12 +172,19 @@ namespace ProjectOC.PinchFace
                 //SetLeftBtnText(_btn, isNake:true);
             }
             CurrentState = CurrentMouseState.Right;
-            UIBtnListContainer.UIBtnLists[7].InitBtnInfo();
-            Debug.Log($"InitBtnInfo{CurrentState}");
-            UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[7]);
-            // UIBtnListContainer.CurSelectUIBtnList = UIBtnListContainer.UIBtnLists[7];
+            StartCoroutine(GenerateRightBtn());
+            // UIBtnListContainer.UIBtnLists[7].InitBtnInfo();
+            // UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[7]);
         }
+        //todo 似乎同步生成btnlist + 跳转 会触发
+        IEnumerator GenerateRightBtn()
+        {
+            // 等待当前帧渲染完成
+            yield return null;
         
+            UIBtnListContainer.UIBtnLists[7].InitBtnInfo();
+            UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[7]);
+        }
                 
 
         private void RightButton_BtnAction(PinchPartType2 _type2,int _type3)
@@ -180,7 +197,7 @@ namespace ProjectOC.PinchFace
             
             if (_type3 == -1)
             {
-                SetLeftBtnText(_btn, ppt.pinchPartType1.ToString(),true);
+                SetLeftBtnText(_btn, _type2.ToString(),true);
             }
             else
             {
@@ -189,14 +206,12 @@ namespace ProjectOC.PinchFace
                 AddType3(_type2, _type3);
             }
             
-            
             BackActionOfList7();
         }
         //右侧面部Button相关函数
         private void AddType3(PinchPartType2 _type2,int _type3)
         {
             PinchPartType dicType = pinchFaceManager.pinchPartType2Dic[_type2];
-            
             foreach (var _dicType3 in dicType.pinchPartType3s)
             {
                 if (raceData.pinchPartType3s.Contains(_dicType3))
@@ -205,11 +220,14 @@ namespace ProjectOC.PinchFace
                 }
             }
             
-            //删除之前的
-            _type3--;
+            //删除前面的0
+            // _type3--;
             if (_type3 >= 0)
             {
-                raceData.pinchPartType3s.Add(dicType.pinchPartType3s[_type3-1]);    
+                // if (pinchFaceManager.pinchPartType2Dic[_type2].couldNaked)
+                //     _type3--;
+                
+                raceData.pinchPartType3s.Add(dicType.pinchPartType3s[_type3]);    
             }
         }
 
@@ -219,9 +237,19 @@ namespace ProjectOC.PinchFace
             // 返回 selectType
             CurrentState = CurrentMouseState.Left;
             
-            int _listIndex = (int)pinchFaceManager.pinchPartType2Dic[curType2].pinchPartType1;
-            UIBtnListContainer.CurSelectUIBtnList = UIBtnListContainer.UIBtnLists[_listIndex];
-            UIBtnListContainer.UIBtnLists[7].DeleteAllButton();
+            // int _listIndex = (int)pinchFaceManager.pinchPartType2Dic[curType2].pinchPartType1;
+            // UIBtnListContainer.CurSelectUIBtnList = UIBtnListContainer.UIBtnLists[_listIndex];
+            UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[1]);
+            
+            for(int i = rightContainerTransf.childCount-1;i>=0;i--)
+            {
+                Transform _btn = rightContainerTransf.GetChild(i);
+                if (_btn.gameObject.GetInstanceID() != selectBtnTemplate.gameObject.GetInstanceID())
+                {
+                    _btn.SetParent(this.transform);
+                    Destroy(_btn.gameObject);
+                }
+            }
             curType2 = PinchPartType2.None;
         }
         
@@ -314,7 +342,7 @@ namespace ProjectOC.PinchFace
             }
             else
             {
-                _image.color = Color.white;
+                _image.color = new Color32(10,150,10,255);
             }
         }
         #endregion

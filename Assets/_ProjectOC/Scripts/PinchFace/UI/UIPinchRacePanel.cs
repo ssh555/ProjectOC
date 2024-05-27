@@ -164,7 +164,7 @@ namespace ProjectOC.PinchFace
             }
             else
             {
-                RacePinchData raceData = RacePinchDatas[_curPos];
+                RacePinchData raceData = RacePinchDatas[RacePinchDatas.Count-1-_curPos];
                 raceNameText.SetText(raceData.raceName);
                 raceDescription.SetText(raceData.raceDescription);
                 //随机生成
