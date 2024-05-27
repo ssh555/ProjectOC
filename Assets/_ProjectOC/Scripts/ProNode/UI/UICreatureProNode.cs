@@ -305,12 +305,12 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 if (CurMode == Mode.Creature)
                 {
-                    ProNode.Remove(0, ProNode.StackAll);
+                    ProNode.Remove(0, ProNode.Stack);
                 }
                 else if (CurMode == Mode.Discard)
                 {
                     int index = ProNode.DataContainer.GetCapacity() - 1;
-                    ProNode.Remove(index, ProNode.DiscardStackAll);
+                    ProNode.Remove(index, ProNode.DiscardStack);
                 }
                 Refresh();
             }
@@ -368,14 +368,14 @@ namespace ProjectOC.ProNodeNS.UI
                 if (hasRecipe)
                 {
                     #region Product
-                    string productID = ProNode.Recipe.ProductID ?? "";
+                    string productID = ProNode.Recipe.ProductID;
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
                     }
                     ProNode_Product.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.StackAll.ToString();
+                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.Stack.ToString();
                     ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113 / 255f, 182 / 255f, 4 / 255f) : Color.black;
                     #endregion
 
@@ -431,18 +431,21 @@ namespace ProjectOC.ProNodeNS.UI
                 activity.gameObject.SetActive(hasCreature);
                 if (hasCreature)
                 {
-                    output.Find("Cur").GetComponent<RectTransform>().sizeDelta =
-                        new Vector2(output.Find("Cur").GetComponent<RectTransform>().sizeDelta.x, (120f * creature.Output) / 50);
-                    RectTransform curOutputThreshold = output.Find("Cur").Find("Output").GetComponent<RectTransform>();
-                    curOutputThreshold.position = new Vector3(curOutputThreshold.position.x, (120f * ProNode.OutputThreshold) / 50, curOutputThreshold.position.z);
-                    output.Find("Output").Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.OutputThreshold.ToString();
+                    RectTransform outputCurRect = output.Find("Cur").GetComponent<RectTransform>();
+                    outputCurRect.sizeDelta = new Vector2(outputCurRect.sizeDelta.x, (120f * creature.Output) / 50);
+                    Transform outputThreshold = output.Find("Output");
+                    RectTransform outputThresholdCurRect = outputThreshold.GetComponent<RectTransform>();
+                    float newY = (120f * ProNode.OutputThreshold) / 50;
+                    outputThresholdCurRect.anchoredPosition = new Vector2(outputThresholdCurRect.anchoredPosition.x, newY);
+                    outputThreshold.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.OutputThreshold.ToString();
                     output.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = creature.Output.ToString();
 
                     int initActivity = ManagerNS.LocalGameManager.Instance.CreatureManager.GetActivity(itemID);
                     initActivity = initActivity > 0 ? initActivity : 1;
-                    activity.Find("Cur").GetComponent<RectTransform>().sizeDelta =
-                        new Vector2(activity.Find("Cur").GetComponent<RectTransform>().sizeDelta.x, (120f * creature.Activity) / initActivity);
                     int activityValue = creature.Activity > 0 ? creature.Activity : 0;
+                    initActivity = System.Math.Max(activityValue, initActivity);
+                    RectTransform activityCurRect = activity.Find("Cur").GetComponent<RectTransform>();
+                    activityCurRect.sizeDelta = new Vector2(activityCurRect.sizeDelta.x, (120f * activityValue) / initActivity);
                     activity.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = activityValue.ToString();
                 }
                 #endregion
@@ -460,7 +463,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 ProNode_Discard.Find("Icon").GetComponent<Image>().sprite = tempSprite[discardID];
                 ProNode_Discard.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(discardID);
-                ProNode_Discard.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DiscardStackAll.ToString();
+                ProNode_Discard.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DiscardStack.ToString();
                 ProNode_Discard.Find("Back").GetComponent<Image>().color = ProNode.DiscardStackAll >= ProNode.StackMax * discardNum ? new Color(113 / 255f, 182 / 255f, 4 / 255f) : Color.black;
                 #endregion
 
@@ -479,8 +482,7 @@ namespace ProjectOC.ProNodeNS.UI
                 if (hasCreature)
                 {
                     ProNode_Eff.Find("IconCreature").GetComponent<Image>().sprite = tempSprite[creature.ID];
-                    ProNode_Eff.Find("EffCreature").GetComponent<TMPro.TextMeshProUGUI>().text = "+" 
-                        + (creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff).ToString() + "%";
+                    ProNode_Eff.Find("EffCreature").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.GetEff() - ProNode.EffBase).ToString() + "%";
                 }
                 #endregion
             }
@@ -496,7 +498,7 @@ namespace ProjectOC.ProNodeNS.UI
                     item.Find("Output").gameObject.SetActive(notNull);
                     item.Find("ActivityIcon").gameObject.SetActive(notNull);
                     item.Find("Activity").gameObject.SetActive(notNull);
-                    item.Find("Gender").gameObject.SetActive(notNull);
+                    item.Find("Gender").gameObject.SetActive(notNull && Creatures[i].Gender != Gender.None);
                     if (notNull)
                     {
                         string itemID = Creatures[i].ID;
@@ -504,17 +506,21 @@ namespace ProjectOC.ProNodeNS.UI
                         {
                             tempSprite[itemID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(itemID);
                         }
-                        item.Find("OutputIcon").GetComponent<Image>().sprite = tempSprite[itemID];
+                        item.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
                         item.Find("Output").GetComponent<TMPro.TextMeshProUGUI>().text = Creatures[i].Output.ToString();
                         item.Find("Activity").GetComponent<TMPro.TextMeshProUGUI>().text = Creatures[i].Activity.ToString();
-                        item.Find("Gender").gameObject.SetActive(Creatures[i].Gender != Gender.None);
                         item.Find("Gender").GetComponent<Image>().sprite = Creatures[i].Gender == Gender.Male ? tempSprite["Male"] : tempSprite["Female"];
+                    }
+                    else
+                    {
+                        item.Find("Icon").GetComponent<Image>().sprite = tempSprite[""];
                     }
                 }
                 #endregion
 
                 #region Product
-                var product = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(Creatures[CreatureIndex]?.ProRecipeID ?? "");
+                string recipeID = Creatures[CreatureIndex]?.ProRecipeID ?? "";
+                var product = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(recipeID);
                 string productID = product.id;
                 int productNum = product.num;
                 if (!tempSprite.ContainsKey(productID))
@@ -525,7 +531,7 @@ namespace ProjectOC.ProNodeNS.UI
                 Creature_UI.Find("Recipe").Find("Amount").gameObject.SetActive(!string.IsNullOrEmpty(productID));
                 Creature_UI.Find("Recipe").Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = $"¡Á{productNum}";
                 Creature_UI.Find("Recipe").Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textTime + ":"
-                    + ManagerNS.LocalGameManager.Instance.RecipeManager.GetTimeCost(productID).ToString() + "s";
+                    + ManagerNS.LocalGameManager.Instance.RecipeManager.GetTimeCost(recipeID).ToString() + "s";
                 Creature_Desc.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                 bool isValidItemID = ML.Engine.InventorySystem.ItemManager.Instance.IsValidItemID(productID);
                 Creature_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID) : PanelTextContent.textEmpty;
@@ -534,9 +540,10 @@ namespace ProjectOC.ProNodeNS.UI
                 #endregion
 
                 #region Raw
-                var recipeRaws = ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(productID);
+                var recipeRaws = ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(recipeID);
                 for (int i = 0; i < recipeRaws.Count; ++i)
                 {
+                    if (i >= RecipeRawBtnList.BtnCnt) { break; }
                     var itemID = recipeRaws[i].id;
                     var item = RecipeRawBtnList.GetBtn(i).transform;
                     var name = item.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
