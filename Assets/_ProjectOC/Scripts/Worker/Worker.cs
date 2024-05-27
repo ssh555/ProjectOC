@@ -844,13 +844,13 @@ namespace ProjectOC.WorkerNS
             if (HaveDestination)
             {
                 Vector3 curPos = transform.position;
-                bool hasArrive = Vector3.Distance(curPos, Target) <= 0.01f;
+                bool hasArrive = Vector3.Distance(curPos, Target) <= 0.1f;
                 if (!hasArrive && JudgeHit && curPos == LastTickPosition)
                 {
                     Vector3 direction = Target - curPos;
                     if (Physics.Raycast(curPos, direction.normalized, out RaycastHit hit, direction.magnitude))
                     {
-                        if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.01f)
+                        if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
                         {
                             hasArrive = true;
                         }
