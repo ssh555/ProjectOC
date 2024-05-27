@@ -38,7 +38,7 @@ namespace ProjectOC.MissionNS
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.Data.Equals(data))
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator 
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
@@ -58,7 +58,7 @@ namespace ProjectOC.MissionNS
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.Equals(data))
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
@@ -78,7 +78,7 @@ namespace ProjectOC.MissionNS
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.Data.Equals(data))
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
