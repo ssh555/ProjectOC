@@ -77,9 +77,6 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Table Property
-        [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
-        public ProNodeType ProNodeType => ManagerNS.LocalGameManager.Instance != null ? 
-            ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID) : ProNodeType.None;
         [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.RecipeCategory Category => ManagerNS.LocalGameManager.Instance != null ? 
             ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID) : ML.Engine.InventorySystem.RecipeCategory.None;

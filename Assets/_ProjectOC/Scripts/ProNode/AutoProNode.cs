@@ -35,7 +35,7 @@ namespace ProjectOC.ProNodeNS
             foreach (var kv in Recipe.Raw)
             {
                 DataNS.ItemIDDataObj data = new DataNS.ItemIDDataObj(kv.id);
-                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetMissionNum(data, true);
+                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetNeedAssignNum(data, true);
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
