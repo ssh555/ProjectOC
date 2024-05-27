@@ -11,11 +11,13 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.U2D;
 using static ProjectOC.MineSystem.MineSystemData;
 using static ProjectOC.Order.OrderManager;
 
@@ -146,6 +148,8 @@ namespace ProjectOC.MineSystem
             });
 
             synchronizerInOrder.StartExecution();
+
+            LoadTechAtlas();
             #endregion
 
             #region 同步初始化
@@ -292,6 +296,15 @@ namespace ProjectOC.MineSystem
                     synchronizerInOrder.Check(3);
                 };
         }
+
+        private SpriteAtlas mineAtlas;
+        private void LoadTechAtlas()
+        {
+            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>("SA_Mine_UI").Completed += (handle) =>
+            {
+                mineAtlas = handle.Result as SpriteAtlas;
+            };
+        }
         #endregion
 
         #region External
@@ -364,17 +377,15 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 加入矿圈数据
         /// </summary>
-        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId)
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int curSlectNum)
         {
-            if(!this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curSlectNum, curMapLayerIndex));
+            placeCircleData.PlaceCirclePosition = CirclePos;
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
-                PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curRegionNum, curMapLayerIndex));
-                this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+                PlacedCircleDataDic.Remove(ProNodeId);
             }
-            else
-            {
-                this.PlacedCircleDataDic[ProNodeId].PlaceCirclePosition = CirclePos;
-            }
+            this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
         }
 
         /// <summary>
@@ -391,11 +402,28 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 获取矿圈数据
         /// </summary>
-        public PlaceCircleData GetMineralCircleData(string ProNodeId)
+        public PlaceCircleData GetMineralCircleData(string ProNodeId,int curSlectNum)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
-                return this.PlacedCircleDataDic[ProNodeId];
+                PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
+                if (placeCircleData.SmallMapTuple == (curSlectNum, curMapLayerIndex))
+                {
+                    return this.PlacedCircleDataDic[ProNodeId];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取矿物图标
+        /// </summary>
+        public Sprite GetMineSprite(string MineId)
+        {
+            UnityEngine.Debug.Log(MineId);
+            if (this.MineralTableDataDic.ContainsKey(MineId))
+            {
+                return this.mineAtlas.GetSprite(MineralTableDataDic[MineId].Icon);
             }
             return null;
         }
