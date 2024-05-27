@@ -64,8 +64,10 @@ namespace ML.Engine.BuildingSystem.UI
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TCategorySpriteAtlasPath).Completed += (handle) =>
             {
                 categoryAtlas = handle.Result as SpriteAtlas;
-                CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
-                Array.Sort(CanSelectCategory1);
+                //CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
+                //Array.Sort(CanSelectCategory1);
+                //更改顺序为 交互建筑，生产节点，房屋，家具
+                CanSelectCategory1 = new BuildingCategory1[4] {BuildingCategory1.Interact, BuildingCategory1 .ProNode,BuildingCategory1.House,BuildingCategory1.Furniture};
                 ++IsInit;
                 if (IsInit >= 1)
                 {

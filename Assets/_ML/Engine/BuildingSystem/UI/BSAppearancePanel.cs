@@ -1,5 +1,9 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Utility;
+using ProjectOC.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +27,8 @@ namespace ML.Engine.BuildingSystem.UI
         private RectTransform matParent;
         private RectTransform templateMat;
 
+        private Transform Slots;
+
         #endregion
 
         #endregion
@@ -35,6 +41,7 @@ namespace ML.Engine.BuildingSystem.UI
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
             templateMat.gameObject.SetActive(false);
+            this.Slots = this.transform.Find("Slots");
         }
 
         protected override void OnDestroy()
@@ -95,6 +102,7 @@ namespace ML.Engine.BuildingSystem.UI
             int of = offset.x > 0 ? 1 : -1;
             this._aCurrentIndex = (this._aCurrentIndex + of + _aCurrentTexs.Length) % _aCurrentTexs.Length;
             this.Placer.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
+            RefreshSlots();
             Refresh();
         }
 
@@ -108,6 +116,26 @@ namespace ML.Engine.BuildingSystem.UI
         private void Placer_ComfirmAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.ExitAppearancePanel();
+        }
+
+        private void RefreshSlots()
+        {
+            var PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+            this.objectPool.ResetPool("SlotPool");
+            foreach (var raw in BuildingManager.Instance.GetRaw(this.Placer.SelectedPartInstance.Classification.ToString()))
+            {
+                var tPrefab = this.objectPool.GetNextObject("SlotPool",Slots);
+                int needNum = raw.num;
+                int haveNum = PlayerInventory.GetItemAllNum(raw.id);
+                Debug.Log(tPrefab);
+                tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                if (needNum > haveNum)
+                {
+                    tPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                }
+                tPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(raw.id);
+                tPrefab.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(raw.id);
+            }
         }
 
         #endregion
@@ -288,6 +316,12 @@ namespace ML.Engine.BuildingSystem.UI
             this.description = "BSAppearancePanel数据加载完成";
         }
         #endregion
+
+        protected override void InitObjectPool()
+        {
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_BuildingSystem/Prefab_BS_UI_Slot.prefab", (handle) => { RefreshSlots(); });
+            base.InitObjectPool();
+        }
     }
 
 }
