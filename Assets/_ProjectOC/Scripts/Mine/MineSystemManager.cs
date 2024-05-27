@@ -420,7 +420,6 @@ namespace ProjectOC.MineSystem
         /// </summary>
         public Sprite GetMineSprite(string MineId)
         {
-            UnityEngine.Debug.Log(MineId);
             if (this.MineralTableDataDic.ContainsKey(MineId))
             {
                 return this.mineAtlas.GetSprite(MineralTableDataDic[MineId].Icon);
