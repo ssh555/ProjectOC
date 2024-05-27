@@ -26,3 +26,28 @@ MonoBehaviour:
     LevelMax: 2
     LevelUpgradeEff: 3200000032000000
     InitAPCost_Duty: 10
+    CreatureOutputAddEff: 3
+    CreatureOutputDescCount: 10
+    CreatureOutputDescValue: 1
+    OutputRanges: 01000000090000001e0000003300000064000000
+    MineTimeCost: 10
+    MineExp: 100
+    MineStackThreshold: 30
+    MineTransThreshold: 15
+    APBarColorConfigs:
+    - Start: 0
+      End: 5
+      Color: {r: 1, g: 0, b: 0, a: 1}
+    - Start: 5
+      End: 0
+      Color: {r: 0, g: 1, b: 0, a: 1}
+    ExpRateIconNumConfigs:
+    - Start: 0
+      End: 100
+      Num: 0
+    - Start: 101
+      End: 130
+      Num: 1
+    - Start: 131
+      End: 0
+      Num: 2

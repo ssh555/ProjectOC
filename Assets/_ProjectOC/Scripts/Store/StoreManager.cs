@@ -21,16 +21,12 @@ namespace ProjectOC.StoreNS
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
-                foreach (var data in datas)
-                {
-                    StoreIconTableDict.Add(data.ID, data);
-                }
+                foreach (var data in datas) { StoreIconTableDict.Add(data.ID, data); }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
             {
-                StoreConfigAsset data = handle.Result;
-                Config = new StoreConfig(data.Config);
+                Config = new StoreConfig(handle.Result.Config);
             };
         }
         #endregion
@@ -38,12 +34,12 @@ namespace ProjectOC.StoreNS
         private Dictionary<string, IWorldStore> WorldStoreDict = new Dictionary<string, IWorldStore>();
 
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        public List<IStore> GetStores(int priorityType = 0, bool isNormalStore = true)
+        public List<IStore> GetStores(int priorityType = 0)
         {
             List<IStore> stores = new List<IStore>();
             foreach (var worldStore in WorldStoreDict.Values)
             {
-                if (worldStore != null && (!isNormalStore || worldStore is WorldStore))
+                if (worldStore != null)
                 {
                     stores.Add(worldStore.Store);
                 }
@@ -60,37 +56,6 @@ namespace ProjectOC.StoreNS
             return stores;
         }
 
-        public Dictionary<IStore, int> GetPutOutStore(string id, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
-        {
-            Dictionary<IStore, int> result = new Dictionary<IStore, int>();
-            if (!string.IsNullOrEmpty(id) && amount > 0)
-            {
-                int resultAmount = 0;
-                List<IStore> stores = GetStores(priorityType);
-                foreach (IStore store in stores)
-                {
-                    if (!judgeInteracting || !store.IsInteracting)
-                    {
-                        int storeAmount = store.DataContainer.GetAmount(id, DataNS.DataOpType.Storage, false, judgeCanOut);
-                        if (storeAmount > 0)
-                        {
-                            if (resultAmount + storeAmount >= amount)
-                            {
-                                result.Add(store, amount - resultAmount);
-                                resultAmount = amount;
-                                break;
-                            }
-                            else
-                            {
-                                result.Add(store, storeAmount);
-                                resultAmount += storeAmount;
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
         /// <summary>
         /// 获取满足取出条件的仓库
         /// </summary>
@@ -104,7 +69,7 @@ namespace ProjectOC.StoreNS
             if (data != null && amount > 0)
             {
                 int resultAmount = 0;
-                List<IStore> stores = GetStores(priorityType, data is DataNS.ItemIDDataObj);
+                List<IStore> stores = GetStores(priorityType);
                 foreach (IStore store in stores)
                 {
                     if (!judgeInteracting || !store.IsInteracting)
@@ -142,7 +107,7 @@ namespace ProjectOC.StoreNS
             if (data != null && amount > 0)
             {
                 bool flag = data is DataNS.ItemIDDataObj;
-                List <IStore> stores = GetStores(priorityType, flag);
+                List <IStore> stores = GetStores(priorityType);
                 foreach (IStore store in stores)
                 {
                     if (!judgeInteracting || !store.IsInteracting)
@@ -152,10 +117,7 @@ namespace ProjectOC.StoreNS
                             // 优先寻找第一个可以一次性存完的仓库
                             // 若没有，则寻找第一个可以存入的，可溢出存入
                             int empty = store.DataContainer.GetAmount(data, DataNS.DataOpType.Empty, judgeCanIn);
-                            if (result == null && empty > 0)
-                            {
-                                result = store;
-                            }
+                            if (result == null && empty > 0) { result = store; }
                             if (empty >= amount)
                             {
                                 result = store;
@@ -187,16 +149,16 @@ namespace ProjectOC.StoreNS
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        public IStore SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) 
+        public IStore SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level) 
         {
             if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.LiquidStore ||
                 storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.SolidStore)
             {
-                return new Store(storeType);
+                return new Store(storeType, level);
             }
             else if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Projector)
             {
-                return new CreatureStore(storeType);
+                return new CreatureStore(storeType, level);
             }
             return null;
         }
@@ -205,7 +167,7 @@ namespace ProjectOC.StoreNS
         {
             if (worldStore != null && level >= 0)
             {
-                WorldStoreSetData(worldStore, SpawnStore(storeType));
+                WorldStoreSetData(worldStore, SpawnStore(storeType, level));
             }
         }
 

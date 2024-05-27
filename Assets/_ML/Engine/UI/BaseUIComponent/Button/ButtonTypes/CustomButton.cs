@@ -4,10 +4,10 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+
 namespace ML.Engine.UI
 {
     [System.Serializable]
@@ -106,8 +106,11 @@ namespace ML.Engine.UI
     }
 }
 
-[CustomEditor(typeof(CustomButton))]
-public class PanelButtonEditor : Editor
+
+#if UNITY_EDITOR
+
+[UnityEditor.CustomEditor(typeof(CustomButton))]
+public class PanelButtonEditor : UnityEditor.Editor
 {
     public override void OnInspectorGUI()
     {
@@ -115,3 +118,5 @@ public class PanelButtonEditor : Editor
         base.OnInspectorGUI();
     }
 }
+
+#endif

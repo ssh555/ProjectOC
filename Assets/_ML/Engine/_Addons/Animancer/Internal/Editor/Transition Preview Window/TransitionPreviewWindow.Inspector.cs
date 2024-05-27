@@ -73,7 +73,6 @@ namespace Animancer.Editor
                     Target.DestroyTransitionProperty();
                     return;
                 }
-
                 DoTransitionPropertyGUI();
                 DoTransitionGUI();
                 Target._Animations.DoGUI();

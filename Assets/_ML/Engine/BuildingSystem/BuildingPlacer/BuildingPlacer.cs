@@ -323,7 +323,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #region Transform
         #region 落点检测
         [LabelText("使用的Camera"), SerializeField, FoldoutGroup("落点检测")]
-        protected new Camera camera = null;
+        protected Camera _camera = null;
         /// <summary>
         /// 使用的摄像机 => 为null时默认使用 Camera.main
         /// </summary>
@@ -331,9 +331,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             get
             {
-                return camera == null ? Camera.main : camera;
+                return _camera == null ? Camera.main : _camera;
             }
-            set => camera = value;
+            set => _camera = value;
         }
 
         [LabelText("检测半径"), SerializeField, FoldoutGroup("落点检测"), PropertyTooltip("单位 m")]

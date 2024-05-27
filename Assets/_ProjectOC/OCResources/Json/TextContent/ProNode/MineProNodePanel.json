@@ -1,0 +1,192 @@
+{
+    "textProNodeType" : {
+        "Chinese" : "矿石锚定潜航器",
+        "English" : "DiveStation ProNode"
+    },
+    "textEmpty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
+    },
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+    "textStateVacancy" : {
+        "Chinese" : "空置",
+        "English" : "Vacancy"
+    },
+    "textStateStagnation" : {
+        "Chinese" : "停滞",
+        "English" : "Stagnation"
+    },
+    "textStateProduction" : {
+        "Chinese" : "生产",
+        "English" : "Production"
+    },
+    "workerStatus":[
+        {
+            "Chinese" : "摸鱼中",
+            "English" : "On Fish"
+        },
+        {
+            "Chinese" : "离岗",
+            "English" : "Leave"
+        },
+        {
+            "Chinese" : "值班中",
+            "English" : "On Duty"
+        }
+    ],
+    "textTime" : {
+        "Chinese" : "制作时间",
+        "English" : "Time"
+    },
+    "textEff" : {
+        "Chinese" : "生产效率",
+        "English" : "Eff"
+    },
+    "textLvDesc" : {
+        "Chinese" : "生产效率: ",
+        "English" : "Eff: "
+    },
+    "textChangeMine" : {
+        "Chinese" : "开采中",
+        "English" : "Mining"
+    },
+    "Upgrade" : {
+        "keyname" : "KT_Upgrade",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Upgrade"
+          },
+        "description" : {
+            "Chinese" : "建筑升级",
+            "English" : "LevelUp"
+        }
+    },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "NextPriority"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "UpgradeConfirm" : {
+        "keyname" : "KT_UpgradeConfirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "升级",
+            "English" : "Upgrade"
+        }
+    },
+    "ChangeMine" : {
+        "keyname" : "KT_ChangeMine",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更矿源",
+            "English" : "Change Mine"
+        }
+    },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出1",
+            "English" : "Remove 1"
+        }
+    },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出10",
+            "English" : "Remove 10"
+        }
+    },
+    "ChangeWorker" : {
+        "keyname" : "KT_ChangeWorker",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更派遣",
+            "English" : "Change Worker"
+        }
+    },
+    "RemoveWorker" : {
+        "keyname" : "KT_RemoveWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "移除派遣",
+            "English" : "Remove Worker"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+

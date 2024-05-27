@@ -1110,6 +1110,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &1267580292502030980
 GameObject:
@@ -1861,6 +1862,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &2212864522157611549
 GameObject:
@@ -2277,6 +2279,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &2808903496873134983
 GameObject:
@@ -5042,27 +5045,10 @@ MonoBehaviour:
   abpath: 
   abname: 
   description: 
-  APBarColorConfigs:
-  - Start: 0
-    End: 5
-    Color: {r: 1, g: 0, b: 0, a: 1}
-  - Start: 5
-    End: 0
-    Color: {r: 0, g: 1, b: 0, a: 1}
-  ExpRateIconNumConfigs:
-  - Start: 0
-    End: 100
-    Num: 0
-  - Start: 101
-    End: 130
-    Num: 1
-  - Start: 131
-    End: 0
-    Num: 2
   CurProNodeMode: 0
   HasUpgrade: 0
   ProNode:
-    WorldProNode: {fileID: 0}
+    ChangeDataAutoSort: 0
     ID: 
     Recipe:
       ID: 
@@ -5770,7 +5756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5401322493043707773
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7075,6 +7061,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 7783839533578040897}
 --- !u!1 &7756328742804790885
 GameObject:
@@ -7365,6 +7352,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 9035235934313614062}
 --- !u!1 &8041892406158688535
 GameObject:
@@ -8385,7 +8373,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1182294899007263416
 RectTransform:
   m_ObjectHideFlags: 0

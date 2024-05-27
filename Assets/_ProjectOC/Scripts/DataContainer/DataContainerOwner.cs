@@ -6,10 +6,11 @@ namespace ProjectOC.DataNS
 {
     public abstract class DataContainerOwner : MissionNS.IMissionObj, ML.Engine.InventorySystem.IInventory
     {
-        [LabelText("存储数据"), ReadOnly]
+        [LabelText("数据容器"), ReadOnly]
         public DataContainer DataContainer;
+        public bool ChangeDataAutoSort;
 
-        #region Init Clear
+        #region Init Clear Reset
         public void InitData(int capacity, int dataCapacity)
         {
             DataContainer = new DataContainer(capacity, dataCapacity);
@@ -58,22 +59,28 @@ namespace ProjectOC.DataNS
         }
         public void ChangeData(int index, IDataObj data, bool isAdd = true, bool updateTransport=true)
         {
-            var tup = DataContainer.ChangeData(index, data);
-            if (isAdd)
+            var tup = DataContainer.ChangeData(index, data, ChangeDataAutoSort);
+            if (tup.Item1 != null)
             {
-                if (tup.Item1 != null)
-                {
-                    tup.Item1.AddToPlayerInventory(tup.Item2);
-                }
+                if (isAdd) { tup.Item1.AddToPlayerInventory(tup.Item2); }
+                if (updateTransport) { (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1); }
             }
-            if (updateTransport) { (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1); }
         }
         public void Remove(int index, int amount)
         {
-            if (amount > 0 && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
+            if (amount > 0 && DataContainer.HaveSetData(index) && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
             {
                 amount = DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
                 DataContainer.GetData(index).AddToPlayerInventory(amount);
+            }
+        }
+        public void FastRemove(int index)
+        {
+            if (DataContainer.HaveSetData(index))
+            {
+                int storage = DataContainer.GetAmount(index, DataOpType.Storage);
+                DataContainer.GetData(index).AddToPlayerInventory(storage);
+                DataContainer.ChangeAmount(index, storage, DataOpType.Empty, DataOpType.Storage);
             }
         }
         public void FastAdd(int index)
@@ -97,22 +104,29 @@ namespace ProjectOC.DataNS
         public abstract void PutIn(int index, IDataObj data, int amount);
         public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false)
         {
-            if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, true) < 0) { return 0; }
-            return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, exceed: true, needCanIn: true);
+            if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, needCanIn: true, needSort: ChangeDataAutoSort) < 0) { return 0; }
+            return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true);
+        }
+        public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false)
+        {
+            amount = ChangeAmount(data, amount, DataOpType.Empty, DataOpType.EmptyReserve);
+            if (removeEmpty) { RemoveDataWithReserveEmptyIndex(data); }
+            return amount;
         }
         public int PutOut(IDataObj data, int amount, bool removeEmpty = false)
         {
             amount = ChangeAmount(data, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
-            if (removeEmpty)
-            {
-                List<int> indexs = DataContainer.GetIndexs(data);
-                if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0)
-                {
-                    ChangeData(indexs[0], null, updateTransport:false);
-                }
-                else { Debug.Log("PutOut removeEmpty Error"); }
-            }
+            if (removeEmpty) { RemoveDataWithReserveEmptyIndex(data); }
             return amount;
+        }
+        private void RemoveDataWithReserveEmptyIndex(IDataObj data)
+        {
+            List<int> indexs = DataContainer.GetIndexs(data);
+            if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0 && GetAmount(data, DataOpType.EmptyReserve) == 0)
+            {
+                ChangeData(indexs[0], null, false, false);
+            }
+            else { Debug.Log("RemoveDataWithReserveEmptyIndex Error"); }
         }
         public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
@@ -144,7 +158,6 @@ namespace ProjectOC.DataNS
             }
             return false;
         }
-
         public bool RemoveItem(ML.Engine.InventorySystem.Item item)
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
@@ -160,12 +173,11 @@ namespace ProjectOC.DataNS
             }
             return false;
         }
-
         public ML.Engine.InventorySystem.Item RemoveItem(ML.Engine.InventorySystem.Item item, int amount)
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && amount > 0)
             {
-                ML.Engine.InventorySystem.Item result = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(item.ID);
+                ML.Engine.InventorySystem.Item result = (ML.Engine.InventorySystem.Item)item.Clone();
                 if (item is IDataObj dataObj)
                 {
                     result.Amount = DataContainer.ChangeAmount(dataObj, amount, DataOpType.Empty, DataOpType.Storage, complete: false);
@@ -178,7 +190,6 @@ namespace ProjectOC.DataNS
             }
             return null;
         }
-
         public bool RemoveItem(string itemID, int amount)
         {
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
@@ -187,12 +198,10 @@ namespace ProjectOC.DataNS
             }
             return false;
         }
-
         public int GetItemAllNum(string id)
         {
             return DataContainer.GetAmount(id, DataOpType.Storage);
         }
-
         public ML.Engine.InventorySystem.Item[] GetItemList()
         {
             var result = new List<ML.Engine.InventorySystem.Item>();

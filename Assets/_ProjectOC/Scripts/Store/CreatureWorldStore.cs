@@ -15,7 +15,6 @@ namespace ProjectOC.StoreNS
             //    {
             //        UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();
             //        uiPanel.Store = RealStore;
-            //        uiPanel.HasUpgrade = (this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade() || RealStore.Level > 0;
             //        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             //    };
         }

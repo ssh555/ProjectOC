@@ -17,7 +17,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
 using Unity.VisualScripting;
-using ML.Engine.Timer;
 
 namespace ML.Engine.UI
 {
@@ -99,6 +98,7 @@ namespace ML.Engine.UI
         private bool isLoop;
         private bool isWheel;
         private bool readUnActive;
+        private bool isBanMouse;
         private bool NeedToResetCurSelected = false;
         private string prefabPath = null;
 
@@ -139,7 +139,7 @@ namespace ML.Engine.UI
             this.isLoop = btnListInitData.isLoop;
             this.isWheel = btnListInitData.isWheel;
             this.readUnActive = btnListInitData.readUnActiveButton;
-
+            this.isBanMouse = btnListInitData.isBanMouse;
             if (prefabPath != null) 
             {
                 this.prefabPath = prefabPath;
@@ -1196,8 +1196,9 @@ namespace ML.Engine.UI
         /// <summary>
         /// 该函数功能为更新鼠标选中
         /// </summary>
-        public SelectedButton RefreshSelected(SelectedButton sb)
+        public SelectedButton RefreshSelected(SelectedButton sb,bool comeFromMouse = false)
         {
+            if (this.isBanMouse == true) return null;
             if (this.isEnable == false) return null;
             if (sb == null) return null;
             if (SBPosDic.ContainsKey(sb))
@@ -1217,7 +1218,6 @@ namespace ML.Engine.UI
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-
             }
             return null;
         }

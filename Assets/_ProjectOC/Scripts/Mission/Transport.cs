@@ -1,6 +1,6 @@
 using Sirenix.OdinInspector;
-using UnityEngine;
 using ProjectOC.DataNS;
+using System;
 
 namespace ProjectOC.MissionNS
 {
@@ -10,16 +10,16 @@ namespace ProjectOC.MissionNS
         #region Data
         [LabelText("搬运的数据"), ReadOnly, ShowInInspector]
         public IDataObj Data;
-        [LabelText("搬运所属的任务"), HideInInspector]
+        [LabelText("搬运所属的任务"), ShowInInspector, NonSerialized]
         public MissionTransport Mission;
-        [LabelText("取货地"), HideInInspector]
+        [LabelText("取货地"), ShowInInspector, NonSerialized]
         public IMissionObj Source;
-        [LabelText("送货地"), HideInInspector]
+        [LabelText("送货地"), ShowInInspector, NonSerialized]
         public IMissionObj Target;
         #endregion
 
         #region Property
-        [LabelText("负责该搬运的刁民"), ReadOnly]
+        [LabelText("负责该搬运的刁民"), ReadOnly, ShowInInspector, NonSerialized]
         public WorkerNS.Worker Worker;
         [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;
@@ -45,22 +45,19 @@ namespace ProjectOC.MissionNS
         {
             if (mission.Data == null) { return; }
             Data = mission.Data;
-            bool isReplaceData = mission.ReplaceIndex >= 0;
             Mission = mission;
             Source = source;
             Target = target;
             Mission.AddTransport(this);
             Source.AddTransport(this);
             Target.AddTransport(this);
-
             MissionNum = missionNum;
             SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
+
+            bool isReplaceData = mission.ReplaceIndex >= 0;
             if (!isReplaceData) { TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty); }
             Worker = worker;
-            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0))
-            {
-                End();
-            }
+            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0)) { End(); }
             else
             {
                 Worker.Transport = this;
@@ -110,10 +107,7 @@ namespace ProjectOC.MissionNS
                     SoureceReserveNum -= Source.RemoveReservePutOut(Data, SoureceReserveNum);
                 }
             }
-            else
-            {
-                End();
-            }
+            else { End(); }
         }
         public void PutInTarget()
         {
@@ -128,10 +122,7 @@ namespace ProjectOC.MissionNS
                 End();
                 Mission.FinishNum += FinishNum;
             }
-            else
-            {
-                End();
-            }
+            else { End(); }
         }
         public void End()
         {
@@ -147,16 +138,12 @@ namespace ProjectOC.MissionNS
             }
             if (TargetReserveNum > 0)
             {
-                Target?.RemoveReservePutIn(Data, TargetReserveNum);
+                Target?.RemoveReservePutIn(Data, TargetReserveNum, Mission.ReserveEmpty);
             }
             Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
             Data = null;
-            Mission = null;
-            Source = null;
-            Target = null;
-            Worker = null;
         }
         #endregion
     }

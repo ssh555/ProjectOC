@@ -9,7 +9,7 @@ namespace ProjectOC.ProNodeNS
     public abstract class IProNode : DataNS.DataContainerOwner, WorkerNS.IEffectObj
     {
         #region Data
-        [HideInInspector]
+        [ShowInInspector, NonSerialized]
         public IWorldProNode WorldProNode;
         [ReadOnly]
         public string ID = "";
@@ -116,6 +116,7 @@ namespace ProjectOC.ProNodeNS
         {
             ID = config.ID ?? "";
             InitData(0, 0);
+            InitAPCost_Duty = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             EffBase = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
         }
@@ -148,11 +149,8 @@ namespace ProjectOC.ProNodeNS
         {
             if (CanWorking())
             {
-                if (!IsOnProduce)
-                {
-                    TimerForProduce.Reset(GetTimeCost());
-                    return true;
-                }
+                if(!IsOnProduce) { TimerForProduce.Reset(GetTimeCost()); }
+                return true;
             }
             return false;
         }
@@ -222,6 +220,7 @@ namespace ProjectOC.ProNodeNS
         #region Level
         [LabelText("µÈ¼¶"), ReadOnly]
         public int Level = 0;
+        public event Action OnLevelChangeEvent;
         public bool SetLevel(int level)
         {
             var config = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config;
@@ -242,6 +241,7 @@ namespace ProjectOC.ProNodeNS
                     }
                 }
                 Level = level;
+                OnLevelChangeEvent?.Invoke();
                 return true;
             }
             return false;
