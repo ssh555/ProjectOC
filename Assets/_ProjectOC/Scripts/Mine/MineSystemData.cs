@@ -115,20 +115,20 @@ namespace ProjectOC.MineSystem
             private int remainMineNum;
             public int RemianMineNum { get { return remainMineNum; } }
             [LabelText("一次开采获取数量"), ReadOnly, ShowInInspector]
-            private int gainNum;
-            public int GainNum { get { return gainNum; } }
+            private List<ML.Engine.InventorySystem.Formula> gainItems;
+            public List<ML.Engine.InventorySystem.Formula> GainItems => gainItems;
             //该矿物所属的区块号
             private int regionNum;
             public int RegionNum { get { return regionNum; }set { regionNum = value; } }
             //该矿物所属的层次号
             private int layerNum;
             public int LayerNum { get { return layerNum; } set { layerNum = value; } }
-            public MineData(string mineralMapID, Vector2 position, int remainMineNum,int gainNum)
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum, List<ML.Engine.InventorySystem.Formula> gainItems)
             {
                 mineID = mineralMapID;
                 this.position = position;
                 this.remainMineNum = remainMineNum;
-                this.gainNum = gainNum;
+                this.gainItems = gainItems;
                 proNodeCnt = 0;
             }
 

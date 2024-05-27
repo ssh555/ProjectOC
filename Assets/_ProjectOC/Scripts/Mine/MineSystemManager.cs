@@ -225,8 +225,8 @@ namespace ProjectOC.MineSystem
                             if(this.MineralTableDataDic.ContainsKey(mine.MineID))
                             {
                                 int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
-                                //int GainNum = this.MineralTableDataDic[mine.MineID].
-                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum, 5));
+                                List<ML.Engine.InventorySystem.Formula> GainItems = new List<ML.Engine.InventorySystem.Formula>(this.MineralTableDataDic[mine.MineID].MineEff);
+                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum, GainItems));
                             }
                         }
                     }
