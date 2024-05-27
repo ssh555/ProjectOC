@@ -285,6 +285,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
