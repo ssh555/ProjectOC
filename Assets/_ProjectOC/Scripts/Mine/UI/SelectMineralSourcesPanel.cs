@@ -143,7 +143,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     }
     #endregion
 
-
     #region UI
 
     #region UI对象引用
@@ -199,7 +198,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         MM.GridScale = this.cursorNavigation.CurZoomscale;
     }
     #endregion
-
 
     #region Resource
     #region TextContent
