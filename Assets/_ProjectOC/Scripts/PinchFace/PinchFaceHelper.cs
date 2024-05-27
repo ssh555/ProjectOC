@@ -45,7 +45,11 @@ namespace ProjectOC.PinchFace
                 childTransforms[i] = _parent.GetChild(i);
             }
             //ÅÅÐò
-            System.Array.Sort(childTransforms,(x,y)=>string.Compare(x.name,y.name));
+            System.Array.Sort(childTransforms,(x,y)=>
+                int.Parse(x.name).CompareTo(int.Parse(y.name)));
+            // bigMap.SmallMapEditDatas.Sort((a, b) =>
+            //     (int.Parse(a.name.Split("_")[1]).CompareTo(int.Parse(b.name.Split("_")[1]))));
+            
             List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
             for (int i = 0; i < childTransforms.Length; i++)
             {
