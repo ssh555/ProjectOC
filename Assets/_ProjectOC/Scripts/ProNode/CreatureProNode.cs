@@ -112,14 +112,14 @@ namespace ProjectOC.ProNodeNS
             if (Stack >= StackReserve + needAssignNum + StackThreshold * ProductNum)
             {
                 StackReserve = Stack - needAssignNum;
-                var creature = Creature;
-                creature.Activity -= 1;
-                int descCount = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescCount;
-                if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
-                {
-                    int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
-                    creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
-                }
+            }
+            var creature = Creature;
+            creature.Activity -= 1;
+            int descCount = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescCount;
+            if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
+            {
+                int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
+                creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
             }
             // 下一次生产
             if (!StartProduce()) { StopProduce(); }
