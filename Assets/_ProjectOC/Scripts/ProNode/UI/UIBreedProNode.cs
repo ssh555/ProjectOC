@@ -205,6 +205,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             base.Exit();
         }
         #endregion
