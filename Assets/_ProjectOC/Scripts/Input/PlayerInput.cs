@@ -3304,6 +3304,133 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""SmallMap"",
+            ""id"": ""8707cadf-9603-464b-bb8d-f6fb13cd131c"",
+            ""actions"": [
+                {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""b8676b1a-92b6-4adb-b8be-5792e5237450"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""3e088ad0-fa36-4f05-b2a1-3a891b0e0586"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e9ad6bbc-1a2d-4556-b570-55062a3fd09f"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e7bd2eef-3e27-441c-bf0a-176d6080977a"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ea558055-2c20-4068-a929-22adfa822ffa"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0b76ed71-1cc3-41d9-8faa-920f7e668a50"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""b1e88e97-f3c0-4be9-a51a-8d8597ffffe9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""70d787b3-279a-4ded-920a-ee70e4507df0"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6c5d1f3f-beb5-4f04-996b-063d52fae8d5"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""70d4fb3f-4e31-4037-b45f-9d2552e19c09"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0be1d1e3-c6fe-4495-b72e-62794f7bbf7f"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3403,6 +3530,9 @@ namespace ProjectOC.Input
             // UIWorkerHome
             m_UIWorkerHome = asset.FindActionMap("UIWorkerHome", throwIfNotFound: true);
             m_UIWorkerHome_Alter = m_UIWorkerHome.FindAction("Alter", throwIfNotFound: true);
+            // SmallMap
+            m_SmallMap = asset.FindActionMap("SmallMap", throwIfNotFound: true);
+            m_SmallMap_SwichBtn = m_SmallMap.FindAction("SwichBtn", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -4572,6 +4702,52 @@ namespace ProjectOC.Input
             }
         }
         public UIWorkerHomeActions @UIWorkerHome => new UIWorkerHomeActions(this);
+
+        // SmallMap
+        private readonly InputActionMap m_SmallMap;
+        private List<ISmallMapActions> m_SmallMapActionsCallbackInterfaces = new List<ISmallMapActions>();
+        private readonly InputAction m_SmallMap_SwichBtn;
+        public struct SmallMapActions
+        {
+            private @PlayerInput m_Wrapper;
+            public SmallMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SwichBtn => m_Wrapper.m_SmallMap_SwichBtn;
+            public InputActionMap Get() { return m_Wrapper.m_SmallMap; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(SmallMapActions set) { return set.Get(); }
+            public void AddCallbacks(ISmallMapActions instance)
+            {
+                if (instance == null || m_Wrapper.m_SmallMapActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_SmallMapActionsCallbackInterfaces.Add(instance);
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
+            }
+
+            private void UnregisterCallbacks(ISmallMapActions instance)
+            {
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
+            }
+
+            public void RemoveCallbacks(ISmallMapActions instance)
+            {
+                if (m_Wrapper.m_SmallMapActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ISmallMapActions instance)
+            {
+                foreach (var item in m_Wrapper.m_SmallMapActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_SmallMapActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public SmallMapActions @SmallMap => new SmallMapActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -4682,6 +4858,10 @@ namespace ProjectOC.Input
         public interface IUIWorkerHomeActions
         {
             void OnAlter(InputAction.CallbackContext context);
+        }
+        public interface ISmallMapActions
+        {
+            void OnSwichBtn(InputAction.CallbackContext context);
         }
     }
 }

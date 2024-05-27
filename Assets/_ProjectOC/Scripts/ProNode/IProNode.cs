@@ -9,7 +9,7 @@ namespace ProjectOC.ProNodeNS
     public abstract class IProNode : DataNS.DataContainerOwner, WorkerNS.IEffectObj
     {
         #region Data
-        [HideInInspector]
+        [ShowInInspector, NonSerialized]
         public IWorldProNode WorldProNode;
         [ReadOnly]
         public string ID = "";
@@ -77,9 +77,6 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Table Property
-        [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
-        public ProNodeType ProNodeType => ManagerNS.LocalGameManager.Instance != null ? 
-            ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID) : ProNodeType.None;
         [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.RecipeCategory Category => ManagerNS.LocalGameManager.Instance != null ? 
             ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID) : ML.Engine.InventorySystem.RecipeCategory.None;
@@ -116,6 +113,7 @@ namespace ProjectOC.ProNodeNS
         {
             ID = config.ID ?? "";
             InitData(0, 0);
+            InitAPCost_Duty = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             EffBase = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
         }
@@ -219,6 +217,7 @@ namespace ProjectOC.ProNodeNS
         #region Level
         [LabelText("等级"), ReadOnly]
         public int Level = 0;
+        public event Action OnLevelChangeEvent;
         public bool SetLevel(int level)
         {
             var config = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config;
@@ -239,6 +238,7 @@ namespace ProjectOC.ProNodeNS
                     }
                 }
                 Level = level;
+                OnLevelChangeEvent?.Invoke();
                 return true;
             }
             return false;

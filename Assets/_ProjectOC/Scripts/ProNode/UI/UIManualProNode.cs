@@ -1,6 +1,5 @@
 using ML.Engine.TextContent;
 using static ProjectOC.ProNodeNS.UI.UIManualProNode;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,56 +11,6 @@ namespace ProjectOC.ProNodeNS.UI
     public class UIManualProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
         #region Data
-        #region Config
-        [System.Serializable]
-        public struct APBarColorConfig
-        {
-            [LabelText("初始体力值")]
-            public int Start;
-            [LabelText("结束体力值")]
-            public int End;
-            [LabelText("对应颜色")]
-            public Color Color;
-        }
-        [System.Serializable]
-        public struct IconNumConfig
-        {
-            [LabelText("初始体力值")]
-            public int Start;
-            [LabelText("结束体力值")]
-            public int End;
-            [LabelText("对应数量")]
-            public int Num;
-        }
-
-        [LabelText("体力对应的体力条颜色"), FoldoutGroup("配置项"), ShowInInspector]
-        public List<APBarColorConfig> APBarColorConfigs = new List<APBarColorConfig>();
-        [LabelText("学习速度对应的图标数量"), FoldoutGroup("配置项"), ShowInInspector]
-        public List<IconNumConfig> ExpRateIconNumConfigs = new List<IconNumConfig>();
-        private Color GetAPBarColor(int ap)
-        {
-            foreach (var config in APBarColorConfigs)
-            {
-                if (config.Start <= ap && (config.End == 0 || ap <= config.End))
-                {
-                    return config.Color;
-                }
-            }
-            return default(Color);
-        }
-        private int GetExpRateIconNum(int eff)
-        {
-            foreach (var config in ExpRateIconNumConfigs)
-            {
-                if (config.Start <= eff && (config.End == 0 || eff <= config.End))
-                {
-                    return config.Num;
-                }
-            }
-            return 0;
-        }
-        #endregion
-
         #region Mode
         public enum Mode
         {
@@ -96,7 +45,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if (curMode == Mode.ChangeWorker)
                 {
-                    Workers = new List<WorkerNS.Worker>() { };
+                    Workers.Clear();
                     Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetNotBanWorkers());
                     Workers.Sort(new WorkerNS.Worker.SortForProNodeUI() { WorkType = ProNode.ExpType });
                     if (Worker != null)
@@ -194,7 +143,7 @@ namespace ProjectOC.ProNodeNS.UI
             num = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(ProNode.WorldProNode.Classification.ToString()).Count;
             if (UpgradeBtnList != null && UpgradeBtnList.BtnCnt != num)
             {
-                UpgradeBtnList.ChangBtnNum(num, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+                UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
             }
             else
             {
@@ -336,6 +285,9 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
             base.Exit();
         }
         #endregion
@@ -554,6 +506,7 @@ namespace ProjectOC.ProNodeNS.UI
                     ProNode_Product.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
                     ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.Stack.ToString();
+                    ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                     #endregion
 
                     #region Raw
@@ -606,7 +559,7 @@ namespace ProjectOC.ProNodeNS.UI
                 if (hasWorker)
                 {
                     ProNode_Worker.Find("Bar1").GetComponent<Image>().fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                    ProNode_Worker.Find("Bar1").GetComponent<Image>().color = GetAPBarColor(Worker.APCurrent);
+                    ProNode_Worker.Find("Bar1").GetComponent<Image>().color = ManagerNS.LocalGameManager.Instance.ProNodeManager.GetAPBarColor(Worker.APCurrent);
                     ProNode_Worker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Name;
                     ProNode_Worker.Find("Gender").GetComponent<Image>().sprite = Worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon;
                 }
@@ -628,7 +581,7 @@ namespace ProjectOC.ProNodeNS.UI
                 if (hasWorker)
                 {
                     ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
-                    ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.GetEff() - ProNode.EffBase).ToString() + "%";
+                    ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
                 }
                 #endregion
             }
@@ -702,7 +655,7 @@ namespace ProjectOC.ProNodeNS.UI
                     // Bar1
                     var bar1 = item.Find("Bar1").GetComponent<Image>();
                     bar1.fillAmount = (float)worker.APCurrent / worker.APMax;
-                    bar1.color = GetAPBarColor(worker.APCurrent);
+                    bar1.color = ManagerNS.LocalGameManager.Instance.ProNodeManager.GetAPBarColor(worker.APCurrent);
                     // Name
                     item.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker.Name;
                     // Gender
@@ -722,7 +675,7 @@ namespace ProjectOC.ProNodeNS.UI
                     {
                         GridLayoutGroup gridLayout = item.transform.Find("Level").GetComponent<GridLayoutGroup>();
                         Transform template = item.transform.Find("Level").Find("Icon");
-                        int num = GetExpRateIconNum(worker.GetEff(ProNode.ExpType));
+                        int num = ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpRateIconNum(worker.GetEff(ProNode.ExpType));
                         Image[] images = item.transform.Find("Level").GetComponentsInChildren<Image>();
                         int cnt = 0;
                         foreach (var image in images)
@@ -772,7 +725,7 @@ namespace ProjectOC.ProNodeNS.UI
                     var uiItemData = UpgradeBtnList.GetBtn(i).transform;
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
+                    int current = ManagerNS.LocalGameManager.Instance.Player.InventoryItemAmount(itemID);
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
@@ -815,7 +768,7 @@ namespace ProjectOC.ProNodeNS.UI
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (ProNode.Level + 1).ToString();
                     Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc +
-                        (ProNode.EffBase + ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[ProNode.Level + 1]) + "%";
+                        (ProNode.EffBase + ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[ProNode.Level]) + "%";
                 }
                 else
                 {
@@ -844,6 +797,7 @@ namespace ProjectOC.ProNodeNS.UI
             }
             if (ProNode.HasRecipe)
             {
+                ProNode_Product.Find("Back").GetComponent<Image>().color = ProNode.StackAll >= ProNode.StackMax * ProNode.ProductNum ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
                 ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                 for (int i = 0; i < ProNode.Recipe.Raw.Count; ++i)
                 {
@@ -871,11 +825,11 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
                 ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
-                ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.GetEff() - ProNode.EffBase).ToString() + "%";
+                ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
 
                 var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
                 bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                bar1.color = GetAPBarColor(Worker.APCurrent);
+                bar1.color = ManagerNS.LocalGameManager.Instance.ProNodeManager.GetAPBarColor(Worker.APCurrent);
             }
         }
 

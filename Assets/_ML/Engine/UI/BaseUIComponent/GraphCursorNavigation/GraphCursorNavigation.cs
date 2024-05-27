@@ -15,20 +15,24 @@ namespace ML.Engine.UI
     {
         private ScrollRect ScrollRect;
         private Scrollbar VerticalScrollbar, HorizontalScrollbar;
-        private RectTransform Center;
+        private RectTransform center;
+        public Transform Center { get { return center.transform; } }
         private RectTransform RaycastCenter;
         /// <summary>
         /// Center 在Content 坐标系下的坐标
         /// </summary>
         [ShowInInspector]
-        public Vector3 CenterPos { get { return Center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
+        public Vector3 CenterPos { get { if (center == null) return Vector3.zero; return center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
 
         private Vector2 LimitBound;
         private Vector2 minBounds;
         private Vector2 maxBounds;
 
+        [ShowInInspector]
         private InputAction BindNavigationInputAction = null;
+        [ShowInInspector]
         private InputAction BindZoomInInputAction = null;
+        [ShowInInspector]
         private InputAction BindZoomOutInputAction = null;
 
         private Transform content;
@@ -36,6 +40,10 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private UIBtnList uiBtnList;
         public UIBtnList UIBtnList { get { return uiBtnList; } }
+
+        private bool isEnable = false;
+        [ShowInInspector]
+        public bool IsEnale { get { return isEnable; } set { isEnable = value; } }
 
         #region 面板配置项
         [LabelText("边距配置（左右间距，上下间距）")]
@@ -58,14 +66,15 @@ namespace ML.Engine.UI
 
         //当前组件的scale 
         private float curZoomscale;
-        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"),ShowInInspector]
-        public float curZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  }
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"), ShowInInspector]
+        private float curZoomRate;
+        public float CurZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  set { curZoomRate = value; CurZoomscale = (ZoomInLimit - ZoomOutLimit) * value + ZoomOutLimit; } }
         [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放值"), ShowInInspector]
         public float CurZoomscale 
         { 
             set {
                 this.content.localScale = new Vector3(value, value, value);
-                this.Center.localScale = new Vector3(value, value, value);
+                this.center.localScale = new Vector3(value, value, value);
                 curZoomscale = value;
                 }
             get
@@ -75,14 +84,15 @@ namespace ML.Engine.UI
         }
 
         public event Action OnScaleChanged;
+        public event Action OnCenterPosChanged;
 
         protected override void Awake()
         {
             this.ScrollRect = this.transform.Find("Scroll View").GetComponent<ScrollRect>();
             this.VerticalScrollbar = ScrollRect.verticalScrollbar;
             this.HorizontalScrollbar = ScrollRect.horizontalScrollbar;
-            this.Center = this.transform.Find("Center").GetComponent<RectTransform>();
-            this.RaycastCenter = this.Center;
+            this.center = this.transform.Find("Center").GetComponent<RectTransform>();
+            this.RaycastCenter = this.center;
             var rec = this.GetComponent<RectTransform>();
             this.LimitBound = new Vector2(rec.rect.width / 2, rec.rect.height / 2);
             this.minBounds = -LimitBound + Margin;
@@ -182,6 +192,9 @@ namespace ML.Engine.UI
                 NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
                 NavagateMapTimer.OnEndEvent += () =>
                 {
+
+                    if(isEnable == false) { return; }
+
                     canControlCenterxLeft = false;
                     canControlCenterxRight = false;
                     canControlCenteryUP = false;
@@ -214,13 +227,13 @@ namespace ML.Engine.UI
                     //右侧触底
                     if (canControlCenterxRight)
                     {
-                        Vector2 clampedPosition = Center.anchoredPosition + vector2 * 5 * NavagationSpeed;
+                        Vector2 clampedPosition = center.anchoredPosition + vector2 * 5 * NavagationSpeed;
                         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
-                        clampedPosition.y = Center.anchoredPosition.y;
-                        Center.anchoredPosition = clampedPosition;
+                        clampedPosition.y = center.anchoredPosition.y;
+                        center.anchoredPosition = clampedPosition;
 
                         //退出控制Center
-                        if (Center.anchoredPosition.x < 0)
+                        if (center.anchoredPosition.x < 0)
                         {
                             HorizontalScrollbar.value += (vector2.x / 400) * NavagationSpeed;
                         }
@@ -229,13 +242,13 @@ namespace ML.Engine.UI
                     //左侧触底
                     if (canControlCenterxLeft)
                     {
-                        Vector2 clampedPosition = Center.anchoredPosition + vector2 * 5 * NavagationSpeed;
+                        Vector2 clampedPosition = center.anchoredPosition + vector2 * 5 * NavagationSpeed;
                         clampedPosition.x = Mathf.Clamp(clampedPosition.x, minBounds.x, maxBounds.x);
-                        clampedPosition.y = Center.anchoredPosition.y;
-                        Center.anchoredPosition = clampedPosition;
+                        clampedPosition.y = center.anchoredPosition.y;
+                        center.anchoredPosition = clampedPosition;
 
                         //退出控制Center
-                        if (Center.anchoredPosition.x > 0)
+                        if (center.anchoredPosition.x > 0)
                         {
                             HorizontalScrollbar.value += (vector2.x / 400) * NavagationSpeed;
                         }
@@ -244,13 +257,13 @@ namespace ML.Engine.UI
                     //上侧触底
                     if (canControlCenteryUP)
                     {
-                        Vector2 clampedPosition = Center.anchoredPosition + vector2 * 5 * NavagationSpeed;
-                        clampedPosition.x = Center.anchoredPosition.x;
+                        Vector2 clampedPosition = center.anchoredPosition + vector2 * 5 * NavagationSpeed;
+                        clampedPosition.x = center.anchoredPosition.x;
                         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
-                        Center.anchoredPosition = clampedPosition;
+                        center.anchoredPosition = clampedPosition;
 
                         //退出控制Center
-                        if (Center.anchoredPosition.y < 0)
+                        if (center.anchoredPosition.y < 0)
                         {
                             VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
                         }
@@ -259,13 +272,13 @@ namespace ML.Engine.UI
                     //下侧触底
                     if (canControlCenteryDown)
                     {
-                        Vector2 clampedPosition = Center.anchoredPosition + vector2 * 5 * NavagationSpeed;
-                        clampedPosition.x = Center.anchoredPosition.x;
+                        Vector2 clampedPosition = center.anchoredPosition + vector2 * 5 * NavagationSpeed;
+                        clampedPosition.x = center.anchoredPosition.x;
                         clampedPosition.y = Mathf.Clamp(clampedPosition.y, minBounds.y, maxBounds.y);
-                        Center.anchoredPosition = clampedPosition;
+                        center.anchoredPosition = clampedPosition;
 
                         //退出控制Center
-                        if (Center.anchoredPosition.y > 0)
+                        if (center.anchoredPosition.y > 0)
                         {
                             VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
                         }
@@ -282,6 +295,7 @@ namespace ML.Engine.UI
                     {
                         VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
                     }
+                    OnCenterPosChanged?.Invoke();
                 };
             }
 
@@ -304,6 +318,7 @@ namespace ML.Engine.UI
                 ZoomOutTimer = new CounterDownTimer(ZoomOutTimeInterval, true, true, 1, 2);
                 ZoomOutTimer.OnEndEvent += () =>
                 {
+                    if (isEnable == false) { return; }
                     ZoomOut();
                 };
             }
@@ -327,6 +342,7 @@ namespace ML.Engine.UI
                 ZoomInTimer = new CounterDownTimer(ZoomInTimeInterval, true, true, 1, 2);
                 ZoomInTimer.OnEndEvent += () =>
                 {
+                    if (isEnable == false) { return; }
                     ZoomIn();
                 };
             }
@@ -343,7 +359,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void ZoomIn()
         {
-            Vector3 Offset = this.ScrollRect.content.position - this.Center.position;
+            Vector3 Offset = this.ScrollRect.content.position - this.center.position;
             float PreZoomscale = CurZoomscale;
             if (CurZoomscale + ZoomSpeed*0.01f > ZoomInLimit) 
             {
@@ -354,7 +370,7 @@ namespace ML.Engine.UI
                 CurZoomscale += ZoomSpeed * 0.01f;
             }
             Offset *= CurZoomscale / PreZoomscale;
-            this.ScrollRect.content.position = this.Center.position + Offset;
+            this.ScrollRect.content.position = this.center.position + Offset;
             OnScaleChanged?.Invoke();
         }
 
@@ -363,7 +379,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void ZoomOut()
         {
-            Vector3 Offset = this.ScrollRect.content.position - this.Center.position;
+            Vector3 Offset = this.ScrollRect.content.position - this.center.position;
             float PreZoomscale = CurZoomscale;
 
             if (CurZoomscale - ZoomSpeed * 0.01f < ZoomOutLimit)
@@ -376,10 +392,9 @@ namespace ML.Engine.UI
             }
 
             Offset *= CurZoomscale / PreZoomscale;
-            this.ScrollRect.content.position = this.Center.position + Offset;
+            this.ScrollRect.content.position = this.center.position + Offset;
             OnScaleChanged?.Invoke();
         }
-
         public void EnableGraphCursorNavigation(InputAction NavigationInputAction, InputAction ZoomInInputAction = null, InputAction ZoomOutInputAction = null)
         {
             this.BindNavigationInput(NavigationInputAction);
@@ -390,6 +405,7 @@ namespace ML.Engine.UI
             }
             this.uiBtnList.EnableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            this.isEnable = true;
         }
 
         public void DisableGraphCursorNavigation()
@@ -402,6 +418,7 @@ namespace ML.Engine.UI
             }
             this.uiBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            this.isEnable = false;
         }
 
         public void InitUIBtnList()

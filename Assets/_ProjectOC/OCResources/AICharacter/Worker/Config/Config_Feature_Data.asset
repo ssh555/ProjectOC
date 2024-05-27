@@ -37,3 +37,5 @@ MonoBehaviour:
     FeatDelCostItemID: Item_Juice_2
     FeatDelCostItemNum: 1
     FeatDelTime: 2
+    FeatureMax: 64000000640000006400000064000000
+    FeatureOdds: 3200000032000000

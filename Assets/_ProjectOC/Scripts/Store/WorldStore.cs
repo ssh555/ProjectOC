@@ -2,20 +2,10 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.StoreNS
 {
-    public class WorldStore : IWorldStore, ML.Engine.BuildingSystem.IBuildingUpgrade
+    public class WorldStore : IWorldStore
     {
         [LabelText("ÕæÊµ²Ö¿â"), ShowInInspector, ReadOnly]
         public Store RealStore => Store as Store;
-
-        public void OnUpgradeSetData(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
-        {
-            isFirstBuild = lastLevelBuild.isFirstBuild;
-            if (lastLevelBuild is WorldStore worldStore)
-            {
-                ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
-                RealStore.SetLevel(Classification.Category4 - 1);
-            }
-        }
         public override void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab",

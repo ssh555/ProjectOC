@@ -2,6 +2,7 @@
 
 namespace ML.Engine.InventorySystem
 {
+    [System.Serializable]
     public struct CreatureTableData : IGenData
     {
         public string ID;

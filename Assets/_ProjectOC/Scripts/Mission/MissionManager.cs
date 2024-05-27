@@ -45,11 +45,8 @@ namespace ProjectOC.MissionNS
             if (data != null && missionNum > 0 && initiator != null)
             {
                 MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType, replaceIndex, reserveEmpty);
-                if (mission.Data != null)
-                {
-                    MissionTransports.Add(mission);
-                    return mission;
-                }
+                MissionTransports.Add(mission);
+                return mission;
             }
             return null;
         }
@@ -72,10 +69,9 @@ namespace ProjectOC.MissionNS
                 if (worker != null)
                 {
                     int weight = mission.Data.GetDataWeight();
-                    int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : 0;
+                    int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : missionNum;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
-
                 IMissionObj target = null;
                 if (missionNum > 0)
                 {
@@ -93,10 +89,7 @@ namespace ProjectOC.MissionNS
                 {
                     new Transport(mission, missionNum, mission.Initiator, target, worker);
                 }
-                else
-                {
-                    return worker == null ? -1 : -2;
-                }
+                else { return worker == null ? -1 : -2; }
             }
             return 1;
         }
@@ -108,9 +101,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.IStore, int> result = mission.Data is ItemIDDataObj ? 
-                    ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true) :
-                    ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data.GetDataID(), mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.IStore, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
                     StoreNS.IStore store = kv.Key;
@@ -119,17 +110,14 @@ namespace ProjectOC.MissionNS
                     if (worker != null)
                     {
                         int weight = mission.Data.GetDataWeight();
-                        int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : 0;
+                        int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : missionNum;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
                     {
                         new Transport(mission, missionNum, store, mission.Initiator, worker);
                     }
-                    else
-                    {
-                        return worker == null ? -1 : -2;
-                    }
+                    else { return worker == null ? -1 : -2; }
                 }
             }
             return 1;
@@ -146,27 +134,17 @@ namespace ProjectOC.MissionNS
             {
                 if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)
                 {
-                    if (InitiatorToTarget(MissionObjType.Store, mission) == -1)
-                    {
-                        return;
-                    }
+                    if (InitiatorToTarget(MissionObjType.Store, mission) == -1) { return; }
                 }
                 else if (mission.Type == MissionTransportType.ProNode_Restaurant)
                 {
-                    if (InitiatorToTarget(MissionObjType.Restaurant, mission) == -1)
-                    {
-                        return;
-                    }
+                    if (InitiatorToTarget(MissionObjType.Restaurant, mission) == -1) { return; }
                 }
                 else if (mission.Type == MissionTransportType.Store_ProNode)
                 {
-                    if (StoreToInitiator(mission) == -1)
-                    {
-                        return;
-                    }
+                    if (StoreToInitiator(mission) == -1) { return; }
                 }
             }
         }
     }
 }
-

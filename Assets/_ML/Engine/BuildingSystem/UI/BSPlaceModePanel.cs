@@ -8,6 +8,11 @@ using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
 using Sirenix.OdinInspector;
+using ML.Engine.Utility;
+using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
+using ProjectOC.Player;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -29,6 +34,8 @@ namespace ML.Engine.BuildingSystem.UI
 
         private Transform KT_AlterHeight;
         private Transform KT_AlterSocket;
+
+        private Transform Slots;
         #endregion
 
         #endregion
@@ -45,6 +52,7 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.KT_AlterHeight = this.transform.Find("KT_AlterHeight");
             this.KT_AlterSocket = this.transform.Find("KeyTip").Find("KT_AlterSocket");
+            this.Slots = this.transform.Find("Slots");
         }
 
         #endregion
@@ -419,6 +427,30 @@ namespace ML.Engine.BuildingSystem.UI
             this.description = "BSPlaceModePanel数据加载完成";
         }
         #endregion
+        protected override void InitObjectPool()
+        {
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_BuildingSystem/Prefab_BS_UI_Slot.prefab", (handle) => { RefreshSlots(); });
+            base.InitObjectPool();
+        }
+        private void RefreshSlots()
+        {
+            var PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+            this.objectPool.ResetPool("SlotPool");
+            foreach (var raw in BuildingManager.Instance.GetRaw(this.Placer.SelectedPartInstance.Classification.ToString()))
+            {
+                var tPrefab = this.objectPool.GetNextObject("SlotPool", Slots);
+                int needNum = raw.num;
+                int haveNum = PlayerInventory.GetItemAllNum(raw.id);
+                Debug.Log(tPrefab);
+                tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                if (needNum > haveNum)
+                {
+                    tPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                }
+                tPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(raw.id);
+                tPrefab.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(raw.id);
+            }
+        }
     }
 }
 

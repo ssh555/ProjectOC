@@ -38,8 +38,7 @@ namespace ProjectOC.ProNodeNS
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ProNodeConfigAsset>("Config_ProNode").Completed += (handle) =>
             {
-                ProNodeConfigAsset data = handle.Result;
-                Config = new ProNodeConfig(data.Config);
+                Config = new ProNodeConfig(handle.Result.Config);
             };
         }
         #endregion
@@ -115,11 +114,11 @@ namespace ProjectOC.ProNodeNS
         #region Get
         public bool IsValidID(string id)
         {
-            return !string.IsNullOrEmpty(id) ? ProNodeTableDict.ContainsKey(id) : false;
+            return !string.IsNullOrEmpty(id) && ProNodeTableDict.ContainsKey(id);
         }
         public bool IsValidUID(string uid)
         {
-            return !string.IsNullOrEmpty(uid) ? WorldProNodeDict.ContainsKey(uid) : false;
+            return !string.IsNullOrEmpty(uid) && WorldProNodeDict.ContainsKey(uid);
         }
         public IWorldProNode GetWorldProNode(string uid)
         {
@@ -159,14 +158,34 @@ namespace ProjectOC.ProNodeNS
         }
         public bool GetCanCharge(string id)
         {
-            return IsValidID(id) ? ProNodeTableDict[id].CanCharge : false;
+            return IsValidID(id) && ProNodeTableDict[id].CanCharge;
         }
         public bool GetIsAuto(string id)
         {
-            return IsValidID(id) ? ProNodeTableDict[id].Type == ProNodeType.Auto : false;
+            return IsValidID(id) && ProNodeTableDict[id].Type == ProNodeType.Auto;
+        }
+        public UnityEngine.Color GetAPBarColor(int ap)
+        {
+            foreach (var config in Config.APBarColorConfigs)
+            {
+                if (config.Start <= ap && (config.End == 0 || ap <= config.End))
+                {
+                    return config.Color;
+                }
+            }
+            return default(UnityEngine.Color);
+        }
+        public int GetExpRateIconNum(int eff)
+        {
+            foreach (var config in Config.ExpRateIconNumConfigs)
+            {
+                if (config.Start <= eff && (config.End == 0 || eff <= config.End))
+                {
+                    return config.Num;
+                }
+            }
+            return 0;
         }
         #endregion
     }
 }
-
-
