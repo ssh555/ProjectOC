@@ -1986,6 +1986,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 8990633782829304668}
 --- !u!1 &1081098020735392266
 GameObject:
@@ -4393,7 +4394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -370.99408, y: 284.2515}
+  m_AnchoredPosition: {x: -370.99408, y: 384.74493}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3759539099081840311
@@ -5038,6 +5039,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &2739760374550008763
 GameObject:
@@ -9043,7 +9045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3179737216151972966
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11002,6 +11004,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &6066986520682832070
 GameObject:
@@ -15145,9 +15148,9 @@ RectTransform:
   m_Father: {fileID: 9129250217184700490}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1.7000008, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &7078902211687344283
 CanvasRenderer:
@@ -15219,6 +15222,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 3083074672569816086}
 --- !u!1 &7788505819959956725
 GameObject:
@@ -15397,7 +15401,7 @@ RectTransform:
   m_Father: {fileID: 5803689307336256660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17652,8 +17656,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4190107103590345731}
   m_HandleRect: {fileID: 3110786692263499898}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.8094246
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

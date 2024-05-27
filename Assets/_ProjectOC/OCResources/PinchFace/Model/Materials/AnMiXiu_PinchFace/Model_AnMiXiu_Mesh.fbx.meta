@@ -128,11 +128,11 @@ ModelImporter:
     - boneName: Upper Leg.L
       humanName: LeftUpperLeg
       limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
+        min: {x: -60, y: -60, z: -90}
+        max: {x: 60, y: 60, z: 25}
         value: {x: 0, y: 0, z: 0}
         length: 0
-        modified: 0
+        modified: 1
     - boneName: Lower Leg.L
       humanName: LeftLowerLeg
       limit:
@@ -200,19 +200,19 @@ ModelImporter:
     - boneName: Upper Arm.L
       humanName: LeftUpperArm
       limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
+        min: {x: -90, y: -100, z: -9}
+        max: {x: 90, y: 100, z: 40}
         value: {x: 0, y: 0, z: 0}
         length: 0
-        modified: 0
+        modified: 1
     - boneName: Upper Arm.R
       humanName: RightUpperArm
       limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
+        min: {x: -90, y: -100, z: -9}
+        max: {x: 90, y: 100, z: 40}
         value: {x: 0, y: 0, z: 0}
         length: 0
-        modified: 0
+        modified: 1
     - boneName: Lower Arm.L
       humanName: LeftLowerArm
       limit:
@@ -416,11 +416,11 @@ ModelImporter:
     - boneName: Upper Leg.R
       humanName: RightUpperLeg
       limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
+        min: {x: -60, y: -60, z: -90}
+        max: {x: 60, y: 60, z: 25}
         value: {x: 0, y: 0, z: 0}
         length: 0
-        modified: 0
+        modified: 1
     - boneName: Lower Leg.R
       humanName: RightLowerLeg
       limit:
@@ -445,19 +445,115 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
+    - boneName: "\u5C0F\u6307\uFF11.L"
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u5C0F\u6307\uFF12.L"
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u5C0F\u6307\uFF13.L"
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF10.L"
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF11.L"
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF12.L"
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF10.R"
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF11.R"
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u89AA\u6307\uFF12.R"
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u5C0F\u6307\uFF11.R"
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u5C0F\u6307\uFF12.R"
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: "\u5C0F\u6307\uFF13.R"
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
     skeleton:
-    - name: AnMiXiu_Mesh(Clone)
+    - name: Model_AnMiXiu_Mesh(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: AnMiXiu_Mesh
-      parentName: AnMiXiu_Mesh(Clone)
+      parentName: Model_AnMiXiu_Mesh(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
       scale: {x: 1, y: 1, z: 1}
     - name: AnMiXiuBone
-      parentName: AnMiXiu_Mesh(Clone)
+      parentName: Model_AnMiXiu_Mesh(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
       scale: {x: 1, y: 1, z: 1}
@@ -674,7 +770,7 @@ ModelImporter:
     - name: "_dummy_\u8155\u63692.L"
       parentName: "\u8155\u6369.L"
       position: {x: -0.000000002980232, y: 0.00000011967494, z: -0.00000026428668}
-      rotation: {x: 0.64103454, y: -0.29845405, z: -0.62644535, w: 0.32797295}
+      rotation: {x: 0.6410345, y: -0.29845402, z: -0.6264453, w: 0.32797292}
       scale: {x: 1, y: 0.9999999, z: 0.99999994}
     - name: "_dummy_\u8155\u63693.L"
       parentName: "\u8155\u6369.L"
@@ -804,17 +900,17 @@ ModelImporter:
     - name: "\u89AA\u6307\uFF10.L"
       parentName: Hand.L
       position: {x: 0.07276543, y: 0.069197044, z: 0.0016978356}
-      rotation: {x: 0.5450521, y: 0.83753955, z: 0.03264836, w: 0.01948907}
+      rotation: {x: 0.48876968, y: 0.8721531, z: 0.017253155, w: 0.012469243}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: "\u89AA\u6307\uFF11.L"
       parentName: "\u89AA\u6307\uFF10.L"
       position: {x: 0.000000005960464, y: 0.045629226, z: 0.000000011920928}
-      rotation: {x: 0.025105454, y: 0.8870837, z: 0.035894852, w: -0.45952573}
+      rotation: {x: 0.023745496, y: 0.8871735, z: 0.03395067, w: -0.45957235}
       scale: {x: 1, y: 1.0000004, z: 1.0000001}
     - name: "\u89AA\u6307\uFF12.L"
       parentName: "\u89AA\u6307\uFF11.L"
       position: {x: 0.000000005960464, y: 0.060105164, z: 0.0000000372529}
-      rotation: {x: -0.020120883, y: -0.010441046, z: -0.056738544, w: 0.9981317}
+      rotation: {x: -0.013573211, y: -0.010451373, z: -0.038276605, w: 0.99912035}
       scale: {x: 1, y: 0.9999999, z: 1.0000001}
     - name: "\u89AA\u6307\u5148.L"
       parentName: "\u89AA\u6307\uFF12.L"
@@ -874,7 +970,7 @@ ModelImporter:
     - name: Upper Arm.R
       parentName: "\u80A9C.R"
       position: {x: 7.2319435e-11, y: 0.00000009586206, z: -4.9637402e-11}
-      rotation: {x: 0.51446307, y: 0.487265, z: 0.51247317, w: -0.48504826}
+      rotation: {x: 0.5144631, y: 0.487265, z: 0.5124732, w: -0.48504826}
       scale: {x: 0.9999998, y: 0.99999994, z: 1}
     - name: "\u8155\u6369.R"
       parentName: Upper Arm.R
@@ -1019,17 +1115,17 @@ ModelImporter:
     - name: "\u89AA\u6307\uFF10.R"
       parentName: Hand.R
       position: {x: 0.07276543, y: 0.069196925, z: -0.0016979421}
-      rotation: {x: 0.54565626, y: 0.8368748, z: -0.020178176, w: -0.038634982}
+      rotation: {x: 0.48903504, y: 0.8716407, z: -0.0060721, w: -0.03240786}
       scale: {x: 1, y: 1, z: 1}
     - name: "\u89AA\u6307\uFF11.R"
       parentName: "\u89AA\u6307\uFF10.R"
       position: {x: 0.000000041723247, y: 0.045629226, z: 0.00000009983778}
-      rotation: {x: -0.010666288, y: 0.18945539, z: -0.042484816, w: 0.9809118}
+      rotation: {x: -0.010088474, y: 0.18947445, z: -0.040183663, w: 0.98101115}
       scale: {x: 0.99999994, y: 0.99999976, z: 0.9999999}
     - name: "\u89AA\u6307\uFF12.R"
       parentName: "\u89AA\u6307\uFF11.R"
       position: {x: 0.00000002980232, y: 0.060105238, z: 0.000000077486035}
-      rotation: {x: -0.059317984, y: 0.028622136, z: -0.0102706365, w: 0.99777585}
+      rotation: {x: -0.040014237, y: 0.028650407, z: -0.0069276043, w: 0.9987643}
       scale: {x: 1, y: 0.99999994, z: 0.99999994}
     - name: "\u89AA\u6307\u5148.R"
       parentName: "\u89AA\u6307\uFF12.R"
@@ -1459,7 +1555,7 @@ ModelImporter:
     - name: q_3_5
       parentName: clothBottom
       position: {x: -0.1304471, y: 0.049624853, z: -0.021087231}
-      rotation: {x: -0.013612472, y: -0.13232614, z: 0.1323261, w: 0.9822394}
+      rotation: {x: -0.013612473, y: -0.13232614, z: 0.13232611, w: 0.9822394}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: q_3_6
       parentName: clothBottom
@@ -1559,7 +1655,7 @@ ModelImporter:
     - name: q_4_3
       parentName: clothBottom
       position: {x: -0.10232486, y: 0.08473716, z: -0.07378723}
-      rotation: {x: -0.06008432, y: -0.101924144, z: 0.10192408, w: 0.98773116}
+      rotation: {x: -0.060084324, y: -0.101924144, z: 0.101924084, w: 0.98773116}
       scale: {x: 0.99999994, y: 1, z: 1}
     - name: q_4_4
       parentName: clothBottom
@@ -1669,7 +1765,7 @@ ModelImporter:
     - name: q_5_5
       parentName: clothBottom
       position: {x: -0.1491096, y: 0.119849615, z: -0.025179513}
-      rotation: {x: -0.0043460173, y: -0.13114795, z: 0.13114789, w: 0.9826401}
+      rotation: {x: -0.0043460177, y: -0.13114795, z: 0.1311479, w: 0.9826401}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: q_5_6
       parentName: clothBottom
@@ -1719,7 +1815,7 @@ ModelImporter:
     - name: q_5_15
       parentName: clothBottom
       position: {x: 0.109155804, y: 0.11984927, z: 0.090411425}
-      rotation: {x: 0.06795623, y: 0.08965064, z: -0.08965062, w: 0.98959965}
+      rotation: {x: 0.06795624, y: 0.08965064, z: -0.08965063, w: 0.98959965}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: q_5_16
       parentName: clothBottom
@@ -2061,8 +2157,8 @@ ModelImporter:
       position: {x: -0, y: 5.954822e-10, z: 0.013623045}
       rotation: {x: -0.000000022351742, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    armTwist: 0.5
-    foreArmTwist: 0.5
+    armTwist: 0.488
+    foreArmTwist: 0.482
     upperLegTwist: 0.5
     legTwist: 0.5
     armStretch: 0.05
