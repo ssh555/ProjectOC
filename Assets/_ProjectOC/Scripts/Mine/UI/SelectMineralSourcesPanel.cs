@@ -38,7 +38,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         base.OnExit();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
-        //this.uIMineProNode.ProNode.ChangeMine(curMiningData);
+        uIMineProNode.ProNode.ChangeMine(curMiningData);
     }                                                           
 
     protected override void Exit()
