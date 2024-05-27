@@ -23,6 +23,9 @@ namespace ProjectOC.WorkerNS
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         private int level = 1;
         public int Level { get { return level; } }
+
+
+
         public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("OCTableData", "WorkerEcho", (datas) =>

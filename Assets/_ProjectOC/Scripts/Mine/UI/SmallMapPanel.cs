@@ -61,7 +61,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     private void InitData()
     {
         if (MM.MineralMapData == null) return;
-        this.CheckRange = 3 * this.EnlargeRate;
+        this.CheckRange = MM.MineSystemConfig.MiningCircleRadius * this.EnlargeRate;
         (this.cursorNavigation.Center as RectTransform).sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
         this.PlacedCircle.sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
         Synchronizer synchronizer = new Synchronizer(MM.MineralMapData.MineDatas.Count, () => { ChangeMiningData(); });
@@ -74,7 +74,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
                 btn.GetComponent<RectTransform>().anchoredPosition = minedata.Position * EnlargeRate;
                 btn.GetComponent<RectTransform>().localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 BtnToMineDataDic.Add(btn, minedata);
-                //btn.transform.Find("Image").GetComponent<Image>().sprite = 
+                btn.transform.Find("Image").GetComponent<Image>().sprite = MM.GetMineSprite(minedata.MineID);
             }, OnFinishAdd: () => { synchronizer.Check(); }
             ); ;
         }
@@ -91,7 +91,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         (this.cursorNavigation.UIBtnList.Parent as RectTransform).anchoredPosition = localPosition;
 
         //初始化矿圈位置信息
-        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId);
+        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId,selectMineralSourcesPanel.CurSelectRegion);
         if(placeCircleData != null)
         {
             this.PlacedCircle.gameObject.SetActive(placeCircleData.isPlacedCircle);
@@ -147,7 +147,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     {
         //生成矿圈
         this.PlacedCircle.anchoredPosition = this.cursorNavigation.CenterPos;
-        MM.AddMineralCircleData(this.cursorNavigation.CenterPos, selectMineralSourcesPanel.ProNodeId);
+        MM.AddMineralCircleData(this.cursorNavigation.CenterPos, selectMineralSourcesPanel.ProNodeId, selectMineralSourcesPanel.CurSelectRegion);
         if(hasPlacedCircle == false)
         {
             this.PlacedCircle.gameObject.SetActive(true);

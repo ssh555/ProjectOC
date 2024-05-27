@@ -973,34 +973,24 @@ namespace ML.Engine.UI
         {
             if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
-
             string actionName = obj.action.name;
-
             // 使用 ReadValue<T>() 方法获取附加数据
             string actionMapName = obj.action.actionMap.name;
 
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            double angle = Mathf.Atan2(vector2.x, vector2.y);
+            if(vector2.magnitude < 1f)
+            {
+                return;
+            }
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
 
             angle = angle * 180 / Mathf.PI;
             if (angle < 0)
             {
                 angle = angle + 360;
             }
-
-            double sliceAngle = 360.0 / OneDimCnt;
-            for (int i = 0; i < OneDimCnt; i++)
-            {
-                if (i != OneDimCnt - 1 && angle > sliceAngle / 2 + sliceAngle * i && angle < sliceAngle / 2 + sliceAngle * (i + 1))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-                else if (i == OneDimCnt - 1 && (angle < sliceAngle / 2 || angle > 360 - sliceAngle / 2))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-            }
-
+            float sliceAngle = 360.0f / OneDimCnt;
+            this.MoveIndexIUISelected(Mathf.RoundToInt(angle / sliceAngle));
             this.NavigationPostAction?.Invoke();
         }
 
