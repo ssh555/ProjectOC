@@ -421,7 +421,7 @@ namespace ProjectOC.ProNodeNS.UI
                     mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     mine.Find("Back").gameObject.SetActive(false);
                     mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
-                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = stackAll.ToString();
+                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.Storage).ToString();
                     mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
                 }
                 for (int i = mineCnt; i < ProductBtnList.BtnCnt; i++)
@@ -646,7 +646,7 @@ namespace ProjectOC.ProNodeNS.UI
                 mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                 mine.Find("Back").gameObject.SetActive(false);
                 mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
-                mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll).ToString();
+                mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.Storage).ToString();
                 mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
             }
             for (int i = mineCnt; i < ProductBtnList.BtnCnt; i++)

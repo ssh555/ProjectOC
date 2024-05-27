@@ -7,9 +7,10 @@ namespace ProjectOC.ProNodeNS
     [LabelText("Хрг§Ве"), Serializable]
     public class CreatureProNode : IProNode
     {
+        // Container Index 0:Product, 1->Capacity-3:Raw, Capacity-2:Creature, Capacity-1:Discard
         #region ProNode
         public int OutputThreshold;
-        public bool HasCreature => HasRecipe ? DataContainer.GetCapacity() == Recipe.Raw.Count + 3 : false;
+        public bool HasCreature => HasRecipe && DataContainer.GetCapacity() == Recipe.Raw.Count + 3;
         public ML.Engine.InventorySystem.CreatureItem Creature => HasCreature &&
             DataContainer.GetData(DataContainer.GetCapacity() - 2) is ML.Engine.InventorySystem.CreatureItem item ? item : null;
         public int DiscardStackAll => HasCreature ? DataContainer.GetAmount(DataContainer.GetCapacity() - 1, DataNS.DataOpType.StorageAll) : 0;
@@ -27,8 +28,8 @@ namespace ProjectOC.ProNodeNS
                 {
                     DataContainer.AddCapacity(2, new List<int> { 1, creature.Discard.num * StackMax });
                     int capacity = DataContainer.GetCapacity();
-                    ChangeData(capacity-2, creature);
-                    ChangeData(capacity-1, new DataNS.ItemIDDataObj(creature.Discard.id), false);
+                    ChangeData(capacity-2, creature, false, false);
+                    ChangeData(capacity-1, new DataNS.ItemIDDataObj(creature.Discard.id), false, false);
                     DataContainer.ChangeAmount(capacity-2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                 }
                 else { ChangeRecipe(""); }
@@ -40,12 +41,9 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff()
         {
-            if (ManagerNS.LocalGameManager.Instance != null)
-            {
-                return EffBase + (Creature?.Output ?? 0) *
-                    ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff;
-            }
-            return EffBase;
+            return ManagerNS.LocalGameManager.Instance != null && HasCreature ? 
+                EffBase + Creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
+                EffBase;
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { if (HasCreature) { for (int i = 1; i < DataContainer.GetCapacity() - 2; i++) { FastAdd(i); } } }
@@ -91,10 +89,11 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Output <= OutputThreshold)
+                if (creature.Output <= OutputThreshold && (this as MissionNS.IMissionObj).GetMissionNum(creature, false) == 0)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
-                        (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2);
+                        (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
+                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true);
                 }
                 if (DiscardReserve > 0)
                 {
@@ -116,7 +115,6 @@ namespace ProjectOC.ProNodeNS
                 var creature = Creature;
                 creature.Activity -= 1;
                 int descCount = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescCount;
-                descCount = descCount > 0 ? descCount : 10;
                 if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
                 {
                     int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;

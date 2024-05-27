@@ -459,7 +459,8 @@ namespace ProjectOC.WorkerNS.UI
                     string featID = seat.FeatureIDs[i];
                     Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find("Specific") : btnList.GetBtn(i).transform.Find("Normal");
                     feat.Find("IconNew").gameObject.SetActive(checkNew && seat.IsChanged[i]);
-                    feat.Find("IconCorrect").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconAllow").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconBan").gameObject.SetActive(!checkNew && checkCanCorrect && !featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
                 }
             }
         }
