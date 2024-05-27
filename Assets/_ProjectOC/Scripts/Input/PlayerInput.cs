@@ -527,7 +527,7 @@ namespace ProjectOC.Input
                     ""name"": ""SelectGrid"",
                     ""type"": ""Value"",
                     ""id"": ""4aa17cd2-b005-4617-9f65-3568ffd468a7"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true

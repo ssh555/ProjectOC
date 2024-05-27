@@ -23,7 +23,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("是否有矿"), ReadOnly]
         public bool HasMine => MineDatas != null && MineDatas.Count > 0;
         [LabelText("矿"), ReadOnly, NonSerialized]
-        public List<MineSystemData.MineData> MineDatas;
+        public List<MineSystemData.MineData> MineDatas = new List<MineSystemData.MineData>();
 
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
         public WorkerNS.SkillType ExpType = WorkerNS.SkillType.Collect;
