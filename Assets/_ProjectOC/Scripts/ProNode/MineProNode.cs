@@ -44,24 +44,17 @@ namespace ProjectOC.ProNodeNS
             lock (this)
             {
                 RemoveMine();
-                if (MineDatas != null)
-                {
-                    foreach (var mine in MineDatas)
-                    {
-                        mine.UnRegisterProNode();
-                    }
-                }
                 if (mines != null && mines.Count > 0)
                 {
-                    MineDatas = mines;
+                    MineDatas.AddRange(mines);
                     List<DataNS.IDataObj> datas = new List<DataNS.IDataObj>();
                     List<int> dataCapacitys = new List<int>();
-                    foreach (var mine in mines)
+                    for (int i = 0; i < MineDatas.Count; i++)
                     {
-                        dataCapacitys.Add(mine.GainNum * MineStackMax);
-                        datas.Add(new DataNS.ItemIDDataObj(mine.MineID));
+                        dataCapacitys.Add(MineDatas[i].GainNum * MineStackMax);
+                        datas.Add(new DataNS.ItemIDDataObj(MineDatas[i].MineID));
                         StackReserves.Add(0);
-                        mine.RegisterProNode();
+                        MineDatas[i].RegisterProNode();
                     }
                     ResetData(datas, dataCapacitys);
                     StartRun();
@@ -72,6 +65,14 @@ namespace ProjectOC.ProNodeNS
         {
             StopRun();
             ClearData();
+            if (MineDatas != null)
+            {
+                for (int i = 0; i < MineDatas.Count; i++)
+                {
+                    MineDatas[i].UnRegisterProNode();
+                }
+                MineDatas.Clear();
+            }
             StackReserves.Clear();
         }
         protected void OnContainerDataChangeEventForMineData()
@@ -113,8 +114,8 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Worker?.GetEff(ExpType) ?? 0); }
-        public override int GetTimeCost() { return HasMine && GetEff() > 0 ? (int)Math.Ceiling((double)100 * MineTimeCost / GetEff()) : 0; }
+        public override int GetEff() { return Worker != null ? EffBase + Worker.GetEff(ExpType) : 0; }
+        public override int GetTimeCost() { int eff = GetEff(); return HasMine && eff > 0 ? (int)Math.Ceiling((double)100 * MineTimeCost / eff) : 0; }
         public override void Destroy()
         {
             RemoveMine();
@@ -129,20 +130,10 @@ namespace ProjectOC.ProNodeNS
                 for (int i = 0; i < MineDatas.Count; i++)
                 {
                     int stackAll = DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    if (stackAll < MineStackMax * MineDatas[i].GainNum)
+                    if (stackAll < MineStackMax * MineDatas[i].GainNum && MineDatas[i].RemianMineNum > 0)
                     {
                         flag = false;
                         break;
-                    }
-                }
-                if (flag) { return false; }
-                flag = true;
-                foreach (var min in MineDatas)
-                {
-                    if (min.RemianMineNum > 0) 
-                    { 
-                        flag = false; 
-                        break; 
                     }
                 }
                 if (flag) { return false; }
