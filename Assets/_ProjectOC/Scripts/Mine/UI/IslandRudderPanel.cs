@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ak.wwise;
 using static IslandRudderPanel;
 public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 {
@@ -22,6 +23,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.Target.gameObject.SetActive(false);
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
+        this.DotLine = Content.Find("DotLine").GetComponent<Image>();
+        this.DotLineRectTransform = DotLine.GetComponent<RectTransform>();
     }
     #endregion
 
@@ -193,6 +196,10 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private Transform BigMapInstanceTrans;
     private Transform NormalRegions;
+
+    private Image DotLine;
+    private RectTransform DotLineRectTransform;
+    private Material DotLineMaterial;
     #endregion
 
     public override void Refresh()
@@ -229,7 +236,25 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private void RefreshTarget(bool isMoving)
     {
         this.Target.gameObject.SetActive(isMoving);
+        this.DotLine.gameObject.SetActive(isMoving);
+
+        float angle = Vector3.Angle(MM.MainIslandData.MovingDir, Vector2.right);
+        angle = MM.MainIslandData.TargetPos.y < MM.MainIslandData.CurPos.y ? -angle : angle;
+        var dis = Vector2.Distance(MM.MainIslandData.CurPos, MM.MainIslandData.TargetPos);
+        this.DotLineRectTransform.sizeDelta = new Vector2(dis, DotLineRectTransform.sizeDelta.y);
+        UnityEngine.Debug.Log(this.DotLineRectTransform.sizeDelta + " " + dis);
+        this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
+        this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
+        this.DotLine.material.SetFloat("_Scale", dis/100);
     }
+
+    #region ÐéÏß
+    
+
+
+    #endregion
+
+
     #endregion
 
 
