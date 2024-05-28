@@ -42,8 +42,8 @@
         "English" : "Breed Result"
     },
     "textOutput" : {
-        "Chinese" : "产值",
-        "English" : "Output"
+        "Chinese" : "产值:",
+        "English" : "Output:"
     },
     "textWarnCreature" : {
         "Chinese" : "品种不匹配",

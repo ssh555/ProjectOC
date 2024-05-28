@@ -369,7 +369,6 @@ namespace ProjectOC.ProNodeNS.UI
                 #region Raw
                 Transform raw = ProNode_UI.Find("Raw");
                 bool hasRaw = hasRecipe && ProNode.Recipe.Raw.Count > 0;
-                raw.gameObject.SetActive(hasRaw);
                 string rawID = hasRaw ? ProNode.Recipe.Raw[0].id : "";
                 int rawNum = hasRaw ? ProNode.Recipe.Raw[0].num : 0;
                 if (!tempSprite.ContainsKey(rawID))
@@ -390,11 +389,11 @@ namespace ProjectOC.ProNodeNS.UI
                 RectTransform barRect = bar.Find("Cur").GetComponent<RectTransform>();
                 float posX = 300 * ProNode.OutputThreshold / 50f;
                 barRect.sizeDelta = new Vector2(posX, barRect.sizeDelta.y);
-                RectTransform iconRect = ProNode_UI.Find("Icon").GetComponent<RectTransform>();
+                RectTransform iconRect = bar.Find("Icon").GetComponent<RectTransform>();
                 iconRect.anchoredPosition = new Vector2(posX, iconRect.anchoredPosition.y);
-                ProNode_UI.Find("Icon").Find("Value").GetComponent<TMPro.TextMeshPro>().text = ProNode.OutputThreshold.ToString();
-                ProNode_UI.Find("Icon").Find("Selected").gameObject.SetActive(CurMode == Mode.Output);
-                ProNode_UI.Find("Icon").Find("ValueSelected").gameObject.SetActive(CurMode == Mode.Output);
+                bar.Find("Icon").Find("Value").GetComponent<TMPro.TextMeshPro>().text = ProNode.OutputThreshold.ToString();
+                bar.Find("Icon").Find("Selected").gameObject.SetActive(CurMode == Mode.Output);
+                bar.Find("Icon").Find("ValueSelected").gameObject.SetActive(CurMode == Mode.Output);
                 #endregion
 
                 #region Creature
@@ -461,7 +460,8 @@ namespace ProjectOC.ProNodeNS.UI
                 if (creature != null && showWarn)
                 {
                     notTheSameCreature = creature.ID != ProNode.Creature1.ID;
-                    notTheSameGender = ProNode.Creature1.Gender == Gender.None ? creature.Gender != Gender.None : creature.Gender == ProNode.Creature1.Gender;
+                    notTheSameGender = ProNode.Creature1.Gender == Gender.None ? 
+                        creature.Gender != Gender.None : creature.Gender == ProNode.Creature1.Gender;
                 }
                 bool canBreed = showWarn && !notTheSameCreature && !notTheSameGender;
                 Creature_Recipe.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textBreedResult;
@@ -493,10 +493,12 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 Creature_Desc.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                 bool isValidItemID = ML.Engine.InventorySystem.ItemManager.Instance.IsValidItemID(productID);
-                Creature_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID) : PanelTextContent.textEmpty;
-                Creature_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemDescription(productID) : PanelTextContent.textEmpty;
+                Creature_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ? 
+                    ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID) : PanelTextContent.textEmpty;
+                Creature_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ? 
+                    ML.Engine.InventorySystem.ItemManager.Instance.GetItemDescription(productID) : PanelTextContent.textEmpty;
                 #region Output
-                Creature_Desc.Find("Output").Find("text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textGetBreed;
+                Creature_Desc.Find("Output").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textGetBreed;
                 string proRecipeID = isValidCreature ? creature.ProRecipeID : "";
                 string proProductID = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(proRecipeID).id;
                 if (!tempSprite.ContainsKey(proProductID))
@@ -504,11 +506,12 @@ namespace ProjectOC.ProNodeNS.UI
                     tempSprite[proProductID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(proProductID);
                 }
                 Creature_Desc.Find("Output").Find("Icon").GetComponent<Image>().sprite = tempSprite[proProductID];
-                Creature_Desc.Find("Output").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(proProductID);
+                Creature_Desc.Find("Output").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = 
+                    ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(proProductID);
                 #endregion
 
                 #region Discard
-                Creature_Desc.Find("Discard").Find("text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textGetDiscard;
+                Creature_Desc.Find("Discard").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textGetDiscard;
                 string discardID = isValidCreature ? creature.Discard.id : "";
                 int discardNum = isValidCreature ? creature.Discard.num : 0;
                 if (!tempSprite.ContainsKey(discardID))
@@ -516,7 +519,8 @@ namespace ProjectOC.ProNodeNS.UI
                     tempSprite[discardID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(discardID);
                 }
                 Creature_Desc.Find("Discard").Find("Icon").GetComponent<Image>().sprite = tempSprite[discardID];
-                Creature_Desc.Find("Discard").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(discardID);
+                Creature_Desc.Find("Discard").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = 
+                    ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(discardID);
                 Creature_Desc.Find("Discard").Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>().text = discardNum.ToString();
                 #endregion
                 #endregion
