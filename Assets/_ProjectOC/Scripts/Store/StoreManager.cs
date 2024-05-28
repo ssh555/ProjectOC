@@ -148,26 +148,38 @@ namespace ProjectOC.StoreNS
             }
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
-
-        public IStore SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level) 
+        public List<string> GetCreatureStoreIconItems()
         {
-            if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.LiquidStore ||
-                storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.SolidStore)
+            string[] all = ManagerNS.LocalGameManager.Instance.ItemManager.GetAllItemID();
+            List<string> result = new List<string>();
+            foreach (string id in all)
             {
-                return new Store(storeType, level);
+                if (ManagerNS.LocalGameManager.Instance.ItemManager.GetItemType(id) == ML.Engine.InventorySystem.ItemType.Creature)
+                {
+                    result.Add(id);
+                }
             }
-            else if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Projector)
+            return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
+        }
+
+        public IStore SpawnStore(IWorldStore worldStore, int level) 
+        {
+            if (worldStore is WorldStore)
             {
-                return new CreatureStore(storeType, level);
+                return new Store(worldStore.Classification.Category2, level);
+            }
+            else if (worldStore is CreatureWorldStore)
+            {
+                return new CreatureStore(worldStore.Classification.Category2, level);
             }
             return null;
         }
 
-        public void WorldStoreSetData(IWorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
+        public void WorldStoreSetData(IWorldStore worldStore, int level)
         {
             if (worldStore != null && level >= 0)
             {
-                WorldStoreSetData(worldStore, SpawnStore(storeType, level));
+                WorldStoreSetData(worldStore, SpawnStore(worldStore, level));
             }
         }
 
