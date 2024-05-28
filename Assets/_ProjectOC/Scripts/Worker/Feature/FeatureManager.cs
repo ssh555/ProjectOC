@@ -50,11 +50,11 @@ namespace ProjectOC.WorkerNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<FeatureConfigAsset>("Config_Feature").Completed += (handle) =>
             {
                 Config = new FeatureConfig(handle.Result.Config);
+                foreach (var tup in Config.CategoryFeatureList)
+                {
+                    RaceDict.Add(tup.category, tup.feature);
+                }
             };
-            foreach (var tup in Config.CategoryFeatureList)
-            {
-                RaceDict.Add(tup.category, tup.feature);
-            }
         }
         #endregion
 
