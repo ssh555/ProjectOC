@@ -33,12 +33,14 @@ namespace ProjectOC.MineSystem
         [HideInInspector] public GameObject TilePrefab, MinePrefab, selectOutline, brushIcon;
         [HideInInspector] public Transform gridParentTransf, mineParentTransf,textMeshTransf;
         public MineSmallMapEditData SmallMapEditData;
-
+        public bool eraseOnlySelectMine = true;
+        
         public int EditOption = 0;
         public MineBigMapEditData.MineBrushData curMineBrush = null;
         [Tooltip("0点 1 圈")] public bool brushTypeIsCircle = false;
         public bool isShiftPressed = false;
-
+        [HideInInspector]
+        public float singleDrawMinDistance = 0.1f;
         public float brushSizeScale = 0.1f; //sprite.scale 为1时，范围是2,半径是1
         public BigMap bigMap;
         public void SceneInit()

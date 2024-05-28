@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector.Editor.Drawers;
 using Sirenix.Reflection.Editor;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
+using Transform = UnityEngine.Transform;
 
 namespace ProjectOC.MineSystem
 {
@@ -20,7 +23,7 @@ namespace ProjectOC.MineSystem
         private BigMap bigMap;
         private bool showShortCut = false;
         private int tempMapWidht, tempMapHeight,copyMapIndex = -1;
-
+        private Transform selectMineTemplte;
         private bool ShowProgrammerData = false;
         public override void OnEnable()
         {
@@ -29,7 +32,7 @@ namespace ProjectOC.MineSystem
             bigMap = tileMap.transform.GetComponentInParent<BigMap>();
             tileMap.SceneInit();
             tileMap.textMeshTransf.gameObject.SetActive(true);
-            
+            selectMineTemplte = GameObject.Find("Canvas/Panel/MineSelectTemplate").transform;
             CheckEditData();
        
             ReGenerateSceneObject();
@@ -442,9 +445,9 @@ namespace ProjectOC.MineSystem
                         //if (Physics.Raycast(ray, out hit))
                         foreach (var _hit in hits)
                         {
-                            if (_hit.collider != null)
+                            if (_hit.collider != null && _hit.collider.gameObject.tag == "EditorOnly")
                             {
-                                if (_hit.collider.gameObject.tag == "EditorOnly")
+                                if (!tileMap.eraseOnlySelectMine ||  _hit.collider.gameObject.name.Split("_")[0] == tileMap.curMineBrush.mineID)
                                 {
                                     selectMine.Add(_hit.collider.gameObject);
                                 }
@@ -458,14 +461,42 @@ namespace ProjectOC.MineSystem
                         {
                             if (Vector2.Distance(_mine.transform.position, mouseWorldPos) < curBrush.brushSize * 0.5f)
                             {
-                                selectMine.Add(_mine.gameObject);
+                                if (!tileMap.eraseOnlySelectMine ||  _mine.name.Split("_")[0] == tileMap.curMineBrush.mineID)
+                                {
+                                    selectMine.Add(_mine.gameObject);
+                                }
                             }
                         }
                     }
 
+                    Dictionary<string, int> selectMineDic = new Dictionary<string, int>();
                     foreach (var _mine in selectMine)
                     {
                         _mine.GetComponent<SpriteRenderer>().color = Color.cyan;
+                        string _mineID = _mine.name.Split("_")[0];
+                        if (selectMineDic.ContainsKey(_mineID))
+                        {
+                            selectMineDic[_mineID]++;
+                        }
+                        else
+                        {
+                            selectMineDic[_mineID] = 1;
+                        }
+                    }
+                    
+                    //更新矿物显示UI
+                    for(int i = selectMineTemplte.parent.childCount;i >= 0;i--)
+                    {
+                        GameObject _go = selectMineTemplte.parent.GetChild(i).gameObject;
+                        if(_go != selectMineTemplte)
+                            DestroyImmediate(_go);
+                    }
+                    
+                    foreach (var _singleMineDic in selectMineDic)
+                    {
+                        GameObject _newGO = Instantiate(selectMineTemplte.gameObject,selectMineTemplte.parent);
+                        _newGO.GetComponentInChildren<Image>().sprite = bigMap.mineBrushDatas[_singleMineDic.Key].mineIcon;
+                        _newGO.GetComponentInChildren<TextMeshProUGUI>().text = _singleMineDic.Value.ToString();
                     }
                 }
                 //删除矿物
@@ -534,6 +565,7 @@ namespace ProjectOC.MineSystem
             //圈
             else
             {
+                List<Vector2> _curMinePos = new List<Vector2>();
                 for (int i = 0; i < _brush.brushDensity; i++)
                 {
                     float _angle = Random.Range(0f, 2 * Mathf.PI);
@@ -549,17 +581,30 @@ namespace ProjectOC.MineSystem
                     
                     if(!JudgeDataValid(_grid))
                         continue;
+                    //
+                    bool _stop = false;
+                    foreach (Vector2 _minePos in _curMinePos)
+                    {
+                        if (Vector2.Distance(_minePos, minePos2D) < tileMap.singleDrawMinDistance)
+                        {
+                            _stop = true;
+                            break;
+                        }
+                    }
+                    if(_stop)   continue;
+                        
+                    
                     
                     
                     Vector3 minePos = new Vector3(minePos2D.x,minePos2D.y , 0);
 
-                    //Check在范围外
-                    //if(minePos )
+
 
                     GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                         tileMap.mineParentTransf);
                     tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
                     _curMineData.MinePoses.Add(minePos2D);
+                    _curMinePos.Add(minePos2D);
                 }
             }
 
@@ -623,6 +668,15 @@ namespace ProjectOC.MineSystem
                 ToggleButton("圈", (() => SwitchBrushIcon(1)), tileMap.brushTypeIsCircle, 30);
                 GUILayout.EndHorizontal();
 
+                if (tileMap.EditOption == 2)
+                {
+                    tileMap.eraseOnlySelectMine = EditorGUILayout.Toggle("只擦除选择矿物项", tileMap.eraseOnlySelectMine);
+                }
+                else if (tileMap.EditOption == 1 && tileMap.brushTypeIsCircle)
+                {
+                    tileMap.singleDrawMinDistance = EditorGUILayout.Slider("画笔矿物最小间隔:", tileMap.singleDrawMinDistance, 0.001f, 1f);
+                }
+                
                 curBrush.brushSize = EditorGUILayout.Slider("画笔大小:", curBrush.brushSize, curBrush.brushSizeMin,
                     curBrush.brushSizeMax);
                 curBrush.brushHard = EditorGUILayout.Slider("画笔分散度:", curBrush.brushHard, curBrush.brushHardMin,

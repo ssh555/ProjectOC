@@ -12,7 +12,6 @@ namespace ProjectOC.MineSystem
         public List<MineBrushData> MineBrushDatas;
         public Texture bigMapTex;
 
-
         public MineBrushData IDToMineBrushData(string _id)
         {
             MineBrushData _res = null;

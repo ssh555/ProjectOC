@@ -85,6 +85,11 @@ namespace ProjectOC.MineSystem
         {
             //读取大地图和小地图所有资产
             bigMap.BigMapEditDatas = AssetDatabase.LoadAssetAtPath<MineBigMapEditData>(bigMapPath);
+            foreach (var _singleMineDatas in bigMap.BigMapEditDatas.MineBrushDatas)
+            {
+                bigMap.mineBrushDatas.Add(_singleMineDatas.mineID,_singleMineDatas);
+            }
+            
             ReloadSmallMapAsset();
             if (bigMap.transform.childCount != bigMap.SmallMapEditDatas.Count)
             {
