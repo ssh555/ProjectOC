@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -56,10 +57,13 @@ namespace ProjectOC.ProNodeNS.UI
         private List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
 
         #region BtnList
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList ProductBtnList;
         private int ProductIndex => ProductBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList WorkerBtnList;
         private int WrokerIndex => WorkerBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList UpgradeBtnList;
 
         private bool IsInitBtnList;
@@ -214,6 +218,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             base.Exit();
         }
         #endregion
@@ -306,7 +311,15 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if(CurProNodeMode == ProNodeSelectMode.Mine)
                 {
-                    // TODO
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                    {
+                        SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                        selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                        selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
+                        selectMineralSourcesPanel.UIMineProNode = this;
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                    };
+
                 }
             }
             else if (CurMode == Mode.ChangeWorker && Workers.Count > 0)
@@ -402,7 +415,7 @@ namespace ProjectOC.ProNodeNS.UI
                 bool hasMine = ProNode.HasMine;
                 ProNode_Mine.Find("Icon").gameObject.SetActive(!hasMine);
                 ProNode_Mine.Find("IconMine").gameObject.SetActive(hasMine);
-                ProNode_Mine.Find("Name").gameObject.SetActive(hasMine);
+                ProNode_Mine.Find("Name").gameObject.SetActive(hasMine && ProNode.IsOnProduce);
                 ProNode_Mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textChangeMine;
                 #endregion
 
@@ -413,7 +426,7 @@ namespace ProjectOC.ProNodeNS.UI
                     Transform mine = ProductBtnList.GetBtn(i).transform;
                     string productID = ProNode.DataContainer.GetID(i);
                     int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
+                    int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainItems.num;
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -421,7 +434,7 @@ namespace ProjectOC.ProNodeNS.UI
                     mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                     mine.Find("Back").gameObject.SetActive(false);
                     mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
-                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = stackAll.ToString();
+                    mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.Storage).ToString();
                     mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
                 }
                 for (int i = mineCnt; i < ProductBtnList.BtnCnt; i++)
@@ -632,13 +645,14 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ProNode_Mine.Find("Mask").GetComponent<Image>().fillAmount = 0;
             }
+            ProNode_Mine.Find("Name").gameObject.SetActive(ProNode.HasMine && ProNode.IsOnProduce);
             int mineCnt = ProNode.MineDatas?.Count ?? 0;
             for (int i = 0; i < mineCnt; i++)
             {
                 Transform mine = ProductBtnList.GetBtn(i).transform;
                 string productID = ProNode.DataContainer.GetID(i);
                 int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
+                int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainItems.num;
                 if (!tempSprite.ContainsKey(productID))
                 {
                     tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -646,7 +660,7 @@ namespace ProjectOC.ProNodeNS.UI
                 mine.Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
                 mine.Find("Back").gameObject.SetActive(false);
                 mine.Find("Back2").GetComponent<Image>().color = stackAll >= stackMax ? new Color(113/255f, 182/255f, 4/255f) : Color.black;
-                mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll).ToString();
+                mine.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.Storage).ToString();
                 mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID);
             }
             for (int i = mineCnt; i < ProductBtnList.BtnCnt; i++)

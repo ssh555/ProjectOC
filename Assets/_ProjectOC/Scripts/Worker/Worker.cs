@@ -39,7 +39,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("体力消耗倍率"), ReadOnly, ShowInInspector]
         private float FactorAPCost = 1;
         [LabelText("最终搬运体力消耗"), ReadOnly, ShowInInspector]
-        public int RealAPCost_Transport => (int)(APCost_Transport * FactorAPCost + ModifyAPCost);
+        public int RealAPCost_Transport { get { int value = (int)(APCost_Transport * FactorAPCost + ModifyAPCost); return value >= 0 ? value : 0; } }
         #endregion
         #region Food
         [LabelText("进食时间"), ReadOnly, ShowInInspector]
@@ -49,7 +49,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外进食时间"), ReadOnly, ShowInInspector]
         private float ModifyEatTime;
         [LabelText("最终进食时间"), ReadOnly, ShowInInspector]
-        public float RealEatTime => EatTime * FactorEatTime + ModifyEatTime;
+        public float RealEatTime { get { float value = EatTime * FactorEatTime + ModifyEatTime; return value >= 0 ? value : 0; } }
         #endregion
         #region Mood
         [LabelText("当前心情值"), ReadOnly, ShowInInspector]
@@ -81,7 +81,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外移动速度"), ReadOnly, ShowInInspector]
         private float ModifyWalkSpeed;
         [LabelText("最终移动速度"), ReadOnly, ShowInInspector]
-        public float RealWalkSpeed => WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed;
+        public float RealWalkSpeed { get { float value = WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed; return value >= 0 ? value : 0; } }
         #endregion
         #region Weight
         [LabelText("负重上限"), ReadOnly, ShowInInspector]
@@ -91,7 +91,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外负重上限"), ReadOnly, ShowInInspector]
         private int ModifyBURMax;
         [LabelText("最终负重上限"), ReadOnly, ShowInInspector]
-        public int RealBURMax => (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport);
+        public int RealBURMax { get { int value = (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport); return value >= 0 ? value : 0; } }
         #endregion
         #region Skill
         [LabelText("全局工作效率"), ReadOnly]
@@ -604,7 +604,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (HaveSetEMLowEffect)
                 {
-                    Eff_AllSkill += EMLowEffect;
+                    Eff_AllSkill -= EMLowEffect;
                     HaveSetEMLowEffect = false;
                 }
             }
@@ -612,7 +612,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (!HaveSetEMLowEffect)
                 {
-                    Eff_AllSkill -= EMLowEffect;
+                    Eff_AllSkill += EMLowEffect;
                     HaveSetEMLowEffect = true;
                 }
             }
@@ -794,7 +794,7 @@ namespace ProjectOC.WorkerNS
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -844,13 +844,14 @@ namespace ProjectOC.WorkerNS
             if (HaveDestination)
             {
                 Vector3 curPos = transform.position;
-                bool hasArrive = Vector3.Distance(curPos, Target) <= 0.01f;
+                float dist = Vector3.Distance(curPos, Target);
+                bool hasArrive = dist <= 0.5f;
                 if (!hasArrive && JudgeHit && curPos == LastTickPosition)
                 {
                     Vector3 direction = Target - curPos;
-                    if (Physics.Raycast(curPos, direction.normalized, out RaycastHit hit, direction.magnitude))
+                    foreach (RaycastHit hit in Physics.BoxCastAll(curPos, new Vector3(3, 3, 3), direction.normalized)) 
                     {
-                        if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.01f)
+                        if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
                         {
                             hasArrive = true;
                         }
@@ -862,7 +863,7 @@ namespace ProjectOC.WorkerNS
                     OnArriveDisposableEvent?.Invoke(this);
                     OnArriveEvent?.Invoke(this);
                 }
-                JudgeHit = !hasArrive && curPos != LastTickPosition;
+                JudgeHit = !hasArrive && dist <= 3f && curPos != LastTickPosition;
                 LastTickPosition = curPos;
             }
             bool inSeq = ManagerNS.LocalGameManager.Instance.RestaurantManager.ContainWorker(this);

@@ -254,7 +254,7 @@ namespace ProjectOC.WorkerNS
                     if (reverseType == FeatureType.DeBuff) { return new Color(1.0f, 0.8431f, 0.0f); }
                 }
             }
-            return Color.black;
+            return Color.green;
         }
         public string GetColorStrForUI(string id)
         {
@@ -270,7 +270,7 @@ namespace ProjectOC.WorkerNS
                     if (reverseType == FeatureType.DeBuff) { return "#FFD700"; }
                 }
             }
-            return "black";
+            return "green";
         }
         #endregion
     }

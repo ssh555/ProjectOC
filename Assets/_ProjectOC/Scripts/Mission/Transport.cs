@@ -48,10 +48,10 @@ namespace ProjectOC.MissionNS
             Mission = mission;
             Source = source;
             Target = target;
+            MissionNum = missionNum;
             Mission.AddTransport(this);
             Source.AddTransport(this);
             Target.AddTransport(this);
-            MissionNum = missionNum;
             SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
 
             bool isReplaceData = mission.ReplaceIndex >= 0;
@@ -130,8 +130,11 @@ namespace ProjectOC.MissionNS
             {
                 Data.ConvertToWorldObj(CurNum, Worker.transform);
             }
-            Worker.Transport = null;
-            Worker.ClearDestination();
+            if (Worker != null)
+            {
+                Worker.Transport = null;
+                Worker.ClearDestination();
+            }
             if (SoureceReserveNum > 0)
             {
                 Source?.RemoveReservePutOut(Data, SoureceReserveNum);

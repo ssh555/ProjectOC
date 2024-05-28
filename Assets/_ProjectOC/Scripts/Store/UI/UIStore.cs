@@ -200,6 +200,7 @@ namespace ProjectOC.StoreNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             base.Exit();
         }
         #endregion

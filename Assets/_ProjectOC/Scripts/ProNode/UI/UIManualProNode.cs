@@ -285,6 +285,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
@@ -725,7 +726,7 @@ namespace ProjectOC.ProNodeNS.UI
                     var uiItemData = UpgradeBtnList.GetBtn(i).transform;
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
+                    int current = ManagerNS.LocalGameManager.Instance.Player.InventoryItemAmount(itemID);
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);

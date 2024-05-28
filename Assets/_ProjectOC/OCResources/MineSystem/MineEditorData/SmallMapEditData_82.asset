@@ -140,7 +140,7 @@ MonoBehaviour:
     - {x: 3.7519703, y: 14.382851}
   - MineID: Mineral_Fe_3
     MinePoses: []
-  - MineID: Mineral_Au_1
+  - MineID: Mineral_Pt_1
     MinePoses:
     - {x: 5.2737393, y: 22.814241}
     - {x: 4.58037, y: 22.515625}
@@ -158,13 +158,13 @@ MonoBehaviour:
     - {x: 7.362688, y: 23.369503}
     - {x: 7.3857307, y: 23.692099}
     - {x: 6.9018354, y: 23.692099}
-  - MineID: Mineral_Au_2
+  - MineID: Mineral_Pt_2
     MinePoses:
     - {x: 5.7231956, y: 23.454382}
     - {x: 4.038152, y: 22.519447}
     - {x: 5.048701, y: 22.442703}
     - {x: 4.6849604, y: 22.49472}
-  - MineID: Mineral_Au_3
+  - MineID: Mineral_Pt_3
     MinePoses: []
   - MineID: Mineral_Cu_1
     MinePoses: []
@@ -209,9 +209,9 @@ MonoBehaviour:
     MinePoses: []
   - MineID: Mineral_Si_3
     MinePoses: []
-  - MineID: Mineral_R_1
+  - MineID: Mineral_Rock_1
     MinePoses: []
-  - MineID: Mineral_R_2
+  - MineID: Mineral_Rock_2
     MinePoses: []
-  - MineID: Mineral_R_3
+  - MineID: Mineral_Rock_3
     MinePoses: []

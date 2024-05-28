@@ -15,8 +15,8 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Worker?.GetEff(ExpType) ?? 0); }
-        public override int GetTimeCost() { return HasRecipe && GetEff() > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / GetEff()) : 0; }
+        public override int GetEff() { return Worker != null ? Worker.GetEff(ExpType) + EffBase : EffBase; }
+        public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { for (int i = 1; i < DataContainer.GetCapacity(); i++) { FastAdd(i); } }
         public override void Destroy()
         {
