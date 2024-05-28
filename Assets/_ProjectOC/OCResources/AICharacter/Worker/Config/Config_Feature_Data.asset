@@ -40,5 +40,15 @@ MonoBehaviour:
     FeatureMax: 64000000640000006400000064000000
     FeatureOdds: 3200000032000000
     CategoryFeatureList:
-    - category: 0
-      feature: 
+    - category: 2
+      feature: WorkerFeature_Race_1
+    - category: 3
+      feature: WorkerFeature_Race_2
+    - category: 4
+      feature: WorkerFeature_Race_3
+    - category: 5
+      feature: WorkerFeature_Race_4
+    - category: 7
+      feature: WorkerFeature_Race_5
+    - category: 6
+      feature: WorkerFeature_Race_6

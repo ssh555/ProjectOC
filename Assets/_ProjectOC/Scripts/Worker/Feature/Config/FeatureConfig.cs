@@ -76,7 +76,7 @@ namespace ProjectOC.WorkerNS
     }
 
     [System.Serializable]
-    public class CategoryFeature
+    public struct CategoryFeature
     {
         public WorkerCategory category;
         public string feature;
