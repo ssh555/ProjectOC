@@ -202,8 +202,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     var vector2 = obj.ReadValue<UnityEngine.Vector2>();
                     this.DescriptionScrollView.verticalScrollbar.value += vector2.y;
-
-
                 };
             }
         }
