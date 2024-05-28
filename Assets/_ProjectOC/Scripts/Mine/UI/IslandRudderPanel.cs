@@ -235,7 +235,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.DotLineRectTransform.sizeDelta = new Vector2(dis, DotLineRectTransform.sizeDelta.y);
         this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
         this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
-        this.DotLine.material.SetFloat("_Scale", dis / 100);
+        this.DotLine.material.SetFloat("_Scale", dis / 30);
     }
 
     private void RefreshOnZoomMap()
