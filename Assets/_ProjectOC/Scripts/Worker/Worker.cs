@@ -19,7 +19,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名称"), ReadOnly, ShowInInspector]
         public string Name { get; private set; }
         [LabelText("类目"), ReadOnly]
-        public WorkerCategory Category;
+        public WorkerCategory Category { get; private set; }
         [LabelText("性别"), ReadOnly, ShowInInspector]
         public Gender Gender { get; private set; }
         #endregion
@@ -154,7 +154,7 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Init OnDestroy
-        public void Init(WorkerEcho workerEcho = null)
+        public void Init(WorkerEcho workerEcho = null, WorkerCategory category = WorkerCategory.None)
         {
             #region Event
             ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction += OnHourChangeEvent_AddWorkerEff_AllSkill;
@@ -165,6 +165,14 @@ namespace ProjectOC.WorkerNS
             var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
             ID = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerID();
             Name = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerName();
+            if (category == WorkerCategory.None)
+            {
+                Category = (WorkerCategory)UnityEngine.Random.Range(2, 8);
+            }
+            else
+            {
+                Category = category;
+            }
             Gender = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerGender();
             APMax = config.APMax;
             APWorkThreshold = config.APWorkThreshold;
@@ -190,8 +198,8 @@ namespace ProjectOC.WorkerNS
                 Skill.Add(skillType, new Skill(skillType, level));
             }
             var features = workerEcho != null ? 
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds, Category) :
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(Category);
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);

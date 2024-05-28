@@ -137,7 +137,6 @@ namespace ProjectOC.WorkerNS.UI
         {
             tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_HasHome");
             tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
-            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
             tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             IsInitWorkers = false;
@@ -276,7 +275,11 @@ namespace ProjectOC.WorkerNS.UI
                 // Active
                 item.SetActive(true);
                 // Icon
-                item.transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite["Worker"] : EmptySprite;
+                if (worker != null && !tempSprite.ContainsKey(worker.Category.ToString()))
+                {
+                    tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
+                }
+                item.transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : EmptySprite;
                 // Name
                 item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(worker?.Name) ? worker.Name : PanelTextContent.textEmpty;
                 // HomeIcon
@@ -336,7 +339,11 @@ namespace ProjectOC.WorkerNS.UI
             string text = Worker != null ? Worker.Name : PanelTextContent.textEmpty;
             HomeMain.Find("Title").GetComponent<TMPro.TextMeshProUGUI>().text = "<color=yellow>" + text + "</color>" + PanelTextContent.textHomePost;
 
-            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasHome ? tempSprite["Worker"] : tempSprite["WorkerHome"];
+            if (hasHome && !tempSprite.ContainsKey(Worker.Category.ToString()))
+            {
+                tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
+            }
+            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasHome ? tempSprite[Worker.Category.ToString()] : tempSprite["WorkerHome"];
 
             HomeMain.Find("Bar").gameObject.SetActive(hasHome);
             HomeMain.Find("Mood").gameObject.SetActive(hasHome);
@@ -358,8 +365,11 @@ namespace ProjectOC.WorkerNS.UI
                 return;
             }
             bool hasWorker = Worker != null && Worker.HaveHome;
-
-            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite["Worker"] : tempSprite["WorkerHome"];
+            if (hasWorker && !tempSprite.ContainsKey(Worker.Category.ToString()))
+            {
+                tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
+            }
+            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite[Worker.Category.ToString()] : tempSprite["WorkerHome"];
 
             HomeMain.Find("Bar").gameObject.SetActive(hasWorker);
             HomeMain.Find("Mood").gameObject.SetActive(hasWorker);
