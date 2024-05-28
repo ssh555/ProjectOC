@@ -10,8 +10,12 @@ namespace ProjectOC.ProNodeNS
         // Container Index 0:Product, 1:Raw, 2:Parent1, 3:Parent2, 4:Discard
         #region ProNode
         public int OutputThreshold;
-        public ML.Engine.InventorySystem.CreatureItem Creature1 => HasRecipe ? DataContainer.GetData(2) as ML.Engine.InventorySystem.CreatureItem : null;
-        public ML.Engine.InventorySystem.CreatureItem Creature2 => HasRecipe ? DataContainer.GetData(3) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature1 => HasRecipe && DataContainer.HaveSetData(2) ? 
+            DataContainer.GetData(2) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature2 => HasRecipe && DataContainer.HaveSetData(3) ? 
+            DataContainer.GetData(3) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature3 => HasRecipe && DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0 ? 
+            DataContainer.GetData(0) as ML.Engine.InventorySystem.CreatureItem : null;
         public bool HasCreature => HasRecipe && DataContainer.GetAmount(2, DataNS.DataOpType.Storage) > 0 && DataContainer.GetAmount(3, DataNS.DataOpType.Storage) > 0;
         public int DiscardStackAll => HasCreature ? DataContainer.GetAmount(4, DataNS.DataOpType.StorageAll) : 0;
         public int DiscardStack => HasCreature ? DataContainer.GetAmount(4, DataNS.DataOpType.Storage) : 0;
