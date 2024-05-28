@@ -102,6 +102,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!114 &8731962435216127852
 MonoBehaviour:
@@ -461,6 +462,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!114 &1839016843837629268
 MonoBehaviour:

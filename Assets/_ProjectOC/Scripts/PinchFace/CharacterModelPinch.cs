@@ -354,13 +354,29 @@ namespace ProjectOC.PinchFace
         }
 
         private string changeColorShaderKey = "_BaseColor";
-        public void ChangeColor(PinchPartType2 _type2, Color _color,int _index)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_type2"></param>
+        /// <param name="_color"></param>
+        /// <param name="_index">颜色序号</param>
+        /// <param name="colorType">分色模式</param>
+        public void ChangeColor(PinchPartType2 _type2, Color _color,int _index,int colorType)
         {
-            Material _targetMat = GetMaterial(_type2,_index);
-            if (_targetMat != null)
+            if (colorType == -1)
             {
-                _targetMat.SetColor(changeColorShaderKey,_color);   
+                Material _targetMat = GetMaterial(_type2,_index);
+                if (_targetMat != null)
+                {
+                    _targetMat.SetColor(changeColorShaderKey,_color);   
+                }
             }
+            else
+            {
+                
+            }
+            
+            
         }
 
 
