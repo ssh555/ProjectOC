@@ -145,22 +145,18 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-/*                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
-                {
-                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
+                /*                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
+                                {
+                                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
-                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
-                };*/
-
-                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
-                {
-                    IslandRudderPanel islandRudderPanel = handle.Result.GetComponent<IslandRudderPanel>();
-                    islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
-                };
+                                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
+                                };*/
+                Invoke("PushIslandRudderPanel", 0.1f);
             }
             );
+            
+
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
@@ -240,7 +236,16 @@ namespace ProjectOC.Player.UI
                 ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                 this.UIBtnList.SetCurSelectedNull();
                 this.UIBtnList.DeBindInputAction();
+                
             }
+        }
+
+        private void PushIslandRudderPanel()
+        {
+            IslandRudderPanel islandRudderPanel = LocalGameManager.Instance.MineSystemManager.IslandRudderPanelInstance;
+            islandRudderPanel.gameObject.SetActive(true);
+            islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
         }
 
         #endregion

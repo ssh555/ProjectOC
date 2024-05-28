@@ -16,9 +16,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.iOS;
 using UnityEngine.U2D;
 using static ProjectOC.MineSystem.MineSystemData;
 using static ProjectOC.Order.OrderManager;
@@ -66,11 +68,7 @@ namespace ProjectOC.MineSystem
         /// </summary>
         [ShowInInspector]
         private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
-        private int curRegionNum = -1;
-        [ShowInInspector]
-        public int CurRegionNum { get { return curRegionNum; }}
-        [ShowInInspector]
-        private int lastRegionNum = -1;
+
         #endregion
 
         #region SmallMap
@@ -98,6 +96,11 @@ namespace ProjectOC.MineSystem
                 //主岛移动触发ui refresh
                 if (mainIslandData.IsMoving && !isReachTarget)
                 {
+                    MainIslandRectTransform.anchoredPosition = mainIslandData.CurPos;
+                    if(isRectTransformInit)
+                    {
+                        DetectMainIslandCurRegion();
+                    }
                     RefreshUI?.Invoke();
                 }
             }
@@ -115,10 +118,17 @@ namespace ProjectOC.MineSystem
         public static MineSystemManager Instance { get { return instance; } }
 
         private static MineSystemManager instance;
+
+        #region 岛舵台UI
+        private IslandRudderPanel islandRudderPanelInstance;
+        public IslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
+        private GameObject bigMapInstance;
+        public GameObject BigMapInstance { get { return bigMapInstance; } }
+        #endregion 
+
         public void Init()
         {
             #region 异步初始化
-
             synchronizerInOrder = new SynchronizerInOrder(5, () => {
                 for (int i = 0; i < this.mapRegionDatas.Count; i++)
                 {
@@ -157,6 +167,37 @@ namespace ProjectOC.MineSystem
             synchronizerInOrder.StartExecution();
 
             LoadTechAtlas();
+
+            #region 岛舵台UI
+            //初始化主岛检测
+
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
+            {
+                islandRudderPanelInstance = handle.Result.GetComponent<IslandRudderPanel>();
+                islandRudderPanelInstance.gameObject.SetActive(false);
+                MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
+                {
+                    bigMapInstance = handle.Result;
+                    var BigMapInstanceTrans = bigMapInstance.transform;
+                    MapRegionRectTransform = BigMapInstanceTrans.Find("NormalRegion") as RectTransform;
+                    var cursorNavigation = islandRudderPanelInstance.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
+                    BigMapInstanceTrans.SetParent(cursorNavigation.Content.Find("BigMap"));
+                    BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+
+                    cursorNavigation.CurZoomscale = GridScale;
+                    cursorNavigation.NavagationSpeed = MineSystemConfig.IslandRudderSensitivity;
+                    cursorNavigation.ZoomSpeed = MineSystemConfig.ZoomSpeed;
+                    cursorNavigation.ZoomInLimit = MineSystemConfig.ZoomInLimit;
+                    cursorNavigation.ZoomOutLimit = MineSystemConfig.ZoomOutLimit;
+
+                    isRectTransformInit = true;
+                    DetectMainIslandCurRegion();
+                };
+            };
+            #endregion
+
+
             #endregion
 
             #region 同步初始化
@@ -319,6 +360,65 @@ namespace ProjectOC.MineSystem
         }
         #endregion
 
+        #region Internal
+        #region 主岛位置检测
+        private int curRegionNum = -1;
+        [ShowInInspector]
+        public int CurRegionNum { get { return curRegionNum; } }
+        [ShowInInspector]
+        private int lastRegionNum = -1;
+
+
+
+        private int CurColliderPointRegion = -1;
+        private int PreColliderPointRegion = -1;
+        private float ColliderRadiu = 4;
+
+        private RectTransform MapRegionRectTransform;
+        private RectTransform MainIslandRectTransform;
+        private bool isRectTransformInit = false;
+
+        private void DetectMainIslandCurRegion()
+        {
+            PreColliderPointRegion = CurColliderPointRegion;
+            CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu);
+            if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion == 0)
+            {
+                //碰撞
+                UnlockMapRegion(0);
+                return;
+            }
+            lastRegionNum = curRegionNum;
+            UnityEngine.Debug.Log("MainIslandRectTransform.position " + MainIslandRectTransform.position);
+            curRegionNum = DetectRegion(MainIslandRectTransform.position);
+            if (lastRegionNum != curRegionNum)
+            {
+                //进入新区域
+                UnlockMapRegion(curRegionNum);
+                lastRegionNum = curRegionNum;
+            }
+        }
+
+        public int DetectRegion(Vector3 pos)
+        {
+            Vector3 worldPosition = pos;
+            Vector2 localPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(MapRegionRectTransform, worldPosition, null, out localPosition);
+            Vector2 referenceSize = MapRegionRectTransform.rect.size;
+            Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
+            UnityEngine.Debug.Log("anchorPosition " + anchorPosition + " localPosition "+ localPosition+ " referenceSize "+ referenceSize);
+            anchorPosition = new Vector2(anchorPosition.x, 1 - anchorPosition.y);
+            int width = bigMapTableData.GetLength(0);
+            Vector2Int gridPos = new Vector2Int(
+            Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
+            Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
+
+            
+            return bigMapTableData[gridPos.y, gridPos.x];
+        }
+        #endregion
+        #endregion
+
         #region External
         /// <summary>
         /// 设置导航点 返回true代表成功 返回false代表当前主岛在移动 isCancel表示是否打断目前路径
@@ -331,12 +431,10 @@ namespace ProjectOC.MineSystem
                 mainIslandData.IsMoving = true;
                 return true;
             }
-
             if (mainIslandData.IsMoving)
             {
                 return false;
             }
-
             mainIslandData.TargetPos = pos;
             mainIslandData.IsMoving = true;
             return true;
@@ -357,6 +455,10 @@ namespace ProjectOC.MineSystem
             lastRegionNum = curRegionNum;
             curRegionNum = RegionNum;
             RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex] = true;
+            if(this.islandRudderPanelInstance.gameObject.activeInHierarchy)
+            {
+                this.islandRudderPanelInstance.Refresh();
+            }
         }
 
         public bool CheckRegionIsUnlocked(int RegionNum)

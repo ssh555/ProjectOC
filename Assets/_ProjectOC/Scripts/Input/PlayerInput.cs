@@ -3745,8 +3745,8 @@ namespace ProjectOC.Input
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
             public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
+            public void Enable() {Get().Enable(); }
+            public void Disable() {Get().Disable(); }
             public bool enabled => Get().enabled;
             public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
             public void AddCallbacks(IPlayerActions instance)

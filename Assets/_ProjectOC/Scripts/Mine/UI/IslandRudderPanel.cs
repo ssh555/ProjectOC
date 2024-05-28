@@ -41,7 +41,12 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     public override void OnExit()
     {
-        base.OnExit();
+
+        this.UnregisterInput();
+        this.objectPool.OnDestroy();
+        this.gameObject.SetActive(false);
+        this.Exit();
+        
         MM.RefreshUI -= this.RefreshMainIsland;
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         MM.MainIslandData.OnisMovingChanged -= RefreshTarget;
@@ -68,23 +73,19 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private bool isInit = false;
     private void InitData()
     {
-        GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
-        {
-            BigMapInstanceTrans = handle.Result.transform;
-            NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
-            BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
-            BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-            referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
-            this.cursorNavigation.CurZoomscale = MM.GridScale;
-            this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.IslandRudderSensitivity;
-            this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.ZoomSpeed;
-            this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.ZoomInLimit;
-            this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
-            RefreshOnZoomMap();
-            DetectMainIslandCurRegion();
-            isInit = true;
-            this.Refresh();
-        };
+        BigMapInstanceTrans = MM.BigMapInstance.transform;
+        NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
+        BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
+        BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        this.cursorNavigation.CurZoomscale = MM.GridScale;
+        this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.IslandRudderSensitivity;
+        this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.ZoomSpeed;
+        this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.ZoomInLimit;
+        this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
+        RefreshOnZoomMap();
+        isInit = true;
+        this.Refresh();
+
         //初始化主岛的位置
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
     }
@@ -116,7 +117,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         //先检测是否碰撞
         Vector3 MovingDir = (this.cursorNavigation.CenterPos - (Vector3)MM.MainIslandData.CurPos).normalized;
-        if (DetectRegion(MainIsland.transform.position + MovingDir * ColliderRadiu) == 0)
+        if (MM.DetectRegion(MainIsland.transform.position + MovingDir * ColliderRadiu) == 0)
         {
             return;
         }
@@ -137,50 +138,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     #endregion
 
-    #region 主岛位置检测
-    private RectTransform referenceRectTransform;
-    private int PreRegion = -1;
-    private int CurRegion = -1;
-    private int CurColliderPointRegion = -1;
-    private int PreColliderPointRegion = -1;
-    private void DetectMainIslandCurRegion()
-    {
-        
-        PreColliderPointRegion = CurColliderPointRegion;
-        CurColliderPointRegion = DetectRegion(MainIsland.transform.position + (Vector3)MM.MainIslandData.MovingDir * ColliderRadiu);
-        if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion == 0)
-        {
-            //碰撞
-            MM.UnlockMapRegion(0);
-            return;
-        }
-        PreRegion = CurRegion;
-        CurRegion = DetectRegion(MainIsland.transform.position);
-        if (PreRegion != CurRegion)
-        {
-            //进入新区域
-            MM.UnlockMapRegion(CurRegion);
-            PreRegion = CurRegion;
-            this.Refresh();
-        }
-    }
-
-    private int DetectRegion(Vector3 pos)
-    {
-        Vector3 worldPosition = pos;
-        Vector2 localPosition;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(referenceRectTransform, worldPosition, null, out localPosition);
-        Vector2 referenceSize = referenceRectTransform.rect.size;
-        Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
-        anchorPosition = new Vector2(anchorPosition.x, 1 - anchorPosition.y);
-        int width = MM.BigMapTableData.GetLength(0);
-        Vector2Int gridPos = new Vector2Int(
-        Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
-        Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
-        return MM.BigMapTableData[gridPos.y, gridPos.x];
-    }
-
-    #endregion
 
     #region UI
 
@@ -201,7 +158,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private Image DotLine;
     private RectTransform DotLineRectTransform;
-    private Material DotLineMaterial;
     #endregion
 
     public override void Refresh()
@@ -227,8 +183,9 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         if (!isInit) return;
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
         this.Target.anchoredPosition = MM.MainIslandData.TargetPos;
-        DetectMainIslandCurRegion();
 
+
+        #region 虚线
         float angle = Vector3.Angle(MM.MainIslandData.MovingDir, Vector2.right);
         angle = MM.MainIslandData.TargetPos.y < MM.MainIslandData.CurPos.y ? -angle : angle;
         var dis = Vector2.Distance(MM.MainIslandData.CurPos, MM.MainIslandData.TargetPos);
@@ -236,27 +193,18 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
         this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
         this.DotLine.material.SetFloat("_Scale", dis / 30);
+        #endregion
     }
-
     private void RefreshOnZoomMap()
     {
         this.slider.value = this.cursorNavigation.CurZoomRate;
         MM.GridScale = this.cursorNavigation.CurZoomscale;
     }
-
     private void RefreshTarget(bool isMoving)
     {
         this.Target.gameObject.SetActive(isMoving);
         this.DotLine.gameObject.SetActive(isMoving);
     }
-
-    #region 虚线
-    
-
-
-    #endregion
-
-
     #endregion
 
 
@@ -285,7 +233,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         {
             MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
             //进入新区域
-            MM.UnlockMapRegion(CurRegion);
+            MM.UnlockMapRegion(MM.CurRegionNum);
             this.Refresh();
         };
     }
