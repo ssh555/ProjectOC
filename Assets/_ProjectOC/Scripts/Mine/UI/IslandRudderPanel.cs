@@ -65,6 +65,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     #region Internal
     private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
+    private bool isInit = false;
     private void InitData()
     {
         GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
@@ -81,6 +82,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
             this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
             RefreshOnZoomMap();
             DetectMainIslandCurRegion();
+            isInit = true;
             this.Refresh();
         };
         //初始化主岛的位置
@@ -222,9 +224,18 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private void RefreshMainIsland()
     {
+        if (!isInit) return;
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
         this.Target.anchoredPosition = MM.MainIslandData.TargetPos;
         DetectMainIslandCurRegion();
+
+        float angle = Vector3.Angle(MM.MainIslandData.MovingDir, Vector2.right);
+        angle = MM.MainIslandData.TargetPos.y < MM.MainIslandData.CurPos.y ? -angle : angle;
+        var dis = Vector2.Distance(MM.MainIslandData.CurPos, MM.MainIslandData.TargetPos);
+        this.DotLineRectTransform.sizeDelta = new Vector2(dis, DotLineRectTransform.sizeDelta.y);
+        this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
+        this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
+        this.DotLine.material.SetFloat("_Scale", dis / 100);
     }
 
     private void RefreshOnZoomMap()
@@ -237,15 +248,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         this.Target.gameObject.SetActive(isMoving);
         this.DotLine.gameObject.SetActive(isMoving);
-
-        float angle = Vector3.Angle(MM.MainIslandData.MovingDir, Vector2.right);
-        angle = MM.MainIslandData.TargetPos.y < MM.MainIslandData.CurPos.y ? -angle : angle;
-        var dis = Vector2.Distance(MM.MainIslandData.CurPos, MM.MainIslandData.TargetPos);
-        this.DotLineRectTransform.sizeDelta = new Vector2(dis, DotLineRectTransform.sizeDelta.y);
-        UnityEngine.Debug.Log(this.DotLineRectTransform.sizeDelta + " " + dis);
-        this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
-        this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
-        this.DotLine.material.SetFloat("_Scale", dis/100);
     }
 
     #region 虚线
