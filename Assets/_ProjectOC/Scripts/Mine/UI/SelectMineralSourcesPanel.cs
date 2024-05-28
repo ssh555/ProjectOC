@@ -76,6 +76,8 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     }
     protected override void UnregisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Disable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
         // ·µ»Ø
@@ -86,6 +88,8 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     protected override void RegisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Enable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
         // ·µ»Ø
