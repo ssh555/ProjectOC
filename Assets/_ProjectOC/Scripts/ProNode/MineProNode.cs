@@ -23,7 +23,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("是否有矿"), ReadOnly]
         public bool HasMine => MineDatas != null && MineDatas.Count > 0;
         [LabelText("矿"), ReadOnly, NonSerialized]
-        public List<MineSystemData.MineData> MineDatas;
+        public List<MineSystemData.MineData> MineDatas = new List<MineSystemData.MineData>();
 
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
         public WorkerNS.SkillType ExpType = WorkerNS.SkillType.Collect;
@@ -51,8 +51,8 @@ namespace ProjectOC.ProNodeNS
                     List<int> dataCapacitys = new List<int>();
                     for (int i = 0; i < MineDatas.Count; i++)
                     {
-                        dataCapacitys.Add(MineDatas[i].GainNum * MineStackMax);
-                        datas.Add(new DataNS.ItemIDDataObj(MineDatas[i].MineID));
+                        dataCapacitys.Add(MineDatas[i].GainItems.num * MineStackMax);
+                        datas.Add(new DataNS.ItemIDDataObj(MineDatas[i].GainItems.id));
                         StackReserves.Add(0);
                         MineDatas[i].RegisterProNode();
                     }
@@ -130,7 +130,7 @@ namespace ProjectOC.ProNodeNS
                 for (int i = 0; i < MineDatas.Count; i++)
                 {
                     int stackAll = DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    if (stackAll < MineStackMax * MineDatas[i].GainNum && MineDatas[i].RemianMineNum > 0)
+                    if (stackAll < MineStackMax * MineDatas[i].GainItems.num && MineDatas[i].RemianMineNum > 0)
                     {
                         flag = false;
                         break;
@@ -159,8 +159,8 @@ namespace ProjectOC.ProNodeNS
             for (int i = 0; i < MineDatas.Count; i++)
             {
                 int stackAll = DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                int gainNum = MineDatas[i].GainNum;
-                if (stackAll < MineStackMax * MineDatas[i].GainNum && MineDatas[i].Consume())
+                int gainNum = MineDatas[i].GainItems.num;
+                if (stackAll < MineStackMax * gainNum && MineDatas[i].Consume())
                 {
                     DataContainer.ChangeAmount(i, gainNum, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
                     int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(i), false);

@@ -115,20 +115,20 @@ namespace ProjectOC.MineSystem
             private int remainMineNum;
             public int RemianMineNum { get { return remainMineNum; } }
             [LabelText("一次开采获取数量"), ReadOnly, ShowInInspector]
-            private int gainNum;
-            public int GainNum { get { return gainNum; } }
+            private ML.Engine.InventorySystem.Formula gainItems;
+            public ML.Engine.InventorySystem.Formula GainItems => gainItems;
             //该矿物所属的区块号
             private int regionNum;
             public int RegionNum { get { return regionNum; }set { regionNum = value; } }
             //该矿物所属的层次号
             private int layerNum;
             public int LayerNum { get { return layerNum; } set { layerNum = value; } }
-            public MineData(string mineralMapID, Vector2 position, int remainMineNum,int gainNum)
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum, ML.Engine.InventorySystem.Formula gainItems)
             {
                 mineID = mineralMapID;
                 this.position = position;
                 this.remainMineNum = remainMineNum;
-                this.gainNum = gainNum;
+                this.gainItems = gainItems;
                 proNodeCnt = 0;
             }
 
@@ -179,7 +179,7 @@ namespace ProjectOC.MineSystem
         public class MainIslandData
         {
             [LabelText("移动速度"), ReadOnly, ShowInInspector]
-            private float moveSpeed = 1;
+            private float moveSpeed;
             [LabelText("主岛位置"), ReadOnly, ShowInInspector]
             private Vector2 curPos;
             public Vector2 CurPos { get { return curPos; } set { curPos = value; } }
@@ -200,8 +200,9 @@ namespace ProjectOC.MineSystem
             public Vector2 MovingDir { get { return (targetPos - curPos).normalized; } }
             private bool isPause;
             public bool IsPause { get { return isPause; } set { isPause = value; } }
-            public MainIslandData()
+            public MainIslandData(float moveSpeed)
             {
+                this.moveSpeed = moveSpeed;
                 lastPos = curPos;
                 isPause = false;
             }
@@ -245,7 +246,7 @@ namespace ProjectOC.MineSystem
         {
             public string ID;
             public string Icon;
-            public List<ML.Engine.InventorySystem.Formula> MineEff;
+            public ML.Engine.InventorySystem.Formula MineEff;
             public int MineNum;
         }
     }

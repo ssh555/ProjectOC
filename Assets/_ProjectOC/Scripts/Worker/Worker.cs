@@ -849,7 +849,7 @@ namespace ProjectOC.WorkerNS
                 if (!hasArrive && JudgeHit && curPos == LastTickPosition)
                 {
                     Vector3 direction = Target - curPos;
-                    if (Physics.Raycast(curPos, direction.normalized, out RaycastHit hit, direction.magnitude))
+                    foreach (RaycastHit hit in Physics.BoxCastAll(curPos, new Vector3(3, 3, 3), direction.normalized)) 
                     {
                         if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
                         {
