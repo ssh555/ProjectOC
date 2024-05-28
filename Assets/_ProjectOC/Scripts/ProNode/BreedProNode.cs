@@ -138,7 +138,7 @@ namespace ProjectOC.ProNodeNS
         {
             lock (this)
             {
-                if (index != 0 || index != 1 || (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature))) { return false; }
+                if ((index != 0 && index != 1) || (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature))) { return false; }
                 if (index == 0)
                 {
                     OutputThreshold = 0;
