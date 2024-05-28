@@ -171,6 +171,8 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent += Refresh;
             tempSprite.Add("", transform.Find("ProNode").Find("Creature1").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add("Male", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale"));
+            tempSprite.Add("Female", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale"));
             base.Enter();
         }
 
@@ -383,7 +385,7 @@ namespace ProjectOC.ProNodeNS.UI
                 #endregion
 
                 bool isProduce = ProNode.IsOnProduce;
-                ProNode_UI.Find("State").GetComponent<TMPro.TextMeshPro>().text = isProduce ? PanelTextContent.textOnBreed : "";
+                ProNode_UI.Find("State").GetComponent<TMPro.TextMeshProUGUI>().text = isProduce ? PanelTextContent.textOnBreed : "";
                 #region Bar
                 Transform bar = ProNode_UI.Find("OutputBar");
                 RectTransform barRect = bar.Find("Cur").GetComponent<RectTransform>();
@@ -391,7 +393,7 @@ namespace ProjectOC.ProNodeNS.UI
                 barRect.sizeDelta = new Vector2(posX, barRect.sizeDelta.y);
                 RectTransform iconRect = bar.Find("Icon").GetComponent<RectTransform>();
                 iconRect.anchoredPosition = new Vector2(posX, iconRect.anchoredPosition.y);
-                bar.Find("Icon").Find("Value").GetComponent<TMPro.TextMeshPro>().text = ProNode.OutputThreshold.ToString();
+                bar.Find("Icon").Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.OutputThreshold.ToString();
                 bar.Find("Icon").Find("Selected").gameObject.SetActive(CurMode == Mode.Output);
                 bar.Find("Icon").Find("ValueSelected").gameObject.SetActive(CurMode == Mode.Output);
                 #endregion
@@ -533,9 +535,9 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 bool isProduce = ProNode.IsOnProduce;
                 float timeCost = ProNode.GetTimeCost();
-                int minute = (int)(timeCost / 60);
-                int second = (int)(timeCost - 60 * minute);
-                ProNode_UI.Find("Time").GetComponent<TMPro.TextMeshPro>().text = isProduce ? $"{minute} min {second} s" : "";
+                int minute = (int)(time / 60);
+                int second = (int)(time - 60 * minute);
+                ProNode_UI.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = isProduce ? $"{minute} min {second} s" : "";
                 Transform bar = ProNode_UI.Find("Bar");
                 RectTransform barRect = bar.Find("Cur").GetComponent<RectTransform>();
                 float posX = 300 * (1 - (float)(time / timeCost));
