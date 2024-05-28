@@ -121,66 +121,43 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     }
     private void ChangeMiningData()
     {
-        //tmpMineInfoDic.Clear();
+        tmpMineInfoDic.Clear();
         foreach (var (btn,minedata) in BtnToMineDataDic)
         {
             bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
-            /*if(tmpMineInfoDic.ContainsKey(minedata.GainItems.id))
-            {
-                if()
-            }
-            else
-            {
-                tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
-            }*/
-            
-        }
-        //UpdateMineInfo();
-    }
 
-    #region 矿物信息更新
-    private Dictionary<string,int> MineInfoDic = new Dictionary<string,int>();
-    private Dictionary<string, int> tmpMineInfoDic = new Dictionary<string, int>();
-    private void UpdateMineInfo()
-    {
-        bool NeedRefresh = false;
-        foreach (var formula in MineInfoDic)
-        {
-            if (!tmpMineInfoDic.ContainsKey(formula.Key))
+            if(isInCircle)
             {
-                MineInfoDic.Remove(formula.Key);
-                NeedRefresh = true;
-            }
-            else
-            {
-                if (MineInfoDic[formula.Key] != formula.Value)
+                if (!tmpMineInfoDic.ContainsKey(minedata.GainItems.id))
                 {
-                    MineInfoDic[formula.Key] = formula.Value;
-                    NeedRefresh = true;
+                    tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
+                }
+                else
+                {
+                    tmpMineInfoDic[minedata.GainItems.id] += minedata.GainItems.num;
                 }
             }
         }
+        Debug.Log("ChangeMiningData");
+        UpdateMineInfo();
+    }
 
-        foreach (var formula in tmpMineInfoDic)
-        {
-            if(!MineInfoDic.ContainsKey(formula.Key))
-            {
-                MineInfoDic.Add(formula.Key, formula.Value);
-                NeedRefresh = true;
-            }
-        }
-        if(!NeedRefresh)
-        {
-            return;
-        }
+    #region 矿物信息更新
+    [ShowInInspector]
+    private Dictionary<string, int> tmpMineInfoDic = new Dictionary<string, int>();
+    private void UpdateMineInfo()
+    {
+        if (!isInitObjectPool) return;
+
         this.objectPool.ResetPool("MineInfoPool");
-        foreach (var formula in MineInfoDic)
+        foreach (var (itemid,num) in tmpMineInfoDic)
         {
             var tPrefab = this.objectPool.GetNextObject("MineInfoPool", this.MineInfoContent);
-            tPrefab.transform.Find("Image").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(formula.Key);
-            tPrefab.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "X <color=#49D237>" + formula.Value.ToString() + "</color>/每次";
+            tPrefab.transform.Find("Image").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(itemid);
+            tPrefab.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "X <color=#49D237>" + num.ToString() + "</color>/每次";
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.MineInfoContent as RectTransform);
     }
 
     #endregion
@@ -284,9 +261,10 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         this.cursorNavigation.InitUIBtnList();
     }
 
+    bool isInitObjectPool = false;
     protected override void InitObjectPool()
     {
-        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab");
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab", (handle) => { isInitObjectPool = true; });
         base.InitObjectPool();
     }
     #endregion
