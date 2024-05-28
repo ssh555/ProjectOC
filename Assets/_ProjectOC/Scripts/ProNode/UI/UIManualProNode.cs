@@ -172,7 +172,6 @@ namespace ProjectOC.ProNodeNS.UI
 
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
-        private Sprite WorkerIcon;
         private Sprite WorkerMaleIcon;
         private Sprite WorkerFemalIcon;
 
@@ -268,7 +267,6 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent += Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
-            WorkerIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast");
             WorkerMaleIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale");
             WorkerFemalIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale");
             base.Enter();
@@ -286,7 +284,6 @@ namespace ProjectOC.ProNodeNS.UI
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             tempSprite.Clear();
-            ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
             ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
             base.Exit();
@@ -555,7 +552,11 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Worker.Find("Empty").gameObject.SetActive(!hasWorker);
                 ProNode_Worker.Find("Gender").gameObject.SetActive(hasWorker);
                 var onDuty = ProNode_Worker.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? WorkerIcon : tempSprite[""];
+                if (hasWorker && !tempSprite.ContainsKey(Worker.Category.ToString()))
+                {
+                    tempSprite.Add(Worker.Category.ToString(), ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category));
+                }
+                ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite[Worker.Category.ToString()] : tempSprite[""];
                 onDuty.text = hasWorker ? PanelTextContent.workerStatus[(int)Worker.Status] : PanelTextContent.textLack;
                 if (hasWorker)
                 {
@@ -581,7 +582,7 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Eff.Find("EffWorker").gameObject.SetActive(hasWorker);
                 if (hasWorker)
                 {
-                    ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
+                    ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite[Worker.Category.ToString()];
                     ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
                 }
                 #endregion
@@ -651,8 +652,12 @@ namespace ProjectOC.ProNodeNS.UI
                     if (i >= WorkerBtnList.BtnCnt) { break; }
                     var worker = Workers[i];
                     var item = WorkerBtnList.GetBtn(i).transform;
+                    if (!tempSprite.ContainsKey(worker.Category.ToString()))
+                    {
+                        tempSprite.Add(worker.Category.ToString(), ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category));
+                    }
                     // Icon
-                    item.Find("Icon").GetComponent<Image>().sprite = WorkerIcon;
+                    item.Find("Icon").GetComponent<Image>().sprite = tempSprite[worker.Category.ToString()];
                     // Bar1
                     var bar1 = item.Find("Bar1").GetComponent<Image>();
                     bar1.fillAmount = (float)worker.APCurrent / worker.APMax;
@@ -825,7 +830,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
-                ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
+                ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite[Worker.Category.ToString()];
                 ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
 
                 var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
