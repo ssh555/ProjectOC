@@ -17,11 +17,10 @@ namespace ProjectOC.WorkerNS
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
-                ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
+                ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker
+                (workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho, workerCategory).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
-                    
-                    Worker.Category = workerCategory;
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
