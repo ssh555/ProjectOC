@@ -12,9 +12,8 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
 using ML.Engine.UI;
-using static ProjectOC.ProNodeNS.UI.UIProNode;
-using ProjectOC.ProNodeNS;
 using ProjectOC.ManagerNS;
+using ML.Engine.Utility;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -65,8 +64,10 @@ namespace ML.Engine.BuildingSystem.UI
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TCategorySpriteAtlasPath).Completed += (handle) =>
             {
                 categoryAtlas = handle.Result as SpriteAtlas;
-                CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
-                Array.Sort(CanSelectCategory1);
+                //CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
+                //Array.Sort(CanSelectCategory1);
+                //更改顺序为 交互建筑，生产节点，房屋，家具
+                CanSelectCategory1 = new BuildingCategory1[4] {BuildingCategory1.Interact, BuildingCategory1 .ProNode,BuildingCategory1.House,BuildingCategory1.Furniture};
                 ++IsInit;
                 if (IsInit >= 1)
                 {
@@ -236,7 +237,7 @@ namespace ML.Engine.BuildingSystem.UI
 
                 UIBtnList uIBtnList = SwitchUIBtnListContainer.UIBtnLists[index];
 
-                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(this.CanSelectCategory2.Length, () =>
+                Synchronizer synchronizer = new Synchronizer(this.CanSelectCategory2.Length, () =>
                 {
                     SwitchUIBtnListContainer.MoveToBtnList(uIBtnList);
                 });
@@ -512,7 +513,7 @@ namespace ML.Engine.BuildingSystem.UI
                         
                         furnitureList.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
-                        UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(furnitureList.Count, () => 
+                        Synchronizer synchronizer = new Synchronizer(furnitureList.Count, () => 
                         { 
                             this.FurniturePanel.gameObject.SetActive(true);
                             this.FurnitureDisplayBtnList.OnSelectEnter();
@@ -544,7 +545,7 @@ namespace ML.Engine.BuildingSystem.UI
                         //当前选中的主题ID
                         var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
                         List<string> Buildings = BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID);
-                        UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(Buildings.Count, () => 
+                        Synchronizer synchronizer = new Synchronizer(Buildings.Count, () => 
                         { 
                             this.FurniturePanel.gameObject.SetActive(true);
                             this.FurnitureDisplayBtnList.OnSelectEnter();
@@ -608,7 +609,7 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureThemeBtnList.EnableBtnList();
                 if (isFirstAddThemeBtn)
                 {
-                    UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(BuildingManager.Instance.FurnitureThemeTableDataDic.Count, () => {
+                    Synchronizer synchronizer = new Synchronizer(BuildingManager.Instance.FurnitureThemeTableDataDic.Count, () => {
                         this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
                     });
                     //给主题btnlist加入按钮

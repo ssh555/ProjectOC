@@ -1,3 +1,4 @@
+using ML.Engine.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +35,7 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     Workers.Clear();
                     Workers.Add("");
-                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetNotBanWorkerIDs());
+                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSortWorkerIDForFeatureUI());
                     IsInitBtnList = false;
                     WorkerBtnList.ChangBtnNum(Workers.Count, null, () => { IsInitBtnList = true; Refresh(); });
                     WorkerBtnList.EnableBtnList();
@@ -115,7 +116,7 @@ namespace ProjectOC.WorkerNS.UI
         private bool IsInitBtnList = false;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
             ExchangeFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Exchange").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             CommonFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Common").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             ChangeWorkerFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
@@ -457,8 +458,9 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     string featID = seat.FeatureIDs[i];
                     Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find("Specific") : btnList.GetBtn(i).transform.Find("Normal");
-                    feat.Find("IconNew").gameObject.SetActive(checkNew && featID != seat.WorkerFeatureIDs[i]);
-                    feat.Find("IconCorrect").gameObject.SetActive(checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconNew").gameObject.SetActive(checkNew && seat.IsChanged[i]);
+                    feat.Find("IconAllow").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconBan").gameObject.SetActive(!checkNew && checkCanCorrect && !featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
                 }
             }
         }

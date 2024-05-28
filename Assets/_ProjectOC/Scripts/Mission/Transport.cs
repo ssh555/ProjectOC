@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
-using System.Collections.Generic;
+using ProjectOC.DataNS;
+using System;
 
 namespace ProjectOC.MissionNS
 {
@@ -7,19 +8,21 @@ namespace ProjectOC.MissionNS
     public class Transport
     {
         #region Data
-        [LabelText("搬运东西的ID"), ReadOnly]
-        public string ID = "";
-        [LabelText("搬运所属的任务"), ReadOnly]
+        [LabelText("搬运的数据"), ReadOnly, ShowInInspector]
+        public IDataObj Data;
+        [LabelText("搬运所属的任务"), ShowInInspector, NonSerialized]
         public MissionTransport Mission;
-        [LabelText("取货地"), ReadOnly]
+        [LabelText("取货地"), ShowInInspector, NonSerialized]
         public IMissionObj Source;
-        [LabelText("送货地"), ReadOnly]
+        [LabelText("送货地"), ShowInInspector, NonSerialized]
         public IMissionObj Target;
-        [LabelText("负责该搬运的刁民"), ReadOnly]
+        #endregion
+
+        #region Property
+        [LabelText("负责该搬运的刁民"), ReadOnly, ShowInInspector, NonSerialized]
         public WorkerNS.Worker Worker;
         [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;
-
         [LabelText("当前拿到的数量"), ReadOnly]
         public int CurNum;
         [LabelText("完成的数量"), ReadOnly]
@@ -32,28 +35,35 @@ namespace ProjectOC.MissionNS
         public bool ArriveSource;
         [LabelText("是否到达目的地"), ReadOnly]
         public bool ArriveTarget;
+        [LabelText("是否是有效的"), ReadOnly]
+        public bool IsValid => Data != null;
+        public int Weight => Data != null ? Data.GetDataWeight() * CurNum : 0;
         #endregion
 
-        public Transport(MissionTransport mission, string id, int missionNum, IMissionObj source, IMissionObj target, WorkerNS.Worker worker)
+        #region Method
+        public Transport(MissionTransport mission, int missionNum, IMissionObj source, IMissionObj target, WorkerNS.Worker worker)
         {
+            if (mission.Data == null) { return; }
+            Data = mission.Data;
             Mission = mission;
-            ID = id;
-            MissionNum = missionNum;
             Source = source;
             Target = target;
-            Worker = worker;
-
+            MissionNum = missionNum;
             Mission.AddTransport(this);
             Source.AddTransport(this);
             Target.AddTransport(this);
+            SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
 
-            SoureceReserveNum = Source.ReservePutOut(mission.ID, missionNum);
-            TargetReserveNum = Target.ReservePutIn(mission.ID, missionNum);
-
-            Worker.Transport = this;
-            Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
+            bool isReplaceData = mission.ReplaceIndex >= 0;
+            if (!isReplaceData) { TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty); }
+            Worker = worker;
+            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0)) { End(); }
+            else
+            {
+                Worker.Transport = this;
+                Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
+            }
         }
-
         public void UpdateDestination()
         {
             if (!ArriveSource)
@@ -71,107 +81,73 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
-
         private void OnSourceArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
             worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
         }
-
         private void OnTargetArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveTarget = true;
             worker.Transport.PutInTarget();
         }
-
-        /// <summary>
-        /// 从取货地拿出
-        /// </summary>
         public void PutOutSource()
         {
-            int putOutNum = SoureceReserveNum > 0 ? SoureceReserveNum : MissionNum;
-            int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(ID);
-            int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : putOutNum;
-            putOutNum = putOutNum <= burMaxNum ? putOutNum : burMaxNum;
-            int sourceNum = Source.PutOut(ID, putOutNum);
-            if (!Worker.TransportDict.ContainsKey(ID))
+            int weight = Data.GetDataWeight();
+            int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : SoureceReserveNum;
+            int num = SoureceReserveNum <= burMaxNum ? SoureceReserveNum : burMaxNum;
+            num = Source.PutOut(Data, num, Mission.ReserveEmpty);
+            if (num > 0)
             {
-                Worker.TransportDict[ID] = 0;
+                SoureceReserveNum -= num;
+                CurNum += num;
+                if (SoureceReserveNum > 0)
+                {
+                    SoureceReserveNum -= Source.RemoveReservePutOut(Data, SoureceReserveNum);
+                }
             }
-            Worker.TransportDict[ID] += sourceNum;
-            SoureceReserveNum -= sourceNum;
-            CurNum += sourceNum;
-            if (SoureceReserveNum > 0)
-            {
-                SoureceReserveNum -= Source.RemoveReservePutOut(ID, SoureceReserveNum);
-            }
+            else { End(); }
         }
-
-        /// <summary>
-        /// 放入送货地
-        /// </summary>
         public void PutInTarget()
         {
-            if (Worker.TransportDict.ContainsKey(ID))
+            if (CurNum > 0)
             {
-                int remove = Worker.TransportDict[ID] <= CurNum ? Worker.TransportDict[ID] : CurNum;
-                Worker.TransportDict[ID] -= remove;
-                CurNum -= remove;
-                FinishNum += remove;
-                TargetReserveNum -= remove;
-                if (Worker.TransportDict[ID] == 0)
-                {
-                    Worker.TransportDict.Remove(ID);
-                }
-                Target.PutIn(ID, FinishNum);
+                FinishNum += CurNum;
+                TargetReserveNum -= CurNum;
+                CurNum = 0;
+                if (Mission.ReplaceIndex >= 0) { Target.PutIn(Mission.ReplaceIndex, Data, FinishNum); }
+                else { Target.PutIn(Data, FinishNum); }
                 Worker.SettleTransport();
-                if (TargetReserveNum > 0)
-                {
-                    TargetReserveNum -= Target.RemoveReservePutIn(ID, TargetReserveNum);
-                }
+                End();
+                Mission.FinishNum += FinishNum;
             }
-            End();
-            Mission.FinishNum += FinishNum;
+            else { End(); }
         }
-
-        /// <summary>
-        /// 结束搬运
-        /// </summary>
         public void End()
         {
-            if (Worker != null && Worker.TransportDict.ContainsKey(ID) && CurNum > 0)
+            if (CurNum > 0)
             {
-                CurNum = CurNum <= Worker.TransportDict[ID] ? CurNum : Worker.TransportDict[ID];
-                Worker.TransportDict[ID] -= CurNum;
-                if (Worker.TransportDict[ID] == 0)
-                {
-                    Worker.TransportDict.Remove(ID);
-                }
+                Data.ConvertToWorldObj(CurNum, Worker.transform);
             }
-            if (ML.Engine.InventorySystem.ItemManager.Instance != null)
+            if (Worker != null)
             {
-                List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ID, CurNum);
-                foreach (var item in items)
-                {
-#pragma warning disable CS4014
-                    ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
-#pragma warning restore CS4014
-                }
+                Worker.Transport = null;
+                Worker.ClearDestination();
             }
-            Worker.Transport = null;
-            Worker.ClearDestination();
             if (SoureceReserveNum > 0)
             {
-                Source?.RemoveReservePutOut(ID, SoureceReserveNum);
+                Source?.RemoveReservePutOut(Data, SoureceReserveNum);
             }
             if (TargetReserveNum > 0)
             {
-                Target?.RemoveReservePutIn(ID, TargetReserveNum);
+                Target?.RemoveReservePutIn(Data, TargetReserveNum, Mission.ReserveEmpty);
             }
             Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
+            Data = null;
         }
+        #endregion
     }
 }

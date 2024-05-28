@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
+using ProjectOC.DataNS;
 
 namespace ProjectOC.MissionNS
 {
@@ -38,21 +39,16 @@ namespace ProjectOC.MissionNS
             MissionTransports.Clear();
         }
 
-        /// <summary>
-        /// 创建搬运任务
-        /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator, MissionInitiatorType initiatorType)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, IDataObj data, int missionNum, 
+            IMissionObj initiator, MissionInitiatorType initiatorType, int replaceIndex=-1, bool reserveEmpty=false)
         {
-            if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
+            if (data != null && missionNum > 0 && initiator != null)
             {
-                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator, initiatorType);
+                MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType, replaceIndex, reserveEmpty);
                 MissionTransports.Add(mission);
                 return mission;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public bool RemoveMissionTransport(MissionTransport mission)
@@ -64,9 +60,6 @@ namespace ProjectOC.MissionNS
             return false;
         }
 
-        /// <summary>
-        /// 发起者到目标，存入目标
-        /// </summary>
         private int InitiatorToTarget(MissionObjType targetType, MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
@@ -75,28 +68,28 @@ namespace ProjectOC.MissionNS
                 WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                 if (worker != null)
                 {
-                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
-                    int maxBurNum = weight != 0 ? worker.RealBURMax / weight : 0;
+                    int weight = mission.Data.GetDataWeight();
+                    int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : missionNum;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
                 IMissionObj target = null;
-                switch (targetType)
+                if (missionNum > 0)
                 {
-                    case MissionObjType.Store:
-                        target = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ID, missionNum, 1, true, true);
-                        break;
-                    case MissionObjType.Restaurant:
-                        target = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ID, missionNum);
-                        break;
+                    switch (targetType)
+                    {
+                        case MissionObjType.Store:
+                            target = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.Data, missionNum, 1, true, true);
+                            break;
+                        case MissionObjType.Restaurant:
+                            target = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.Data, missionNum);
+                            break;
+                    }
                 }
-                if (worker != null && target != null && missionNum > 0)
+                if (worker != null && target != null)
                 {
-                    Transport transport = new Transport(mission, mission.ID, missionNum, mission.Initiator, target, worker);
+                    new Transport(mission, missionNum, mission.Initiator, target, worker);
                 }
-                else
-                {
-                    return worker == null ? -1 : -2;
-                }
+                else { return worker == null ? -1 : -2; }
             }
             return 1;
         }
@@ -108,26 +101,23 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ID, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.IStore, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
-                    StoreNS.Store store = kv.Key;
+                    StoreNS.IStore store = kv.Key;
                     int missionNum = kv.Value;
                     WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)
                     {
-                        int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
-                        int maxBurNum = weight != 0 ? worker.RealBURMax / weight : 0;
+                        int weight = mission.Data.GetDataWeight();
+                        int maxBurNum = weight != 0 ? (worker.RealBURMax - worker.WeightCurrent) / weight : missionNum;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
                     {
-                        Transport transport = new Transport(mission, mission.ID, missionNum, store, mission.Initiator, worker);
+                        new Transport(mission, missionNum, store, mission.Initiator, worker);
                     }
-                    else
-                    {
-                        return worker == null ? -1 : -2;
-                    }
+                    else { return worker == null ? -1 : -2; }
                 }
             }
             return 1;
@@ -140,31 +130,21 @@ namespace ProjectOC.MissionNS
         {
             List<MissionTransport> missionList = MissionTransports.ToList();
             missionList.Sort(new MissionTransport.Sort());
-            foreach (MissionTransport mission in missionList)
+            foreach (var mission in missionList)
             {
                 if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)
                 {
-                    if (InitiatorToTarget(MissionObjType.Store, mission) == -1)
-                    {
-                        return;
-                    }
+                    if (InitiatorToTarget(MissionObjType.Store, mission) == -1) { return; }
                 }
                 else if (mission.Type == MissionTransportType.ProNode_Restaurant)
                 {
-                    if (InitiatorToTarget(MissionObjType.Restaurant, mission) == -1)
-                    {
-                        return;
-                    }
+                    if (InitiatorToTarget(MissionObjType.Restaurant, mission) == -1) { return; }
                 }
                 else if (mission.Type == MissionTransportType.Store_ProNode)
                 {
-                    if (StoreToInitiator(mission) == -1)
-                    {
-                        return;
-                    }
+                    if (StoreToInitiator(mission) == -1) { return; }
                 }
             }
         }
     }
 }
-

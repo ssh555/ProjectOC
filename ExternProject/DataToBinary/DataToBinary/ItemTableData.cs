@@ -53,8 +53,15 @@ namespace ML.Engine.InventorySystem
             this.effectsdescription = Program.ParseTextContent(row[9]);
             // TODO: Change
             this.bcanuse = false;
-            this.type = "ResourceItem";
-            this.maxamount = int.MaxValue;
+            if (itemtype == ItemType.Creature)
+            {
+                this.type = "CreatureItem";
+            }
+            else
+            {
+                this.type = "ResourceItem";
+            }
+            this.maxamount = bcanstack ? int.MaxValue : 1;
             this.worldobject = "Prefab_Item_Item";
             return true;
         }

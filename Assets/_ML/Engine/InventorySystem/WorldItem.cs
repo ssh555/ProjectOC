@@ -1,7 +1,5 @@
 using ML.Engine.InteractSystem;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ML.Engine.InventorySystem
@@ -12,10 +10,7 @@ namespace ML.Engine.InventorySystem
         public interface IWorldItemData
         {
             public int Amount { get; }
-            public void SetItemData(Item item)
-            {
-                item.Amount = Amount;
-            }
+            public void SetItemData(Item item);
         }
 
         [System.Serializable]
@@ -29,8 +24,38 @@ namespace ML.Engine.InventorySystem
             {
                 amount = num;
             }
+            public void SetItemData(Item item)
+            {
+                item.Amount = Amount;
+            }
         }
-
+        [System.Serializable]
+        public struct WorldCreatureItemData : IWorldItemData
+        {
+            [LabelText("Item ÊýÁ¿")]
+            public int amount;
+            public int Amount { get => amount; }
+            public Gender Gender;
+            public int Activity;
+            public int Output;
+            public WorldCreatureItemData(int amount, Gender gender, int activity, int output)
+            {
+                this.amount = amount;
+                Gender = gender;
+                Activity = activity;
+                Output = output;
+            }
+            public void SetItemData(Item item)
+            {
+                item.Amount = Amount;
+                if (item is CreatureItem creature)
+                {
+                    creature.Gender = Gender;
+                    creature.Activity = Activity;
+                    creature.Output = Output;
+                }
+            }
+        }
 
         [LabelText("ItemID"), SerializeField]
         protected string itemID = null;
@@ -61,24 +86,22 @@ namespace ML.Engine.InventorySystem
             this.enabled = false;
         }
 
-
-
         /// <summary>
         /// Ê°È¡
         /// </summary>
         /// <param name="inventory"></param>
         public virtual void PickUp(IInventory inventory)
         {
-            if (ItemManager.Instance.IsValidItemID(this.itemID))
+            if (ItemManager.Instance.IsValidItemID(itemID))
             {
-                var item = ItemManager.Instance.SpawnItem(this.itemID);
-                this.itemData.SetItemData(item);
+                Item item = ItemManager.Instance.SpawnItem(itemID);
+                itemData.SetItemData(item);
                 inventory.AddItem(item);
-                Manager.GameManager.DestroyObj(this.gameObject);
+                Manager.GameManager.DestroyObj(gameObject);
             }
             else
             {
-                throw new System.Exception(this.gameObject.name + " WorldItem.Item == null !!!");
+                throw new System.Exception(gameObject.name + " WorldItem.Item == null !!!");
             }
 
         }
@@ -94,7 +117,6 @@ namespace ML.Engine.InventorySystem
             PickUp(component.gameObject.GetComponentInParent<ProjectOC.Player.PlayerCharacter>().Inventory);
         }
         #endregion
-
     }
 
 }

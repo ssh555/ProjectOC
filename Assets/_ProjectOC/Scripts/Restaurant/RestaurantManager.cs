@@ -37,8 +37,7 @@ namespace ProjectOC.RestaurantNS
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RestaurantConfigAsset>("Config_Restaurant").Completed += (handle) =>
             {
-                RestaurantConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = handle.Result.Config;
             };
             Timer = new ML.Engine.Timer.CounterDownTimer(Config.BroadcastTime, true, true);
             Timer.OnEndEvent += EndActionForTimer;
@@ -101,17 +100,17 @@ namespace ProjectOC.RestaurantNS
             return restaurants;
         }
 
-        public Restaurant GetPutInRestaurant(string itemID, int amount)
+        public Restaurant GetPutInRestaurant(DataNS.IDataObj data, int amount)
         {
             Restaurant result = null;
-            if (!string.IsNullOrEmpty(itemID) && amount > 0)
+            if (data != null && amount > 0)
             {
                 List<Restaurant> restaurants = GetRestaurants();
                 foreach (var restaurant in restaurants)
                 {
-                    if (restaurant.DataContainer.HaveSetData(itemID))
+                    if (restaurant.DataContainer.HaveSetData(data))
                     {
-                        int empty = restaurant.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty);
+                        int empty = restaurant.DataContainer.GetAmount(data, DataNS.DataOpType.Empty);
                         if (result == null && empty > 0)
                         {
                             result = restaurant;
@@ -211,10 +210,7 @@ namespace ProjectOC.RestaurantNS
                         bool flag = false;
                         foreach (int index in indexs)
                         {
-                            if (flag)
-                            {
-                                break;
-                            }
+                            if (flag) { break; }
                             if (dict.ContainsKey(index))
                             {
                                 List<Restaurant> removes = new List<Restaurant>();
@@ -225,10 +221,7 @@ namespace ProjectOC.RestaurantNS
                                         flag = true;
                                         break;
                                     }
-                                    else
-                                    {
-                                        removes.Add(restaurant);
-                                    }
+                                    else { removes.Add(restaurant); }
                                 }
                                 foreach (var remove in removes)
                                 {
@@ -236,11 +229,7 @@ namespace ProjectOC.RestaurantNS
                                 }
                             }
                         }
-
-                        if (!flag)
-                        {
-                            break;
-                        }
+                        if (!flag) { break; }
                     }
                 }
             }

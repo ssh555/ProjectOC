@@ -16,9 +16,7 @@ using ML.Engine.Utility;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
-using UnityEditor;
 using Unity.VisualScripting;
-using ML.Engine.Timer;
 
 namespace ML.Engine.UI
 {
@@ -100,6 +98,7 @@ namespace ML.Engine.UI
         private bool isLoop;
         private bool isWheel;
         private bool readUnActive;
+        private bool isBanMouse;
         private bool NeedToResetCurSelected = false;
         private string prefabPath = null;
 
@@ -140,7 +139,7 @@ namespace ML.Engine.UI
             this.isLoop = btnListInitData.isLoop;
             this.isWheel = btnListInitData.isWheel;
             this.readUnActive = btnListInitData.readUnActiveButton;
-
+            this.isBanMouse = btnListInitData.isBanMouse;
             if (prefabPath != null) 
             {
                 this.prefabPath = prefabPath;
@@ -171,7 +170,7 @@ namespace ML.Engine.UI
             this.SBPosDic.Clear();
             this.TwoDimSelectedButtons.Clear();
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(this.readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
             if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
@@ -528,41 +527,6 @@ namespace ML.Engine.UI
             }
             OnFinishAdd?.Invoke();
         }
-
-        //同步变量
-        public class Synchronizer
-        {
-            private int CheckNum;
-            private int curCheckNum;
-            private Action OnAllFinish;
-            private System.Object lockObject = new System.Object();
-
-            private bool isTrigger;
-            public Synchronizer(int checkNum, Action OnAllFinish)
-            {
-                //Debug.Log("checkNum " + checkNum);
-                this.curCheckNum = 0;
-                this.CheckNum = checkNum;
-                this.OnAllFinish = OnAllFinish;
-                this.isTrigger = false;
-            }
-
-            public void Check()
-            {
-                lock(lockObject)
-                {
-                    ++curCheckNum;
-                    //Debug.Log("Check " + curCheckNum);
-                    if (isTrigger == false && curCheckNum == CheckNum)
-                    {
-                        OnAllFinish?.Invoke();
-                        isTrigger = true;
-                    }
-                }
-            }
-        }
-
-
         public void AddBtns(int num, string prefabpath, Action OnAllBtnAdded = null, List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
         {
             Synchronizer Checker = new Synchronizer(num, OnAllBtnAdded);
@@ -1009,34 +973,24 @@ namespace ML.Engine.UI
         {
             if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
-
             string actionName = obj.action.name;
-
             // 使用 ReadValue<T>() 方法获取附加数据
             string actionMapName = obj.action.actionMap.name;
 
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            double angle = Mathf.Atan2(vector2.x, vector2.y);
+            if(vector2.magnitude < 1f)
+            {
+                return;
+            }
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
 
             angle = angle * 180 / Mathf.PI;
             if (angle < 0)
             {
                 angle = angle + 360;
             }
-
-            double sliceAngle = 360.0 / OneDimCnt;
-            for (int i = 0; i < OneDimCnt; i++)
-            {
-                if (i != OneDimCnt - 1 && angle > sliceAngle / 2 + sliceAngle * i && angle < sliceAngle / 2 + sliceAngle * (i + 1))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-                else if (i == OneDimCnt - 1 && (angle < sliceAngle / 2 || angle > 360 - sliceAngle / 2))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-            }
-
+            float sliceAngle = 360.0f / OneDimCnt;
+            this.MoveIndexIUISelected(Mathf.RoundToInt(angle / sliceAngle));
             this.NavigationPostAction?.Invoke();
         }
 
@@ -1232,8 +1186,9 @@ namespace ML.Engine.UI
         /// <summary>
         /// 该函数功能为更新鼠标选中
         /// </summary>
-        public SelectedButton RefreshSelected(SelectedButton sb)
+        public SelectedButton RefreshSelected(SelectedButton sb,bool comeFromMouse = false)
         {
+            if (this.isBanMouse == true) return null;
             if (this.isEnable == false) return null;
             if (sb == null) return null;
             if (SBPosDic.ContainsKey(sb))
@@ -1253,7 +1208,6 @@ namespace ML.Engine.UI
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-
             }
             return null;
         }

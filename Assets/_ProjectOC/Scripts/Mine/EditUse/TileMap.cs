@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -145,3 +147,5 @@ namespace ProjectOC.MineSystem
         }
     }
 }
+
+#endif

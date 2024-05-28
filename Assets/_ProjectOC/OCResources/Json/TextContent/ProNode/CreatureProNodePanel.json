@@ -1,0 +1,141 @@
+{
+    "textProNodeType" : {
+        "Chinese" : "培育舱",
+        "English" : "Creature ProNode"
+    },
+    "textEmpty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
+    },
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+    "textStateVacancy" : {
+        "Chinese" : "空置",
+        "English" : "Vacancy"
+    },
+    "textStateStagnation" : {
+        "Chinese" : "停滞",
+        "English" : "Stagnation"
+    },
+    "textStateProduction" : {
+        "Chinese" : "生产",
+        "English" : "Production"
+    },
+    "textTime" : {
+        "Chinese" : "制作时间",
+        "English" : "Time"
+    },
+    "textEff" : {
+        "Chinese" : "生产效率",
+        "English" : "Eff"
+    },
+    "textBag" : {
+        "Chinese" : "背包",
+        "English" : "Bag"
+    },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "NextPriority"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "ChangeRecipe" : {
+        "keyname" : "KT_ChangeRecipe",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更生物",
+            "English" : "Change Creature"
+        }
+    },
+    "ChangeBar" : {
+        "keyname" : "KT_ChangeBar",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Alter"
+          },
+        "description" : {
+            "Chinese" : "调整预设",
+            "English" : "Change Output Threshold"
+        }
+    },
+    "FastRemove" : {
+        "keyname" : "KT_FastRemove",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "快捷取出",
+            "English" : "Fast Remove"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷投入",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "添加生物",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Back"
+        }
+    }
+}
+

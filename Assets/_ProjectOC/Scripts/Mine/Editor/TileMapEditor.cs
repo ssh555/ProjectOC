@@ -25,6 +25,7 @@ namespace ProjectOC.MineSystem
         private int tempMapWidht, tempMapHeight,copyMapIndex = -1;
         private Transform selectMineTemplte;
         private bool ShowProgrammerData = false;
+        public float minDistance = 0.1f;
         public override void OnEnable()
         {
             tileMap = target as TileMap;
@@ -729,7 +730,7 @@ namespace ProjectOC.MineSystem
             {
                 RegenerateMap();
             }
-
+            minDistance = EditorGUILayout.FloatField("地图长", minDistance);
             if (GUILayout.Button("检查合法性"))
             {
                 // SaveAssetData();
@@ -799,7 +800,7 @@ namespace ProjectOC.MineSystem
         void CheckConfig()
         {
             //矿物距离太近，错误的位置
-            float minDistance = 0.1f;
+
             // 使用双重循环检查每一对元素的距离
             foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
             {

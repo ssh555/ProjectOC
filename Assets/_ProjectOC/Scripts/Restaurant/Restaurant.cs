@@ -6,7 +6,7 @@ using System;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("餐厅"), Serializable]
-    public class Restaurant : DataNS.ItemContainerOwner
+    public class Restaurant : DataNS.DataContainerOwner
     {
         #region Data
         [LabelText("世界餐厅"), ReadOnly, NonSerialized]
@@ -47,7 +47,8 @@ namespace ProjectOC.RestaurantNS
             {
                 Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
+            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, 
+                ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
         }
 
         public void Destroy()
@@ -68,7 +69,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        #region 方法
+        #region Method
         /// <summary>
         /// 先查找空座位，找不到空座位返回false，更新该座位的信息，让刁民寻路到该座位。
         /// </summary>
@@ -102,7 +103,7 @@ namespace ProjectOC.RestaurantNS
             {
                 List<RestaurantData> datas = new List<RestaurantData>();
                 var items = DataContainer.GetDatas();
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < items.Length; i++)
                 {
                     datas.Add(new RestaurantData(items[i].ID, i, items[i].GetAmount(DataNS.DataOpType.Storage)));
                 }
@@ -128,8 +129,7 @@ namespace ProjectOC.RestaurantNS
             int flag = DataContainer.ChangeAmount(index, 1, DataNS.DataOpType.Empty, DataNS.DataOpType.Storage);
             if (0 <= index && flag == 1)
             {
-                string itemID = DataContainer.GetID(index);
-                return ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
+                return ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(DataContainer.GetID(index));
             }
             return null;
         }
@@ -138,11 +138,11 @@ namespace ProjectOC.RestaurantNS
         #region IMissionObj
         public override Transform GetTransform() { return WorldRestaurant.transform; }
         public override string GetUID() { return UID; }
-
         public override MissionNS.MissionObjType GetMissionObjType()
         {
             return MissionNS.MissionObjType.Restaurant;
         }
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) { }
         #endregion
     }
 }

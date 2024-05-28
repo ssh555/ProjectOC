@@ -32,6 +32,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c9c8b428178e0740a6a1b626ea380e4
+    m_Address: Config_Mine_MineEditorData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Config_Mine_MineEditorData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7a9cce9ec08f074d827af8988ed98da
+    m_Address: Assets/_ProjectOC/OCResources/MineSystem/Texture2D/SmallMapTex
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Texture2D_Mine_SmallMapTex
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60514bb01e522a3458126bcb19a12559
+    m_Address: Config_Mine
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:

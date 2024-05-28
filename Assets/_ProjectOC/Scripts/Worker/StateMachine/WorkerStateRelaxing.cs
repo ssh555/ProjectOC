@@ -24,7 +24,7 @@ namespace ProjectOC.WorkerNS
         {
             BindEnterAction
             (
-                (System.Action<StateMachine, State, State>)((machine, state1, state2) =>
+                ((machine, state1, state2) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -35,7 +35,7 @@ namespace ProjectOC.WorkerNS
 
             BindUpdateAction
             (
-                (System.Action<StateMachine, State>)((machine, state) =>
+                ((machine, state) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -67,10 +67,9 @@ namespace ProjectOC.WorkerNS
                                         positions.Add(core.transform.position);
                                     }
                                 }
-                                System.Random random = new System.Random();
                                 if (positions.Count > 0)
                                 {
-                                    worker.SetDestination(positions[random.Next(0, positions.Count)]);
+                                    worker.SetDestination(positions[UnityEngine.Random.Range(0, positions.Count)]);
                                 }
                                 TimerForRandomWalk.Reset(2f);
                             }
@@ -81,7 +80,7 @@ namespace ProjectOC.WorkerNS
 
             BindExitAction
             (
-                (System.Action<StateMachine, State, State>)((machine, state1, state2) =>
+                ((machine, state1, state2) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -90,7 +89,8 @@ namespace ProjectOC.WorkerNS
                         worker.ClearDestination();
                         if (worker.HaveProNode)
                         {
-                            worker.SetDestination(worker.GetContainer(WorkerContainerType.Work).GetTransform().position, worker.GetContainer(WorkerContainerType.Work).OnArriveEvent, WorkerContainerType.Work);
+                            worker.SetDestination(worker.GetContainer(WorkerContainerType.Work).GetTransform().position, 
+                                worker.GetContainer(WorkerContainerType.Work).OnArriveEvent, WorkerContainerType.Work);
                         }
                     }
                 })

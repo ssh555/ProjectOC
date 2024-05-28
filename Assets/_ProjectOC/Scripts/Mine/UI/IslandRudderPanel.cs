@@ -1,37 +1,13 @@
-using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using ML.Engine.Timer;
 using ML.Engine.UI;
-using ML.Engine.Utility;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
-using ProjectOC.MissionNS;
-using ProjectOC.Order;
-using ProjectOC.Player;
-using ProjectOC.TechTree;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.U2D;
 using UnityEngine.UI;
 using static IslandRudderPanel;
-using static ML.Engine.UI.UIBtnList;
-using static ML.Engine.UI.UIBtnListContainer;
-using static OrderBoardPanel;
-using static ProjectOC.MineSystem.MineSystemData;
-using static ProjectOC.Order.OrderManager;
-using static UnityEditor.PlayerSettings;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-
 public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 {
     #region Unity
@@ -41,11 +17,12 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.cursorNavigation = this.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
         var Content = this.cursorNavigation.transform.Find("Scroll View").Find("Viewport").Find("Content");
         this.MainIsland = Content.Find("MainIsland").GetComponent<RectTransform>();
+        this.ColliderRadiu = MainIsland.GetComponent<CircleCollider2D>().radius;
         this.Target = Content.Find("Target").GetComponent<RectTransform>();
+        this.Target.gameObject.SetActive(false);
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
-        
+        this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
     }
-
     #endregion
 
     #region Override
@@ -55,26 +32,30 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         base.OnEnter();
         MM.RefreshUI += this.RefreshMainIsland;
         this.InitData();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
+        MM.MainIslandData.OnisMovingChanged += RefreshTarget;
         this.cursorNavigation.ChangeRaycastCenter(this.MainIsland);
-        this.cursorNavigation.UIBtnList.OnSelectButtonChanged += () =>
-        {
-
-        };
     }
     public override void OnExit()
     {
         base.OnExit();
         MM.RefreshUI -= this.RefreshMainIsland;
-        this.cursorNavigation.DisableGraphCursorNavigation();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
+        MM.MainIslandData.OnisMovingChanged -= RefreshTarget;
     }
 
     protected override void Exit()
     {
         base.Exit();
-        ClearTemp();
+        this.MapLayerUIBtnList.DisableBtnList();
+        this.cursorNavigation.DisableGraphCursorNavigation();
+    }
+
+    protected override void Enter()                                               
+    {
+        base.Enter();
+        this.MapLayerUIBtnList.EnableBtnList();
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
     }
 
     #endregion
@@ -83,44 +64,24 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
     private void InitData()
     {
-        var MapRegionDatas = MM.MapRegionDatas;
-        UIBtnList.Synchronizer synchronizer = new Synchronizer(MapRegionDatas.Count, () =>
+        GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
         {
+            BigMapInstanceTrans = handle.Result.transform;
+            NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
+            BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
+            BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
             this.cursorNavigation.CurZoomscale = MM.GridScale;
+            this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.IslandRudderSensitivity;
+            this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.ZoomSpeed;
+            this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.ZoomInLimit;
+            this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
             RefreshOnZoomMap();
+            DetectMainIslandCurRegion();
             this.Refresh();
-        });
-
-        foreach (var mapRegion in MapRegionDatas)
-        {
-            this.cursorNavigation.UIBtnList.AddBtn("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MapRegion.prefab",
-                        OnSelectEnter: () =>
-                        {
-                            
-                        },
-
-                        OnSelectExit: () =>
-                        {
-                            
-                        },
-                        BtnSettingAction:
-                        (btn) =>
-                        {
-                            var rect = btn.transform.GetComponent<RectTransform>();
-                            rect.anchoredPosition = mapRegion.position;
-                            btn.transform.Find("Normal").gameObject.SetActive(false);
-                            btn.transform.Find("Locked").gameObject.SetActive(true);
-                            btn.transform.Find("Selected").gameObject.SetActive(false);
-                            btn.name = mapRegion.MapRegionID;
-
-                            BtnToMapRegionIdDic.Add(btn, mapRegion.MapRegionID);
-                        },
-                        OnFinishAdd: () =>
-                        {
-                            synchronizer.Check();
-                        }
-                        );
-        }
+        };
+        //初始化主岛的位置
+        this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
     }
     protected override void UnregisterInput()
     {
@@ -129,6 +90,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
+        this.MapLayerUIBtnList.RemoveAllListener();
+        this.MapLayerUIBtnList.DeBindInputAction();
     }
 
     protected override void RegisterInput()
@@ -137,18 +100,26 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
+        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if(!MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos))
+        //先检测是否碰撞
+        Vector3 MovingDir = (this.cursorNavigation.CenterPos - (Vector3)MM.MainIslandData.CurPos).normalized;
+        if (DetectRegion(MainIsland.transform.position + MovingDir * ColliderRadiu) == 0)
         {
+            return;
+        }
+
+        if (!MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos))
+        {
+            MM.MainIslandData.IsPause = true;
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("已有导航点，是否重新设置？", null, null, () => {
                 MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos, true);
-            }));
+                MM.MainIslandData.IsPause = false;
+            }, () => { MM.MainIslandData.IsPause = false; }));
         }
-          
     }
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -157,16 +128,52 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     #endregion
 
-
-    #region UI
-    #region temp
-    private void ClearTemp()
+    #region 主岛位置检测
+    private RectTransform referenceRectTransform;
+    private int PreRegion = -1;
+    private int CurRegion = -1;
+    private int CurColliderPointRegion = -1;
+    private int PreColliderPointRegion = -1;
+    private void DetectMainIslandCurRegion()
     {
-/*        GameManager.DestroyObj(icon_genderfemaleSprite);
-        GameManager.DestroyObj(icon_gendermaleSprite);*/
+        
+        PreColliderPointRegion = CurColliderPointRegion;
+        CurColliderPointRegion = DetectRegion(MainIsland.transform.position + (Vector3)MM.MainIslandData.MovingDir * ColliderRadiu);
+        if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion == 0)
+        {
+            //碰撞
+            MM.UnlockMapRegion(0);
+            return;
+        }
+        PreRegion = CurRegion;
+        CurRegion = DetectRegion(MainIsland.transform.position);
+        if (PreRegion != CurRegion)
+        {
+            //进入新区域
+            MM.UnlockMapRegion(CurRegion);
+            PreRegion = CurRegion;
+            this.Refresh();
+        }
+    }
+
+    private int DetectRegion(Vector3 pos)
+    {
+        Vector3 worldPosition = pos;
+        Vector2 localPosition;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(referenceRectTransform, worldPosition, null, out localPosition);
+        Vector2 referenceSize = referenceRectTransform.rect.size;
+        Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
+        anchorPosition = new Vector2(anchorPosition.x, 1 - anchorPosition.y);
+        int width = MM.BigMapTableData.GetLength(0);
+        Vector2Int gridPos = new Vector2Int(
+        Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
+        Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
+        return MM.BigMapTableData[gridPos.y, gridPos.x];
     }
 
     #endregion
+
+    #region UI
 
     #region UI对象引用
     private MineSystemManager MM => LocalGameManager.Instance.MineSystemManager;
@@ -174,10 +181,14 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private GraphCursorNavigation cursorNavigation;
 
     private RectTransform MainIsland;
+    private float ColliderRadiu;
+
     private RectTransform Target;
 
     private Slider slider;
 
+    private Transform BigMapInstanceTrans;
+    private Transform NormalRegions;
     #endregion
 
     public override void Refresh()
@@ -186,20 +197,34 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         {
             return;
         }
+
+        #region 更新迷雾
+        for (int i = 0;i< NormalRegions.childCount;i++)
+        {
+            var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
+            NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
+            NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
+        }
+        #endregion
+
     }
 
     private void RefreshMainIsland()
     {
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
         this.Target.anchoredPosition = MM.MainIslandData.TargetPos;
-
-
+        DetectMainIslandCurRegion();
     }
 
     private void RefreshOnZoomMap()
     {
-        this.slider.value = this.cursorNavigation.curZoomRate;
+        this.slider.value = this.cursorNavigation.CurZoomRate;
         MM.GridScale = this.cursorNavigation.CurZoomscale;
+    }
+
+    private void RefreshTarget(bool isMoving)
+    {
+        this.Target.gameObject.SetActive(isMoving);
     }
     #endregion
 
@@ -211,7 +236,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     public struct IslandRudderPanelStruct
     {
         public KeyTip AcceptedOrderCancel;
-
     }
     protected override void InitTextContentPathData()
     {
@@ -221,10 +245,18 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     #endregion
 
-
+    private UIBtnList MapLayerUIBtnList = null;
     protected override void InitBtnInfo()
     {
         this.cursorNavigation.InitUIBtnList();
+        MapLayerUIBtnList = new UIBtnList(this.transform.Find("MapLayer").Find("ButtonList").GetComponent<UIBtnListInitor>());
+        MapLayerUIBtnList.OnSelectButtonChanged += () =>
+        {
+            MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
+            //进入新区域
+            MM.UnlockMapRegion(CurRegion);
+            this.Refresh();
+        };
     }
     #endregion
 }

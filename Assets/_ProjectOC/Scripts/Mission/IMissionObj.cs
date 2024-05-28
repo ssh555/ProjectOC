@@ -1,37 +1,44 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using ProjectOC.DataNS;
 
 namespace ProjectOC.MissionNS
 {
     public interface IMissionObj
     {
+        #region Data
         [LabelText("搬运优先级"), ShowInInspector, ReadOnly]
         public TransportPriority TransportPriority { get; set; }
         [LabelText("对应的搬运"), ShowInInspector, ReadOnly]
         public List<Transport> Transports { get; set; }
         [LabelText("对应的搬运任务"), ShowInInspector, ReadOnly]
         public List<MissionTransport> Missions { get; set; }
+        #endregion
 
-        #region Get
+        #region Abstract
         public Transform GetTransform();
         public string GetUID();
         public MissionObjType GetMissionObjType();
-        public int GetAmount(string id, DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
-        public Dictionary<string, int> GetAmount(DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
-        public int GetReservePutIn(string itemID) { return GetAmount(itemID, DataNS.DataOpType.EmptyReserve); }
-        public int GetReservePutOut(string itemID) { return GetAmount(itemID, DataNS.DataOpType.StorageReserve); }
-        public Dictionary<string, int> GetReservePutIn() { return GetAmount(DataNS.DataOpType.EmptyReserve); }
-        public Dictionary<string, int> GetReservePutOut() { return GetAmount(DataNS.DataOpType.StorageReserve); }
+        public int GetAmount(IDataObj data, DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false);
+        #endregion
+
+        #region Get
+        public int GetReservePutIn(IDataObj data) { return GetAmount(data, DataOpType.EmptyReserve); }
+        public int GetReservePutOut(IDataObj data) { return GetAmount(data, DataOpType.StorageReserve); }
+        public Dictionary<IDataObj, int> GetReservePutIn() { return GetAmount(DataOpType.EmptyReserve); }
+        public Dictionary<IDataObj, int> GetReservePutOut() { return GetAmount(DataOpType.StorageReserve); }
         public TransportPriority GetTransportPriority() { return TransportPriority; }
-        public int GetMissionNum(string itemID, bool isPutIn = true)
+        public int GetMissionNum(IDataObj data, bool isPutIn = true)
         {
             int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
+            if (data != null)
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.ID == itemID)
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator 
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
@@ -44,14 +51,14 @@ namespace ProjectOC.MissionNS
             }
             return result;
         }
-        public int GetNeedAssignNum(string itemID, bool isPutIn = true)
+        public int GetNeedAssignNum(IDataObj data, bool isPutIn = true)
         {
             int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
+            if (data != null)
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.ID == itemID)
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
@@ -64,14 +71,14 @@ namespace ProjectOC.MissionNS
             }
             return result;
         }
-        public List<MissionTransport> GetMissions(string itemID, bool isPutIn = true)
+        public List<MissionTransport> GetMissions(IDataObj data, bool isPutIn = true)
         {
             List<MissionTransport> result = new List<MissionTransport>();
-            if (!string.IsNullOrEmpty(itemID))
+            if (data != null)
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    if (mission != null && mission.ID == itemID)
+                    if (mission != null && mission.Data.DataEquales(data))
                     {
                         bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
                             : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
@@ -87,30 +94,21 @@ namespace ProjectOC.MissionNS
         #endregion
 
         #region Set
-        public int ChangeAmount(string id, int amount, DataNS.DataOpType addType, DataNS.DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false);
-        public bool PutIn(string itemID, int amount)
+        public void PutIn(int index, IDataObj data, int amount);
+        public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false);
+        public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false);
+        public int PutOut(IDataObj data, int amount, bool removeEmpty = false);
+        public bool PutIn(IDataObj data, int amount)
         {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.Storage, DataNS.DataOpType.EmptyReserve, exceed: true) == amount;
+            return ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve, exceed: true) == amount;
         }
-        public int PutOut(string itemID, int amount)
+        public int ReservePutOut(IDataObj data, int amount)
         {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.Empty, DataNS.DataOpType.StorageReserve, complete: false);
+            return ChangeAmount(data, amount, DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
         }
-        public int ReservePutIn(string itemID, int amount)
+        public int RemoveReservePutOut(IDataObj data, int amount)
         {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.EmptyReserve, DataNS.DataOpType.Empty, exceed: true, needCanIn: true);
-        }
-        public int ReservePutOut(string itemID, int amount)
-        {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.StorageReserve, DataNS.DataOpType.Storage, complete: false, needCanOut: true);
-        }
-        public int RemoveReservePutIn(string itemID, int amount)
-        {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.Empty, DataNS.DataOpType.EmptyReserve);
-        }
-        public int RemoveReservePutOut(string itemID, int amount)
-        {
-            return ChangeAmount(itemID, amount, DataNS.DataOpType.Storage, DataNS.DataOpType.StorageReserve);
+            return ChangeAmount(data, amount, DataOpType.Storage, DataOpType.StorageReserve);
         }
         #endregion
 
@@ -119,7 +117,6 @@ namespace ProjectOC.MissionNS
         public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
         public void AddMissionTranport(MissionTransport mission) { Missions.Add(mission); }
         public void RemoveMissionTranport(MissionTransport mission) { Missions.Remove(mission); }
-
         public void OnPositionChangeTransport()
         {
             foreach (var transport in Transports.ToArray())
@@ -131,16 +128,15 @@ namespace ProjectOC.MissionNS
                 mission?.UpdateDestionation();
             }
         }
-
-        public void UpdateTransport(string itemID)
+        public void UpdateTransport(IDataObj data)
         {
-            if (!string.IsNullOrEmpty(itemID))
+            if (data != null)
             {
-                int storageReserve = GetReservePutOut(itemID);
-                int emptyReserve = GetReservePutIn(itemID);
+                int storageReserve = GetReservePutOut(data);
+                int emptyReserve = GetReservePutIn(data);
                 foreach (Transport transport in Transports.ToArray())
                 {
-                    if (transport != null && transport.ID == itemID)
+                    if (transport != null && transport.Data.DataEquales(data))
                     {
                         if (transport.Source == this && !transport.ArriveSource)
                         {
@@ -161,38 +157,34 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
-
         public void UpdateTransport()
         {
-            Dictionary<string, int> storageReserve = GetReservePutOut();
-            Dictionary<string, int> emptyReserve = GetReservePutIn();
+            Dictionary<IDataObj, int> storageReserve = GetReservePutOut();
+            Dictionary<IDataObj, int> emptyReserve = GetReservePutIn();
             foreach (Transport transport in Transports.ToArray())
             {
-                if (transport != null && storageReserve.ContainsKey(transport.ID))
+                if (transport == null) { continue; }
+                var key = transport.Data;
+                if (transport.Source == this && !transport.ArriveSource)
                 {
-                    if (transport.Source == this && !transport.ArriveSource)
+                    if (storageReserve.ContainsKey(key) && storageReserve[key] > 0)
                     {
-                        if (storageReserve[transport.ID] <= 0)
-                        {
-                            transport.End();
-                        }
-                        else
-                        {
-                            storageReserve[transport.ID] -= transport.SoureceReserveNum;
-                        }
+                        storageReserve[key] -= transport.SoureceReserveNum;
                     }
-                    else if (transport.Target == this && emptyReserve[transport.ID] <= 0)
+                    else
                     {
                         transport.End();
                     }
                 }
-                else
+                else if (transport.Target == this && !transport.ArriveTarget)
                 {
-                    transport?.End();
+                    if (!emptyReserve.ContainsKey(key) || emptyReserve[key] <= 0)
+                    {
+                        transport.End();
+                    }
                 }
             }
         }
-
         public void Clear()
         {
             if (Transports != null)

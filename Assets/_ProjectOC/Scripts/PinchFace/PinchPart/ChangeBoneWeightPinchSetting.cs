@@ -36,7 +36,28 @@ namespace ProjectOC.PinchFace
 
         private void Awake()
         {
+            foreach (var _boneWeightData in BoneWeightDatas)
+            {
+                _boneWeightData.currentScaleValue = Vector3.one;
+                _boneWeightData.currentOffsetValue = Vector3.zero;
+            }
             this.enabled = false;
+        }
+
+        public void LoadData(CharacterModelPinch _modelPinch)
+        {
+        }
+
+        public void Apply(PinchPartType2 _type2,PinchPartType3 _type3,CharacterModelPinch _modelPinch)
+        {
+            foreach (var _boneWeightData in BoneWeightDatas)
+            {
+                _modelPinch.ChangeBoneScale(_boneWeightData.boneWeightType,_boneWeightData.currentScaleValue);
+                if ((_boneWeightData.boneWeightChangeType & BoneWeightChangeType.Offset) != 0)
+                {
+                    _modelPinch.ChangeBoneScale(_boneWeightData.boneWeightType,_boneWeightData.currentOffsetValue,false);
+                }
+            }
         }
     }
 }

@@ -86,7 +86,6 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.canceled -= OpenMenu_canceled;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
 
 
@@ -107,7 +106,7 @@ namespace ProjectOC.Player.UI
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
-            }
+            }                                                                         
             );
             this.UIBtnList.SetBtnAction("选项",
             () =>
@@ -128,13 +127,19 @@ namespace ProjectOC.Player.UI
             {
                 // GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
                 // 临时用作捏脸
-                LocalGameManager.Instance.PinchFaceManager.GeneratePinchFaceUI();
+                LocalGameManager.Instance.PinchFaceManager.GeneratePinchRaceUI();
             }
             );
             this.UIBtnList.SetBtnAction("我的氏族",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
+                {
+                    var panel = handle.Result.GetComponent<SmallMapPanel>();
+                    panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                };
             }
             );
             this.UIBtnList.SetBtnAction("订单管理",
@@ -151,7 +156,6 @@ namespace ProjectOC.Player.UI
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
                 {
                     IslandRudderPanel islandRudderPanel = handle.Result.GetComponent<IslandRudderPanel>();
-
                     islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
                 };
@@ -160,7 +164,13 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                {
+                    SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                    selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                };
             }
             );
             this.UIBtnList.SetBtnAction("科技树",
@@ -195,10 +205,8 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.canceled -= OpenMenu_canceled;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.started += SelectGrid_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
+
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -207,25 +215,30 @@ namespace ProjectOC.Player.UI
 
         private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            this.UIBtnList.CanPerformRingNavigation = true;
             this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
+            this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
+                () => { 
+                    this.UIBtnList.DisableBtnList();
+                    this.UIBtnList.CanPerformRingNavigation = false;
+                }, () => {
+                    Ring.gameObject.SetActive(false);
+                    ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+                    this.UIBtnList.SetCurSelectedNull();
+                    this.UIBtnList.DeBindInputAction();
+                    this.UIBtnList.EnableBtnList();
+                });
             this.Ring.gameObject.SetActive(true);
             this.UIKeyTipList?.RefreshKeyTip();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Disable(); 
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.started += SelectGrid_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
         }
 
-        private void OpenMenu_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.started -= SelectGrid_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled -= SelectGrid_canceled;
-        }
 
         private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("打开地图"));
         }
-
+        /*
         private float TimeInterval = 0.2f;
         private CounterDownTimer timer = null;
         [ShowInInspector]
@@ -270,14 +283,10 @@ namespace ProjectOC.Player.UI
                 this.UIBtnList.EnableBtnList();
                 isEnterSelect = false;
             }
-            
-
-
-            
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = null;
         }
-
+*/
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if(this.Ring.gameObject.activeInHierarchy == true)

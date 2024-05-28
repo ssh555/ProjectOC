@@ -21,27 +21,23 @@ namespace ProjectOC.StoreNS
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
-                foreach (var data in datas)
-                {
-                    StoreIconTableDict.Add(data.ID, data);
-                }
+                foreach (var data in datas) { StoreIconTableDict.Add(data.ID, data); }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
             {
-                StoreConfigAsset data = handle.Result;
-                Config = new StoreConfig(data.Config);
+                Config = new StoreConfig(handle.Result.Config);
             };
         }
         #endregion
 
-        private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
+        private Dictionary<string, IWorldStore> WorldStoreDict = new Dictionary<string, IWorldStore>();
 
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        public List<Store> GetStores(int priorityType = 0)
+        public List<IStore> GetStores(int priorityType = 0)
         {
-            List<Store> stores = new List<Store>();
-            foreach (WorldStore worldStore in WorldStoreDict.Values)
+            List<IStore> stores = new List<IStore>();
+            foreach (var worldStore in WorldStoreDict.Values)
             {
                 if (worldStore != null)
                 {
@@ -50,11 +46,11 @@ namespace ProjectOC.StoreNS
             }
             if (priorityType == 1)
             {
-                stores.Sort(new Store.Sort());
+                stores.Sort(new IStore.Sort());
             }
             else if (priorityType == -1)
             {
-                stores.Sort(new Store.Sort());
+                stores.Sort(new IStore.Sort());
                 stores.Reverse();
             }
             return stores;
@@ -67,18 +63,18 @@ namespace ProjectOC.StoreNS
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Dictionary<Store, int> GetPutOutStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
+        public Dictionary<IStore, int> GetPutOutStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
-            Dictionary<Store, int> result = new Dictionary<Store, int>();
-            if (!string.IsNullOrEmpty(itemID) && amount > 0)
+            Dictionary<IStore, int> result = new Dictionary<IStore, int>();
+            if (data != null && amount > 0)
             {
                 int resultAmount = 0;
-                List<Store> stores = GetStores(priorityType);
-                foreach (Store store in stores)
+                List<IStore> stores = GetStores(priorityType);
+                foreach (IStore store in stores)
                 {
                     if (!judgeInteracting || !store.IsInteracting)
                     {
-                        int storeAmount = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage, false, judgeCanOut);
+                        int storeAmount = store.DataContainer.GetAmount(data, DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -98,7 +94,6 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
-
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
@@ -106,34 +101,44 @@ namespace ProjectOC.StoreNS
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns></returns>
-        public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
+        public IStore GetPutInStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
         {
-            Store result = null;
-            if (!string.IsNullOrEmpty(itemID) && amount > 0)
+            IStore result = null;
+            if (data != null && amount > 0)
             {
-                List<Store> stores = GetStores(priorityType);
-                foreach (Store store in stores)
+                bool flag = data is DataNS.ItemIDDataObj;
+                List <IStore> stores = GetStores(priorityType);
+                foreach (IStore store in stores)
                 {
                     if (!judgeInteracting || !store.IsInteracting)
                     {
-                        // 优先寻找第一个可以一次性存完的仓库
-                        // 若没有，则寻找第一个可以存入的，可溢出存入
-                        int empty = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty, judgeCanIn);
-                        if (result == null && empty > 0)
+                        if (flag)
                         {
-                            result = store;
+                            // 优先寻找第一个可以一次性存完的仓库
+                            // 若没有，则寻找第一个可以存入的，可溢出存入
+                            int empty = store.DataContainer.GetAmount(data, DataNS.DataOpType.Empty, judgeCanIn);
+                            if (result == null && empty > 0) { result = store; }
+                            if (empty >= amount)
+                            {
+                                result = store;
+                                break;
+                            }
                         }
-                        if (empty >= amount)
+                        else
                         {
-                            result = store;
-                            break;
+                            if (store is CreatureStore creatureStore &&
+                            creatureStore.CreatureItemID == data.GetDataID() &&
+                            store.DataContainer.GetEmptyIndex(judgeCanIn) >= 0)
+                            {
+                                result = store;
+                                break;
+                            }
                         }
                     }
                 }
             }
             return result;
         }
-
         public List<string> GetStoreIconItems()
         {
             List<string> result = new List<string>();
@@ -144,17 +149,29 @@ namespace ProjectOC.StoreNS
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) { return new Store(storeType); }
+        public IStore SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level) 
+        {
+            if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.LiquidStore ||
+                storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.SolidStore)
+            {
+                return new Store(storeType, level);
+            }
+            else if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Projector)
+            {
+                return new CreatureStore(storeType, level);
+            }
+            return null;
+        }
 
-        public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
+        public void WorldStoreSetData(IWorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {
             if (worldStore != null && level >= 0)
             {
-                WorldStoreSetData(worldStore, SpawnStore(storeType));
+                WorldStoreSetData(worldStore, SpawnStore(storeType, level));
             }
         }
 
-        public void WorldStoreSetData(WorldStore worldStore, Store store)
+        public void WorldStoreSetData(IWorldStore worldStore, IStore store)
         {
             if (worldStore != null && store != null)
             {

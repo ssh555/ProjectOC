@@ -37,21 +37,26 @@ namespace  ProjectOC.PinchFace
         private PinchFaceManager PinchFaceManager;
         private CharacterModelPinch ModelPinch => PinchFaceManager.ModelPinch;
         private UIPinchFacePanel PinchFacePanel;
-        
         private SpriteAtlas SA_PinchPart=>PinchFacePanel.SA_PinchPart;
-        private PinchDataConfig Config => PinchFacePanel.Config;
-        public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
+        private PinchDataConfig Config => PinchFaceManager.Config;
+        private PinchPartData pinchPartData;
+        public PinchPartType2 PinchPartType2 => pinchPartData.PinchPartType2;
+        public PinchPartType3 PinchPartType3 => pinchPartData.PinchPartType3;
+        public List<IPinchSettingComp> pinchSettingComps => pinchPartData.pinchSettingComps;
+        
+        
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
         private int isInit = 0;
-        public PinchPartType2 PinchPartType2 { get; private set; }
-        public PinchPartType3 PinchPartType3 { get; private set; }
+
         Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
 
         private Transform colorTypeTransf;
         private int sortCount = 0;
         #endregion
         //外部引用
+
+        #region Init
 
         private void Init()
         {
@@ -81,13 +86,44 @@ namespace  ProjectOC.PinchFace
         public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2, IPinchSettingComp[] _settingComps,Transform _containerTransf)
         {
             Init();
-            
-            PinchPartType3 = _type3;
-            PinchPartType2 = _type2;
-            pinchSettingComps = _settingComps.ToList();
+            pinchPartData = new PinchPartData(_type2, _type3);
+            pinchPartData.pinchSettingComps = _settingComps.ToList();
             containerTransf = _containerTransf;
             PinchFacePanel = _PinchFacePanel;
         }
+        
+        //
+        // public void PinchFaceCallBack()
+        // {
+        //     foreach (var _pinchSettingComp in pinchSettingComps)
+        //     {
+        //         if (_pinchSettingComp.GetType() == typeof(ChangeBoneWeightPinchSetting))
+        //         {
+        //             ChangeBoneWeightPinchSetting _bonePinchSetting = _pinchSettingComp as ChangeBoneWeightPinchSetting;
+        //             foreach (var _boneWeightData in _bonePinchSetting.BoneWeightDatas)
+        //             {
+        //                 //todo 上臂的骨骼资源还没有处理，导入正式的人物骨骼后删除
+        //                 if (ModelPinch.boneWeightDictionary.ContainsKey(_boneWeightData.boneWeightType))
+        //                 {
+        //                     _boneWeightData.currentScaleValue = ModelPinch.boneWeightDictionary[_boneWeightData.boneWeightType].defaultScale;
+        //                     _boneWeightData.currentOffsetValue = ModelPinch.boneWeightDictionary[_boneWeightData.boneWeightType].defaultPos;  
+        //                 }
+        //             }
+        //         }
+        //     } 
+        // }
+        
+        
+        public void ApplyPinchSetting(CharacterModelPinch _modelPinch)
+        {
+            foreach (var _pinchSettingComp in pinchSettingComps)
+            {
+                _pinchSettingComp.Apply(PinchPartType2,PinchPartType3,_modelPinch);
+            }
+        }
+        
+        #endregion
+        #region PinchPart&&UI Process
 
         public void GeneratePinchPartSetting()
         {
@@ -299,7 +335,7 @@ namespace  ProjectOC.PinchFace
                         float _realValue = PinchFaceManager.pinchFaceHelper.RemapValue(_value, new Vector2(1, 100),
                             _boneWeightData.offsetValueRange);
                         Vector3 _boneWeight = _realValue*Vector3.up;
-                        _boneWeightPinchSetting.BoneWeightDatas[_index].currentScaleValue = _boneWeight;
+                        _boneWeightPinchSetting.BoneWeightDatas[_index].currentOffsetValue = _boneWeight;
                         ModelPinch.ChangeBoneScale(_boneWeightData.boneWeightType,_boneWeight,false);
                     }
                     
@@ -314,9 +350,6 @@ namespace  ProjectOC.PinchFace
                     {
                         
                     }
-
-
-
                     
                     //处理移动型
                 }
@@ -475,21 +508,21 @@ namespace  ProjectOC.PinchFace
             }; 
             
             //前发、后发、呆毛、辫子的ColorSetting
-            void GenerateSingleColorType(ChangeColorPinchSetting _colorSetting)
-            {
-                if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.DoubelMatColor) != 0)
-                {
-                    
-                }
-                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorDynamic) != 0)
-                {
-                    
-                } 
-                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorStatic) != 0)
-                {
-                    
-                } 
-            }
+            // void GenerateSingleColorType(ChangeColorPinchSetting _colorSetting)
+            // {
+            //     if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.DoubelMatColor) != 0)
+            //     {
+            //         
+            //     }
+            //     else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorDynamic) != 0)
+            //     {
+            //         
+            //     } 
+            //     else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorStatic) != 0)
+            //     {
+            //         
+            //     } 
+            // }
         }
         
         public void GenerateTextureUI(ChangeTexturePinchSetting _texSetting)
@@ -566,5 +599,23 @@ namespace  ProjectOC.PinchFace
                 PinchFaceManager.pinchFaceHelper.SortUIAfterGenerate(_uiTransf,containerTransf,PinchFacePanel,returnBtnListCount);
             }
         }
+        #endregion
+        
+        #region 数据存储相关
+
+        public class PinchPartData
+        {
+            public PinchPartType2 PinchPartType2 { get; private set; }
+            public PinchPartType3 PinchPartType3 { get; private set; }
+            
+            public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
+
+            public PinchPartData(PinchPartType2 _type2, PinchPartType3 _type3)
+            {
+                PinchPartType2 = _type2;
+                PinchPartType3 = _type3;
+            }
+        }
+        #endregion
     }
 }

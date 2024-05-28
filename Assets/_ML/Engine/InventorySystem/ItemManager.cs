@@ -54,9 +54,6 @@ namespace ML.Engine.InventorySystem
     public sealed class ItemManager : ILocalManager
     {
         #region Instance
-
-
-
         public static ItemManager Instance { get { return instance; } }
 
         private static ItemManager instance;

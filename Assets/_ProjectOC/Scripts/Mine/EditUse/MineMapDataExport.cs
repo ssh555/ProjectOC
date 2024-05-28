@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -11,9 +13,55 @@ namespace ProjectOC.MineSystem
 {
     public class MineMapDataExport : MonoBehaviour
     {
+        #region 检测岛屿区域
+        [Button("检测岛屿区域")]
+        void CheckButtonRegion()
+        {
+            //Transform
+            RectTransform referenceRectTransform;
+            Transform island1, island2;
+            referenceRectTransform = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/NormalRegion").transform as RectTransform;
+            island1 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/IslandPos1").transform;
+            island2 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/IslandTransf/IslandPos2").transform;
+            
+            //策划大地图数据
+            string _jsonData = File.ReadAllText(bigMapDataJson);
+            int[,] data = JsonConvert.DeserializeObject<int[,]>(_jsonData);
+            
+            
+            GetTransformPos(island1,"Island1:  ");
+            GetTransformPos(island2,"Island2:  ");
+            
+            //从Transform转为局部坐标，从左下到右上 0,0 ->1,1
+            void GetTransformPos(Transform _transf,string debugText)
+            {
+                Vector3 worldPosition = _transf.position;
+                Vector2 localPosition;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(referenceRectTransform, worldPosition, null, out localPosition);
+                Vector2 referenceSize = referenceRectTransform.rect.size;
+                
+                Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
+                anchorPosition = new Vector2(anchorPosition.x,1-anchorPosition.y);
+                
+                //float [0-1]  -> int[0 - width-1]
+                int width = data.GetLength(0);
+                Vector2Int gridPos = new Vector2Int(
+                    Mathf.Clamp((int)(anchorPosition.x * (width)) , 0,width-1),
+                    Mathf.Clamp((int)(anchorPosition.y * (width)) , 0,width-1));
+                //注意GridPos的Y和X是一致的
+                Debug.Log($"{debugText}{anchorPosition} Region:({gridPos.y},{gridPos.x})   {data[gridPos.y,gridPos.x]}");
+            }
+
+            
+        }
+        
+
+        #endregion
+
+        #region 导出数据
         List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();
-        Color dataTileColor = new Color(44, 46, 47);
-        Color emptyTileColor = new Color(161, 162, 166);
+        Color dataTileColor = new Color32(44, 46, 47,255);
+        Color emptyTileColor = new Color32(161, 162, 166,255);
         [Button("导出数据")]
         void ReGenerateAsset()
         {
@@ -28,10 +76,9 @@ namespace ProjectOC.MineSystem
         }
 
         private string smallMapFoldPath = "Assets/_ProjectOC/OCResources/MineSystem/MineEditorData";
-        private string smallMapDataNamePre = "SmallMapEditData_";
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
         private string bigMapPrefabPath =
-            "Assets/_ProjectOC/OCResources/MineSystem/Prefabs/UIPrefab/Prefab_MineSystem_UI_BigMap_copy.prefab";
+            "Assets/_ProjectOC/OCResources/MineSystem/Prefabs/UIPrefab/Prefab_MineSystem_UI_BigMap.prefab";
         private string smallMapTexPath = "Assets/_ProjectOC/OCResources/MineSystem/Texture2D/SmallMapTex";
         private string bigMapTexPath = "Assets/_ProjectOC/OCResources/MineSystem/Texture2D/BigMapTex";
         void ReloadMineData()
@@ -57,6 +104,7 @@ namespace ProjectOC.MineSystem
             string _jsonData = File.ReadAllText(bigMapDataJson);
             GameObject _prefabData =
                 GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(bigMapPrefabPath));
+            _prefabData.name = "Prefab_MineSystem_UI_BigMap";
             GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_Block").gameObject;
             Transform normalRegionTransf = _prefabData.transform.Find("NormalRegion");
             TileMap.DestroyTransformChild(normalRegionTransf);
@@ -151,7 +199,7 @@ namespace ProjectOC.MineSystem
                 }
 
                 texture.Apply();
-                string PATH = $"{smallMapTexPath}/Tex_MineBigMap_{_lable}.png";
+                string PATH = $"{bigMapTexPath}/Tex_MineBigMap_{_lable}.png";
                 SaveTextureAsPNG(texture, PATH);
                 SetSpriteTextureAsset(PATH);
                 Sprite _sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PATH);
@@ -161,26 +209,28 @@ namespace ProjectOC.MineSystem
                 if (_lable == 0) //石头区域
                 {
                     newPrefab = _regionTemplate;
-                    Image _uiImage = newPrefab.GetComponent<Image>();
-                    _uiImage.sprite = _sprite;
                 }
                 else
                 {
                     newPrefab = Instantiate(_regionTemplate);
                     newPrefab.name = $"MapRegion_{_lable}";
-                    Image _uiImage = newPrefab.GetComponent<Image>();
-                    _uiImage.sprite = _sprite;
                     newPrefab.transform.SetParent(normalRegionTransf);
                     (newPrefab.transform as RectTransform).anchoredPosition = Vector2.zero;
-
-
-
+                    (newPrefab.transform as RectTransform).localScale = Vector3.one;
                     // float _randomValue = Random.Range(0f,1f);
                     // Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
-                    Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f),
+                }
+                
+                Image[] images = newPrefab.GetComponentsInChildren<Image>(true);
+                foreach (var image in images)
+                {
+                    image.sprite = _sprite;
+                    if(image.name != "Locked" && _lable != 0)
+                    {
+                        Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f),
                         Random.Range(0.15f, 0.9f));
-                    _uiImage.color = randomColor;
-
+                        image.color = randomColor;
+                    }
                 }
             }
         }
@@ -192,7 +242,7 @@ namespace ProjectOC.MineSystem
             MineSmallMapEditData _smallMapEditData = SmallMapEditDatas[_index];
             Texture2D _resTex = CreateTextureFromData(_smallMapEditData.gridData, _smallMapEditData.width,
                 _smallMapEditData.height);
-            string PATH = $"{bigMapTexPath}/Tex_MineSmallMap_{_index}.png";
+            string PATH = $"{smallMapTexPath}/Tex_MineSmallMap_{_index}.png";
             SaveTextureAsPNG(_resTex, PATH);
             SetSpriteTextureAsset(PATH);
         }
@@ -248,5 +298,9 @@ namespace ProjectOC.MineSystem
                 importer.SaveAndReimport();
             }
         }
+        
+        #endregion
     }
 }
+
+#endif

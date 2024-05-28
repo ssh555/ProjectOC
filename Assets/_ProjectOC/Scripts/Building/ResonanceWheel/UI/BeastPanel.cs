@@ -233,7 +233,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        [ShowInInspector]
+        //[ShowInInspector]
         private int CurrentBeastIndex { get { return this.BeastList.GetCurSelectedPos1(); } }
 
         [ShowInInspector]
@@ -374,7 +374,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 BeastName.text = worker.Name;
 
                 APMaxNumText.text = worker.APMax.ToString();
-                MoodMax.text = worker.EMMax.ToString();
+                MoodMaxNumText.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
                 this.objectPool.ResetPool("DescriptionPool");

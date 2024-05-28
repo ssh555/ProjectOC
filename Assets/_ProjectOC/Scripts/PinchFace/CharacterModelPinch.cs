@@ -18,6 +18,12 @@ namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
+        #region Unity
+
+        
+
+        #endregion
+        
         #region 捏脸函数
 
         public AsyncOperationHandle<GameObject> GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
@@ -50,7 +56,7 @@ namespace ProjectOC.PinchFace
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
-                UnEquipItem(_type2,replaceGo[Type2ToTypeReplaceGoIndex(_type2)]);
+                UnEquipItem(_type2);
             }
 
             AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
@@ -92,13 +98,13 @@ namespace ProjectOC.PinchFace
             Destroy(_PinchGo);
         }
 
-        public void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void UnEquipItem(PinchPartType2 _type2)
         {
-            if (boneType2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
+            if (_type2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
                 boneWeightDictionary.Remove(BoneWeightType.Tail);
             
             
-            if (boneTransfsDictionary.TryGetValue(boneType2, out var keyBone))
+            if (boneTransfsDictionary.TryGetValue(_type2, out var keyBone))
             {
                 foreach (Transform bone in keyBone)
                 {
@@ -109,14 +115,32 @@ namespace ProjectOC.PinchFace
                 }
 
             }
-            
-            if (_PinchGo != null)
+            if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
+                GameObject _PinchGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
                 _PinchGo.transform.SetParent(this.transform.parent);
                 Destroy(_PinchGo);   
             }
         }
 
+        public void UnEquipAllItem(bool UnEquipHair = false)
+        {
+            //第一个是0
+            int maxCount = replaceGo.Count;
+            if (!UnEquipHair)
+            {
+                maxCount = (int)PinchPartType2.HairFront;
+            }
+                
+            for (int i = 1; i < maxCount; i++)
+            {
+                if(replaceGo[i] != null)
+                    continue;
+                
+                UnEquipItem((PinchPartType2)i);
+            }
+        }
+        
         public GameObject Stitch(GameObject sourceClothing, GameObject targetCharacter,bool inCamera)
         {
             GameObject targetClothingBone = null;
@@ -373,7 +397,8 @@ namespace ProjectOC.PinchFace
             [ShowInInspector, ReadOnly, FoldoutGroup("骨骼字典")]
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
             [ShowInInspector, ReadOnly, FoldoutGroup("骨骼字典")]
-            Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
+            public Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
+            private List<PinchPart.PinchPartData> PinchPartDatas = new List<PinchPart.PinchPartData>();
             
             public class BoneData
             {
@@ -395,17 +420,16 @@ namespace ProjectOC.PinchFace
             
             void Awake()
             {
+                //数据初始化
                 pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
                 CameraView.Init(pinchFaceManager);
                 
                 Array enumValues = Enum.GetValues(typeof(PinchPartType2));
                 for(int i = 0;i<enumValues.Length;i++)
                     replaceGo.Add(null);
-                
                 avatar = transform.Find("AnMiXiuBone");
                 characterSkinMeshRenderer = transform.Find("AnMiXiu_Mesh").GetComponent<SkinnedMeshRenderer>();
                 CataBonelog(boneDic,avatar);
-                
                 //骨骼字典初始化
                 boneWeightDictionary.Add(BoneWeightType.Head,new BoneData(boneDic["Head"]));
                 //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
@@ -414,7 +438,20 @@ namespace ProjectOC.PinchFace
                 boneWeightDictionary.Add(BoneWeightType.Leg,new BoneData(boneDic["Weight_Thin"]));
                 boneWeightDictionary.Add(BoneWeightType.HeadTop,new BoneData(boneDic["Add_HeadTop"]));
                 boneWeightDictionary.Add(BoneWeightType.Root,new BoneData(boneDic["Root"]));
+
+
+                if (pinchFaceManager.Config != null)
+                {
+                    ChangeType(PinchPartType3.HF_HairFront, 0);
+                    ChangeType(PinchPartType3.HD_Dai, 0);
+                    ChangeType(PinchPartType3.HB_HairBack, 0);
+                }
                 
+                // pinchFaceManager.RandomPinchPart(PinchPartType3.HF_HairFront,true,this);
+                // foreach (var _type3 in pinchFaceManager.RacePinchDatas[2].pinchPartType3s)
+                // {
+                //     pinchFaceManager.RandomPinchPart(_type3,true,this);
+                // }
                 this.enabled = false;
             }
             
@@ -519,5 +556,7 @@ namespace ProjectOC.PinchFace
         public PinchCharacterCameraView CameraView;
 
         #endregion
+
+        
     }
 }

@@ -51,7 +51,6 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
-        private System.Random Random = new System.Random();
         #region ´ÊÌõ´«ÊÚ
         [LabelText("ß÷ß÷ÎÑ×ùÎ»"), ShowInInspector, ReadOnly]
         public FeatureSeat[] Seats = new FeatureSeat[2];
@@ -145,12 +144,14 @@ namespace ProjectOC.WorkerNS
             if (cnt1 < 3 && set2.Count > 0)
             {
                 Seats[0].WorkerFeatureIDs.Add("");
-                Seats[0].FeatureIDs.Add(set2.ToList()[Random.Next(0, set2.Count)]);
+                Seats[0].FeatureIDs.Add(set2.ToList()[UnityEngine.Random.Range(0, set2.Count)]);
+                Seats[0].IsChanged.Add(true);
             }
             if (cnt2 < 3 && set1.Count > 0)
             {
                 Seats[1].WorkerFeatureIDs.Add("");
-                Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count)]);
+                Seats[1].FeatureIDs.Add(set1.ToList()[UnityEngine.Random.Range(0, set1.Count)]);
+                Seats[1].IsChanged.Add(true);
             }
             IsExchangeEnd = true;
             OnExchangeEndEvent?.Invoke();
@@ -245,7 +246,8 @@ namespace ProjectOC.WorkerNS
         {
             if (CorrectType != FeatureCorrectType.Reverse)
             {
-                int index = Random.Next(0, Seat.FeatureIDs.Count);
+                int index = UnityEngine.Random.Range(0, Seat.FeatureIDs.Count);
+                Seat.IsChanged[index] = true;
                 string featID = Seat.FeatureIDs[index];
                 string newFeatID = "";
                 switch (CorrectType)
@@ -274,6 +276,7 @@ namespace ProjectOC.WorkerNS
                     {
                         Seat.FeatureIDs[i] = reverseID;
                     }
+                    Seat.IsChanged[i] = true;
                 }
             }
             IsCorrectEnd = true;

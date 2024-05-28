@@ -34,29 +34,12 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public Effect SpawnEffect(string id)
-        {
-            return IsValidID(id) ? new Effect(EffectTableDict[id]) : default(Effect);
-        }
+        public Effect SpawnEffect(string id) { return IsValidID(id) ? new Effect(EffectTableDict[id]) : default(Effect); }
         #endregion
-
         #region Getter
-        public bool IsValidID(string id)
-        {
-            return !string.IsNullOrEmpty(id) ? EffectTableDict.ContainsKey(id) : false;
-        }
-        public string GetName(string id)
-        {
-            return IsValidID(id) ? EffectTableDict[id].Name : "";
-        }
-        public EffectType GetEffectType(string id)
-        {
-            return IsValidID(id) ? EffectTableDict[id].Type : EffectType.None;
-        }
-        public string GetParam1(string id)
-        {
-            return IsValidID(id) ? EffectTableDict[id].Param1 : "";
-        }
+        public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) && EffectTableDict.ContainsKey(id); }
+        public string GetName(string id) { return IsValidID(id) ? EffectTableDict[id].Name : ""; }
+        public EffectType GetEffectType(string id) { return IsValidID(id) ? EffectTableDict[id].Type : EffectType.None; }
         #endregion
     }
 }

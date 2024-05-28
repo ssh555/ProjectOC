@@ -1,0 +1,280 @@
+{
+    "proNodeType" : [
+        {
+            "name" : "None",
+            "description" : {
+                "Chinese" : "生产节点",
+                "English" : "ProNode"
+            }
+        },
+        {
+            "name" : "WaterCollector",
+            "description" : {
+                "Chinese" : "露水收集器",
+                "English" : "WaterCollector"
+            }
+        },
+        {
+            "name" : "WaterPurifier",
+            "description" : {
+                "Chinese" : "水源纯化器",
+                "English" : "WaterPurifier"
+            }
+        },
+        {
+            "name" : "SeedBox",
+            "description" : {
+                "Chinese" : "种籽箱",
+                "English" : "SeedBox"
+            }
+        },
+        {
+            "name" : "Integrator",
+            "description" : {
+                "Chinese" : "光流整束器",
+                "English" : "Integrator"
+            }
+        },
+        {
+            "name" : "SeedPlot",
+            "description" : {
+                "Chinese" : "苗圃",
+                "English" : "SeedPlot"
+            }
+        },
+        {
+            "name" : "DiveStation",
+            "description" : {
+                "Chinese" : "矿石锚定潜航器",
+                "English" : "DiveStation"
+            }
+        },
+        {
+            "name" : "Refine",
+            "description" : {
+                "Chinese" : "精炼炉",
+                "English" : "Refine"
+            }
+        },
+        {
+            "name" : "Handwork",
+            "description" : {
+                "Chinese" : "手工作业台",
+                "English" : "Handwork"
+            }
+        },
+        {
+            "name" : "Pharmacy",
+            "description" : {
+                "Chinese" : "制药台",
+                "English" : "Pharmacy"
+            }
+        },
+        {
+            "name" : "Liquor",
+            "description" : {
+                "Chinese" : "发酵桶",
+                "English" : "Liquor"
+            }
+        },
+        {
+            "name" : "Aggregator",
+            "description" : {
+                "Chinese" : "聚合器",
+                "English" : "Aggregator"
+            }
+        },
+        {
+            "name" : "Processor",
+            "description" : {
+                "Chinese" : "精密加工机",
+                "English" : "Processor"
+            }
+        },
+        {
+            "name" : "Kitchen",
+            "description" : {
+                "Chinese" : "风味工坊",
+                "English" : "Kitchen"
+            }
+        },
+        {
+            "name" : "CreaturePro",
+            "description" : {
+                "Chinese" : "培育舱",
+                "English" : "CreaturePro"
+            }
+        },
+        {
+            "name" : "CreatureBreed",
+            "description" : {
+                "Chinese" : "繁育仪",
+                "English" : "CreatureBreed"
+            }
+        },
+        {
+            "name" : "Calculus",
+            "description" : {
+                "Chinese" : "演算仪",
+                "English" : "Calculus"
+            }
+        }
+    ],
+    "textEmpty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
+    },
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+    "textStateVacancy" : {
+        "Chinese" : "空置",
+        "English" : "Vacancy"
+    },
+    "textStateStagnation" : {
+        "Chinese" : "停滞",
+        "English" : "Stagnation"
+    },
+    "textStateProduction" : {
+        "Chinese" : "生产",
+        "English" : "Production"
+    },
+    "textTime" : {
+        "Chinese" : "制作时间",
+        "English" : "Time"
+    },
+    "textEff" : {
+        "Chinese" : "生产效率",
+        "English" : "Eff"
+    },
+    "textLvDesc" : {
+        "Chinese" : "生产效率: ",
+        "English" : "Eff: "
+    },
+    "Upgrade" : {
+        "keyname" : "KT_Upgrade",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Upgrade"
+          },
+        "description" : {
+            "Chinese" : "建筑升级",
+            "English" : "LevelUp"
+        }
+    },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "NextPriority"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "UpgradeConfirm" : {
+        "keyname" : "KT_UpgradeConfirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "升级",
+            "English" : "Upgrade"
+        }
+    },
+    "ChangeRecipe" : {
+        "keyname" : "KT_ChangeRecipe",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "更改配方",
+            "English" : "Change Recipe"
+        }
+    },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出1",
+            "English" : "Remove 1"
+        }
+    },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出10",
+            "English" : "Remove 10"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷投入",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+

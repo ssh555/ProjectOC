@@ -75,8 +75,8 @@ namespace ProjectOC.Player
                 int num = OCState.Inventory.GetItemAllNum(itemID);
                 if (containStore && num < amount)
                 {
-                    List<StoreNS.Store> stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores();
-                    foreach (StoreNS.Store store in stores)
+                    List<StoreNS.IStore> stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores();
+                    foreach (StoreNS.IStore store in stores)
                     {
                         num += store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage);
                         if (num >= amount)
@@ -122,8 +122,8 @@ namespace ProjectOC.Player
 
             if (containStore && reamin.Count > 0)
             {
-                List<StoreNS.Store> stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores();
-                foreach (StoreNS.Store store in stores)
+                List<StoreNS.IStore> stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores();
+                foreach (StoreNS.IStore store in stores)
                 {
                     foreach (string id in reamin.ToArray())
                     {
@@ -193,7 +193,8 @@ namespace ProjectOC.Player
                 int current = OCState.Inventory.RemoveItem(itemID, num) ? num : 0;
                 if (containStore && amount - current > 0)
                 {
-                    Dictionary<StoreNS.Store, int> dict = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(itemID, amount - current, priority);
+                    Dictionary<StoreNS.IStore, int> dict = ManagerNS.LocalGameManager.Instance.StoreManager.
+                        GetPutOutStore(new DataNS.ItemIDDataObj(itemID), amount - current, priority);
                     foreach (var kv in dict)
                     {
                         current += kv.Key.RemoveItem(itemID, kv.Value) ? kv.Value : 0;

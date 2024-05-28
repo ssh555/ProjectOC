@@ -30,10 +30,10 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class WorkerEcho : IEffectObj
     {
-        public ExternWorker[] Workers = new ExternWorker[5];
+        public ExternWorker[] Workers;
         public WorkerEchoBuilding WorkerEchoBuilding = null;
-        public List<int> FeatureMax = new List<int>() { 100, 100, 100, 100};
-        public List<int> FeatureOdds = new List<int>() { 100, 100 };
+        public List<int> FeatureMax = new List<int>();
+        public List<int> FeatureOdds = new List<int>();
         public float FactorTimeCost = 1;
         public int ModifyTimeCost;
         public int GetRealTimeCost(string id)
@@ -52,7 +52,14 @@ namespace ProjectOC.WorkerNS
 
         public WorkerEcho(WorkerEchoBuilding workerEchoBuilding)
         {
+            Workers = new ExternWorker[5];
             WorkerEchoBuilding = workerEchoBuilding;
+        }
+
+        public void SetFeature()
+        {
+            FeatureMax.AddRange(ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatureMax);
+            FeatureOdds.AddRange(ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatureOdds);
         }
 
         public ExternWorker SummonWorker(WorkerCategory workerCategory, int index, ML.Engine.InventorySystem.IInventory inventory)
