@@ -164,13 +164,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
-                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
-                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
-                {
-                    SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
-                    selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
-                };
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
             }
             );
             this.UIBtnList.SetBtnAction("科技树",
@@ -238,55 +232,6 @@ namespace ProjectOC.Player.UI
         {
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("打开地图"));
         }
-        /*
-        private float TimeInterval = 0.2f;
-        private CounterDownTimer timer = null;
-        [ShowInInspector]
-        private bool isEnterSelect = false;
-        private void SelectGrid_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (timer == null)
-            {
-                timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
-                timer.OnEndEvent += () =>
-                {
-                    var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-                    
-
-                    if(vector2.magnitude > 0.5)
-                    {
-                        isEnterSelect = true;
-                        this.UIBtnList.CanPerformRingNavigation = true;
-                    }
-                    else
-                    {
-                        
-                        this.UIBtnList.CanPerformRingNavigation = false;
-                    }
-
-                };
-            }
-        }
-
-        private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            this.UIBtnList.CanPerformRingNavigation = false;
-            if (isEnterSelect)
-            {
-                this.UIBtnList.ButtonInteract(obj);
-                this.UIBtnList.DisableBtnList();
-                Ring.gameObject.SetActive(false);
-                ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
-                this.UIBtnList.SetCurSelectedNull();
-                this.UIBtnList.DeBindInputAction();
-                this.UIBtnList.EnableBtnList();
-                isEnterSelect = false;
-            }
-            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = null;
-        }
-*/
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if(this.Ring.gameObject.activeInHierarchy == true)

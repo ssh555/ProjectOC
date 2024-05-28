@@ -22,8 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    MainIslandSpeed: 1
-    MiningCircleRadius: 3
+    MainIslandSpeed: 0.5
+    MiningCircleRadius: 1
     IslandRudderSensitivity: 1
     InitZoomRate: 0.5
     ZoomSpeed: 1

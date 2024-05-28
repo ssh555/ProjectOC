@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -56,10 +57,13 @@ namespace ProjectOC.ProNodeNS.UI
         private List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
 
         #region BtnList
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList ProductBtnList;
         private int ProductIndex => ProductBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList WorkerBtnList;
         private int WrokerIndex => WorkerBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList UpgradeBtnList;
 
         private bool IsInitBtnList;
@@ -278,11 +282,11 @@ namespace ProjectOC.ProNodeNS.UI
                 {
                     CurProNodeMode = ProNodeSelectMode.Product;
                 }
-                else if (offset.x > 0 && (CurProNodeMode != ProNodeSelectMode.Product || ProductIndex == ProNode.MineDatas.Count - 1))
+                else if (offset.x > 0 && (CurProNodeMode != ProNodeSelectMode.Product || ProductIndex == ProNode.MineDataItemIDs.Count - 1))
                 {
                     CurProNodeMode = ProNodeSelectMode.Worker;
                 }
-                else if (offset.x > 0 && CurProNodeMode == ProNodeSelectMode.Product && ProductIndex < ProNode.MineDatas.Count - 1)
+                else if (offset.x > 0 && CurProNodeMode == ProNodeSelectMode.Product && ProductIndex < ProNode.MineDataItemIDs.Count - 1)
                 {
                     ProductBtnList.MoveIndexIUISelected(ProductIndex + 1);
                 }
@@ -416,13 +420,13 @@ namespace ProjectOC.ProNodeNS.UI
                 #endregion
 
                 #region Product
-                int mineCnt = ProNode.MineDatas?.Count ?? 0;
+                int mineCnt = ProNode.MineDataItemIDs?.Count ?? 0;
                 for (int i = 0; i < mineCnt; i++)
                 {
                     Transform mine = ProductBtnList.GetBtn(i).transform;
                     string productID = ProNode.DataContainer.GetID(i);
                     int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainItems.num;
+                    int stackMax = ProNode.MineStackMax;
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -642,13 +646,13 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Mine.Find("Mask").GetComponent<Image>().fillAmount = 0;
             }
             ProNode_Mine.Find("Name").gameObject.SetActive(ProNode.HasMine && ProNode.IsOnProduce);
-            int mineCnt = ProNode.MineDatas?.Count ?? 0;
+            int mineCnt = ProNode.MineDataItemIDs?.Count ?? 0;
             for (int i = 0; i < mineCnt; i++)
             {
                 Transform mine = ProductBtnList.GetBtn(i).transform;
                 string productID = ProNode.DataContainer.GetID(i);
                 int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainItems.num;
+                int stackMax = ProNode.MineStackMax;
                 if (!tempSprite.ContainsKey(productID))
                 {
                     tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);

@@ -81,7 +81,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外移动速度"), ReadOnly, ShowInInspector]
         private float ModifyWalkSpeed;
         [LabelText("最终移动速度"), ReadOnly, ShowInInspector]
-        public float RealWalkSpeed { get { float value = WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed; return value >= 0 ? value : 0; } }
+        public float RealWalkSpeed { get { float value = WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed; return value >= 1 ? value : 1; } }
         #endregion
         #region Weight
         [LabelText("负重上限"), ReadOnly, ShowInInspector]
@@ -91,7 +91,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外负重上限"), ReadOnly, ShowInInspector]
         private int ModifyBURMax;
         [LabelText("最终负重上限"), ReadOnly, ShowInInspector]
-        public int RealBURMax { get { int value = (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport); return value >= 0 ? value : 0; } }
+        public int RealBURMax { get { int value = (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport); return value >= 1 ? value : 1; } }
         #endregion
         #region Skill
         [LabelText("全局工作效率"), ReadOnly]
@@ -854,6 +854,7 @@ namespace ProjectOC.WorkerNS
                         if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
                         {
                             hasArrive = true;
+                            break;
                         }
                     }
                 }

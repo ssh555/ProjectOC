@@ -90,7 +90,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
+        this.MapLayerUIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.IslandRudder.ChangeMapLayer, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -142,7 +142,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         }
     }
     #endregion
-
 
     #region UI
 
@@ -199,7 +198,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         MM.GridScale = this.cursorNavigation.CurZoomscale;
     }
     #endregion
-
 
     #region Resource
     #region TextContent

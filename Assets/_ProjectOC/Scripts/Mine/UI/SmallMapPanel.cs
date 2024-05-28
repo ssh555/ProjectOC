@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
@@ -7,9 +8,12 @@ using ProjectOC.MineSystem;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
 using static SmallMapPanel;
@@ -25,6 +29,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         this.SmallMapBackground = this.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("SmallMapBackground") as RectTransform;
         this.slider = this.cursorNavigation.transform.Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
+
+        this.MineInfoContent = this.transform.Find("MineInfo").Find("Content");
     }
     #endregion
 
@@ -115,12 +121,63 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     }
     private void ChangeMiningData()
     {
+        Debug.Log("ChangeMiningData");
+        tmpMineInfoDic.Clear();
         foreach (var (btn,minedata) in BtnToMineDataDic)
         {
             bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
+            tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
+        }
+        UpdateMineInfo();
+    }
+
+    #region 矿物信息更新
+    private Dictionary<string,int> MineInfoDic = new Dictionary<string,int>();
+    private Dictionary<string, int> tmpMineInfoDic = new Dictionary<string, int>();
+    private void UpdateMineInfo()
+    {
+        bool NeedRefresh = false;
+        foreach (var formula in MineInfoDic)
+        {
+            if (!tmpMineInfoDic.ContainsKey(formula.Key))
+            {
+                MineInfoDic.Remove(formula.Key);
+                NeedRefresh = true;
+            }
+            else
+            {
+                if (MineInfoDic[formula.Key] != formula.Value)
+                {
+                    MineInfoDic[formula.Key] = formula.Value;
+                    NeedRefresh = true;
+                }
+            }
+        }
+
+        foreach (var formula in tmpMineInfoDic)
+        {
+            if(!MineInfoDic.ContainsKey(formula.Key))
+            {
+                MineInfoDic.Add(formula.Key, formula.Value);
+                NeedRefresh = true;
+            }
+        }
+        if(!NeedRefresh)
+        {
+            return;
+        }
+        this.objectPool.ResetPool("MineInfoPool");
+        foreach (var formula in MineInfoDic)
+        {
+            var tPrefab = this.objectPool.GetNextObject("MineInfoPool", this.MineInfoContent);
+            tPrefab.transform.Find("Image").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(formula.Key);
+            tPrefab.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "X <color=#49D237>" + formula.Value.ToString() + "</color>/每次";
         }
     }
+
+    #endregion
+
     private void RefreshOnZoomMap()
     {
         this.slider.value = this.cursorNavigation.CurZoomRate;
@@ -181,6 +238,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     private RectTransform SmallMapBackground;
     private bool hasPlacedCircle = false;
 
+    private Transform MineInfoContent;
+
     /// <summary>
     ///当前矿物坐标放大系数
     /// </summary>
@@ -216,6 +275,12 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     protected override void InitBtnInfo()
     {
         this.cursorNavigation.InitUIBtnList();
+    }
+
+    protected override void InitObjectPool()
+    {
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab");
+        base.InitObjectPool();
     }
     #endregion
 }
