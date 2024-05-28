@@ -11,6 +11,7 @@ namespace ProjectOC.StoreNS
 
         public CreatureStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level) : base(storeType, level, false)
         {
+            CreatureItemID = "";
             InitData(15, 1);
             ChangeDataAutoSort = true;
         }
@@ -20,6 +21,24 @@ namespace ProjectOC.StoreNS
             {
                 if (CreatureItemID != itemID) { ClearData(); }
                 CreatureItemID = itemID;
+            }
+        }
+        public void FastAdd()
+        {
+            if (!string.IsNullOrEmpty(CreatureItemID))
+            {
+                foreach (var item in ManagerNS.LocalGameManager.Instance.Player.GetInventory().GetItemList())
+                {
+                    if (item.ID == CreatureItemID && item is ML.Engine.InventorySystem.CreatureItem creature)
+                    {
+                        int index = DataContainer.GetEmptyIndex();
+                        if (index >= 0)
+                        {
+                            ChangeData(index, creature);
+                            DataContainer.ChangeAmount(creature, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                        }
+                    }
+                }
             }
         }
     }

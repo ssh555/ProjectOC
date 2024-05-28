@@ -1,0 +1,114 @@
+{
+    "text_Title" : {
+        "Chinese" : "生物仓库",
+        "English" : "Creature Store"
+    },
+    "text_Empty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "TransportPriority":[
+        {
+            "Chinese" : "紧急",
+            "English" : "Urgency"
+        },
+        {
+            "Chinese" : "常规",
+            "English" : "Normal"
+        },
+        {
+            "Chinese" : "备选",
+            "English" : "Alternative"
+        }
+    ],
+    "text_WaitPutIn" : {
+        "Chinese" : "等待存入",
+        "English" : "Wait put in"
+    },
+    "text_GetBreed" : {
+        "Chinese" : "培育获得",
+        "English" : "Breed Get"
+    },
+    "text_GetDiscard" : {
+        "Chinese" : "弃置获得",
+        "English" : "Discard Get"
+    },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "NextPriority"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "ChangeItem" : {
+        "keyname" : "KT_ChangeItem",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "更换",
+            "English" : "Change"
+        }
+    },
+    "Remove" : {
+        "keyname" : "KT_Remove",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出",
+            "English" : "Remove"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷存放",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
+    "Confirm": {
+        "keyname": "KT_Confirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Confirm"
+        },
+        "description": {
+          "Chinese": "确认",
+          "English": "Confirm"
+        }
+      },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+
