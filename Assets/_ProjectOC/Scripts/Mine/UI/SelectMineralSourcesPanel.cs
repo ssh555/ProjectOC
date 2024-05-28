@@ -90,7 +90,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
+        this.MapLayerUIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.IslandRudder.ChangeMapLayer, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
