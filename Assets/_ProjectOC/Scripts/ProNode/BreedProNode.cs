@@ -139,7 +139,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     OutputThreshold = 0;
                     DiscardReserve = 0;
-                    if (creature != null && ChangeRecipe(creature.ProRecipeID))
+                    if (creature != null && ChangeRecipe(creature.BreRecipeID))
                     {
                         DataContainer.AddCapacity(3, new List<int> { 1, 1, creature.Discard.num * StackMax });
                         ChangeData(2, creature);

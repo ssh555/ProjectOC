@@ -854,6 +854,7 @@ namespace ProjectOC.WorkerNS
                         if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
                         {
                             hasArrive = true;
+                            break;
                         }
                     }
                 }
