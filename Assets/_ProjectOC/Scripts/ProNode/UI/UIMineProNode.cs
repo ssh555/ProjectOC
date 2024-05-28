@@ -276,20 +276,23 @@ namespace ProjectOC.ProNodeNS.UI
                 if (offset.y > 0 && CurProNodeMode == ProNodeSelectMode.Product)
                 {
                     CurProNodeMode = ProNodeSelectMode.Mine;
+                    ProductBtnList.SetCurSelectedNull();
                 }
                 else if (offset.y < 0 && ProNode.HasMine)
                 {
                     CurProNodeMode = ProNodeSelectMode.Product;
+                    ProductBtnList.MoveIndexIUISelected(0);
                 }
                 else if (offset.x > 0 && (CurProNodeMode != ProNodeSelectMode.Product || ProductIndex == ProNode.MineDataItemIDs.Count - 1))
                 {
                     CurProNodeMode = ProNodeSelectMode.Worker;
+                    ProductBtnList.SetCurSelectedNull();
                 }
                 else if (offset.x > 0 && CurProNodeMode == ProNodeSelectMode.Product && ProductIndex < ProNode.MineDataItemIDs.Count - 1)
                 {
                     ProductBtnList.MoveIndexIUISelected(ProductIndex + 1);
                 }
-                else if(offset.x < 0 && CurProNodeMode == ProNodeSelectMode.Worker)
+                else if (offset.x < 0 && CurProNodeMode == ProNodeSelectMode.Worker)
                 {
                     CurProNodeMode = ProNodeSelectMode.Mine;
                 }
@@ -426,6 +429,7 @@ namespace ProjectOC.ProNodeNS.UI
                     string productID = ProNode.DataContainer.GetID(i);
                     int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
                     int stackMax = ProNode.MineStackMax;
+                    mine.Find("Icon").gameObject.SetActive(true);
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -461,7 +465,7 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Worker.Find("Empty").gameObject.SetActive(!hasWorker);
                 ProNode_Worker.Find("Gender").gameObject.SetActive(hasWorker);
                 var onDuty = ProNode_Worker.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                if (!tempSprite.ContainsKey(Worker.Category.ToString()))
+                if (hasWorker && !tempSprite.ContainsKey(Worker.Category.ToString()))
                 {
                     tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
                 }

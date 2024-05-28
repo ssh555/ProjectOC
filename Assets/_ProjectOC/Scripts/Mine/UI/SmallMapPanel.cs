@@ -121,15 +121,22 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     }
     private void ChangeMiningData()
     {
-        Debug.Log("ChangeMiningData");
-        tmpMineInfoDic.Clear();
+        //tmpMineInfoDic.Clear();
         foreach (var (btn,minedata) in BtnToMineDataDic)
         {
             bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
-            tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
+            /*if(tmpMineInfoDic.ContainsKey(minedata.GainItems.id))
+            {
+                if()
+            }
+            else
+            {
+                tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
+            }*/
+            
         }
-        UpdateMineInfo();
+        //UpdateMineInfo();
     }
 
     #region 矿物信息更新
