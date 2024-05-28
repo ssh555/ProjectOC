@@ -188,7 +188,8 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn Delete
-        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, bool isAdd = true, WorkerEcho workerEcho = null, string name = "Prefab_Worker_Worker")
+        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> SpawnWorker
+            (Vector3 pos, Quaternion rot, bool isAdd = true, WorkerEcho workerEcho = null, WorkerCategory category = WorkerCategory.None, string name = "Prefab_Worker_Worker")
         {
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
@@ -201,7 +202,7 @@ namespace ProjectOC.WorkerNS
                     {
                         worker = obj.AddComponent<Worker>();
                     }
-                    worker.Init(workerEcho);
+                    worker.Init(workerEcho, category);
                     if (isAdd)
                     {
                         Workers.Add(worker.ID, worker);

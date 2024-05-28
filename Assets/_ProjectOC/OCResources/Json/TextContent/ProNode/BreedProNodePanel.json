@@ -1,0 +1,153 @@
+{
+    "textProNodeType" : {
+        "Chinese" : "繁育仪",
+        "English" : "Breed ProNode"
+    },
+    "textEmpty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
+    },
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+    "textTime" : {
+        "Chinese" : "繁育时间",
+        "English" : "Time"
+    },
+    "textBag" : {
+        "Chinese" : "背包",
+        "English" : "Bag"
+    },
+    "textOnBreed" : {
+        "Chinese" : "繁育中",
+        "English" : "On Breed"
+    },
+    "textBreedResult" : {
+        "Chinese" : "子嗣预期结果",
+        "English" : "Breed Result"
+    },
+    "textOutput" : {
+        "Chinese" : "产值",
+        "English" : "Output"
+    },
+    "textWarnCreature" : {
+        "Chinese" : "品种不匹配",
+        "English" : "Creature Not Match"
+    },
+    "textWarnGender" : {
+        "Chinese" : "性别不匹配",
+        "English" : "Gender Not Match"
+    },
+    "textGetBreed" : {
+        "Chinese" : "培育获得",
+        "English" : "Breed Get"
+    },
+    "textGetDiscard" : {
+        "Chinese" : "弃置获得",
+        "English" : "Discard Get"
+    },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "NextPriority"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "ChangeCreature" : {
+        "keyname" : "KT_ChangeCreature",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更生物",
+            "English" : "Change Creature"
+        }
+    },
+    "ChangeBar" : {
+        "keyname" : "KT_ChangeBar",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Alter"
+          },
+        "description" : {
+            "Chinese" : "调整预设",
+            "English" : "Change Output Threshold"
+        }
+    },
+    "FastRemove" : {
+        "keyname" : "KT_FastRemove",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "快捷取出",
+            "English" : "Fast Remove"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷投入",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "添加生物",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Back"
+        }
+    }
+}
+
