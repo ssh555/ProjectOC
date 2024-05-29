@@ -10,13 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
 using static SmallMapPanel;
+
 public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 {
     #region Unity
@@ -88,7 +88,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         //生成小地图背景
         Texture2D texture2D = MM.MineralMapData.texture2D;
         this.SmallMapBackground.GetComponent<Image>().sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero);
-        this.SmallMapBackground.sizeDelta = texture2D.Size();
+        this.SmallMapBackground.sizeDelta = new Vector2(texture2D.width, texture2D.height);
         this.SmallMapBackground.localScale = new Vector2(EnlargeRate, EnlargeRate);
 
         //获取小地图最左下角的屏幕坐标
