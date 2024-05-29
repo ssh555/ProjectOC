@@ -1,29 +1,17 @@
 using ML.Engine.Manager;
-using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
 using Newtonsoft.Json;
-using ProjectOC.ManagerNS;
-using ProjectOC.Order;
-using ProjectOC.Player;
 using ProjectOC.ProNodeNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.iOS;
 using UnityEngine.U2D;
 using static ProjectOC.MineSystem.MineSystemData;
-using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.MineSystem
 {
@@ -176,6 +164,7 @@ namespace ProjectOC.MineSystem
                 islandRudderPanelInstance = handle.Result.GetComponent<IslandRudderPanel>();
                 islandRudderPanelInstance.gameObject.SetActive(false);
                 MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
+                ColliderRadiu = MainIslandRectTransform.GetComponent<CircleCollider2D>().radius;
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
                 {
                     bigMapInstance = handle.Result;
@@ -367,12 +356,9 @@ namespace ProjectOC.MineSystem
         public int CurRegionNum { get { return curRegionNum; } }
         [ShowInInspector]
         private int lastRegionNum = -1;
-
-
-
         private int CurColliderPointRegion = -1;
         private int PreColliderPointRegion = -1;
-        private float ColliderRadiu = 4;
+        private float ColliderRadiu;
 
         private RectTransform MapRegionRectTransform;
         private RectTransform MainIslandRectTransform;
@@ -384,13 +370,20 @@ namespace ProjectOC.MineSystem
             CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu);
             if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion == 0)
             {
-                //Åö×²
+                //ÕÏ°­Åö×²
                 UnlockMapRegion(0);
                 return;
             }
             lastRegionNum = curRegionNum;
-            UnityEngine.Debug.Log("MainIslandRectTransform.position " + MainIslandRectTransform.position);
             curRegionNum = DetectRegion(MainIslandRectTransform.position);
+            if(curRegionNum == -1)
+            {
+                //±ß½çÅö×²
+                mainIslandData.Reset();
+                curRegionNum = lastRegionNum;
+                return;
+            }
+
             if (lastRegionNum != curRegionNum)
             {
                 //½øÈëÐÂÇøÓò
@@ -398,7 +391,6 @@ namespace ProjectOC.MineSystem
                 lastRegionNum = curRegionNum;
             }
         }
-
         public int DetectRegion(Vector3 pos)
         {
             Vector3 worldPosition = pos;
@@ -406,14 +398,11 @@ namespace ProjectOC.MineSystem
             RectTransformUtility.ScreenPointToLocalPointInRectangle(MapRegionRectTransform, worldPosition, null, out localPosition);
             Vector2 referenceSize = MapRegionRectTransform.rect.size;
             Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
-            UnityEngine.Debug.Log("anchorPosition " + anchorPosition + " localPosition "+ localPosition+ " referenceSize "+ referenceSize);
             anchorPosition = new Vector2(anchorPosition.x, 1 - anchorPosition.y);
             int width = bigMapTableData.GetLength(0);
             Vector2Int gridPos = new Vector2Int(
             Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
             Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
-
-            
             return bigMapTableData[gridPos.y, gridPos.x];
         }
         #endregion

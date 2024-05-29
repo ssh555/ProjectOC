@@ -287,7 +287,7 @@ namespace ML.Engine.UI
                     panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
 
                     
-                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel();
+                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false);
                     GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
 
                     panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);

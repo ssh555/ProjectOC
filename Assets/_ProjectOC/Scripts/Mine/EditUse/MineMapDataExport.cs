@@ -105,7 +105,7 @@ namespace ProjectOC.MineSystem
             GameObject _prefabData =
                 GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(bigMapPrefabPath));
             _prefabData.name = "Prefab_MineSystem_UI_BigMap";
-            GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_Block").gameObject;
+            GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_0").gameObject;
             Transform normalRegionTransf = _prefabData.transform.Find("NormalRegion");
             TileMap.DestroyTransformChild(normalRegionTransf);
 
@@ -225,11 +225,19 @@ namespace ProjectOC.MineSystem
                 foreach (var image in images)
                 {
                     image.sprite = _sprite;
+                    Debug.Log(image.transform.parent.name+" "+image.name);
                     if(image.name != "Locked" && _lable != 0)
                     {
-                        Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f),
-                        Random.Range(0.15f, 0.9f));
-                        image.color = randomColor;
+                        if(image.name == "Normal")
+                        {
+                            Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f), Random.Range(0.15f, 0.9f));
+                            image.color = randomColor;
+                        }
+                        else if(image.name == "Selected")
+                        {
+                            image.color = Color.white;
+                        }
+                        
                     }
                 }
             }

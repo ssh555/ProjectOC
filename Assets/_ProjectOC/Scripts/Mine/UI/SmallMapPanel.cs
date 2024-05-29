@@ -139,7 +139,6 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
                 }
             }
         }
-        Debug.Log("ChangeMiningData");
         UpdateMineInfo();
     }
 

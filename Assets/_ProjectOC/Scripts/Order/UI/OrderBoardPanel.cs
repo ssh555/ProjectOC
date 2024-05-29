@@ -35,7 +35,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         this.KT_ViewMoreInformation = this.KeyTips.Find("KT_ViewMoreInformation");
         this.KT_CancelMoreInformation = this.KeyTips.Find("KT_CancelMoreInformation");
         this.KT_Back = this.KeyTips.Find("KT_Back");
-
     }
 
     #endregion
@@ -222,8 +221,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         
     }
     #endregion
-
-
     #region UI
     #region temp
 

@@ -3444,6 +3444,24 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RT"",
+                    ""type"": ""Button"",
+                    ""id"": ""04b511de-061f-4c85-86ff-60c23e9de23e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LT"",
+                    ""type"": ""Button"",
+                    ""id"": ""13f5a33f-ac86-4e1f-ac99-f6d8349d897a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -3556,6 +3574,50 @@ namespace ProjectOC.Input
                     ""action"": ""ChangeMapLayer"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f3217d4-ea33-464c-ab5a-f52d8c952696"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a4e2a30-9720-46d4-98f4-5d49746fc8a0"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59dda883-603e-4bdf-96a2-53d920377947"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0bc1e49-9f3d-4ac5-b48c-2654797d8fb1"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -3663,6 +3725,8 @@ namespace ProjectOC.Input
             // IslandRudder
             m_IslandRudder = asset.FindActionMap("IslandRudder", throwIfNotFound: true);
             m_IslandRudder_ChangeMapLayer = m_IslandRudder.FindAction("ChangeMapLayer", throwIfNotFound: true);
+            m_IslandRudder_RT = m_IslandRudder.FindAction("RT", throwIfNotFound: true);
+            m_IslandRudder_LT = m_IslandRudder.FindAction("LT", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -3745,8 +3809,8 @@ namespace ProjectOC.Input
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
             public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
-            public void Enable() {Get().Enable(); }
-            public void Disable() {Get().Disable(); }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
             public bool enabled => Get().enabled;
             public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
             public void AddCallbacks(IPlayerActions instance)
@@ -4883,11 +4947,15 @@ namespace ProjectOC.Input
         private readonly InputActionMap m_IslandRudder;
         private List<IIslandRudderActions> m_IslandRudderActionsCallbackInterfaces = new List<IIslandRudderActions>();
         private readonly InputAction m_IslandRudder_ChangeMapLayer;
+        private readonly InputAction m_IslandRudder_RT;
+        private readonly InputAction m_IslandRudder_LT;
         public struct IslandRudderActions
         {
             private @PlayerInput m_Wrapper;
             public IslandRudderActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @ChangeMapLayer => m_Wrapper.m_IslandRudder_ChangeMapLayer;
+            public InputAction @RT => m_Wrapper.m_IslandRudder_RT;
+            public InputAction @LT => m_Wrapper.m_IslandRudder_LT;
             public InputActionMap Get() { return m_Wrapper.m_IslandRudder; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -4900,6 +4968,12 @@ namespace ProjectOC.Input
                 @ChangeMapLayer.started += instance.OnChangeMapLayer;
                 @ChangeMapLayer.performed += instance.OnChangeMapLayer;
                 @ChangeMapLayer.canceled += instance.OnChangeMapLayer;
+                @RT.started += instance.OnRT;
+                @RT.performed += instance.OnRT;
+                @RT.canceled += instance.OnRT;
+                @LT.started += instance.OnLT;
+                @LT.performed += instance.OnLT;
+                @LT.canceled += instance.OnLT;
             }
 
             private void UnregisterCallbacks(IIslandRudderActions instance)
@@ -4907,6 +4981,12 @@ namespace ProjectOC.Input
                 @ChangeMapLayer.started -= instance.OnChangeMapLayer;
                 @ChangeMapLayer.performed -= instance.OnChangeMapLayer;
                 @ChangeMapLayer.canceled -= instance.OnChangeMapLayer;
+                @RT.started -= instance.OnRT;
+                @RT.performed -= instance.OnRT;
+                @RT.canceled -= instance.OnRT;
+                @LT.started -= instance.OnLT;
+                @LT.performed -= instance.OnLT;
+                @LT.canceled -= instance.OnLT;
             }
 
             public void RemoveCallbacks(IIslandRudderActions instance)
@@ -5042,6 +5122,8 @@ namespace ProjectOC.Input
         public interface IIslandRudderActions
         {
             void OnChangeMapLayer(InputAction.CallbackContext context);
+            void OnRT(InputAction.CallbackContext context);
+            void OnLT(InputAction.CallbackContext context);
         }
     }
 }
