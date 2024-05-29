@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 908388276559883163}
   - component: {fileID: 6030624295988452395}
   - component: {fileID: 3280763311169690881}
-  - component: {fileID: 3543087441710893899}
+  - component: {fileID: -5335648964352815166}
   m_Layer: 7
   m_Name: Interact_Biostore_Base1_1
   m_TagString: Untagged
@@ -235,7 +235,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5, y: 1.4, z: 1.62}
   m_Center: {x: -0.0026062727, y: 0.75, z: 0.00088205934}
---- !u!114 &3543087441710893899
+--- !u!114 &-5335648964352815166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8206686620712636093}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d70636ddcc0088439ec85c7af608e52, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ecedce2965864b45a9a23e75ce1be6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -256,12 +256,5 @@ MonoBehaviour:
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
-  Store:
-    WorldStore: {fileID: 0}
-    Name: 
-    StoreType: 0
-    Level: 0
-    IsInteracting: 0
-    WorldIconItemID: 
