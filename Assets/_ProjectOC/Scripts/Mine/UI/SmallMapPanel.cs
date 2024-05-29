@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
@@ -7,12 +8,15 @@ using ProjectOC.MineSystem;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
 using static SmallMapPanel;
+
 public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 {
     #region Unity
@@ -25,6 +29,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         this.SmallMapBackground = this.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("SmallMapBackground") as RectTransform;
         this.slider = this.cursorNavigation.transform.Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
+
+        this.MineInfoContent = this.transform.Find("MineInfo").Find("Content");
     }
     #endregion
 
@@ -82,7 +88,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         //生成小地图背景
         Texture2D texture2D = MM.MineralMapData.texture2D;
         this.SmallMapBackground.GetComponent<Image>().sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero);
-        this.SmallMapBackground.sizeDelta = texture2D.Size();
+        this.SmallMapBackground.sizeDelta = new Vector2(texture2D.width, texture2D.height);
         this.SmallMapBackground.localScale = new Vector2(EnlargeRate, EnlargeRate);
 
         //获取小地图最左下角的屏幕坐标
@@ -115,12 +121,47 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     }
     private void ChangeMiningData()
     {
+        tmpMineInfoDic.Clear();
         foreach (var (btn,minedata) in BtnToMineDataDic)
         {
             bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
+
+            if(isInCircle)
+            {
+                if (!tmpMineInfoDic.ContainsKey(minedata.GainItems.id))
+                {
+                    tmpMineInfoDic.Add(minedata.GainItems.id, minedata.GainItems.num);
+                }
+                else
+                {
+                    tmpMineInfoDic[minedata.GainItems.id] += minedata.GainItems.num;
+                }
+            }
         }
+        Debug.Log("ChangeMiningData");
+        UpdateMineInfo();
     }
+
+    #region 矿物信息更新
+    [ShowInInspector]
+    private Dictionary<string, int> tmpMineInfoDic = new Dictionary<string, int>();
+    private void UpdateMineInfo()
+    {
+        if (!isInitObjectPool) return;
+
+        this.objectPool.ResetPool("MineInfoPool");
+        foreach (var (itemid,num) in tmpMineInfoDic)
+        {
+            var tPrefab = this.objectPool.GetNextObject("MineInfoPool", this.MineInfoContent);
+            tPrefab.transform.Find("Image").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(itemid);
+            tPrefab.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = "X <color=#49D237>" + num.ToString() + "</color>/每次";
+        }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.MineInfoContent as RectTransform);
+    }
+
+    #endregion
+
     private void RefreshOnZoomMap()
     {
         this.slider.value = this.cursorNavigation.CurZoomRate;
@@ -181,6 +222,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     private RectTransform SmallMapBackground;
     private bool hasPlacedCircle = false;
 
+    private Transform MineInfoContent;
+
     /// <summary>
     ///当前矿物坐标放大系数
     /// </summary>
@@ -216,6 +259,13 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     protected override void InitBtnInfo()
     {
         this.cursorNavigation.InitUIBtnList();
+    }
+
+    bool isInitObjectPool = false;
+    protected override void InitObjectPool()
+    {
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab", (handle) => { isInitObjectPool = true; });
+        base.InitObjectPool();
     }
     #endregion
 }

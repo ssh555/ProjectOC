@@ -220,7 +220,6 @@ namespace ProjectOC.MineSystem
                         lastPos = curPos;
                         curPos += moveSpeed * (targetPos - curPos).normalized;
                     }
-                        
                     return false;
                 }
             }
@@ -233,10 +232,6 @@ namespace ProjectOC.MineSystem
             }
             
         }
-
-
-
-
 
         /// <summary>
         /// 矿物表数据

@@ -403,7 +403,7 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 生产节点销毁时调用 移除矿圈数据
         /// </summary>
-        public void RemoveMineralCircleData(Vector2 CirclePos, string ProNodeId)
+        public void RemoveMineralCircleData(string ProNodeId)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {

@@ -29,6 +29,7 @@ namespace ProjectOC.WorkerNS
         #region ILocalManager
         private Dictionary<FeatureType, List<string>> FeatureTypeDict = new Dictionary<FeatureType, List<string>>();
         private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
+        private Dictionary<WorkerCategory, string> RaceDict = new Dictionary<WorkerCategory, string>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
         public FeatureConfig Config;
         public void OnRegister()
@@ -50,6 +51,10 @@ namespace ProjectOC.WorkerNS
             {
                 Config = new FeatureConfig(handle.Result.Config);
             };
+            foreach (var tup in Config.CategoryFeatureList)
+            {
+                RaceDict.Add(tup.category, tup.feature);
+            }
         }
         #endregion
 
@@ -73,11 +78,11 @@ namespace ProjectOC.WorkerNS
             }
             return 0;
         }
-        public List<Feature> CreateFeature()
+        public List<Feature> CreateFeature(WorkerCategory category)
         {
-            return CreateFeature(Config.FeatureMax, Config.FeatureOdds);
+            return CreateFeature(Config.FeatureMax, Config.FeatureOdds, category);
         }
-        public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds)
+        public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds, WorkerCategory category)
         {
             if (featureMax == null) { featureMax = Config.FeatureMax; }
             if (featureOdds == null) { featureOdds = Config.FeatureOdds; }
@@ -88,10 +93,13 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
             int maxFeatureNum = GetRandomIndex(featureMax);
-            string featureID = FeatureTypeDict[FeatureType.Race][UnityEngine.Random.Range(0, FeatureTypeDict[FeatureType.Race].Count)];
-            result.Add(SpawnFeature(featureID));
+            if (RaceDict.ContainsKey(category))
+            {
+                result.Add(SpawnFeature(RaceDict[category]));
+            }
             HashSet<string> buffs = FeatureTypeDict[FeatureType.Buff].ToHashSet();
             HashSet<string> debuffs = FeatureTypeDict[FeatureType.DeBuff].ToHashSet();
+            string featureID;
             for (int i = 0; i < maxFeatureNum; i++)
             {
                 if (buffs.Count == 0 && debuffs.Count == 0) { break; }

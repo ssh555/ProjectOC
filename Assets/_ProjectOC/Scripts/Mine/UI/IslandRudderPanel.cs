@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ak.wwise;
 using static IslandRudderPanel;
 public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 {
@@ -22,6 +23,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.Target.gameObject.SetActive(false);
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
+        this.DotLine = Content.Find("DotLine").GetComponent<Image>();
+        this.DotLineRectTransform = DotLine.GetComponent<RectTransform>();
     }
     #endregion
 
@@ -62,6 +65,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     #region Internal
     private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
+    private bool isInit = false;
     private void InitData()
     {
         GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
@@ -78,6 +82,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
             this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
             RefreshOnZoomMap();
             DetectMainIslandCurRegion();
+            isInit = true;
             this.Refresh();
         };
         //初始化主岛的位置
@@ -85,6 +90,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     protected override void UnregisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Disable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
         // 返回
@@ -96,11 +103,13 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     protected override void RegisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Enable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
+        this.MapLayerUIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.IslandRudder.ChangeMapLayer, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -189,6 +198,10 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private Transform BigMapInstanceTrans;
     private Transform NormalRegions;
+
+    private Image DotLine;
+    private RectTransform DotLineRectTransform;
+    private Material DotLineMaterial;
     #endregion
 
     public override void Refresh()
@@ -211,9 +224,18 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private void RefreshMainIsland()
     {
+        if (!isInit) return;
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
         this.Target.anchoredPosition = MM.MainIslandData.TargetPos;
         DetectMainIslandCurRegion();
+
+        float angle = Vector3.Angle(MM.MainIslandData.MovingDir, Vector2.right);
+        angle = MM.MainIslandData.TargetPos.y < MM.MainIslandData.CurPos.y ? -angle : angle;
+        var dis = Vector2.Distance(MM.MainIslandData.CurPos, MM.MainIslandData.TargetPos);
+        this.DotLineRectTransform.sizeDelta = new Vector2(dis, DotLineRectTransform.sizeDelta.y);
+        this.DotLineRectTransform.rotation = Quaternion.Euler(0, 0, angle);
+        this.DotLineRectTransform.anchoredPosition = (MM.MainIslandData.CurPos + MM.MainIslandData.TargetPos) / 2;
+        this.DotLine.material.SetFloat("_Scale", dis / 30);
     }
 
     private void RefreshOnZoomMap()
@@ -225,7 +247,16 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private void RefreshTarget(bool isMoving)
     {
         this.Target.gameObject.SetActive(isMoving);
+        this.DotLine.gameObject.SetActive(isMoving);
     }
+
+    #region 虚线
+    
+
+
+    #endregion
+
+
     #endregion
 
 
