@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -16,7 +17,8 @@ namespace ProjectOC.MineSystem
         public List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();
         public float mineToTileScale = 0.2f;
 
-        public Dictionary<string, MineBigMapEditData.MineBrushData> mineBrushDatas = new Dictionary<string, MineBigMapEditData.MineBrushData>();
+        [ShowInInspector]
+        public Dictionary<string, Sprite> mineBrushDatas = new Dictionary<string, Sprite>();
         //新建笔刷项 数据
         public string mineID = "Mineral_Ti_1";
         public Sprite mineTex;

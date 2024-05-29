@@ -87,7 +87,8 @@ namespace ProjectOC.MineSystem
             bigMap.BigMapEditDatas = AssetDatabase.LoadAssetAtPath<MineBigMapEditData>(bigMapPath);
             foreach (var _singleMineDatas in bigMap.BigMapEditDatas.MineBrushDatas)
             {
-                bigMap.mineBrushDatas.Add(_singleMineDatas.mineID,_singleMineDatas);
+                if(!bigMap.mineBrushDatas.ContainsKey(_singleMineDatas.mineID))
+                    bigMap.mineBrushDatas.Add(_singleMineDatas.mineID,_singleMineDatas.mineIcon);
             }
             
             ReloadSmallMapAsset();
