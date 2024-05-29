@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
@@ -6,16 +7,19 @@ using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.Order;
 using ProjectOC.Player;
+using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.U2D;
 using static ProjectOC.MineSystem.MineSystemData;
 using static ProjectOC.Order.OrderManager;
 
@@ -87,15 +91,20 @@ namespace ProjectOC.MineSystem
 
         public void Tick(float deltatime)
         {
-            //触发get
-            var isReachTarget = mainIslandData.isReachTarget;
-            //主岛移动触发ui refresh
-            if (mainIslandData.IsMoving && !isReachTarget) 
+            if(mainIslandData != null)
             {
-                RefreshUI?.Invoke();
+                //触发get
+                var isReachTarget = mainIslandData.isReachTarget;
+                //主岛移动触发ui refresh
+                if (mainIslandData.IsMoving && !isReachTarget)
+                {
+                    RefreshUI?.Invoke();
+                }
             }
+            
         }
         #endregion
+
         #region Base
         SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
@@ -146,30 +155,38 @@ namespace ProjectOC.MineSystem
             });
 
             synchronizerInOrder.StartExecution();
+
+            LoadTechAtlas();
             #endregion
 
             #region 同步初始化
             //初始化大地图缩放比例
-            this.GridScale = 1;
+            this.GridScale = (MineSystemConfig.ZoomInLimit - MineSystemConfig.ZoomOutLimit) * MineSystemConfig.InitZoomRate + MineSystemConfig.ZoomOutLimit; ;
 
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];
 
             //初始化主岛数据
-            mainIslandData = new MainIslandData();
+            mainIslandData = new MainIslandData(mineSystemConfig.MainIslandSpeed);
 
             //默认选中
             curMapLayerIndex = 0;
             #endregion
         }
 
+        private MineSystemConfig mineSystemConfig;
+        public MineSystemConfig MineSystemConfig { get { return mineSystemConfig; }  }
         public void OnRegister()
         {
             if (instance == null)
             {
                 instance = this;
                 ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-                Init();
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<MineSystemConfigAsset>("Config_Mine").Completed += (handle) =>
+                {
+                    mineSystemConfig = new MineSystemConfig(handle.Result.Config);
+                    Init();
+                };
             }
         }
 
@@ -208,8 +225,7 @@ namespace ProjectOC.MineSystem
                             if(this.MineralTableDataDic.ContainsKey(mine.MineID))
                             {
                                 int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
-                                //int GainNum = this.MineralTableDataDic[mine.MineID].
-                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum, 5));
+                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum, MineralTableDataDic[mine.MineID].MineEff));
                             }
                         }
                     }
@@ -292,6 +308,15 @@ namespace ProjectOC.MineSystem
                     synchronizerInOrder.Check(3);
                 };
         }
+
+        private SpriteAtlas mineAtlas;
+        private void LoadTechAtlas()
+        {
+            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>("SA_Mine_UI").Completed += (handle) =>
+            {
+                mineAtlas = handle.Result as SpriteAtlas;
+            };
+        }
         #endregion
 
         #region External
@@ -364,23 +389,21 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 加入矿圈数据
         /// </summary>
-        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId)
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int curSlectNum)
         {
-            if(!this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curSlectNum, curMapLayerIndex));
+            placeCircleData.PlaceCirclePosition = CirclePos;
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
-                PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curRegionNum, curMapLayerIndex));
-                this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+                PlacedCircleDataDic.Remove(ProNodeId);
             }
-            else
-            {
-                this.PlacedCircleDataDic[ProNodeId].PlaceCirclePosition = CirclePos;
-            }
+            this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
         }
 
         /// <summary>
         /// 生产节点销毁时调用 移除矿圈数据
         /// </summary>
-        public void RemoveMineralCircleData(Vector2 CirclePos, string ProNodeId)
+        public void RemoveMineralCircleData(string ProNodeId)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
@@ -391,11 +414,27 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 获取矿圈数据
         /// </summary>
-        public PlaceCircleData GetMineralCircleData(string ProNodeId)
+        public PlaceCircleData GetMineralCircleData(string ProNodeId,int curSlectNum)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
-                return this.PlacedCircleDataDic[ProNodeId];
+                PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
+                if (placeCircleData.SmallMapTuple == (curSlectNum, curMapLayerIndex))
+                {
+                    return this.PlacedCircleDataDic[ProNodeId];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取矿物图标
+        /// </summary>
+        public Sprite GetMineSprite(string MineId)
+        {
+            if (this.MineralTableDataDic.ContainsKey(MineId))
+            {
+                return this.mineAtlas.GetSprite(MineralTableDataDic[MineId].Icon);
             }
             return null;
         }

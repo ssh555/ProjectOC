@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -56,10 +57,13 @@ namespace ProjectOC.ProNodeNS.UI
         private List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
 
         #region BtnList
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList ProductBtnList;
         private int ProductIndex => ProductBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList WorkerBtnList;
         private int WrokerIndex => WorkerBtnList?.GetCurSelectedPos1() ?? 0;
+        [ShowInInspector]
         private ML.Engine.UI.UIBtnList UpgradeBtnList;
 
         private bool IsInitBtnList;
@@ -199,7 +203,6 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnProduceEndEvent += Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             tempSprite.Add("", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Empty"));
-            tempSprite.Add("WorkerIcon", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast"));
             tempSprite.Add("WorkerMaleIcon", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale"));
             tempSprite.Add("WorkerFemalIcon", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale"));
             base.Enter();
@@ -214,6 +217,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            tempSprite.Clear();
             base.Exit();
         }
         #endregion
@@ -272,20 +276,23 @@ namespace ProjectOC.ProNodeNS.UI
                 if (offset.y > 0 && CurProNodeMode == ProNodeSelectMode.Product)
                 {
                     CurProNodeMode = ProNodeSelectMode.Mine;
+                    ProductBtnList.SetCurSelectedNull();
                 }
                 else if (offset.y < 0 && ProNode.HasMine)
                 {
                     CurProNodeMode = ProNodeSelectMode.Product;
+                    ProductBtnList.MoveIndexIUISelected(0);
                 }
-                else if (offset.x > 0 && (CurProNodeMode != ProNodeSelectMode.Product || ProductIndex == ProNode.MineDatas.Count - 1))
+                else if (offset.x > 0 && (CurProNodeMode != ProNodeSelectMode.Product || ProductIndex == ProNode.MineDataItemIDs.Count - 1))
                 {
                     CurProNodeMode = ProNodeSelectMode.Worker;
+                    ProductBtnList.SetCurSelectedNull();
                 }
-                else if (offset.x > 0 && CurProNodeMode == ProNodeSelectMode.Product && ProductIndex < ProNode.MineDatas.Count - 1)
+                else if (offset.x > 0 && CurProNodeMode == ProNodeSelectMode.Product && ProductIndex < ProNode.MineDataItemIDs.Count - 1)
                 {
                     ProductBtnList.MoveIndexIUISelected(ProductIndex + 1);
                 }
-                else if(offset.x < 0 && CurProNodeMode == ProNodeSelectMode.Worker)
+                else if (offset.x < 0 && CurProNodeMode == ProNodeSelectMode.Worker)
                 {
                     CurProNodeMode = ProNodeSelectMode.Mine;
                 }
@@ -306,7 +313,15 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if(CurProNodeMode == ProNodeSelectMode.Mine)
                 {
-                    // TODO
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                    {
+                        SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                        selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                        selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
+                        selectMineralSourcesPanel.UIMineProNode = this;
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                    };
+
                 }
             }
             else if (CurMode == Mode.ChangeWorker && Workers.Count > 0)
@@ -402,18 +417,19 @@ namespace ProjectOC.ProNodeNS.UI
                 bool hasMine = ProNode.HasMine;
                 ProNode_Mine.Find("Icon").gameObject.SetActive(!hasMine);
                 ProNode_Mine.Find("IconMine").gameObject.SetActive(hasMine);
-                ProNode_Mine.Find("Name").gameObject.SetActive(hasMine);
+                ProNode_Mine.Find("Name").gameObject.SetActive(hasMine && ProNode.IsOnProduce);
                 ProNode_Mine.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textChangeMine;
                 #endregion
 
                 #region Product
-                int mineCnt = ProNode.MineDatas?.Count ?? 0;
+                int mineCnt = ProNode.MineDataItemIDs?.Count ?? 0;
                 for (int i = 0; i < mineCnt; i++)
                 {
                     Transform mine = ProductBtnList.GetBtn(i).transform;
                     string productID = ProNode.DataContainer.GetID(i);
                     int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
+                    int stackMax = ProNode.MineStackMax;
+                    mine.Find("Icon").gameObject.SetActive(true);
                     if (!tempSprite.ContainsKey(productID))
                     {
                         tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -449,7 +465,11 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Worker.Find("Empty").gameObject.SetActive(!hasWorker);
                 ProNode_Worker.Find("Gender").gameObject.SetActive(hasWorker);
                 var onDuty = ProNode_Worker.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite["WorkerIcon"] : tempSprite[""];
+                if (hasWorker && !tempSprite.ContainsKey(Worker.Category.ToString()))
+                {
+                    tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
+                }
+                ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite[Worker.Category.ToString()] : tempSprite[""];
                 onDuty.text = hasWorker ? PanelTextContent.workerStatus[(int)Worker.Status] : PanelTextContent.textLack;
                 if (hasWorker)
                 {
@@ -475,7 +495,7 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Eff.Find("EffWorker").gameObject.SetActive(hasWorker);
                 if (hasWorker)
                 {
-                    ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite["WorkerIcon"];
+                    ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite[Worker.Category.ToString()];
                     ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
                 }
                 #endregion
@@ -488,7 +508,11 @@ namespace ProjectOC.ProNodeNS.UI
                     var worker = Workers[i];
                     var item = WorkerBtnList.GetBtn(i).transform;
                     // Icon
-                    item.Find("Icon").GetComponent<Image>().sprite = tempSprite["WorkerIcon"];
+                    if (!tempSprite.ContainsKey(worker.Category.ToString()))
+                    {
+                        tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
+                    }
+                    item.Find("Icon").GetComponent<Image>().sprite = tempSprite[worker.Category.ToString()];
                     // Bar1
                     var bar1 = item.Find("Bar1").GetComponent<Image>();
                     bar1.fillAmount = (float)worker.APCurrent / worker.APMax;
@@ -632,13 +656,14 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 ProNode_Mine.Find("Mask").GetComponent<Image>().fillAmount = 0;
             }
-            int mineCnt = ProNode.MineDatas?.Count ?? 0;
+            ProNode_Mine.Find("Name").gameObject.SetActive(ProNode.HasMine && ProNode.IsOnProduce);
+            int mineCnt = ProNode.MineDataItemIDs?.Count ?? 0;
             for (int i = 0; i < mineCnt; i++)
             {
                 Transform mine = ProductBtnList.GetBtn(i).transform;
                 string productID = ProNode.DataContainer.GetID(i);
                 int stackAll = ProNode.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                int stackMax = ProNode.MineStackMax * ProNode.MineDatas[i].GainNum;
+                int stackMax = ProNode.MineStackMax;
                 if (!tempSprite.ContainsKey(productID))
                 {
                     tempSprite[productID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(productID);
@@ -670,7 +695,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
-                ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite["WorkerIcon"];
+                ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = tempSprite[Worker.Category.ToString()];
                 ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + Worker.GetEff(ProNode.ExpType).ToString() + "%";
 
                 var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();

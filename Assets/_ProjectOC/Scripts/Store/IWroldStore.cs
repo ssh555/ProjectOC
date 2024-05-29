@@ -14,7 +14,7 @@ namespace ProjectOC.StoreNS
         {
             if (isFirstBuild)
             {
-                ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, Classification.Category2, Classification.Category4 - 1);
+                ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, Classification.Category4 - 1);
             }
             if (oldPos != newPos)
             {

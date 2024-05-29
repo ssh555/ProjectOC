@@ -113,6 +113,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //TODO: 共鸣轮建筑存在时只隐藏不销毁
             this.gameObject.SetActive(false);
             this.Exit();
+            ResonanceWheel_sub1Instance = null;
             this.objectPool.OnDestroy();
             ClearTemp();
             isInitPool = false;
@@ -745,7 +746,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + WorkerCategory.Random));
             }
             );
-            Synchronizer synchronizer = new Synchronizer(2, () => {isInitPool = true;Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(6, () => {isInitPool = true;Refresh(); });
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
                 synchronizer.Check();
@@ -756,7 +757,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ResonanceWheel_sub1Instance = (handle.Result as GameObject).GetComponent<ResonanceWheel_sub1>();
                 synchronizer.Check();
             });
-
             base.InitObjectPool();
         }
         #endregion

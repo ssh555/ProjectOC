@@ -441,7 +441,6 @@ namespace ML.Engine.BuildingSystem.UI
                 var tPrefab = this.objectPool.GetNextObject("SlotPool", Slots);
                 int needNum = raw.num;
                 int haveNum = PlayerInventory.GetItemAllNum(raw.id);
-                Debug.Log(tPrefab);
                 tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
                 if (needNum > haveNum)
                 {

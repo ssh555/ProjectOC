@@ -527,7 +527,7 @@ namespace ProjectOC.Input
                     ""name"": ""SelectGrid"",
                     ""type"": ""Value"",
                     ""id"": ""4aa17cd2-b005-4617-9f65-3568ffd468a7"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -3431,6 +3431,133 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""IslandRudder"",
+            ""id"": ""99f20df0-00a5-4b83-83e4-8a8b30b1750e"",
+            ""actions"": [
+                {
+                    ""name"": ""ChangeMapLayer"",
+                    ""type"": ""Button"",
+                    ""id"": ""a51010dd-98fe-4464-9b0c-2e92255cc6a4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""4b1d93cf-b568-4716-8bd3-5697a3286282"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3faec52f-00d5-4132-9f8a-527f50a131c8"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""1dbc777f-6960-4c7d-ad74-7bb33237df03"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""55237fd8-d4fc-45fd-8c7b-d3adf2c8f1d6"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1f186733-41e5-418c-8061-4d8a5e1e828e"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""c3dd98f0-2704-4143-ab57-c7c8e8ed94e1"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3f4907da-5ded-4966-a22a-f398352f142f"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""917e06da-59e1-4cd8-b523-3b679125f6b3"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5753c212-5781-49e6-b7c8-e8277f72f71f"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2489ba20-26b1-43ac-9758-ba79152491eb"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeMapLayer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3533,6 +3660,9 @@ namespace ProjectOC.Input
             // SmallMap
             m_SmallMap = asset.FindActionMap("SmallMap", throwIfNotFound: true);
             m_SmallMap_SwichBtn = m_SmallMap.FindAction("SwichBtn", throwIfNotFound: true);
+            // IslandRudder
+            m_IslandRudder = asset.FindActionMap("IslandRudder", throwIfNotFound: true);
+            m_IslandRudder_ChangeMapLayer = m_IslandRudder.FindAction("ChangeMapLayer", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -4748,6 +4878,52 @@ namespace ProjectOC.Input
             }
         }
         public SmallMapActions @SmallMap => new SmallMapActions(this);
+
+        // IslandRudder
+        private readonly InputActionMap m_IslandRudder;
+        private List<IIslandRudderActions> m_IslandRudderActionsCallbackInterfaces = new List<IIslandRudderActions>();
+        private readonly InputAction m_IslandRudder_ChangeMapLayer;
+        public struct IslandRudderActions
+        {
+            private @PlayerInput m_Wrapper;
+            public IslandRudderActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ChangeMapLayer => m_Wrapper.m_IslandRudder_ChangeMapLayer;
+            public InputActionMap Get() { return m_Wrapper.m_IslandRudder; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(IslandRudderActions set) { return set.Get(); }
+            public void AddCallbacks(IIslandRudderActions instance)
+            {
+                if (instance == null || m_Wrapper.m_IslandRudderActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_IslandRudderActionsCallbackInterfaces.Add(instance);
+                @ChangeMapLayer.started += instance.OnChangeMapLayer;
+                @ChangeMapLayer.performed += instance.OnChangeMapLayer;
+                @ChangeMapLayer.canceled += instance.OnChangeMapLayer;
+            }
+
+            private void UnregisterCallbacks(IIslandRudderActions instance)
+            {
+                @ChangeMapLayer.started -= instance.OnChangeMapLayer;
+                @ChangeMapLayer.performed -= instance.OnChangeMapLayer;
+                @ChangeMapLayer.canceled -= instance.OnChangeMapLayer;
+            }
+
+            public void RemoveCallbacks(IIslandRudderActions instance)
+            {
+                if (m_Wrapper.m_IslandRudderActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IIslandRudderActions instance)
+            {
+                foreach (var item in m_Wrapper.m_IslandRudderActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_IslandRudderActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public IslandRudderActions @IslandRudder => new IslandRudderActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -4862,6 +5038,10 @@ namespace ProjectOC.Input
         public interface ISmallMapActions
         {
             void OnSwichBtn(InputAction.CallbackContext context);
+        }
+        public interface IIslandRudderActions
+        {
+            void OnChangeMapLayer(InputAction.CallbackContext context);
         }
     }
 }

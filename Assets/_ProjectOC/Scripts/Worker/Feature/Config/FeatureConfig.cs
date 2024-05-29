@@ -46,6 +46,9 @@ namespace ProjectOC.WorkerNS
         [LabelText("增减词条权重")]
         public List<int> FeatureOdds;
 
+        [LabelText("隐兽种类对应的词条ID")]
+        public List<CategoryFeature> CategoryFeatureList;
+
         public FeatureConfig(FeatureConfig config)
         {
             FeatTransCostItemID = config.FeatTransCostItemID;
@@ -67,6 +70,15 @@ namespace ProjectOC.WorkerNS
             FeatureMax.AddRange(config.FeatureMax);
             FeatureOdds = new List<int>();
             FeatureOdds.AddRange(config.FeatureOdds);
+            CategoryFeatureList = new List<CategoryFeature>();
+            CategoryFeatureList.AddRange(config.CategoryFeatureList);
         }
+    }
+
+    [System.Serializable]
+    public struct CategoryFeature
+    {
+        public WorkerCategory category;
+        public string feature;
     }
 }

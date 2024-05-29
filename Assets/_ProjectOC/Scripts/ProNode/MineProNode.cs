@@ -23,7 +23,9 @@ namespace ProjectOC.ProNodeNS
         [LabelText("是否有矿"), ReadOnly]
         public bool HasMine => MineDatas != null && MineDatas.Count > 0;
         [LabelText("矿"), ReadOnly, NonSerialized]
-        public List<MineSystemData.MineData> MineDatas;
+        public List<MineSystemData.MineData> MineDatas = new List<MineSystemData.MineData>();
+        [LabelText("矿对应的物品ID,不超过3个"), ReadOnly]
+        public List<string> MineDataItemIDs = new List<string>();
 
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
         public WorkerNS.SkillType ExpType = WorkerNS.SkillType.Collect;
@@ -49,11 +51,18 @@ namespace ProjectOC.ProNodeNS
                     MineDatas.AddRange(mines);
                     List<DataNS.IDataObj> datas = new List<DataNS.IDataObj>();
                     List<int> dataCapacitys = new List<int>();
+                    HashSet<string> itemIDs = new HashSet<string>();
                     for (int i = 0; i < MineDatas.Count; i++)
                     {
-                        dataCapacitys.Add(MineDatas[i].GainNum * MineStackMax);
-                        datas.Add(new DataNS.ItemIDDataObj(MineDatas[i].MineID));
-                        StackReserves.Add(0);
+                        string id = MineDatas[i].GainItems.id;
+                        if (!itemIDs.Contains(id))
+                        {
+                            itemIDs.Add(id);
+                            dataCapacitys.Add(MineStackMax);
+                            MineDataItemIDs.Add(id);
+                            datas.Add(new DataNS.ItemIDDataObj(id));
+                            StackReserves.Add(0);
+                        }
                         MineDatas[i].RegisterProNode();
                     }
                     ResetData(datas, dataCapacitys);
@@ -73,13 +82,14 @@ namespace ProjectOC.ProNodeNS
                 }
                 MineDatas.Clear();
             }
+            MineDataItemIDs.Clear();
             StackReserves.Clear();
         }
         protected void OnContainerDataChangeEventForMineData()
         {
             if (HasMine)
             {
-                for (int i = 0; i < MineDatas.Count; i++)
+                for (int i = 0; i < MineDataItemIDs.Count; i++)
                 {
                     int cur = StackReserves[i] + (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(i), false) 
                         - DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
@@ -127,13 +137,20 @@ namespace ProjectOC.ProNodeNS
             {
                 if (!(HaveWorker && Worker.IsOnProNodeDuty && !Worker.HaveFeatSeat)) { return false; }
                 bool flag = true;
-                for (int i = 0; i < MineDatas.Count; i++)
+                for (int i = 0; i < MineDataItemIDs.Count; i++)
                 {
                     int stackAll = DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                    if (stackAll < MineStackMax * MineDatas[i].GainNum && MineDatas[i].RemianMineNum > 0)
+                    if (stackAll < MineStackMax)
                     {
-                        flag = false;
-                        break;
+                        for (int j = 0; j < MineDatas.Count; j++)
+                        {
+                            if (MineDatas[j].GainItems.id == MineDataItemIDs[i] && MineDatas[j].RemianMineNum > 0)
+                            {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (!flag) { break; }
                     }
                 }
                 if (flag) { return false; }
@@ -156,18 +173,24 @@ namespace ProjectOC.ProNodeNS
         }
         protected override void EndActionForProduce()
         {
-            for (int i = 0; i < MineDatas.Count; i++)
+            for (int i = 0; i < MineDataItemIDs.Count; i++)
             {
                 int stackAll = DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll);
-                int gainNum = MineDatas[i].GainNum;
-                if (stackAll < MineStackMax * MineDatas[i].GainNum && MineDatas[i].Consume())
+                if (stackAll < MineStackMax)
                 {
-                    DataContainer.ChangeAmount(i, gainNum, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
-                    int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(i), false);
-                    int stack = DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
-                    if (stack >= StackReserves[i] + needAssignNum + MineTransThreshold * gainNum)
+                    for (int j = 0; j < MineDatas.Count; j++)
                     {
-                        StackReserves[i] = stack - needAssignNum;
+                        if (MineDatas[j].GainItems.id == MineDataItemIDs[i] && MineDatas[j].Consume()) 
+                        {
+                            int gainNum = MineDatas[j].GainItems.num;
+                            DataContainer.ChangeAmount(i, gainNum, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
+                            int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(i), false);
+                            int stack = DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
+                            if (stack >= StackReserves[i] + needAssignNum + MineTransThreshold * gainNum)
+                            {
+                                StackReserves[i] = stack - needAssignNum;
+                            }
+                        }
                     }
                 }
             }

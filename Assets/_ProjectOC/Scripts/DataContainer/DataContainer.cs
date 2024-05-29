@@ -44,6 +44,12 @@ namespace ProjectOC.DataNS
             ResetIndexDict();
             OnDataChangeEvent?.Invoke();
         }
+        public void Clear()
+        {
+            Array.Resize(ref Datas, 0);
+            ResetIndexDict();
+            OnDataChangeEvent?.Invoke();
+        }
         private void ResetIndexDict()
         {
             HashSet<string> keys = new HashSet<string>(IndexDict.Keys);

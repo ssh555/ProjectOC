@@ -4,6 +4,7 @@ using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
+using ProjectOC.ProNodeNS.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         base.OnExit();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
+        uIMineProNode.ProNode.ChangeMine(curMiningData);
     }                                                           
 
     protected override void Exit()
@@ -74,6 +76,8 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     }
     protected override void UnregisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Disable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
         // 返回
@@ -84,11 +88,13 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     protected override void RegisterInput()
     {
+        ProjectOC.Input.InputManager.PlayerInput.IslandRudder.Enable();
+
         ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
+        this.MapLayerUIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.IslandRudder.ChangeMapLayer, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -113,9 +119,11 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     #region 光标位置检测
     private RectTransform referenceRectTransform;
-    private int PreSelectRegion = -1;
+    private int preSelectRegion = -1;
+    public int PreSelectRegion { get { return preSelectRegion; }  }
     [ShowInInspector]
-    private int CurSelectRegion = -1;
+    private int curSelectRegion = -1;
+    public int CurSelectRegion { get { return  curSelectRegion; } }
 
     private void DetectMainIslandCurRegion()
     {
@@ -129,16 +137,15 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         Vector2Int gridPos = new Vector2Int(
         Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
         Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
-        CurSelectRegion = MM.BigMapTableData[gridPos.y, gridPos.x];
-        if (PreSelectRegion != CurSelectRegion)
+        curSelectRegion = MM.BigMapTableData[gridPos.y, gridPos.x];
+        if (preSelectRegion != curSelectRegion)
         {
-            PreSelectRegion = CurSelectRegion;
-            MM.ChangeCurMineralMapData(CurSelectRegion);
+            preSelectRegion = curSelectRegion;
+            MM.ChangeCurMineralMapData(curSelectRegion);
             this.Refresh();
         }
     }
     #endregion
-
 
     #region UI
 
@@ -166,6 +173,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     private List<MineData> curMiningData = new List<MineData>();
     [ShowInInspector]
     public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
+
+    private UIMineProNode uIMineProNode;
+    public UIMineProNode UIMineProNode { get {  return uIMineProNode; } set { uIMineProNode = value; } }
     #endregion
 
     public override void Refresh()
@@ -181,7 +191,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
-            NormalRegions.GetChild(i).Find("Selected").gameObject.SetActive(isUnlocked && i + 1 == CurSelectRegion);
+            NormalRegions.GetChild(i).Find("Selected").gameObject.SetActive(isUnlocked && i + 1 == curSelectRegion);
         }
         #endregion
     }
@@ -192,7 +202,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         MM.GridScale = this.cursorNavigation.CurZoomscale;
     }
     #endregion
-
 
     #region Resource
     #region TextContent
@@ -217,7 +226,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         MapLayerUIBtnList.OnSelectButtonChanged += () =>
         {
             MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
-            MM.ChangeCurMineralMapData(CurSelectRegion);
+            MM.ChangeCurMineralMapData(curSelectRegion);
             this.Refresh();
         };
     }
