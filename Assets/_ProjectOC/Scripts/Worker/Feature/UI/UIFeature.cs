@@ -437,7 +437,8 @@ namespace ProjectOC.WorkerNS.UI
                 feat.Find("Icon").gameObject.SetActive(false);
                 feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                 feat.Find("IconNew").gameObject.SetActive(false);
-                feat.Find("IconCorrect").gameObject.SetActive(false);
+                feat.Find("IconAllow").gameObject.SetActive(false);
+                feat.Find("IconBan").gameObject.SetActive(false);
                 if (IsSeeInfo)
                 {
                     feat.Find("DescIcon").gameObject.SetActive(false);
