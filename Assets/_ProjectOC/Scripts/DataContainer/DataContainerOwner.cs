@@ -30,6 +30,7 @@ namespace ProjectOC.DataNS
                     kv.Key.AddToPlayerInventory(kv.Value);
                 }
             }
+            DataContainer.Clear();
         }
         public void ResetData(List<IDataObj> datas, List<int> dataCapacity)
         {
