@@ -63,6 +63,14 @@ namespace ProjectOC.MineSystem
         [ShowInInspector]
         private MineralMapData mineralMapData;
         public MineralMapData MineralMapData { get { return mineralMapData; } }
+
+        /// <summary>
+        ///当前矿圈所圈住的矿物集合
+        /// </summary>
+        private List<MineData> curMiningData = new List<MineData>();
+        [ShowInInspector]
+        public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
+
         /// <summary>
         /// 记录所有生产节点的矿圈位置数据  小地图索引-> 该小地图的PlaceCircleData字典
         /// </summary>
@@ -391,6 +399,11 @@ namespace ProjectOC.MineSystem
                 lastRegionNum = curRegionNum;
             }
         }
+
+
+        [ShowInInspector]
+        private int smallMapcurSelectRegion = -1;
+        public int SmallMapCurSelectRegion { set { smallMapcurSelectRegion = value; } }
         public int DetectRegion(Vector3 pos)
         {
             Vector3 worldPosition = pos;
@@ -505,15 +518,29 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 获取矿圈数据
         /// </summary>
-        public PlaceCircleData GetMineralCircleData(string ProNodeId,int curSlectNum)
+        public PlaceCircleData GetMineralCircleData(string ProNodeId,bool isCheckSmallMapcurSelectRegion = true)
+        {
+            
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
+                if ((isCheckSmallMapcurSelectRegion && placeCircleData.SmallMapTuple.Item1 == smallMapcurSelectRegion) || (!isCheckSmallMapcurSelectRegion)) 
+                {
+                    return placeCircleData;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取矿圈数据
+        /// </summary>
+        public PlaceCircleData GetMineralCircleData(string ProNodeId)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
                 PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
-                if (placeCircleData.SmallMapTuple == (curSlectNum, curMapLayerIndex))
-                {
-                    return this.PlacedCircleDataDic[ProNodeId];
-                }
+                return this.PlacedCircleDataDic[ProNodeId];
             }
             return null;
         }

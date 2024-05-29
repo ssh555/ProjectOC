@@ -97,8 +97,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         (this.cursorNavigation.UIBtnList.Parent as RectTransform).anchoredPosition = localPosition;
 
         //初始化矿圈位置信息
-        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId,selectMineralSourcesPanel.CurSelectRegion);
-        if(placeCircleData != null)
+        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId, isCheckRegionNum);
+        if (placeCircleData != null)
         {
             this.PlacedCircle.gameObject.SetActive(placeCircleData.isPlacedCircle);
             this.PlacedCircle.anchoredPosition = placeCircleData.PlaceCirclePosition;
@@ -192,16 +192,17 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         {
             this.PlacedCircle.gameObject.SetActive(true);
         }
-        selectMineralSourcesPanel.CurMiningData.Clear();
+        MM.CurMiningData.Clear();
         foreach (var (btn, minedata) in BtnToMineDataDic)
         {
             bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
             if(isInCircle)
             {
-                selectMineralSourcesPanel.CurMiningData.Add(minedata);
+                MM.CurMiningData.Add(minedata);
             }
         }
+
     }
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -212,6 +213,11 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 
     #region UI
     #region UI对象引用
+    //true代表正常进入 false代表已有采矿圈进入
+    private bool isCheckRegionNum = true;
+    public bool IsCheckRegionNum { set { isCheckRegionNum = value; } }
+
+
     private MineSystemManager MM => LocalGameManager.Instance.MineSystemManager;
     [ShowInInspector]
     private GraphCursorNavigation cursorNavigation;
@@ -263,7 +269,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     bool isInitObjectPool = false;
     protected override void InitObjectPool()
     {
-        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab", (handle) => { isInitObjectPool = true; });
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "MineInfoPool", 5, "Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_MineInfo.prefab", (handle) => { isInitObjectPool = true; UpdateMineInfo(); });
         base.InitObjectPool();
     }
     #endregion

@@ -145,14 +145,13 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-                /*                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
-                                {
-                                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
+                {
+                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
-                                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
-                                };*/
-                Invoke("PushIslandRudderPanel", 0.1f);
+                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
+                };
             }
             );
             
@@ -239,15 +238,6 @@ namespace ProjectOC.Player.UI
                 
             }
         }
-
-        private void PushIslandRudderPanel()
-        {
-            IslandRudderPanel islandRudderPanel = LocalGameManager.Instance.MineSystemManager.IslandRudderPanelInstance;
-            islandRudderPanel.gameObject.SetActive(true);
-            islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
-        }
-
         #endregion
 
         #region UI对象引用

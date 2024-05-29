@@ -95,7 +95,7 @@ namespace ProjectOC.Order
         #region 策划配置项
         /*        [LabelText("紧急订单刷新时间间隔（现实时间的min为单位）")]*/
         [ShowInInspector]
-        public float UrgentRefreshInterval = 0.1f;
+        public float UrgentRefreshInterval = 2f;
         #endregion
 
         #region Base
