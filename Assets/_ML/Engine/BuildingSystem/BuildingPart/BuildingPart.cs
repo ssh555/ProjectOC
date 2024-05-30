@@ -95,9 +95,8 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 //{
                 //    this.CanPlaceInPlaceMode = false;
                 //}
-                
                 Material mat = BuildingManager.Instance.GetBuldingMat(mode);
-                if(mat != null)
+                if (mat != null)
                 {
                     foreach (var kv in this.rowMat)
                     {
