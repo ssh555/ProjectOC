@@ -159,7 +159,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             bool isCommitSuccess = OrderManager.Instance.CommitOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             if(isCommitSuccess)
             {
-                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
+                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder, () => { Refresh(); });
             }
         }
     }

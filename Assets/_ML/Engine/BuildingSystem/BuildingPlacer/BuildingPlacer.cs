@@ -259,7 +259,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.SelectedPartInstance.OnChangePlaceEvent(this.SelectedPartInstance.gameObject.transform.position, this.SelectedPartInstance.gameObject.transform.position);
                 this.OnPlaceModeSuccess?.Invoke(this.SelectedPartInstance);
 
-
                 this.SelectedPartInstance = tmp;
                 return true;
             }
@@ -622,7 +621,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         protected float interactCheckInterval = 0.1f;
         private float _curTimer = 0f;
 
-        [HideInInspector]
+        [ShowInInspector]
         public List<IBuildingPart> InteractBPartList = new List<IBuildingPart>();
 
         /// <summary>
@@ -683,7 +682,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             if(offset != 0)
             {
                 int index = offset > 0 ? 1 : -1;
-                index = (this.InteractBPartList.IndexOf(this.SelectedPartInstance) + index) % this.InteractBPartList.Count;
+                index = (this.InteractBPartList.IndexOf(this.SelectedPartInstance) + index + this.InteractBPartList.Count) % this.InteractBPartList.Count;
                 this.SelectedPartInstance = this.InteractBPartList[index];
             }
         }
