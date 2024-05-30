@@ -103,7 +103,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<LocalGameManager>();
 
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-                //GM?.UnregisterLocalManager<Order.OrderManager>();
+                GM?.UnregisterLocalManager<Order.OrderManager>();
                 //���ܻ���ǰע�����ر���������ʱ��
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
                 GM?.UnregisterLocalManager<Dialog.DialogManager>();
@@ -125,7 +125,7 @@ namespace ProjectOC.ManagerNS
             //Ҫ��ȡ���ģ�ͣ����ں���
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
-            //GM.RegisterLocalManager(OrderManager);
+            GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos����

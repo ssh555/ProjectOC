@@ -93,7 +93,7 @@ namespace ProjectOC.MainInteract.UI
                         // 实例化
                         panel = handle.Result.GetComponent<LoadingScenePanel>();
 
-                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                        panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                         panel.OnEnter();
 
@@ -133,7 +133,7 @@ namespace ProjectOC.MainInteract.UI
                         // 实例化
                         panel = handle.Result.GetComponent<LoadingScenePanel>();
 
-                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                        panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                         panel.OnEnter();
 
@@ -166,7 +166,7 @@ namespace ProjectOC.MainInteract.UI
                     // 实例化
                     var panel = handle.Result.GetComponent<OptionPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };

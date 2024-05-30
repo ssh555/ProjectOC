@@ -24,7 +24,7 @@ namespace ML.Engine.InventorySystem
 
         private void Start()
         {
-            Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+            Image.transform.SetParent(Manager.GameManager.Instance.UIManager.NormalPanel, false);
             Image.enabled = false;
             Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
             this.enabled = false;

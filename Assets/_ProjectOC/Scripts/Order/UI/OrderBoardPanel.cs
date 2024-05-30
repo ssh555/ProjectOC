@@ -35,7 +35,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         this.KT_ViewMoreInformation = this.KeyTips.Find("KT_ViewMoreInformation");
         this.KT_CancelMoreInformation = this.KeyTips.Find("KT_CancelMoreInformation");
         this.KT_Back = this.KeyTips.Find("KT_Back");
-
     }
 
     #endregion
@@ -67,7 +66,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         base.Exit();
         ClearTemp();
     }
-
     #endregion
 
     #region Internal
@@ -160,7 +158,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             bool isCommitSuccess = OrderManager.Instance.CommitOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             if(isCommitSuccess)
             {
-                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
+                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder, () => { Refresh(); });
             }
         }
     }
@@ -222,7 +220,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         
     }
     #endregion
-
 
     #region UI
     #region temp
@@ -346,17 +343,19 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             //当前所选氏族的ID
             string CurSelectedClanID = this.ClanBtnList.GetCurSelected().name;
 
-            if(isNeedRefreshOrderUrgentDelegation)
+            if(isNeedRefreshOrderUrgentDelegation && !UrgentBtnListIsBusy)
             {
                 Synchronizer synchronizer = new Synchronizer(2 , () =>
                 {
                     this.OrderDelegationUIBtnListContainer.InitBtnlistInfo();
                     this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
                     this.OrderDelegationUIBtnListContainer.CurSelectUIBtnList.GetCurSelected()?.OnSelect(null);
+                    UrgentBtnListIsBusy = false;
                 });
 
                 this.OrderDelegationUIBtnListContainer.UIBtnLists[0].DeleteAllButton(() =>
                 {
+                    UrgentBtnListIsBusy = true;
                     #region 紧急订单槽
 
                     foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Urgent))
@@ -525,18 +524,20 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         #region AcceptedOrder
         if(FunctionIndex == 0)
         {
-            if(isNeedRefreshAcceptedOrder)
+            if(isNeedRefreshAcceptedOrder && !AcceptedOrderBtnListIsBusy)
             {
                 OrderManager.Instance.RefreshAcceptedList();
                 Synchronizer synchronizer = new Synchronizer(OrderManager.Instance.AcceptedOrders.Count, () =>
                 {
                     this.AcceptedOrderBtnList.InitBtnInfo();
                     this.AcceptedOrderBtnList.InitSelectBtn();
+                    AcceptedOrderBtnListIsBusy = false;
                 });
 
                 this.AcceptedOrderBtnList.EnableBtnList();
                 this.AcceptedOrderBtnList.DeleteAllButton(() =>
                 {
+                    AcceptedOrderBtnListIsBusy = true;
                     foreach (var acceptedOrder in OrderManager.Instance.AcceptedOrders)
                     {
                         OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(acceptedOrder);
@@ -701,7 +702,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     }
     #endregion
 
-
     #region Resource
 
     #region TextContent
@@ -736,10 +736,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     //订单委托 紧急订单 常规订单
     [ShowInInspector]
     private UIBtnListContainer OrderDelegationUIBtnListContainer;
+    private bool UrgentBtnListIsBusy = false;
 
     [ShowInInspector]
     //已承接订单
     private UIBtnList AcceptedOrderBtnList;
+    private bool AcceptedOrderBtnListIsBusy = false;
 
     protected override void InitBtnInfo()
     {

@@ -61,9 +61,9 @@ namespace ML.Engine.UI
 
         protected override void RegisterInput()
         {
-            this.UIBtnList.BindInputAction("ConfirmBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(); });
+            this.UIBtnList.BindInputAction("ConfirmBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false); });
 
-            this.UIBtnList.BindInputAction("CancleBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Back, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(); });
+            this.UIBtnList.BindInputAction("CancleBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Back, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(true); });
         }
 
         #endregion
