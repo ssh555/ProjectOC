@@ -53,7 +53,10 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void KeyCom_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            monoBM.PopPanel();
+            if(needPop)
+            {
+                monoBM.PopPanel();
+            }
         }
 
         private void PasteOutLook_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -68,11 +71,15 @@ namespace ML.Engine.BuildingSystem.UI
             BuildingManager.Instance.CopyBPartMaterial(this.Placer.SelectedPartInstance);
         }
 
+        private bool needPop = true;
         private void CopyBuild_perfomed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var bpart = BuildingManager.Instance.GetOneBPartCopyInstance(this.Placer.SelectedPartInstance);
-            if (bpart == this.Placer.SelectedPartInstance)
+            if (bpart != null)
             {
+                needPop = false;
+                this.Placer.SelectedPartInstance = bpart;
+                BM.Mode = BuildingMode.Place;
                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
             }
         }

@@ -69,7 +69,7 @@ namespace ProjectOC.MainInteract.UI
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -94,7 +94,7 @@ namespace ProjectOC.MainInteract.UI
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -110,7 +110,7 @@ namespace ProjectOC.MainInteract.UI
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -136,7 +136,7 @@ namespace ProjectOC.MainInteract.UI
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -165,7 +165,7 @@ namespace ProjectOC.MainInteract.UI
                             // 实例化
                             loadingpanel = handle.Result.GetComponent<LoadingScenePanel>();
 
-                            loadingpanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                            loadingpanel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                             loadingpanel.OnEnter();
 
@@ -186,7 +186,7 @@ namespace ProjectOC.MainInteract.UI
                             // 实例化
                             var panel = handle.Result.GetComponent<StartMenuPanel>();
 
-                            panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                            panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                             GameManager.Instance.UIManager.ChangeBotUIPanel(panel);
 

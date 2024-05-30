@@ -172,7 +172,7 @@ namespace ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 var panel = handle.Result.GetComponent<UIPinchRacePanel>();
-                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
         }
@@ -182,7 +182,7 @@ namespace ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 var panel = handle.Result.GetComponent<UICustomRacePanel>();
-                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
         }
@@ -197,7 +197,7 @@ namespace ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 var panel = handle.Result.GetComponent<UIPinchFacePanel>();
-                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
 
                 panel.InitRaceData(_raceData);

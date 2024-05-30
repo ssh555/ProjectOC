@@ -73,7 +73,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("是否正在制作物品"), ShowInInspector, ReadOnly]
         public bool IsOnProduce => timerForProduce != null && !timerForProduce.IsStoped;
         [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
-        public ProNodeState State => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy;
+        public ProNodeState State => IsOnProduce ? ProNodeState.Production : ((DataContainer.GetCapacity() > 0 || HasRecipe) ? ProNodeState.Stagnation : ProNodeState.Vacancy);
         #endregion
 
         #region Table Property

@@ -11,7 +11,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("提供的工作效率"), ReadOnly]
         public int Eff;
         [LabelText("技能学习速度"), ReadOnly]
-        public float ExpRate;
+        public int ExpRate;
         [LabelText("当前经验值"), ReadOnly]
         public int Exp;
         [LabelText("技能等级"), ReadOnly]
@@ -20,7 +20,7 @@ namespace ProjectOC.WorkerNS
         public Skill(SkillType type, int level=0)
         {
             SkillType = type;
-            ExpRate = 1;
+            ExpRate = 100;
             Eff = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.SkillEff;
             Eff = type != SkillType.Transport ? Eff : Eff / 10;
             Exp = 0;
@@ -39,7 +39,7 @@ namespace ProjectOC.WorkerNS
         }
         public Skill AlterExp(int value)
         {
-            int cur = (int)(Exp + value * ExpRate);
+            int cur = (int)(Exp + value * ExpRate / 100f);
             cur = cur >= 0 ? cur : 0;
             List<int> expToLevel = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpToLevel;
             Exp = System.Math.Min(cur, expToLevel[expToLevel.Count - 1]);

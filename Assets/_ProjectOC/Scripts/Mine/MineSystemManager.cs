@@ -1,27 +1,17 @@
 using ML.Engine.Manager;
-using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
 using Newtonsoft.Json;
-using ProjectOC.ManagerNS;
-using ProjectOC.Order;
-using ProjectOC.Player;
 using ProjectOC.ProNodeNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.U2D;
 using static ProjectOC.MineSystem.MineSystemData;
-using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.MineSystem
 {
@@ -66,17 +56,21 @@ namespace ProjectOC.MineSystem
         /// </summary>
         [ShowInInspector]
         private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
-        private int curRegionNum = -1;
-        [ShowInInspector]
-        public int CurRegionNum { get { return curRegionNum; }}
-        [ShowInInspector]
-        private int lastRegionNum = -1;
+
         #endregion
 
         #region SmallMap
         [ShowInInspector]
         private MineralMapData mineralMapData;
         public MineralMapData MineralMapData { get { return mineralMapData; } }
+
+        /// <summary>
+        ///当前矿圈所圈住的矿物集合
+        /// </summary>
+        private List<MineData> curMiningData = new List<MineData>();
+        [ShowInInspector]
+        public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
+
         /// <summary>
         /// 记录所有生产节点的矿圈位置数据  小地图索引-> 该小地图的PlaceCircleData字典
         /// </summary>
@@ -98,6 +92,11 @@ namespace ProjectOC.MineSystem
                 //主岛移动触发ui refresh
                 if (mainIslandData.IsMoving && !isReachTarget)
                 {
+                    MainIslandRectTransform.anchoredPosition = mainIslandData.CurPos;
+                    if(isRectTransformInit)
+                    {
+                        DetectMainIslandCurRegion();
+                    }
                     RefreshUI?.Invoke();
                 }
             }
@@ -115,10 +114,17 @@ namespace ProjectOC.MineSystem
         public static MineSystemManager Instance { get { return instance; } }
 
         private static MineSystemManager instance;
+
+        #region 岛舵台UI
+        private IslandRudderPanel islandRudderPanelInstance;
+        public IslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
+        private GameObject bigMapInstance;
+        public GameObject BigMapInstance { get { return bigMapInstance; } }
+        #endregion 
+
         public void Init()
         {
             #region 异步初始化
-
             synchronizerInOrder = new SynchronizerInOrder(5, () => {
                 for (int i = 0; i < this.mapRegionDatas.Count; i++)
                 {
@@ -157,11 +163,43 @@ namespace ProjectOC.MineSystem
             synchronizerInOrder.StartExecution();
 
             LoadTechAtlas();
+
+            #region 岛舵台UI
+            //初始化主岛检测
+
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
+            {
+                islandRudderPanelInstance = handle.Result.GetComponent<IslandRudderPanel>();
+                islandRudderPanelInstance.gameObject.SetActive(false);
+                MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
+                ColliderRadiu = MainIslandRectTransform.GetComponent<CircleCollider2D>().radius;
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
+                {
+                    bigMapInstance = handle.Result;
+                    var BigMapInstanceTrans = bigMapInstance.transform;
+                    MapRegionRectTransform = BigMapInstanceTrans.Find("NormalRegion") as RectTransform;
+                    var cursorNavigation = islandRudderPanelInstance.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
+                    BigMapInstanceTrans.SetParent(cursorNavigation.Content.Find("BigMap"));
+                    BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+
+                    cursorNavigation.CurZoomscale = GridScale;
+                    cursorNavigation.NavagationSpeed = MineSystemConfig.IslandRudderSensitivity;
+                    cursorNavigation.ZoomSpeed = MineSystemConfig.IslandRudderZoomSpeed;
+                    cursorNavigation.ZoomInLimit = MineSystemConfig.IslandRudderZoomInLimit;
+                    cursorNavigation.ZoomOutLimit = MineSystemConfig.IslandRudderZoomOutLimit;
+
+                    isRectTransformInit = true;
+                    DetectMainIslandCurRegion();
+                };
+            };
+            #endregion
+
+
             #endregion
 
             #region 同步初始化
             //初始化大地图缩放比例
-            this.GridScale = (MineSystemConfig.ZoomInLimit - MineSystemConfig.ZoomOutLimit) * MineSystemConfig.InitZoomRate + MineSystemConfig.ZoomOutLimit; ;
+            this.GridScale = (MineSystemConfig.IslandRudderZoomInLimit - MineSystemConfig.IslandRudderZoomOutLimit) * MineSystemConfig.IslandRudderInitZoomRate + MineSystemConfig.IslandRudderZoomOutLimit; ;
 
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];
@@ -287,9 +325,15 @@ namespace ProjectOC.MineSystem
                 for (int i = 0; i < BlockRegion.childCount; i++)
                 {
                     var child = BlockRegion.GetChild(i);
-                    MapRegionData mapRegionData = new MapRegionData(child.name, true);
-                    IDToMapRegionDic.Add(child.name, mapRegionData);
-                    RegionNumToRegionDic.Add(0, mapRegionData);
+                    string regionNumstr = child.name.Split('_')[1];
+                    int regionNum;
+                    bool isRegionNum = int.TryParse(regionNumstr, out regionNum);
+                    if(isRegionNum)
+                    {
+                        MapRegionData mapRegionData = new MapRegionData(child.name, true);
+                        IDToMapRegionDic.Add(child.name, mapRegionData);
+                        RegionNumToRegionDic.Add(regionNum, mapRegionData);
+                    }
                 }
                 synchronizerInOrder.Check(2);
             };
@@ -319,6 +363,70 @@ namespace ProjectOC.MineSystem
         }
         #endregion
 
+        #region Internal
+        #region 主岛位置检测
+        private int curRegionNum = -1;
+        [ShowInInspector]
+        public int CurRegionNum { get { return curRegionNum; } }
+        [ShowInInspector]
+        private int lastRegionNum = -1;
+        private int CurColliderPointRegion = -1;
+        private int PreColliderPointRegion = -1;
+        private float ColliderRadiu;
+
+        private RectTransform MapRegionRectTransform;
+        private RectTransform MainIslandRectTransform;
+        private bool isRectTransformInit = false;
+
+        private void DetectMainIslandCurRegion()
+        {
+            PreColliderPointRegion = CurColliderPointRegion;
+            CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu);
+            if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion <= 0)
+            {
+                //障碍碰撞
+                UnlockMapRegion(CurColliderPointRegion);
+                return;
+            }
+            lastRegionNum = curRegionNum;
+            curRegionNum = DetectRegion(MainIslandRectTransform.position);
+            if(curRegionNum == -1)
+            {
+                //边界碰撞
+                mainIslandData.Reset();
+                curRegionNum = lastRegionNum;
+                return;
+            }
+
+            if (lastRegionNum != curRegionNum)
+            {
+                //进入新区域
+                UnlockMapRegion(curRegionNum);
+                lastRegionNum = curRegionNum;
+            }
+        }
+
+
+        [ShowInInspector]
+        private int smallMapcurSelectRegion = -1;
+        public int SmallMapCurSelectRegion { set { smallMapcurSelectRegion = value; } }
+        public int DetectRegion(Vector3 pos)
+        {
+            Vector3 worldPosition = pos;
+            Vector2 localPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(MapRegionRectTransform, worldPosition, null, out localPosition);
+            Vector2 referenceSize = MapRegionRectTransform.rect.size;
+            Vector2 anchorPosition = new Vector2(localPosition.x / referenceSize.x + 0.5f, localPosition.y / referenceSize.y + 0.5f);
+            anchorPosition = new Vector2(anchorPosition.x, 1 - anchorPosition.y);
+            int width = bigMapTableData.GetLength(0);
+            Vector2Int gridPos = new Vector2Int(
+            Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
+            Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
+            return bigMapTableData[gridPos.y, gridPos.x];
+        }
+        #endregion
+        #endregion
+
         #region External
         /// <summary>
         /// 设置导航点 返回true代表成功 返回false代表当前主岛在移动 isCancel表示是否打断目前路径
@@ -331,12 +439,10 @@ namespace ProjectOC.MineSystem
                 mainIslandData.IsMoving = true;
                 return true;
             }
-
             if (mainIslandData.IsMoving)
             {
                 return false;
             }
-
             mainIslandData.TargetPos = pos;
             mainIslandData.IsMoving = true;
             return true;
@@ -347,16 +453,21 @@ namespace ProjectOC.MineSystem
             if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return;
 
             //碰到障碍
-            if (RegionNum == 0)
+            if (RegionNum <= 0)
             {
                 mainIslandData.Reset();
                 curRegionNum = lastRegionNum;
-                return;
             }
-
-            lastRegionNum = curRegionNum;
-            curRegionNum = RegionNum;
+            else
+            {
+                lastRegionNum = curRegionNum;
+                curRegionNum = RegionNum;
+            }
             RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex] = true;
+            if(this.islandRudderPanelInstance.gameObject.activeInHierarchy)
+            {
+                this.islandRudderPanelInstance.Refresh();
+            }
         }
 
         public bool CheckRegionIsUnlocked(int RegionNum)
@@ -403,7 +514,7 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 生产节点销毁时调用 移除矿圈数据
         /// </summary>
-        public void RemoveMineralCircleData(Vector2 CirclePos, string ProNodeId)
+        public void RemoveMineralCircleData(string ProNodeId)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
@@ -414,15 +525,29 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 获取矿圈数据
         /// </summary>
-        public PlaceCircleData GetMineralCircleData(string ProNodeId,int curSlectNum)
+        public PlaceCircleData GetMineralCircleData(string ProNodeId,bool isCheckSmallMapcurSelectRegion = true)
+        {
+            
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
+                if ((isCheckSmallMapcurSelectRegion && placeCircleData.SmallMapTuple.Item1 == smallMapcurSelectRegion) || (!isCheckSmallMapcurSelectRegion)) 
+                {
+                    return placeCircleData;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 获取矿圈数据
+        /// </summary>
+        public PlaceCircleData GetMineralCircleData(string ProNodeId)
         {
             if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
             {
                 PlaceCircleData placeCircleData = this.PlacedCircleDataDic[ProNodeId];
-                if (placeCircleData.SmallMapTuple == (curSlectNum, curMapLayerIndex))
-                {
-                    return this.PlacedCircleDataDic[ProNodeId];
-                }
+                return this.PlacedCircleDataDic[ProNodeId];
             }
             return null;
         }

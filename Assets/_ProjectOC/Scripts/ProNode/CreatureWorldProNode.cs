@@ -9,7 +9,7 @@ namespace ProjectOC.ProNodeNS
         public override void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ProNode_UI/Prefab_ProNode_UI_CreatureProNodePanel.prefab",
-                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
                 {
                     UI.UICreatureProNode uiPanel = handle.Result.GetComponent<UI.UICreatureProNode>();
                     uiPanel.ProNode = RealProNode;

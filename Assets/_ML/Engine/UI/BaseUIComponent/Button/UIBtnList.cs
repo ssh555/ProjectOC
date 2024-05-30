@@ -13,9 +13,6 @@ using static ML.Engine.UI.UIBtnListContainerInitor;
 using static ML.Engine.UI.UIBtnListInitor;
 using static UnityEngine.InputSystem.InputAction;
 using ML.Engine.Utility;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using System.IO.Pipes;
-using UnityEngine.InputSystem.iOS;
 using Unity.VisualScripting;
 
 namespace ML.Engine.UI
@@ -37,6 +34,9 @@ namespace ML.Engine.UI
         private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//二维列表
 
         public List<List<SelectedButton>> GetTwoDimSelectedButtons { get { return TwoDimSelectedButtons; } }
+
+        private HashSet<CustomButton> customButtons = new HashSet<CustomButton>();
+
         protected int OneDimCnt = 0;
         public int BtnCnt { get { return OneDimCnt; } }
         protected int TwoDimH = 0;
@@ -54,7 +54,7 @@ namespace ML.Engine.UI
             {
                 if(value is CustomButton)
                 {
-                    //绑定PanelButton 的按键
+                    customButtons.Add(value as CustomButton);
                 }
 
                 _CurSelected = value;
@@ -939,7 +939,6 @@ namespace ML.Engine.UI
                 angle = angle + 360;
             }
 
-
             if (angle < 45 || angle > 315)
             {
                 //Debug.Log("MoveUPIUISelected " + this.isEnable);
@@ -1160,6 +1159,11 @@ namespace ML.Engine.UI
                         item.Key.Item1.canceled -= item.Value;
                         break;
                 }
+            }
+
+            foreach (var customButton in customButtons)
+            {
+                customButton.DeBindInput();
             }
 
         }
