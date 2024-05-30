@@ -48,13 +48,13 @@ namespace ProjectOC.PinchFace
                 {
                     CharacterModelPinch _modelPinch = playerCharacter.GetComponentInChildren<CharacterModelPinch>();
                     _modelPinch.ChangeType(PinchPartType3.HF_HairFront, 0);
-                    _modelPinch.ChangeType(PinchPartType3.HD_Dai, 0);
+                    // _modelPinch.ChangeType(PinchPartType3.HD_Dai, 0);
                     _modelPinch.ChangeType(PinchPartType3.HB_HairBack, 0);
                 }
             };
 
             //GeneratePinchRaceUI();
-            // GenerateCustomRaceUI();
+            //GenerateCustomRaceUI();
             // GeneratePinchFaceUI(); 
         }
 
@@ -77,7 +77,7 @@ namespace ProjectOC.PinchFace
         /// </summary>
         public void RegisterPinchPartType()
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
+            GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
             {
                 lock (pinchPartType3Dic)
                 {

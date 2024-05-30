@@ -45,18 +45,32 @@ namespace ML.Engine.Event
                 Debug.LogError("[TabelData Error] CheckBuild");
             }
             //Build_Interact_LifeDiversion_1
-            string buildingTypeStr = p1[0].Split("_")[2];
+            string[] idSplit = p1[0].Split("_");
+            string buildingTypeStr = idSplit[2];
             BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
-            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+            int _level = 1;
+            if (idSplit.Length == 4)
+            {
+                _level = int.Parse(idSplit[3]);
+            }
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType, _level);
 
+            
             return currentCount >= p2[0];
         }
 
         private string CheckBuildGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
-            string buildingTypeStr = (p1[0].Split("_"))[2];
-            BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
-            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+            string[] idSplit = p1[0].Split("_");
+            string buildingTypeStr = idSplit[2];
+            BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
+            int _level = 1;
+            if (idSplit.Length == 4)
+            {
+                _level = int.Parse(idSplit[3]);
+            }
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType, _level);
+            
             string _conditionText = s.Replace("&S1",currentCount.ToString());
             return _conditionText;
         }

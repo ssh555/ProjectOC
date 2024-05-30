@@ -1230,7 +1230,7 @@ namespace ML.Engine.BuildingSystem
             }
         }
 
-        public int GetBuildingCount(BuildingCategory2 _buildingType)
+        public int GetBuildingCount(BuildingCategory2 _buildingType,int level)
         {
             if (!buildingInstanceDic.ContainsKey(_buildingType))
             {
@@ -1238,7 +1238,21 @@ namespace ML.Engine.BuildingSystem
             }
             else
             {
-                return buildingInstanceDic[_buildingType].Count;
+                if (level == 1)
+                {
+                    return buildingInstanceDic[_buildingType].Count;
+                }
+                else
+                {
+                    int _res = 0;
+                    foreach (var _buildingPart in buildingInstanceDic[_buildingType])
+                    {
+                        //向下兼容,实际等级大于需要等级
+                        if ((_buildingPart.Classification.Category4 - 1) >= level)
+                            _res++;
+                    }
+                    return _res;
+                }
             }
         }
         #endregion

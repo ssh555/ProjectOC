@@ -11,8 +11,11 @@ namespace ProjectOC.PinchFace.Config
     [CreateAssetMenu(fileName = "NewPinchDataConfig", menuName = "ML/PinchDataConfig")]
     public class PinchDataConfig : SerializedScriptableObject
     {
-        //存储Type3 Prefab数量
+        //存储Type3 Prefab数量, 头发分色数据
         public List<Type3Data> typesDatas;
+
+        public List<int> HairFrontChangeColorTypes = new List<int>();
+        public List<int> HairBackChangeColorTypes = new List<int>();
         public class Type3Data
         {
             public PinchPartType3 _type3;
@@ -30,6 +33,7 @@ namespace ProjectOC.PinchFace.Config
         public void LoadConfig()
         {
             ReadType3Cofig();
+            ReadHairColorTypeConfig();
         }
         
         
@@ -42,6 +46,7 @@ namespace ProjectOC.PinchFace.Config
             TraverseFolders(rootFolderPath);
             //排序
             typesDatas.Sort((a, b) => ((int)a._type3).CompareTo((int)b._type3));
+            
         }
         private void TraverseFolders(string folderPath)
         {
@@ -69,6 +74,55 @@ namespace ProjectOC.PinchFace.Config
             foreach (string subDirectory in subDirectories)
             {
                 TraverseFolders(subDirectory);
+            }
+        }
+
+        private void ReadHairColorTypeConfig()
+        {
+            HairFrontChangeColorTypes.Clear();
+            HairBackChangeColorTypes.Clear();
+            string hairPrefabPath = "Assets/_ProjectOC/OCResources/PinchFace/Prefabs/PinchPart/5_Common_PinchType1";
+            int _hairCount = 0;
+            foreach (var _type3Data in typesDatas)
+            {
+                if (_type3Data._type3 == PinchPartType3.HF_HairFront)
+                {
+                    _hairCount = _type3Data.typeCount;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < _hairCount; i++)
+            {
+                string _path0 = $"{hairPrefabPath}/15_HairFront_PinchType2/40_HF_HairFront_PinchType3/HF_HairFront_{i}.prefab";
+                string _path1 = $"{hairPrefabPath}/16_HairBack_PinchType2/41_HB_HairBack_PinchType3/HB_HairBack_{i}.prefab";
+                ReadPrefabConfig(_path0, 0);
+                ReadPrefabConfig(_path1, 1);
+
+                void ReadPrefabConfig(string _path, int _id)
+                {
+                    GameObject _prefab = AssetDatabase.LoadAssetAtPath<GameObject>(_path);
+                    if (_prefab != null)
+                    {
+                        GameObject instance = PrefabUtility.InstantiatePrefab(_prefab) as GameObject;
+                        Debug.Log(instance.name);
+                        ChangeColorPinchSetting _colorPinchSetting = instance.GetComponent<ChangeColorPinchSetting>();
+                        if (_id == 0)
+                        {
+                            HairFrontChangeColorTypes.Add((int)_colorPinchSetting.colorChangeType);
+                        }
+                        else
+                        {
+                            HairBackChangeColorTypes.Add((int)_colorPinchSetting.colorChangeType);
+                        }
+                        DestroyImmediate(instance);
+                        
+                    }
+                    else
+                    {
+                        Debug.Log($"Can't find Prefab: {_path}");
+                    }
+                }
             }
         }
     }   
