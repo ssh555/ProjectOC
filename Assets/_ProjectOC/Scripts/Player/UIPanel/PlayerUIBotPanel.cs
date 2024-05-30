@@ -116,7 +116,7 @@ namespace ProjectOC.Player.UI
                     // สตภýปฏ
                     var panel = handle.Result.GetComponent<OptionPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -137,7 +137,7 @@ namespace ProjectOC.Player.UI
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<SmallMapPanel>();
-                    panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
             }
@@ -149,7 +149,7 @@ namespace ProjectOC.Player.UI
                 {
                     OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
-                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
                 };
             }
@@ -212,12 +212,14 @@ namespace ProjectOC.Player.UI
                     this.UIBtnList.CanPerformRingNavigation = false;
                 }, () => {
                     Ring.gameObject.SetActive(false);
+                    (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Enable();
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
                     this.UIBtnList.EnableBtnList();
                 });
             this.Ring.gameObject.SetActive(true);
+            (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Disable();
             this.UIKeyTipList?.RefreshKeyTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
         }
@@ -233,9 +235,9 @@ namespace ProjectOC.Player.UI
             {
                 Ring.gameObject.SetActive(false);
                 ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+                (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Enable();
                 this.UIBtnList.SetCurSelectedNull();
                 this.UIBtnList.DeBindInputAction();
-                
             }
         }
         #endregion

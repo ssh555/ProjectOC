@@ -108,7 +108,7 @@ namespace ProjectOC.Player
 
             // 按下对应按键才会压入栈
 
-            var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<UI.PlayerUIBotPanel>();
+            var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.BottomPanel, false).GetComponent<UI.PlayerUIBotPanel>();
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
@@ -120,12 +120,12 @@ namespace ProjectOC.Player
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
             {
                 // to-do : 待优化
-                this.GetComponentInChildren<InteractComponent>().Disable();
+                interactComponent.Disable();
             };
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
                 // to-do : 待优化
-                this.GetComponentInChildren<InteractComponent>().Enable();
+                interactComponent.Enable();
             };
 
             //StartCoroutine(__DelayInit__());
@@ -147,7 +147,7 @@ namespace ProjectOC.Player
 
             if (Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
             {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
             }
 

@@ -104,7 +104,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
             {
                 var panel = handle.Result.GetComponent<SmallMapPanel>();
-                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 panel.SelectMineralSourcesPanel = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };

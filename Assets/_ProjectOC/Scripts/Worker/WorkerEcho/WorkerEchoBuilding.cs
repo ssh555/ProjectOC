@@ -40,7 +40,7 @@ namespace ProjectOC.WorkerNS
                 {
                     uIResonanceWheelInstance = handle.Result.GetComponent<ResonanceWheelUI>();
                     uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = (GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-                    uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
                 };
             }
