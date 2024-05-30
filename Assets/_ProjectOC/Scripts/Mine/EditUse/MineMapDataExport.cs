@@ -101,7 +101,7 @@ namespace ProjectOC.MineSystem
             GameObject _prefabData =
                 GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(bigMapPrefabPath));
             _prefabData.name = "Prefab_MineSystem_UI_BigMap";
-            GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_0").gameObject;
+            GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_Template").gameObject;
             Transform normalRegionTransf = _prefabData.transform.Find("NormalRegion");
             TileMap.DestroyTransformChild(normalRegionTransf);
             //Block«¯”Ú

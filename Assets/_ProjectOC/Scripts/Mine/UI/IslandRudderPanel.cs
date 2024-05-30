@@ -74,6 +74,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     {
         BigMapInstanceTrans = MM.BigMapInstance.transform;
         NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
+        BlockRegions = BigMapInstanceTrans.Find("BlockRegion");
         BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
         BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         this.cursorNavigation.CurZoomscale = MM.GridScale;
@@ -148,6 +149,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private Transform BigMapInstanceTrans;
     private Transform NormalRegions;
+    private Transform BlockRegions;
 
     private Image DotLine;
     private RectTransform DotLineRectTransform;
@@ -171,6 +173,19 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
             var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
+        }
+
+        for (int i = 0; i < BlockRegions.childCount; i++)
+        {
+            var child = BlockRegions.GetChild(i);
+            string regionNumstr = child.name.Split('_')[1];
+            int regionNum;
+            bool isRegionNum = int.TryParse(regionNumstr, out regionNum);
+            if(isRegionNum)
+            {
+                var isUnlocked = MM.CheckRegionIsUnlocked(regionNum);
+                BlockRegions.GetChild(i).Find("Normal").gameObject.SetActive(!isUnlocked);
+            }
         }
         #endregion
     }

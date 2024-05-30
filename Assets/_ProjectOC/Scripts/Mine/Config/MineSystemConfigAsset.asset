@@ -24,7 +24,7 @@ MonoBehaviour:
   Config:
     MainIslandSpeed: 0.5
     MiningCircleRadius: 3
-    IslandRudderSensitivity: 1
+    IslandRudderSensitivity: 0.5
     InitZoomRate: 0.5
     ZoomSpeed: 1
     ZoomInLimit: 3

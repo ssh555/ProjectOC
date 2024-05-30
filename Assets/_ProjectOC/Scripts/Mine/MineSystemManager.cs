@@ -325,9 +325,15 @@ namespace ProjectOC.MineSystem
                 for (int i = 0; i < BlockRegion.childCount; i++)
                 {
                     var child = BlockRegion.GetChild(i);
-                    MapRegionData mapRegionData = new MapRegionData(child.name, true);
-                    IDToMapRegionDic.Add(child.name, mapRegionData);
-                    RegionNumToRegionDic.Add(0, mapRegionData);
+                    string regionNumstr = child.name.Split('_')[1];
+                    int regionNum;
+                    bool isRegionNum = int.TryParse(regionNumstr, out regionNum);
+                    if(isRegionNum)
+                    {
+                        MapRegionData mapRegionData = new MapRegionData(child.name, true);
+                        IDToMapRegionDic.Add(child.name, mapRegionData);
+                        RegionNumToRegionDic.Add(regionNum, mapRegionData);
+                    }
                 }
                 synchronizerInOrder.Check(2);
             };
@@ -376,10 +382,10 @@ namespace ProjectOC.MineSystem
         {
             PreColliderPointRegion = CurColliderPointRegion;
             CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu);
-            if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion == 0)
+            if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion <= 0)
             {
                 //ÕÏ°­Åö×²
-                UnlockMapRegion(0);
+                UnlockMapRegion(CurColliderPointRegion);
                 return;
             }
             lastRegionNum = curRegionNum;
@@ -447,15 +453,16 @@ namespace ProjectOC.MineSystem
             if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return;
 
             //Åöµ½ÕÏ°­
-            if (RegionNum == 0)
+            if (RegionNum <= 0)
             {
                 mainIslandData.Reset();
                 curRegionNum = lastRegionNum;
-                return;
             }
-
-            lastRegionNum = curRegionNum;
-            curRegionNum = RegionNum;
+            else
+            {
+                lastRegionNum = curRegionNum;
+                curRegionNum = RegionNum;
+            }
             RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex] = true;
             if(this.islandRudderPanelInstance.gameObject.activeInHierarchy)
             {
