@@ -70,6 +70,11 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         this.CheckRange = MM.MineSystemConfig.MiningCircleRadius * this.EnlargeRate;
         (this.cursorNavigation.Center as RectTransform).sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
         this.PlacedCircle.sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
+        this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.SmallMapSensitivity;
+        this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.SmallMapZoomSpeed;
+        this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.SmallMapZoomInLimit;
+        this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.SmallMapZoomOutLimit;
+        this.cursorNavigation.CurZoomRate = MM.MineSystemConfig.SelectMineralSourcesInitZoomRate;
         Synchronizer synchronizer = new Synchronizer(MM.MineralMapData.MineDatas.Count, () => { ChangeMiningData(); });
         foreach (var minedata in MM.MineralMapData.MineDatas)
         {

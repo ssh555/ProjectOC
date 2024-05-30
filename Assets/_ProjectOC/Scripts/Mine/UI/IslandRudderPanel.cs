@@ -79,9 +79,9 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         this.cursorNavigation.CurZoomscale = MM.GridScale;
         this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.IslandRudderSensitivity;
-        this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.ZoomSpeed;
-        this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.ZoomInLimit;
-        this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.ZoomOutLimit;
+        this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.IslandRudderZoomSpeed;
+        this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.IslandRudderZoomInLimit;
+        this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.IslandRudderZoomOutLimit;
         RefreshOnZoomMap();
         this.Refresh();
 

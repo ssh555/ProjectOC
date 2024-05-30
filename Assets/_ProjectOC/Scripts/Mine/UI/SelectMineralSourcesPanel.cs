@@ -66,7 +66,11 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
             BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
-            this.cursorNavigation.CurZoomscale = MM.GridScale;
+            this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.SelectMineralSourcesSensitivity;
+            this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.SelectMineralSourcesZoomSpeed;
+            this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.SelectMineralSourcesZoomInLimit;
+            this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.SelectMineralSourcesZoomOutLimit;
+            this.cursorNavigation.CurZoomRate = MM.MineSystemConfig.SelectMineralSourcesInitZoomRate;
             RefreshOnZoomMap();
             this.Refresh();
         };

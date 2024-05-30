@@ -184,9 +184,9 @@ namespace ProjectOC.MineSystem
 
                     cursorNavigation.CurZoomscale = GridScale;
                     cursorNavigation.NavagationSpeed = MineSystemConfig.IslandRudderSensitivity;
-                    cursorNavigation.ZoomSpeed = MineSystemConfig.ZoomSpeed;
-                    cursorNavigation.ZoomInLimit = MineSystemConfig.ZoomInLimit;
-                    cursorNavigation.ZoomOutLimit = MineSystemConfig.ZoomOutLimit;
+                    cursorNavigation.ZoomSpeed = MineSystemConfig.IslandRudderZoomSpeed;
+                    cursorNavigation.ZoomInLimit = MineSystemConfig.IslandRudderZoomInLimit;
+                    cursorNavigation.ZoomOutLimit = MineSystemConfig.IslandRudderZoomOutLimit;
 
                     isRectTransformInit = true;
                     DetectMainIslandCurRegion();
@@ -199,7 +199,7 @@ namespace ProjectOC.MineSystem
 
             #region 同步初始化
             //初始化大地图缩放比例
-            this.GridScale = (MineSystemConfig.ZoomInLimit - MineSystemConfig.ZoomOutLimit) * MineSystemConfig.InitZoomRate + MineSystemConfig.ZoomOutLimit; ;
+            this.GridScale = (MineSystemConfig.IslandRudderZoomInLimit - MineSystemConfig.IslandRudderZoomOutLimit) * MineSystemConfig.IslandRudderInitZoomRate + MineSystemConfig.IslandRudderZoomOutLimit; ;
 
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];

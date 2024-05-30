@@ -68,7 +68,7 @@ namespace ML.Engine.UI
         private float curZoomscale;
         [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"), ShowInInspector]
         private float curZoomRate;
-        public float CurZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  set { curZoomRate = value; CurZoomscale = (ZoomInLimit - ZoomOutLimit) * value + ZoomOutLimit; } }
+        public float CurZoomRate { get { return (CurZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  set { curZoomRate = value;  CurZoomscale = (ZoomInLimit - ZoomOutLimit) * value + ZoomOutLimit; } }
         [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放值"), ShowInInspector]
         public float CurZoomscale 
         { 
