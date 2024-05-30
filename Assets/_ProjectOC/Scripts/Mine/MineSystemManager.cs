@@ -189,6 +189,7 @@ namespace ProjectOC.MineSystem
                     cursorNavigation.ZoomOutLimit = MineSystemConfig.IslandRudderZoomOutLimit;
 
                     isRectTransformInit = true;
+                    CalculateMainIslandWorldPos();
                     DetectMainIslandCurRegion();
                 };
             };
@@ -204,8 +205,8 @@ namespace ProjectOC.MineSystem
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];
 
-            //初始化主岛数据
-            mainIslandData = new MainIslandData(mineSystemConfig.MainIslandSpeed);
+            
+
 
             //默认选中
             curMapLayerIndex = 0;
@@ -424,6 +425,29 @@ namespace ProjectOC.MineSystem
             Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
             return bigMapTableData[gridPos.y, gridPos.x];
         }
+
+        private void CalculateMainIslandWorldPos()
+        {
+            int width = bigMapTableData.GetLength(0);
+            Vector2 anchorPosition = Vector2.zero;
+            anchorPosition.x = mineSystemConfig.MainIslandInitPos.y / width;
+            anchorPosition.y = mineSystemConfig.MainIslandInitPos.x / width;
+            anchorPosition.y = 1 - anchorPosition.y;
+            Vector2 referenceSize = MapRegionRectTransform.rect.size;
+            Vector2 localPosition = Vector2.zero;
+            localPosition.x = (anchorPosition.x - 0.5f) * referenceSize.x;
+            localPosition.y = (anchorPosition.y - 0.5f) * referenceSize.y;
+            Vector2 worldPosition = RectTransformUtility.WorldToScreenPoint(null, MapRegionRectTransform.TransformPoint(localPosition));
+            // 将世界坐标转换为屏幕坐标
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
+            // 将屏幕坐标转换为 RectTransform 的本地坐标
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(MainIslandRectTransform, screenPoint, null, out Vector2 localPoint);
+            //初始化主岛数据
+            mainIslandData = new MainIslandData(mineSystemConfig.MainIslandSpeed, localPoint);
+            MainIslandRectTransform.anchoredPosition = localPoint;
+        }
+
+
         #endregion
         #endregion
 
