@@ -268,9 +268,9 @@ MonoBehaviour:
   - mineID: Mineral_Si_1
     mineIcon: {fileID: 21300000, guid: 06e74df2180d1cd429adf8955d8fbc78, type: 3}
     brushData:
-      brushSize: 10
+      brushSize: 1.5
       brushHard: 0
-      brushDensity: 2
+      brushDensity: 15
       brushSizeMin: 0
       brushSizeMax: 10
       brushHardMin: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   - mineID: Mineral_Rock_1
     mineIcon: {fileID: 21300000, guid: 6de62f81a145f83459e0249494e0aa1e, type: 3}
     brushData:
-      brushSize: 10
+      brushSize: 3.99
       brushHard: 0
       brushDensity: 2
       brushSizeMin: 0
