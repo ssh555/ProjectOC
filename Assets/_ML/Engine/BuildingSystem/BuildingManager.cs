@@ -652,6 +652,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingHeight的三级分类
         /// </summary>
+        [ShowInInspector]
         private Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnHeight(IBuildingPart BPart)
@@ -793,6 +794,7 @@ namespace ML.Engine.BuildingSystem
         {
             return GetBPartPrefabCountOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4);
         }
+
         public BuildingCategory3[] GetAllStyleByBPartHeight(IBuildingPart BPart)
         {
             var bparts = BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4].ToArray();
@@ -803,6 +805,16 @@ namespace ML.Engine.BuildingSystem
             }
             return styles;
         }
+
+        public List<IBuildingPart> GetAllStyleIBuildingPartOnHeight1(IBuildingPart BPart)
+        {
+            return BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][1].ToArray().ToList();
+        }
+        public List<IBuildingPart> GetAllHeightIBuildingPartOnStyle(IBuildingPart BPart)
+        {
+            return BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3].ToArray().ToList();
+        }
+
         #endregion
 
         #region Material
