@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -36515133528241192, guid: 552c542ae92f76d4d87b07d54aa27c50, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 40a950d7374fff747930f2374671e3d0, type: 2}
     - target: {fileID: 919132149155446097, guid: 552c542ae92f76d4d87b07d54aa27c50, type: 3}
       propertyPath: m_Name
       value: HB_HairBack_0
@@ -79,8 +83,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorChangeType: 29
   CurColorChangeType: 0
-  param1: 0
-  param2: 0
+  smoothStepThreshold: 0.2
+  smoothStrength: 0.2
   colors:
   - {r: 0, g: 0, b: 0, a: 0}
   - {r: 0, g: 0, b: 0, a: 0}

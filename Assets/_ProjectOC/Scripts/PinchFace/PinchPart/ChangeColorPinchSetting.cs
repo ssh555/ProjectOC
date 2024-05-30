@@ -50,9 +50,13 @@ namespace ProjectOC.PinchFace
             {
                 Apply(PinchPartType2.HairBack,PinchPartType3.HB_HairBack,_modelPinch);
             }
+
             _modelPinch.ChangeColor(_type2,colors[0],0);
-            _modelPinch.ChangeColor(_type2,colors[1],1);
-            _modelPinch.ChangeColorType(_type2,CurColorChangeType,smoothStepThreshold,smoothStrength);
+            if (_type2 == PinchPartType2.HairBack || _type2 == PinchPartType2.HairFront)
+            {
+                _modelPinch.ChangeColor(_type2,colors[1],1);
+                _modelPinch.ChangeColorType(_type2,CurColorChangeType,smoothStepThreshold,smoothStrength);
+            }
         }
     }
 }

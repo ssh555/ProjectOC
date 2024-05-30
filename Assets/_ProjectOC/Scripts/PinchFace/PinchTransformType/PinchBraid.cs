@@ -6,7 +6,7 @@ namespace ProjectOC.PinchFace
 {
     public class PinchBraid : PinchTransfType
     {
-        public PinchBraid(GameObject _go, int _index) : base(_index)
+        public PinchBraid(int _index) : base(_index)
         {
             transformType = TransformType.Sphere;
         }

@@ -210,12 +210,8 @@ namespace ProjectOC.PinchFace
                     .LinkData(i+defaultIndex,i+defaultIndex+1,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
-
-            // foreach (var _btn in _btnLists)
-            // {
-            //     Debug.LogWarning($"Btn: {_btn.name}");
-            // }
-            this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+            
+            UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
             //btnListContainerInitor 删除复原
             newBtnListContainers.btnListContainerInitData.RemoveLinkData(defaultIndex-1,newLinkDataCount);
             

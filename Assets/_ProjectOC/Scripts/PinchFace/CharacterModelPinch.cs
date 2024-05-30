@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using ML.MathExtension;
 using ML.PlayerCharacterNS;
 using ProjectOC.ManagerNS;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -25,7 +26,6 @@ namespace ProjectOC.PinchFace
         #endregion
         
         #region ÄóÁ³º¯Êý
-
         public AsyncOperationHandle<GameObject> GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
         {
             //Prefabs_PinchPart/PinchPart/
@@ -59,12 +59,39 @@ namespace ProjectOC.PinchFace
                 curHairIndex = typeIndex;
             }
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
+            
+            #region ÂíÎ²¡¢½Ç  ÌØÊâ´¦Àí
+            if(_type2 == PinchPartType2.EarTop)
+            {
+                if (topEar != null)
+                {
+                    topEar.Release();
+                }
+            
+                BezierComponent _bezier = boneTransfsDictionary[PinchPartType2.EarTop].GetComponent<BezierComponent>();
+                _handle.Completed += (handle) =>
+                {
+                    topEar = new PinchJiao(_bezier,_handle.Result,typeIndex,inCamera);
+                };
+                return _handle;
+            }
+            else if (_type2 == PinchPartType2.HairBraid)
+            {
+                //Ó¦¸ÃÔÙÅÐ¶ÏType3ÊÇ·ñÒ»Ñù
+                _handle.Completed += (handle) =>
+                {
+                    braid = new PinchBraid(typeIndex);
+                };
+                
+            }
+            #endregion
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
                 UnEquipItem(_type2);
             }
 
-            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
+            
             _handle.Completed += (handle)=>
             {
                 EquipItem(_type2,handle.Result,inCamera);
@@ -72,28 +99,7 @@ namespace ProjectOC.PinchFace
             return _handle;
         }
         
-        public void TempChangeType(int index)
-        {
-            // ChangeType(PinchPartType2.HeadTop,index);
-            // return;
-            //
-            // if (index < 2)
-            // {
-            //     ChangeType(PinchPartType2.Tail, index);
-            // }
-            // else if (index == 2)
-            // {
-            //     ChangeType(PinchPartType2.TopHorn, index);
-            // }
-            // else if (index == 3)
-            // {
-            //     ChangeTransform(PinchPartType2.EarTop,index,Vector2.right * _slider.value);
-            // }
-            // else
-            // {
-            //     topEar.Release();
-            // }
-        }
+        
         public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
         {
             // sourceClothingÒÂ·þ targetAvatar ½ÇÉ«
@@ -224,7 +230,6 @@ namespace ProjectOC.PinchFace
                 if (transf != null)
                 {
                     targets[index] = transf;
-                    //Debug.Log(sources[index].name);
                 }
                 else
                 {
@@ -234,26 +239,17 @@ namespace ProjectOC.PinchFace
             return targets;
         }
 
-        public void ChangeTransform(PinchPartType2 boneType2,int index,Vector2 param)
+        public void ChangeTransform(PinchPartType2 boneType2,Vector2 param)
         {
+            
             if(boneType2 == PinchPartType2.EarTop)
             {
-
-                if (topEar == null || topEar.index != index)
-                {
-                    BezierComponent _bezier = 
-                        boneTransfsDictionary[PinchPartType2.EarTop].GetComponent<BezierComponent>();
-                    topEar = new PinchJiao(_bezier,tempTail[index],index);
-                }
                 topEar.ModifyValue(param);
             }
             else if (boneType2 == PinchPartType2.HairBraid)
             {
-                if (braid == null || braid.index != index)
-                {
-                    braid = new PinchBraid(tempTail[index], index);
-                }
-                braid.ModifyValue(param);
+                if(braid != null)
+                    braid.ModifyValue(param);
             }
         }
         
@@ -332,7 +328,11 @@ namespace ProjectOC.PinchFace
             
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
+            {
+                Debug.LogWarning($"Ã»ÓÐÄóÁ³²¿¼þ:{_type2.ToString()}");
                 return null;
+            }
+                
             
             Material[] mats = _replaceGo.GetComponentInChildren<SkinnedMeshRenderer>().materials;
             if (mats == null)
@@ -382,7 +382,6 @@ namespace ProjectOC.PinchFace
             
             if (_index == 0)
             {
-                Debug.Log($"{_type2} Color{_index}: {_color}");
                 _targetMat.SetColor(changeColorShaderKey,_color);   
             }
             else
@@ -406,7 +405,7 @@ namespace ProjectOC.PinchFace
                 return;
             if (colorType != -1)
             {
-                Debug.Log($"ChangeColorType: {_type2} colorType:{colorType}");
+                
                 
                 int _curColor = 1 << colorType;
                 if (_type2 == PinchPartType2.HairFront &&
@@ -418,13 +417,13 @@ namespace ProjectOC.PinchFace
                     if (colorType > 2)
                         colorType--;
                     _targetMat.SetInt("_ColorType",colorType);
-                    Debug.Log($"SetColorValue: {colorType}  {_targetMat.GetInt("_ColorType")}");
                 }
                 else
                 {
                     _targetMat.SetInt("_ColorType",0);
                 }
-
+                
+                
                 _targetMat.SetFloat("_smoothStepThreshold",_param1);
                 _targetMat.SetFloat("_smoothStrength",_param2);
             }
@@ -436,13 +435,19 @@ namespace ProjectOC.PinchFace
 
         //
 
-        public Color GetType2Color(PinchPartType2 _type2)
+        public Color GetType2Color(PinchPartType2 _type2,int index = 0)
         {
             Material _targetMat = GetMaterial(_type2);
             if (_targetMat == null)
                 return Color.clear;
-            else
-                return _targetMat.GetColor(changeColorShaderKey);
+            Color resColor = Color.clear;
+            
+                if (index == 0 && _targetMat.HasColor(changeColorShaderKey))
+                    resColor = _targetMat.GetColor(changeColorShaderKey);
+                else if(index == 1 && _targetMat.HasColor(changeColroShaderKey2))
+                    resColor = _targetMat.GetColor(changeColroShaderKey2);
+                
+            return resColor;
         }
         
 
@@ -455,9 +460,6 @@ namespace ProjectOC.PinchFace
             private SkinnedMeshRenderer characterSkinMeshRenderer;
             [SerializeField, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             List<GameObject> replaceGo = new List<GameObject>();
-            
-            [SerializeField, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
-                List<GameObject> tempTail = new List<GameObject>();
             [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             private Dictionary<string, Transform> boneDic = new Dictionary<string, Transform>();
             [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
@@ -511,13 +513,9 @@ namespace ProjectOC.PinchFace
                     ChangeType(PinchPartType3.HF_HairFront, 0);
                     //ChangeType(PinchPartType3.HD_Dai, 0);
                     ChangeType(PinchPartType3.HB_HairBack, 0);
+                    // ChangeType(PinchPartType3.HB_HairBraid, 0);
                 }
                 
-                // pinchFaceManager.RandomPinchPart(PinchPartType3.HF_HairFront,true,this);
-                // foreach (var _type3 in pinchFaceManager.RacePinchDatas[2].pinchPartType3s)
-                // {
-                //     pinchFaceManager.RandomPinchPart(_type3,true,this);
-                // }
                 this.enabled = false;
             }
             
