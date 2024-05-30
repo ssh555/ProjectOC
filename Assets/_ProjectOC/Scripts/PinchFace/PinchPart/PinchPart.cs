@@ -164,6 +164,7 @@ namespace  ProjectOC.PinchFace
                     GenerateColorUI1(_comp as ChangeColorPinchSetting,0);
                     GenerateHeadUI("颜色2");
                     GenerateColorUI1(_comp as ChangeColorPinchSetting,1);
+                    GenerateColorGradualSlider(_comp as ChangeColorPinchSetting);
                 }
                 else
                 {
@@ -248,12 +249,11 @@ namespace  ProjectOC.PinchFace
             _typeSetting.typeIndex = _index;
             if (PinchPartType3 == PinchPartType3.HF_HairFront)
             {
-                _isInit = 3;
+                _isInit = 2;
                 curColorChangeType = ChangeColorPinchSetting.ColorChangeType.None;
                 ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HF_HairFront,_index,inCamera));    
-                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HD_Dai,_index,inCamera));    
+                //ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HD_Dai,_index,inCamera));    
                 ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HB_HairBack,_index,inCamera));
-                //ModelPinch.ChangeType(PinchPartType3.HB_HairBraid,_index);
                 //根据头发的组件增加颜色类型和UI
             }
             else
@@ -266,19 +266,17 @@ namespace  ProjectOC.PinchFace
                 _handle.Completed += (handle) =>
                 {
                     //刷新骨骼权重
-                    
-                    //刷新颜色板块
                     if (PinchPartType3 == PinchPartType3.HF_HairFront)
                     {
 
                         ChangeColorPinchSetting _colorPinchSetting =
-                            _handle.Result.GetComponent<ChangeColorPinchSetting>();
+                            handle.Result.GetComponent<ChangeColorPinchSetting>();
                         curColorChangeType |= _colorPinchSetting.colorChangeType;
                         
                         _isInit--;
                         if (_isInit == 0)
                         {
-                            RefreshColorType(pinchSettingComps.Find(_comp => _comp.GetType()== typeof(ChangeColorPinchSetting))as ChangeColorPinchSetting);
+                            RefreshColorType(false);
                         }
                     }
                     
@@ -388,9 +386,6 @@ namespace  ProjectOC.PinchFace
             }
             int _counter = sortCount;
             GenerateUIPre();
-
-            
-            
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[3])
                 .Completed += (handle) =>
@@ -407,7 +402,7 @@ namespace  ProjectOC.PinchFace
                     _colorGrid.onClick.AddListener(() =>
                     {
                         _colorSetting.colors[colorPanelIndex] = _gridColor;
-                        ModelPinch.ChangeColor(PinchPartType2,_gridColor,colorPanelIndex,CurColorType);
+                        ModelPinch.ChangeColor(PinchPartType2,_gridColor,colorPanelIndex);
                         _container2.Find("ColorView").GetComponent<Image>().color = _gridColor;
                     });
                 }
@@ -456,7 +451,7 @@ namespace  ProjectOC.PinchFace
                 _hsvColorSetting.ColorChangeAction +=((_color)=>
                 {
                     _colorSetting.colors[colorPanelIndex] = _color;
-                    ModelPinch.ChangeColor(PinchPartType2,_color,colorPanelIndex,CurColorType);
+                    ModelPinch.ChangeColor(PinchPartType2,_color,colorPanelIndex);
                     _colorView.color = _color;
                 });
                 
@@ -490,6 +485,8 @@ namespace  ProjectOC.PinchFace
                 return curColorType;
             }
         }
+
+        private float gradualParam1 , gradualParam2;
         private ChangeColorPinchSetting.ColorChangeType curColorChangeType = ChangeColorPinchSetting.ColorChangeType.None;
         
         
@@ -514,22 +511,33 @@ namespace  ProjectOC.PinchFace
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[5])
                 .Completed += (handle) =>
             {
-                //加入 type3的btn
                 colorTypeTransf = handle.Result.transform;
+                RefreshColorType(true);
                 GenerateUICallBack(colorTypeTransf,_counter);
             };
         }
         /// <summary>
         /// 每次切换发型的时候，切换成当前发型的分色模式  删除原来的Btn
+        /// true,第一次进入 不需要重新生成BtnListContainer；false 后续因为切换发型重新生成分色方式BtnListContainer
         /// </summary>
-        private void RefreshColorType(ChangeColorPinchSetting _colorSetting)
+        private void RefreshColorType(bool firstGenerate)
         {
+            ChangeColorPinchSetting _colorSetting =
+                pinchSettingComps.Find(_comp => _comp.GetType() == typeof(ChangeColorPinchSetting)) as
+                    ChangeColorPinchSetting;
+            //初始生成，还没有生成右侧Btn
+            if (colorTypeTransf == null)
+            {
+                return;
+            }
+            
             SelectedButton btnTemplate = colorTypeTransf.Find("Container/TemplateBtn").GetComponent<SelectedButton>();
             //删除
             foreach (Transform _btn in btnTemplate.transform.parent)
             {
                 if (_btn != btnTemplate.transform)
                 {
+                    _btn.gameObject.SetActive(false);
                     GameObject.Destroy(_btn.gameObject);   
                 }
             }
@@ -543,19 +551,20 @@ namespace  ProjectOC.PinchFace
                 for (int i = 0; i < 5; i++)
                 {
                     int _index = i;
-                    if (((int)_colorSetting.colorChangeType & (1<< i)) != 0)
+                    if (((int)curColorChangeType & (1<< _index)) != 0)
                     {
                         if (_index == CurColorType)
                             couldInherit = true;
                         
                         GameObject _btn = GameObject.Instantiate(btnTemplate.gameObject,btnTemplate.transform.parent);
                         _btn.name = $"ColorType_{_index}";
-                        _btn.GetComponentInChildren<TextMeshProUGUI>().text = colorTypeString[0];
+                        _btn.GetComponentInChildren<TextMeshProUGUI>().text = colorTypeString[_index];
                         _btn.SetActive(true);
                         _btn.GetComponentInChildren<SelectedButton>().onClick.AddListener(() =>
                         {
                             CurColorType = _index;
                             _colorSetting.CurColorChangeType = CurColorType;
+                            ModelPinch.ChangeColorType(PinchPartType2,CurColorType,gradualParam1,gradualParam2);
                             
                             Color _selectColor = new Color(0.3931559f, 0.8773585f, 0.5431628f);
                             foreach (Transform _otherBtn in btnTemplate.transform.parent)
@@ -573,8 +582,72 @@ namespace  ProjectOC.PinchFace
                     btnTemplate.transform.parent.Find($"ColorType_{inheritIndex}").GetComponent<SelectedButton>().onClick.Invoke();
                 }
                 
+                //重新生成BtnList,初始的时候没有Container
+                // if (PinchFacePanel.UIBtnListContainer.UIBtnLists.Count > 4)
+                // {
+                //     Debug.Log("Regenerate btn 5");
+                //     PinchFacePanel.UIBtnListContainer.UIBtnLists[5].InitBtnInfo();
+                // }
+                //todo 应该是重新生成BtnList，而不是重新生成BtnList Container
+                if (!firstGenerate)
+                {
+                    //UIBtnListInitor[] btnLists = PinchFacePanel.transform.GetComponentsInChildren<UIBtnListInitor>(); 
+                    PinchFacePanel.ReGenerateBtnListContainer(PinchFacePanel.rightBtnLists);
+                    PinchFaceManager.pinchFaceHelper.RefreshPanelLayout(PinchFacePanel.transform);
+                    PinchFacePanel.ReturnBtnList(4);
+                }
             }
         }
+        
+        
+        public void GenerateColorGradualSlider(ChangeColorPinchSetting _colorSetting)
+        {
+            int _counter = sortCount;
+            GenerateUIPre();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[2])
+                .Completed += (handle) =>
+            {
+                //加入 生成的Slider
+                Transform _trans = handle.Result.transform;
+                GameObject sliderTemplate = _trans.Find("Container/Pinch_SliderTemplate").gameObject;
+                GameObject _slider2 = GameObject.Instantiate(sliderTemplate, sliderTemplate.transform.parent);
+                SettingSlider(sliderTemplate, "渐变位置",Action_ScaleSlider1);
+                SettingSlider(_slider2, "渐变程度",Action_ScaleSlider2);
+                
+                void SettingSlider(GameObject _sliderGo,string _text,UnityAction<float> _action)
+                {
+                    
+                    CustomSelectedSlider _slider = _sliderGo.GetComponentInChildren<CustomSelectedSlider>();
+                    _sliderGo.transform.Find("Button").name = _text;
+                    
+                    _slider.SetSliderConfig(_text,_action);
+                }
+                
+                //_value 1~100 ->
+                void Action_ScaleSlider1(float _value)
+                {
+                    //_value Remap
+                    float _realValue = PinchFaceManager.pinchFaceHelper.RemapValue(_value, new Vector2(1, 100),
+                        Vector2.up*0.8f);
+                    gradualParam1 = _realValue;
+                    _colorSetting.smoothStepThreshold = gradualParam1;
+                    ModelPinch.ChangeColorType(PinchPartType2,CurColorType,gradualParam1,gradualParam2);
+                }
+                void Action_ScaleSlider2(float _value)
+                {
+                    //_value Remap
+                    float _realValue = PinchFaceManager.pinchFaceHelper.RemapValue(_value, new Vector2(1, 100),
+                        Vector2.up*0.5f);
+                    gradualParam2 = _realValue;
+                    _colorSetting.smoothStrength = gradualParam2;
+                    ModelPinch.ChangeColorType(PinchPartType2,CurColorType,gradualParam1,gradualParam2);
+                }
+                
+                
+                GenerateUICallBack(_trans,_counter);
+            };
+        }
+        
         
         public void GenerateTextureUI(ChangeTexturePinchSetting _texSetting)
         {

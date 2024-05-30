@@ -19,6 +19,7 @@ namespace ProjectOC.PinchFace
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             
+            
             this.UIBtnListContainer =
                 new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             #region 初始PinchParts 生成读取模型 Config 图集
@@ -93,6 +94,7 @@ namespace ProjectOC.PinchFace
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= ApplyPinchType;
             ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed -= RandomPinchPart;
+            
         }
 
         void ApplyPinchType(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -253,8 +255,8 @@ namespace ProjectOC.PinchFace
 
         private PinchFaceManager pinchFaceManager;
         private CharacterModelPinch modelPinch => pinchFaceManager.ModelPinch;
-        [ShowInInspector]
-        private UIBtnListContainer UIBtnListContainer;
+        
+        public UIBtnListContainer UIBtnListContainer { private set; get; }
         public Transform containerTransf,commonBtnList;
         private RacePinchData raceData;
         private List<PinchPart> pinchParts;

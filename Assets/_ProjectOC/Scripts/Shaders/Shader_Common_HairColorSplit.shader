@@ -3,7 +3,7 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _MainColor ("Color1",Color) = (1,0.2,0.2,1)
+        _BaseColor ("Color1",Color) = (1,0.2,0.2,1)
         _Color2 ("Color2",Color) = (1,0.5,0.2,1)
         _ColorType("ColorType",int) = 0
         _smoothStepThreshold("StepThreshold",Range(0,0.8)) = 0.3
@@ -24,7 +24,7 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 			CBUFFER_START(UnityPerMaterial) //变量引入开始
 			float _smoothStepThreshold,_smoothStrength;
-            float4 _MainColor,_Color2;
+            float4 _BaseColor,_Color2;
             int _ColorType;
             CBUFFER_END //变量引入结束
             
@@ -72,21 +72,21 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
                 //0纯色 1分色 2动态渐变 3静态渐变 
                 if(_ColorType == 0)
                 {
-                    color = _MainColor;
+                    color = _BaseColor;
                 }
                 else if(_ColorType == 1)
                 {
-                    color = step(0.5f,IN.uv.x) ? _Color2:_MainColor;
+                    color = step(0.5f,IN.uv.x) ? _Color2:_BaseColor;
                 }
                 else if(_ColorType == 2)
                 {
                     float lerpValue = smoothstep(_smoothStepThreshold,_smoothStepThreshold+_smoothStrength,IN.uv.y);
-                    color = lerp(_Color2,_MainColor,lerpValue);
+                    color = lerp(_Color2,_BaseColor,lerpValue);
                 }
                 else if(_ColorType == 3)
                 {
                     float4 _texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(IN.uv));
-                    color = step(0.5f,_texColor.x) ? _Color2:_MainColor;
+                    color = step(0.5f,_texColor.x) ? _Color2:_BaseColor;
                 }
                 
                 return color*halfLambert*mainLightColor;

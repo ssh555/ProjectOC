@@ -275,7 +275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnListInitData:
-    limitNum: 1
+    limitNum: 5
     hasInitSelect: 0
     isLoop: 0
     isWheel: 0
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 4832615718886034671}
   - component: {fileID: 390976973606309686}
   - component: {fileID: 3444875421424831059}
-  - component: {fileID: 4664584042023901606}
+  - component: {fileID: 8572833792788941243}
   m_Layer: 5
   m_Name: TemplateBtn
   m_TagString: Untagged
@@ -382,8 +382,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 32.016, y: -19.2355}
-  m_SizeDelta: {x: 64.032, y: 38.471}
+  m_AnchoredPosition: {x: 37.1333, y: -19.2355}
+  m_SizeDelta: {x: 74.2666, y: 38.471}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &390976973606309686
 CanvasRenderer:
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4664584042023901606
+--- !u!114 &8572833792788941243
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -432,7 +432,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6170379856644033157}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:

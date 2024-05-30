@@ -50,9 +50,14 @@ namespace ProjectOC.PinchFace
             return (int)_type2 - 1;
         }
         
-        
+        //temp
+        private int curHairIndex = -1;
         public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex,bool inCamera = false)
         {
+            if (_type3 == PinchPartType3.HF_HairFront)
+            {
+                curHairIndex = typeIndex;
+            }
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
@@ -319,11 +324,11 @@ namespace ProjectOC.PinchFace
             }
         }
 
-        private Material GetMaterial(PinchPartType2 _type2,int _index = 0)
+        private Material GetMaterial(PinchPartType2 _type2)
         {
-            string matColorName = "Mat_ColorChange1";
+            string matColorName = "_ColorChange";
             //头发双色用
-            string matColorName2 = "Mat_ColorChange2";
+            // string matColorName2 = "Mat_ColorChange2";
             
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
@@ -336,16 +341,18 @@ namespace ProjectOC.PinchFace
             }
             foreach (var _mat in mats)
             {
-                if (_index == 0)
-                {
-                    if (_mat.name.Contains(matColorName))
-                        return _mat;
-                }
-                else if(_index == 1)
-                {
-                    if (_mat.name.Contains(matColorName2))
-                        return _mat;
-                }
+                if (_mat.name.Contains(matColorName))
+                    return _mat;
+                // if (_index == 0)
+                // {
+                //     if (_mat.name.Contains(matColorName))
+                //         return _mat;
+                // }
+                // else if(_index == 1)
+                // {
+                //     if (_mat.name.Contains(matColorName2))
+                //         return _mat;
+                // }
                 
             }
             
@@ -354,6 +361,7 @@ namespace ProjectOC.PinchFace
         }
 
         private string changeColorShaderKey = "_BaseColor";
+        private string changeColroShaderKey2 = "_Color2";
         /// <summary>
         /// 
         /// </summary>
@@ -361,25 +369,67 @@ namespace ProjectOC.PinchFace
         /// <param name="_color"></param>
         /// <param name="_index">颜色序号</param>
         /// <param name="colorType">分色模式</param>
-        public void ChangeColor(PinchPartType2 _type2, Color _color,int _index,int colorType)
+        public void ChangeColor(PinchPartType2 _type2, Color _color,int _index)
         {
-            if (colorType == -1)
+            if (_type2 == PinchPartType2.HairFront)
             {
-                Material _targetMat = GetMaterial(_type2,_index);
-                if (_targetMat != null)
-                {
-                    _targetMat.SetColor(changeColorShaderKey,_color);   
-                }
+                ChangeColor( PinchPartType2.HairBack, _color, _index);
+            }
+            
+            Material _targetMat = GetMaterial(_type2);
+            if (_targetMat == null)
+                return;
+            
+            if (_index == 0)
+            {
+                Debug.Log($"{_type2} Color{_index}: {_color}");
+                _targetMat.SetColor(changeColorShaderKey,_color);   
             }
             else
             {
-                
+                _targetMat.SetColor(changeColroShaderKey2,_color);
             }
+
             
             
         }
 
+        public void ChangeColorType(PinchPartType2 _type2,int colorType,float _param1,float _param2)
+        {
+            if (_type2 == PinchPartType2.HairFront)
+            {
+                ChangeColorType( PinchPartType2.HairBack, colorType,_param1,_param2);
+            }
+            
+            Material _targetMat = GetMaterial(_type2);
+            if (_targetMat == null)
+                return;
+            if (colorType != -1)
+            {
+                Debug.Log($"ChangeColorType: {_type2} colorType:{colorType}");
+                
+                int _curColor = 1 << colorType;
+                if (_type2 == PinchPartType2.HairFront &&
+                    (pinchFaceManager.Config.HairFrontChangeColorTypes[curHairIndex] & _curColor) != 0
+                    || (_type2 == PinchPartType2.HairBack &&
+                        (pinchFaceManager.Config.HairBackChangeColorTypes[curHairIndex] & _curColor) != 0))
+                {
+                    //和Shader的Int值对齐
+                    if (colorType > 2)
+                        colorType--;
+                    _targetMat.SetInt("_ColorType",colorType);
+                    Debug.Log($"SetColorValue: {colorType}  {_targetMat.GetInt("_ColorType")}");
+                }
+                else
+                {
+                    _targetMat.SetInt("_ColorType",0);
+                }
 
+                _targetMat.SetFloat("_smoothStepThreshold",_param1);
+                _targetMat.SetFloat("_smoothStrength",_param2);
+            }
+        }
+        
         #endregion
 
         #region public函数
@@ -459,7 +509,7 @@ namespace ProjectOC.PinchFace
                 if (pinchFaceManager.Config != null)
                 {
                     ChangeType(PinchPartType3.HF_HairFront, 0);
-                    ChangeType(PinchPartType3.HD_Dai, 0);
+                    //ChangeType(PinchPartType3.HD_Dai, 0);
                     ChangeType(PinchPartType3.HB_HairBack, 0);
                 }
                 

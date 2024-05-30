@@ -586,3 +586,5 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+  HairFrontChangeColorTypes: 1b0000001b000000
+  HairBackChangeColorTypes: 1d0000001b000000

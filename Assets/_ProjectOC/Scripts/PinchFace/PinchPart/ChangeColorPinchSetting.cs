@@ -18,9 +18,9 @@ namespace ProjectOC.PinchFace
             [LabelText("纯色")]
             PureColor = 1 << 0,
             [LabelText("双材质色1")]
-            DoubelMatColor = 1 << 1,  //例如挑染、阴阳头
+            DoubelMatColor = 1 << 1,  //挑染，内换色
             [LabelText("双材质色2")]
-            DoubelMatColor2 = 1 << 2,  //例如挑染、阴阳头
+            DoubelMatColor2 = 1 << 2,  //阴阳头这样前发后发都要换色的
             [LabelText("动态渐变")]
             GradientColorStatic = 1 << 3,
             [LabelText("静态渐变")]
@@ -30,7 +30,7 @@ namespace ProjectOC.PinchFace
         public ColorChangeType colorChangeType = ColorChangeType.PureColor;
         public int CurColorChangeType = 0;
         //需要存储
-        public float param1,param2; //渐变程度，渐变高度
+        public float smoothStepThreshold = 0.2f,smoothStrength = 0.2f; //渐变程度，渐变高度
         public Color[] colors = new Color[2];
 
         
@@ -46,8 +46,13 @@ namespace ProjectOC.PinchFace
 
         public void Apply(PinchPartType2 _type2,PinchPartType3 _type3,CharacterModelPinch _modelPinch)
         {
-            _modelPinch.ChangeColor(_type2,colors[0],0,CurColorChangeType);
-            _modelPinch.ChangeColor(_type2,colors[1],1,CurColorChangeType);
+            if (_type2 == PinchPartType2.HairFront)
+            {
+                Apply(PinchPartType2.HairBack,PinchPartType3.HB_HairBack,_modelPinch);
+            }
+            _modelPinch.ChangeColor(_type2,colors[0],0);
+            _modelPinch.ChangeColor(_type2,colors[1],1);
+            _modelPinch.ChangeColorType(_type2,CurColorChangeType,smoothStepThreshold,smoothStrength);
         }
     }
 }

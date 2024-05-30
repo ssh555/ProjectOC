@@ -34,7 +34,7 @@ namespace ProjectOC.PinchFace
             {
                 if (_type2 == PinchPartType2.HairFront)
                 {
-                    _modelPinch.ChangeType(PinchPartType3.HD_Dai, typeIndex);
+                    // _modelPinch.ChangeType(PinchPartType3.HD_Dai, typeIndex);
                     _modelPinch.ChangeType(PinchPartType3.HB_HairBack, typeIndex);
                 }
                 _modelPinch.ChangeType(_type3, typeIndex);
