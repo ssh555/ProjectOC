@@ -62,17 +62,13 @@ namespace ProjectOC.MineSystem
         List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();
         Color dataTileColor = new Color32(44, 46, 47,255);
         Color emptyTileColor = new Color32(161, 162, 166,255);
-        [Button("导出数据")]
+        
+        [Button("导出大地图数据")]
         void ReGenerateAsset()
         {
             ReloadMineData();
             
             GenerateBigMapPrefab();
-
-            for (int i = 0; i < SmallMapEditDatas.Count; i++)
-            {
-                GenerateSmallMapPrefab(i);
-            }
         }
 
         private string smallMapFoldPath = "Assets/_ProjectOC/OCResources/MineSystem/MineEditorData";
@@ -108,11 +104,20 @@ namespace ProjectOC.MineSystem
             GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_0").gameObject;
             Transform normalRegionTransf = _prefabData.transform.Find("NormalRegion");
             TileMap.DestroyTransformChild(normalRegionTransf);
-
+            //Block区域
+            Transform _regionTemplateParentTransf = _regionTemplate.transform.parent;
+            for(int i = _regionTemplateParentTransf.childCount-1;i>=0;i--)
+            {
+                if(_regionTemplateParentTransf.GetChild(i).name != _regionTemplate.name)
+                    DestroyImmediate(_regionTemplateParentTransf.GetChild(i));
+            }
+            
             //修改部分: 生成对应的Tex和 Collider2D
             ProcessMapJsonData(_jsonData);
             Transform _canvas = GameObject.Find("Canvas").transform;
             TileMap.DestroyTransformChild(_canvas);
+            
+            
             _prefabData.transform.SetParent(_canvas);
             //PrefabUtility.ApplyPrefabInstance(_prefabData, InteractionMode.UserAction);
             //DestroyImmediate(_prefabData);
@@ -204,29 +209,27 @@ namespace ProjectOC.MineSystem
                 SetSpriteTextureAsset(PATH);
                 Sprite _sprite = AssetDatabase.LoadAssetAtPath<Sprite>(PATH);
 
-                GameObject newPrefab = null;
-
-                if (_lable == 0) //石头区域
+                GameObject newPrefab = Instantiate(_regionTemplate);
+                newPrefab.SetActive(true);
+                newPrefab.name = $"MapRegion_{_lable}";
+                Transform _parentTransf = null;
+                if (_lable > 0)
                 {
-                    newPrefab = _regionTemplate;
+                    _parentTransf = normalRegionTransf;
                 }
                 else
                 {
-                    newPrefab = Instantiate(_regionTemplate);
-                    newPrefab.name = $"MapRegion_{_lable}";
-                    newPrefab.transform.SetParent(normalRegionTransf);
-                    (newPrefab.transform as RectTransform).anchoredPosition = Vector2.zero;
-                    (newPrefab.transform as RectTransform).localScale = Vector3.one;
-                    // float _randomValue = Random.Range(0f,1f);
-                    // Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
+                    _parentTransf = _regionTemplateParentTransf;
                 }
+                newPrefab.transform.SetParent(_parentTransf);
+                (newPrefab.transform as RectTransform).anchoredPosition = Vector2.zero;
+                (newPrefab.transform as RectTransform).localScale = Vector3.one;
                 
                 Image[] images = newPrefab.GetComponentsInChildren<Image>(true);
                 foreach (var image in images)
                 {
                     image.sprite = _sprite;
-                    Debug.Log(image.transform.parent.name+" "+image.name);
-                    if(image.name != "Locked" && _lable != 0)
+                    if(image.name != "Locked" && _lable > 0)
                     {
                         if(image.name == "Normal")
                         {
@@ -244,7 +247,16 @@ namespace ProjectOC.MineSystem
         }
 
 
-
+        
+        [Button("导出小地图数据")]
+        public void ExportSmallMapPrefab()
+        {
+            for (int i = 0; i < SmallMapEditDatas.Count; i++)
+            {
+                GenerateSmallMapPrefab(i);
+            }
+        }
+        
         void GenerateSmallMapPrefab(int _index)
         {
             MineSmallMapEditData _smallMapEditData = SmallMapEditDatas[_index];
