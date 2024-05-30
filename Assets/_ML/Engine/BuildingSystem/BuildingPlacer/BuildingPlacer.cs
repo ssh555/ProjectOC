@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ML.Engine.BuildingSystem.Config;
+using static Unity.Burst.Intrinsics.X86.Avx;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -144,6 +146,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #endregion
 
         #region BPart
+        [ShowInInspector]
         private IBuildingPart selectedPartInstance;
         /// <summary>
         /// 当前选中交互的建筑物
@@ -238,6 +241,20 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             }
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnHeight(this.SelectedPartInstance, isForward);
             //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
+            tmp.RotOffset = SelectedPartInstance.RotOffset;
+            tmp.Mode = this.SelectedPartInstance.Mode;
+            this.ResetBPart();
+            this.SelectedPartInstance = tmp;
+            // to-do : 只有PlaceMode会调用
+            this.OnPlaceModeChangeBPart?.Invoke(this.SelectedPartInstance);
+        }
+
+        /// <summary>
+        /// 更改buildingPart
+        /// </summary>
+        public void AlternateBPart(IBuildingPart buildingPart)
+        {
+            var tmp = GameObject.Instantiate<GameObject>(buildingPart.gameObject).GetComponent<IBuildingPart>();
             tmp.RotOffset = SelectedPartInstance.RotOffset;
             tmp.Mode = this.SelectedPartInstance.Mode;
             this.ResetBPart();
