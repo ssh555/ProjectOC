@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeIndex: -1
   distributionMode: 0
 --- !u!114 &4429541841707830216
 MonoBehaviour:
@@ -59,3 +60,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TransformType: 0
+  pinchRangeX: {x: 0, y: 1}
+  pinchBraidRangeY: {x: 0, y: 1}
+  curValue: {x: 0, y: 0}

@@ -19,6 +19,7 @@ namespace ProjectOC.PinchFace
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             
+            
             this.UIBtnListContainer =
                 new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             #region 初始PinchParts 生成读取模型 Config 图集
@@ -93,6 +94,7 @@ namespace ProjectOC.PinchFace
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= ApplyPinchType;
             ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed -= RandomPinchPart;
+            
         }
 
         void ApplyPinchType(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -208,12 +210,8 @@ namespace ProjectOC.PinchFace
                     .LinkData(i+defaultIndex,i+defaultIndex+1,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
-
-            // foreach (var _btn in _btnLists)
-            // {
-            //     Debug.LogWarning($"Btn: {_btn.name}");
-            // }
-            this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+            
+            UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
             //btnListContainerInitor 删除复原
             newBtnListContainers.btnListContainerInitData.RemoveLinkData(defaultIndex-1,newLinkDataCount);
             
@@ -253,8 +251,8 @@ namespace ProjectOC.PinchFace
 
         private PinchFaceManager pinchFaceManager;
         private CharacterModelPinch modelPinch => pinchFaceManager.ModelPinch;
-        [ShowInInspector]
-        private UIBtnListContainer UIBtnListContainer;
+        
+        public UIBtnListContainer UIBtnListContainer { private set; get; }
         public Transform containerTransf,commonBtnList;
         private RacePinchData raceData;
         private List<PinchPart> pinchParts;

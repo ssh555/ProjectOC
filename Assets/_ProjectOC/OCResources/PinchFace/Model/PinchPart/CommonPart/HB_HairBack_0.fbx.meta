@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ed681cfa2b3e65c4ba231188dc8193b8
+guid: 552c542ae92f76d4d87b07d54aa27c50
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -9,11 +9,6 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: HairMatDefault
     second: {fileID: 2100000, guid: eb29172756882d74b989251d6a864d5d, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: HairNei
-    second: {fileID: 2100000, guid: 76295f5084c148d44bd6524f5323fb80, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -100,7 +95,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 10
+    globalScale: 0.099999994
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
