@@ -231,9 +231,16 @@ namespace ProjectOC.MineSystem
                     image.sprite = _sprite;
                     if(image.name != "Locked" && _lable > 0)
                     {
-                        Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f),
-                        Random.Range(0.15f, 0.9f));
-                        image.color = randomColor;
+                        if(image.name == "Normal")
+                        {
+                            Color randomColor = Color.HSVToRGB(Random.Range(0f, 1f), Random.Range(0f, 0.3f), Random.Range(0.15f, 0.9f));
+                            image.color = randomColor;
+                        }
+                        else if(image.name == "Selected")
+                        {
+                            image.color = Color.white;
+                        }
+                        
                     }
                 }
             }

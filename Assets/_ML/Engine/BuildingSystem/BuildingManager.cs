@@ -283,6 +283,7 @@ namespace ML.Engine.BuildingSystem
         /// PreMode, CurMode
         /// </summary>
         public event System.Action<BuildingMode, BuildingMode> OnModeChanged;
+        [ShowInInspector]
         private BuildingPlacer.BuildingPlacer placer;
         /// <summary>
         /// ¿ØÖÆµÄPlacer
@@ -475,7 +476,7 @@ namespace ML.Engine.BuildingSystem
                 BPart.Mode = BuildingMode.None;
                 return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
             }
-            return BPart;
+            return null;
         }
 
 

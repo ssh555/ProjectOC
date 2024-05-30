@@ -92,9 +92,9 @@ namespace ML.Engine.UI
             this.Enter();
         }
 
-        public void SetHidePanel()
+        public void SetHidePanel(bool hidePanel)
         {
-            this.hidePanel = !hidePanel;
+            this.hidePanel = hidePanel;
         }
 
 

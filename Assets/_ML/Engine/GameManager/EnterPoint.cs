@@ -23,7 +23,7 @@ namespace ML.Engine.Manager
                     // สตภýปฏ
                     var panel = handle.Result.GetComponent<StartMenuPanel>();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
 

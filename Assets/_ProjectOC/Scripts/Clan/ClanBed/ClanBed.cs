@@ -47,7 +47,7 @@ namespace ProjectOC.ClanNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Clan_UI/Prefab_Clan_UI_ClanBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Clan_UI/Prefab_Clan_UI_ClanBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
             {
                 UI.UIClanBed uiPanel = (handle.Result).GetComponent<UI.UIClanBed>();
                 uiPanel.Bed = this;

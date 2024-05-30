@@ -247,39 +247,6 @@
                     "action": "ChangeInteractiveActor",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "XBOX",
-                    "id": "9f71e855-284c-4219-a3c7-794d08d7915f",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeInteractiveActor",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "92c1ba92-8c84-47f8-b222-c49dcc770fc9",
-                    "path": "<XInputController>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeInteractiveActor",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "08b1cdc2-7232-4d54-9399-ff6d577d5ab9",
-                    "path": "<XInputController>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeInteractiveActor",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         },

@@ -893,8 +893,8 @@ namespace ML.Engine.Input
             public InputAction @SubInteract => m_Wrapper.m_Common_SubInteract;
             public InputAction @SubInteractHold => m_Wrapper.m_Common_SubInteractHold;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
+            public void Enable() { UnityEngine.Debug.Log("Common Enable"); Get().Enable(); }
+            public void Disable() { UnityEngine.Debug.Log("Common Disable"); Get().Disable(); }
             public bool enabled => Get().enabled;
             public static implicit operator InputActionMap(CommonActions set) { return set.Get(); }
             public void AddCallbacks(ICommonActions instance)
