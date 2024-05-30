@@ -65,7 +65,7 @@ namespace ML.Engine.BuildingSystem
 
         public const string BPartABPath = "BS_Prefab_BuildingPart";
 
-        private RectTransform Canvas { get => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>(); }
+        private RectTransform Canvas { get => Manager.GameManager.Instance.UIManager.NormalPanel.GetComponent<RectTransform>(); }
         public async UniTask<T> GetPanel<T>() where T : UIBasePanel
         {
             string _path = UIPanelABPath + "/Prefab_BS_" + typeof(T).Name + ".prefab";

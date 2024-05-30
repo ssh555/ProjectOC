@@ -38,7 +38,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         base.OnExit();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
-        uIMineProNode.ProNode.ChangeMine(curMiningData);
+        uIMineProNode.ProNode.ChangeMine(MM.CurMiningData);
     }                                                           
 
     protected override void Exit()
@@ -66,7 +66,11 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
             BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
-            this.cursorNavigation.CurZoomscale = MM.GridScale;
+            this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.SelectMineralSourcesSensitivity;
+            this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.SelectMineralSourcesZoomSpeed;
+            this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.SelectMineralSourcesZoomInLimit;
+            this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.SelectMineralSourcesZoomOutLimit;
+            this.cursorNavigation.CurZoomRate = MM.MineSystemConfig.SelectMineralSourcesInitZoomRate;
             RefreshOnZoomMap();
             this.Refresh();
         };
@@ -104,7 +108,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
             {
                 var panel = handle.Result.GetComponent<SmallMapPanel>();
-                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 panel.SelectMineralSourcesPanel = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
@@ -138,6 +142,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
         Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
         curSelectRegion = MM.BigMapTableData[gridPos.y, gridPos.x];
+        MM.SmallMapCurSelectRegion = curSelectRegion;
         if (preSelectRegion != curSelectRegion)
         {
             preSelectRegion = curSelectRegion;
@@ -166,13 +171,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     private string proNodeId = "testID" + ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
     [ShowInInspector]
     public string ProNodeId { set { proNodeId = value; } get { return proNodeId; } }
-
-    /// <summary>
-    ///当前矿圈所圈住的矿物集合
-    /// </summary>
-    private List<MineData> curMiningData = new List<MineData>();
-    [ShowInInspector]
-    public List<MineData> CurMiningData { get { return curMiningData; } set { curMiningData = value; } }
 
     private UIMineProNode uIMineProNode;
     public UIMineProNode UIMineProNode { get {  return uIMineProNode; } set { uIMineProNode = value; } }

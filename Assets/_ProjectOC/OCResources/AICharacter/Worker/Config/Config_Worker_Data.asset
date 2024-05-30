@@ -24,7 +24,7 @@ MonoBehaviour:
   Config:
     APMax: 100
     APWorkThreshold: 30
-    APRelaxThreshold: 470
+    APRelaxThreshold: 70
     APCost_Transport: 5
     EatTime: 5
     EMMax: 100

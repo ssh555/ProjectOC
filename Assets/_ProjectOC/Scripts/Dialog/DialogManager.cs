@@ -97,7 +97,7 @@ namespace ProjectOC.Dialog
                     .Completed +=(handle) =>
                 {
                     DialogPanel = handle.Result.GetComponent<UIDialogPanel>();
-                    DialogPanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    DialogPanel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(DialogPanel);
                     LoadDialogue(_ID);
 

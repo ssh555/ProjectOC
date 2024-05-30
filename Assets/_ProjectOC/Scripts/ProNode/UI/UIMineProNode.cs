@@ -6,6 +6,8 @@ using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
 using Sirenix.OdinInspector;
+using ProjectOC.ManagerNS;
+using ML.Engine.Manager;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -313,15 +315,39 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if(CurProNodeMode == ProNodeSelectMode.Mine)
                 {
-                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                    var MM = LocalGameManager.Instance.MineSystemManager;
+                    var MineralCircleData = MM.GetMineralCircleData(ProNode.GetUID());
+                    if (MineralCircleData != null)
                     {
-                        SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
-                        selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                        selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
-                        selectMineralSourcesPanel.UIMineProNode = this;
-                        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
-                    };
-
+                        ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                        {
+                            SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                            selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                            selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
+                            selectMineralSourcesPanel.UIMineProNode = this;
+                            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                            MM.ChangeCurMineralMapData(MineralCircleData.SmallMapTuple.Item1);
+                            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
+                            {
+                                var panel = handle.Result.GetComponent<SmallMapPanel>();
+                                panel.IsCheckRegionNum = false;
+                                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                                panel.SelectMineralSourcesPanel = selectMineralSourcesPanel;
+                                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                            };
+                        };
+                    }
+                    else
+                    {
+                        ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
+                        {
+                            SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                            selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                            selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
+                            selectMineralSourcesPanel.UIMineProNode = this;
+                            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
+                        };
+                    }
                 }
             }
             else if (CurMode == Mode.ChangeWorker && Workers.Count > 0)

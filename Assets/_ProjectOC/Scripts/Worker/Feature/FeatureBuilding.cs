@@ -21,7 +21,7 @@ namespace ProjectOC.WorkerNS
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_FeaturePanel.prefab",
-                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
                 {
                     UI.UIFeature uiPanel = (handle.Result).GetComponent<UI.UIFeature>();
                     uiPanel.FeatBuild = this;
