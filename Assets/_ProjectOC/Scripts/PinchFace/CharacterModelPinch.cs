@@ -116,6 +116,15 @@ namespace ProjectOC.PinchFace
 
         public void UnEquipItem(PinchPartType2 _type2)
         {
+            if (_type2 == PinchPartType2.EarTop)
+            {
+                if (topEar != null)
+                {
+                    topEar.Release();
+                    topEar = null;    
+                }
+            }
+            
             if (_type2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
                 boneWeightDictionary.Remove(BoneWeightType.Tail);
             

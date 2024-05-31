@@ -70,30 +70,13 @@ namespace ProjectOC.PinchFace
         #endregion
 
         #region Internal
+
+        
+
         protected override void RegisterInput()
         {
             base.RegisterInput();
-            for(int i = RacePinchDatas.Count-1;i >= 0;i--)
-            {
-                int tmpI = i;
-                SelectedButton _btn =  Instantiate(raceBtnTemplate,raceBtnTemplate.transform.parent);
-                _btn.gameObject.SetActive(true);
-                _btn.name = $"Race_{RacePinchDatas[tmpI].raceName}";
-                _btn.transform.GetComponentInChildren<TextMeshProUGUI>().text = RacePinchDatas[i].raceName;
-                if (RacePinchDatas[tmpI].isDefault)
-                {
-                    _btn.transform.Find("NotDefaultImage").gameObject.SetActive(false);
-                }
-                _btn.onClick.AddListener(() =>
-                {
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-                    pinchFaceManager.GeneratePinchFaceUI(RacePinchDatas[tmpI]);
-                });
-            }
-            
-            
             UIBtnListContainer.UIBtnLists[0].InitBtnInfo();
-            
             UIBtnListContainer.UIBtnLists[1].SetBtnAction(0,0,() =>
             {
                 //创建种族
@@ -105,13 +88,18 @@ namespace ProjectOC.PinchFace
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed += SubInteract_performed;
         }
-        
+
         protected override void UnregisterInput()
         {
             base.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
+            UIBtnListContainer.UIBtnLists[0].DeBindInputAction();
+            UIBtnListContainer.UIBtnLists[1].DeBindInputAction();
+            Input.InputManager.PlayerInput.PlayerUI.Disable();
+            UIBtnListContainer.DeBindNavigationInputAction();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed -= SubInteract_performed;
         }
         
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -119,7 +107,31 @@ namespace ProjectOC.PinchFace
             Destroy(pinchFaceManager.ModelPinch.gameObject);
             ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
-
+        private void SubInteract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            //推出确认菜单
+            if (CouldDeleteRace)
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, 
+                    new UIManager.PopUpUIData("确认删除种族自创种族名称吗?", "这将删除所有该种族已保存的角色形象。\n已在游戏中创建的角色不会受到影响，但其种族将变更为未知。", null, 
+        () => {
+                        int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos1();
+                        RacePinchData raceData = RacePinchDatas[RacePinchDatas.Count-1-_curPos];
+                        foreach (Transform _btn in raceBtnTemplate.transform.parent)
+                        {
+                            if (_btn.name == $"Race_{raceData.raceName}")
+                            {
+                                _btn.gameObject.SetActive(false);
+                                Destroy(_btn.gameObject);
+                                break;
+                            }
+                        }
+                        pinchFaceManager.RacePinchDatas.Remove(raceData);
+                        
+                        UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
+                    }));   
+            }
+        }
         
         #endregion
         
@@ -149,10 +161,10 @@ namespace ProjectOC.PinchFace
                 _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
             }
             this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
-
+            GenerateLeftBtnList();
             base.InitBtnInfo();
         }
-
+        
         void SelectButtonChangedAction()
         {
             //右侧种族描述更新，中英文切换直接换RacePinchData
@@ -161,12 +173,15 @@ namespace ProjectOC.PinchFace
             {
                 raceNameText.text = "";
                 raceDescription.text = "";
+                CouldDeleteRace = false;
             }
             else
             {
                 RacePinchData raceData = RacePinchDatas[RacePinchDatas.Count-1-_curPos];
                 raceNameText.SetText(raceData.raceName);
                 raceDescription.SetText(raceData.raceDescription);
+                CouldDeleteRace = !raceData.isDefault;
+                Debug.Log($"{raceData.raceName} {CouldDeleteRace}");
                 //随机生成
                 if (pinchFaceManager.ModelPinch != null)
                 {
@@ -176,9 +191,28 @@ namespace ProjectOC.PinchFace
                         pinchFaceManager.RandomPinchPart(_type3,true);
                     }
                 }
-
+                
             }
-            
+        }
+        void GenerateLeftBtnList()
+        {
+            for(int i = RacePinchDatas.Count-1;i >= 0;i--)
+            {
+                int tmpI = i;
+                SelectedButton _btn =  Instantiate(raceBtnTemplate,raceBtnTemplate.transform.parent);
+                _btn.gameObject.SetActive(true);
+                _btn.name = $"Race_{RacePinchDatas[tmpI].raceName}";
+                _btn.transform.GetComponentInChildren<TextMeshProUGUI>().text = RacePinchDatas[i].raceName;
+                if (RacePinchDatas[tmpI].isDefault)
+                {
+                    _btn.transform.Find("NotDefaultImage").gameObject.SetActive(false);
+                }
+                _btn.onClick.AddListener(() =>
+                {
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                    pinchFaceManager.GeneratePinchFaceUI(RacePinchDatas[tmpI]);
+                });
+            }
         }
         
         private void InitBtnData(PinchRacePanelStruct datas)
@@ -206,8 +240,19 @@ namespace ProjectOC.PinchFace
         
         public UICameraImage uICameraImage;
         private int IsInit = 0;
-    
-        
+
+        private bool CouldDeleteRace
+        {
+            get {return couldDeleteRace;}
+            set
+            {
+                couldDeleteRace = value;
+                Transform deleteKT = transform.Find("BotKeyTips/KeyTips/KT_Delete");
+                deleteKT.gameObject.SetActive(CouldDeleteRace);
+            }
+        }
+        private bool couldDeleteRace = false;
+
         #endregion
 
 
