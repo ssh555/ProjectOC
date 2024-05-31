@@ -15,14 +15,22 @@ namespace ML.Engine.UI
     {
         private ScrollRect ScrollRect;
         private Scrollbar VerticalScrollbar, HorizontalScrollbar;
+        private bool VerticalScrollbarActive { get { return VerticalScrollbar.gameObject.activeInHierarchy; } }
+        private bool HorizontalScrollbarActive { get { return HorizontalScrollbar.gameObject.activeInHierarchy; } }
+
         private RectTransform center;
         public Transform Center { get { return center.transform; } }
         private RectTransform RaycastCenter;
         /// <summary>
         /// Center 在Content 坐标系下的坐标
         /// </summary>
-        [ShowInInspector]
-        public Vector3 CenterPos { get { if (center == null) return Vector3.zero; return center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
+        public Vector3 CenterPos { get {
+
+                Vector2 localPosition;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(this.content as RectTransform, this.center.position, null, out localPosition);
+                return localPosition;
+            } 
+        }
 
         private Vector2 LimitBound;
         private Vector2 minBounds;
@@ -49,7 +57,8 @@ namespace ML.Engine.UI
         [LabelText("边距配置（左右间距，上下间距）")]
         public Vector2 Margin = new Vector2();
         [LabelText("导航速度")]
-        public float NavagationSpeed = 1;
+        public float navagationSpeed = 1;
+        public float NavagationSpeed { get { return navagationSpeed * curZoomscale; } set { navagationSpeed = value; } }
         [LabelText("是否启用缩放功能")]
         public bool IsZoomEnabled = false;
         [ShowIf("IsZoomEnabled", true)]
@@ -82,6 +91,8 @@ namespace ML.Engine.UI
                 return curZoomscale;
             }
         }
+        public float valueToPosX { get { return ((this.content as RectTransform).rect.width - (this.transform as RectTransform).rect.width) * curZoomscale; } }
+        public float valueToPosY { get { return ((this.content as RectTransform).rect.height - (this.transform as RectTransform).rect.height) * curZoomscale; } }
 
         public event Action OnScaleChanged;
         public event Action OnCenterPosChanged;
@@ -180,9 +191,13 @@ namespace ML.Engine.UI
         #region NavagateMap_performed
         private float NavagateMapTimeInterval = 0.01f;
         CounterDownTimer NavagateMapTimer = null;
+        [ShowInInspector]
         private bool canControlCenterxLeft;
+        [ShowInInspector]
         private bool canControlCenterxRight;
+        [ShowInInspector]
         private bool canControlCenteryUP;
+        [ShowInInspector]
         private bool canControlCenteryDown;
         #endregion
         private void NavagateMap_started(InputAction.CallbackContext obj)
@@ -192,7 +207,7 @@ namespace ML.Engine.UI
                 NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
                 NavagateMapTimer.OnEndEvent += () =>
                 {
-
+                    //Debug.Log("NavagateMap_started ");
                     if(isEnable == false) { return; }
 
                     canControlCenterxLeft = false;
@@ -222,6 +237,18 @@ namespace ML.Engine.UI
                     if (Mathf.Abs(VerticalScrollbar.value) < 0.0025)
                     {
                         canControlCenteryDown = true;
+                    }
+                    
+                    if (HorizontalScrollbarActive == false)
+                    { 
+                        canControlCenterxLeft = true;
+                        canControlCenterxRight = true;
+                    }
+
+                    if (VerticalScrollbarActive == false)
+                    {
+                        canControlCenteryUP = true;
+                        canControlCenteryDown = false;
                     }
 
                     //右侧触底
@@ -287,13 +314,15 @@ namespace ML.Engine.UI
                     //左右可移动背景
                     if (!canControlCenterxRight && !canControlCenterxLeft)
                     {
-                        HorizontalScrollbar.value += (vector2.x / 400) * NavagationSpeed;
+                        //HorizontalScrollbar.value += (vector2.x / 400) * NavagationSpeed;
+                        HorizontalScrollbar.value += vector2.x * 5 * NavagationSpeed / valueToPosX;
                     }
 
                     //上下可移动背景
                     if (!canControlCenteryUP && !canControlCenteryDown)
                     {
-                        VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
+                        //VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
+                        VerticalScrollbar.value += vector2.y * 5 * NavagationSpeed / valueToPosY;
                     }
                     OnCenterPosChanged?.Invoke();
                 };
@@ -306,6 +335,19 @@ namespace ML.Engine.UI
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(NavagateMapTimer);
             NavagateMapTimer = null;
         }
+
+
+        public float CalculateContentPosChangePerValueChange(RectTransform content, Scrollbar scrollbar)
+        {
+            float totalHeight = content.rect.height; // Content 的总高度
+            float viewportHeight = content.parent.GetComponent<RectTransform>().rect.height; // Viewport 的高度
+            float scrollbarHeight = scrollbar.size * viewportHeight; // 滚动条的滑块高度
+
+            // 计算 value 从 0 变化到 1 时 Content 的 PosY 的变化值
+            float contentPosChangePerValueChange = (totalHeight - viewportHeight) / (1 - scrollbarHeight / (totalHeight - viewportHeight));
+            return contentPosChangePerValueChange;
+        }
+
 
         #region ZoomOut_performed
         private float ZoomOutTimeInterval = 0.01f;

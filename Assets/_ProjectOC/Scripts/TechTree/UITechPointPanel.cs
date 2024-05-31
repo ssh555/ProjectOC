@@ -116,8 +116,6 @@ namespace ProjectOC.TechTree.UI
 
                             SetBtnPos(btn.transform, TechTreeManager.Instance.GetTPGrid(id));
 
-
-
                             int order = TechTreeManager.Instance.GetWaitingOrder(id);
                             btn.transform.Find("Image").gameObject.SetActive(order != -1);
                             if (order != -1)
@@ -181,11 +179,9 @@ namespace ProjectOC.TechTree.UI
         [ShowInInspector]
 
         private string CurrentID = "";
-
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
-
         #endregion
 
         public IInventory inventory;
@@ -309,8 +305,6 @@ namespace ProjectOC.TechTree.UI
         {
             base.Start();
         }
-
-
         protected override void OnDestroy()
         {
             ClearTemp();
@@ -346,7 +340,6 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
         public override void OnEnter()
         {
             base.OnEnter();
@@ -401,8 +394,6 @@ namespace ProjectOC.TechTree.UI
             }
         }
 
-
-
         private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private List<CounterDownTimer> tempTimer = new List<CounterDownTimer>();
         private List<GameObject> tempGO = new List<GameObject>();
@@ -428,8 +419,6 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         private Dictionary<string, GameObject> TPCItemGO = new Dictionary<string, GameObject>();
 
-
-
         private void ClearTempOnAlterTP()
         {
             foreach (var s in TPCItemGO.Values)
@@ -444,7 +433,6 @@ namespace ProjectOC.TechTree.UI
             TPUnlockGO.Clear();
 
         }
-
         private void ClearTemp()
         {
             // sprite
@@ -495,7 +483,6 @@ namespace ProjectOC.TechTree.UI
             }
             tempTimer.Clear();
         }
-
         public override void Refresh()
         {
             if (!this.objectPool.IsLoadFinish()) 

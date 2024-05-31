@@ -44,7 +44,6 @@ namespace ML.Engine.Utility
             yield return null;
             this.isFinished = true;
             this.onAllFunctionsCompleted?.Invoke();
-            
         }
 
         public void AddFunction(Func<T> func)

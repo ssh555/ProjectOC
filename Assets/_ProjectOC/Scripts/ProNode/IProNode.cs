@@ -296,7 +296,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("额外值班体力消耗"), ReadOnly, ShowInInspector]
         private int ModifyAPCost_Duty;
         [LabelText("值班体力消耗倍率"), ReadOnly, ShowInInspector]
-        private float FactorAPCost_Duty;
+        private float FactorAPCost_Duty = 1;
         [LabelText("最终值班体力消耗"), ReadOnly, ShowInInspector]
         public int RealAPCost_Duty => (int)(InitAPCost_Duty * FactorAPCost_Duty + ModifyAPCost_Duty);
         public List<WorkerNS.Effect> Effects { get; set; } = new List<WorkerNS.Effect>();
