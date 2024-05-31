@@ -154,7 +154,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private Image DotLine;
     private RectTransform DotLineRectTransform;
 
-
     private UIIslandUpdatePanel uIIslandUpdatePanel;
     public UIIslandUpdatePanel UIIslandUpdatePanel { set { uIIslandUpdatePanel = value; } }
 
