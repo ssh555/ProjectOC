@@ -66,6 +66,11 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     private Dictionary<SelectedButton, MineData> BtnToMineDataDic = new Dictionary<SelectedButton, MineData>();
     private void InitData()
     {
+        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId, isCheckRegionNum);
+        if (placeCircleData != null)
+        {
+            MM.SetMineralMapData(placeCircleData.SmallMapTuple.Item1, placeCircleData.SmallMapTuple.Item2);
+        }
         if (MM.MineralMapData == null) return;
         this.CheckRange = MM.MineSystemConfig.MiningCircleRadius * this.EnlargeRate;
         (this.cursorNavigation.Center as RectTransform).sizeDelta = new Vector2(2 * CheckRange, 2 * CheckRange);
@@ -102,7 +107,7 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         (this.cursorNavigation.UIBtnList.Parent as RectTransform).anchoredPosition = localPosition;
 
         //初始化矿圈位置信息
-        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId, isCheckRegionNum);
+
         if (placeCircleData != null)
         {
             this.PlacedCircle.gameObject.SetActive(placeCircleData.isPlacedCircle);

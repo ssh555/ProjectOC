@@ -15,9 +15,7 @@ namespace ML.Engine.Manager
         public EnterPoint()
         {
             //InitUIPrefabs();
-
-
-            System.Action<string, string> postCallback = (string s1,string s2) => {
+/*            System.Action<string, string> postCallback = (string s1,string s2) => {
                 this.GetStartMenuPanelInstance().Completed += (handle) =>
                 {
                     // 实例化
@@ -30,9 +28,19 @@ namespace ML.Engine.Manager
                     //panel.OnEnter();
                 };
 
-            };
+            };*/
+            this.GetStartMenuPanelInstance().Completed += (handle) =>
+            {
+                // 实例化
+                var panel = handle.Result.GetComponent<StartMenuPanel>();
 
-            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_PreScene", null, postCallback));
+                panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
+
+                GameManager.Instance.UIManager.PushPanel(panel);
+
+                //panel.OnEnter();
+            };
+            //GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_PreScene", null, postCallback));
         }
 
         #region Prefab

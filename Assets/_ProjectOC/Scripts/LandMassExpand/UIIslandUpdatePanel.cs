@@ -77,10 +77,18 @@ namespace ProjectOC.LandMassExpand
         {
             if (currentIslandIndex == 2)
             {
-                IslandRudderPanelInstance.transform.SetParent(null, false);
+                if(isBackEnable)
+                {
+                    IslandRudderPanelInstance.transform.SetParent(null, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                    return;
+                }
+            }
+            else
+            {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
             }
-            ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
 
         private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -251,6 +259,15 @@ namespace ProjectOC.LandMassExpand
             ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed += Maininteract_performed;
         }
 
+        private bool isBackEnable = true;
+        public void DisableBack_performed()
+        {
+            isBackEnable = false;
+        }
+        public void  EnableBack_performed()
+        {
+            isBackEnable = true;
+        }
         #endregion
     }
 }

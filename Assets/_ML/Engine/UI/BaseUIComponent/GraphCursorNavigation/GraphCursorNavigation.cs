@@ -24,7 +24,6 @@ namespace ML.Engine.UI
         /// <summary>
         /// Center 在Content 坐标系下的坐标
         /// </summary>
-        [ShowInInspector]
         public Vector3 CenterPos { get {
 
                 Vector2 localPosition;
@@ -58,7 +57,8 @@ namespace ML.Engine.UI
         [LabelText("边距配置（左右间距，上下间距）")]
         public Vector2 Margin = new Vector2();
         [LabelText("导航速度")]
-        public float NavagationSpeed = 1;
+        public float navagationSpeed = 1;
+        public float NavagationSpeed { get { return navagationSpeed * curZoomscale; } set { navagationSpeed = value; } }
         [LabelText("是否启用缩放功能")]
         public bool IsZoomEnabled = false;
         [ShowIf("IsZoomEnabled", true)]
@@ -91,10 +91,8 @@ namespace ML.Engine.UI
                 return curZoomscale;
             }
         }
-        [ShowInInspector]
-        public float valueToPosX { get { return ((this.content as RectTransform).rect.width - (this.transform as RectTransform).rect.width) * curZoomRate; } }
-        [ShowInInspector]
-        public float valueToPosY { get { return ((this.content as RectTransform).rect.height - (this.transform as RectTransform).rect.height) * curZoomRate; } }
+        public float valueToPosX { get { return ((this.content as RectTransform).rect.width - (this.transform as RectTransform).rect.width) * curZoomscale; } }
+        public float valueToPosY { get { return ((this.content as RectTransform).rect.height - (this.transform as RectTransform).rect.height) * curZoomscale; } }
 
         public event Action OnScaleChanged;
         public event Action OnCenterPosChanged;

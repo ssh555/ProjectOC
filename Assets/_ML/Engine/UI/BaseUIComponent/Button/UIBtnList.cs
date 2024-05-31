@@ -778,13 +778,6 @@ namespace ML.Engine.UI
             return this.CurSelected;
         }
         /// <summary>
-        /// 获取当前选中按钮
-        /// </summary>
-        public void SetCurSelected(SelectedButton selectedButton)
-        {
-            this.CurSelected = selectedButton;
-        }
-        /// <summary>
         /// 置空当前选中按钮
         /// </summary>
         public void SetCurSelectedNull()

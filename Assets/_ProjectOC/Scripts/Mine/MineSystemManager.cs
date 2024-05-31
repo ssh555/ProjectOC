@@ -61,6 +61,9 @@ namespace ProjectOC.MineSystem
 
         #region SmallMap
         [ShowInInspector]
+        /// <summary>
+        ///当前所选小地图的矿物集合
+        /// </summary>
         private MineralMapData mineralMapData;
         public MineralMapData MineralMapData { get { return mineralMapData; } }
 
@@ -249,6 +252,13 @@ namespace ProjectOC.MineSystem
         private Dictionary<int,Texture2D> IndexToTextureDic = new Dictionary<int,Texture2D>();
 
         //策划大地图数据
+/*        [System.Serializable]
+        public struct BigMapTableData
+        {
+            public List<List<int>> BigMapData;
+        }*/
+
+
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
         private string _jsonData;
         private int[,] bigMapTableData;
@@ -502,6 +512,12 @@ namespace ProjectOC.MineSystem
             return RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex];
         }
 
+        public bool CheckRegionIsUnlocked(int RegionNum,int MapLayerIndex)
+        {
+            if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return false;
+            return RegionNumToRegionDic[RegionNum].isUnlockLayer[MapLayerIndex];
+        }
+
         public void ChangeCurMineralMapData(int curSelectRegion)
         {
             if(!RegionNumToRegionDic.ContainsKey(curSelectRegion))
@@ -525,6 +541,32 @@ namespace ProjectOC.MineSystem
                 return;
             }
             this.mineralMapData =  mineralMapDatas[MineralMapDataID];
+        }
+
+        public void SetMineralMapData(int RegionNum,int MapLayerIndex)
+        {
+            if (!RegionNumToRegionDic.ContainsKey(RegionNum))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            if (!CheckRegionIsUnlocked(RegionNum, MapLayerIndex))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            if (RegionNum <= 0)
+            {
+                return;
+            }
+
+            string MineralMapDataID = RegionNumToRegionDic[RegionNum].mineralDataID[MapLayerIndex];
+            if (!mineralMapDatas.ContainsKey(MineralMapDataID))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            this.mineralMapData = mineralMapDatas[MineralMapDataID];
         }
 
         /// <summary>
