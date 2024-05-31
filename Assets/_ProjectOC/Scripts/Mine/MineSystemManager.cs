@@ -259,7 +259,7 @@ namespace ProjectOC.MineSystem
         }*/
 
 
-        private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
+        private const string bigMapDataJson = "OCTableData/WorldMap.json";
         private string _jsonData;
         private int[,] bigMapTableData;
         public int[,] BigMapTableData { get { return bigMapTableData; } }
@@ -313,7 +313,7 @@ namespace ProjectOC.MineSystem
         private void LoadBigMapTableData()
         {
             //策划大地图数据
-            _jsonData = File.ReadAllText(bigMapDataJson);
+            _jsonData = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<TextAsset>(bigMapDataJson).WaitForCompletion().text;
             bigMapTableData = JsonConvert.DeserializeObject<int[,]>(_jsonData);
             synchronizerInOrder.Check(1);
         }
