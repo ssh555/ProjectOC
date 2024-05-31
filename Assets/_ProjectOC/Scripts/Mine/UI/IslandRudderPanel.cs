@@ -5,6 +5,7 @@ using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
 using ProjectOC.MineSystem;
 using Sirenix.OdinInspector;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +27,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
         this.DotLine = Content.Find("DotLine").GetComponent<Image>();
         this.DotLineRectTransform = DotLine.GetComponent<RectTransform>();
+        this.DotLine.gameObject.SetActive(false);
     }
     #endregion
 
@@ -124,11 +126,19 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         if (!MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos))
         {
             MM.MainIslandData.IsPause = true;
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("已有导航点，是否重新设置？", null, null, () => {
-                MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos, true);
-                MM.MainIslandData.IsPause = false;
-            }, () => { MM.MainIslandData.IsPause = false; }));
+            GameManager.Instance.StartCoroutine(PushNoticeUIInstance1());
         }
+
+    }
+    private IEnumerator PushNoticeUIInstance1()
+    {
+        uIIslandUpdatePanel.DisableBack_performed();
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("已有导航点，是否重新设置？", null, null, () => {
+            MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos, true);
+            MM.MainIslandData.IsPause = false;
+            uIIslandUpdatePanel.EnableBack_performed();
+        }, () => { MM.MainIslandData.IsPause = false; uIIslandUpdatePanel.EnableBack_performed(); }));
     }
     #endregion
 
@@ -238,11 +248,36 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         MapLayerUIBtnList = new UIBtnList(this.transform.Find("MapLayer").Find("ButtonList").GetComponent<UIBtnListInitor>());
         MapLayerUIBtnList.OnSelectButtonChanged += () =>
         {
+            if (MM.MainIslandData.IsMoving)
+            {
+                MM.MainIslandData.IsPause = true;
+                uIIslandUpdatePanel.DisableBack_performed();
+                GameManager.Instance.StartCoroutine(PushNoticeUIInstance2());
+            }
+            else
+            {
+                MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
+                //进入新区域
+                MM.UnlockMapRegion(MM.CurRegionNum);
+                this.Refresh();
+            }
+        };
+    }
+
+    private IEnumerator PushNoticeUIInstance2()
+    {
+        uIIslandUpdatePanel.DisableBack_performed();
+        yield return new WaitForSeconds(0.1f);
+        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("取消已有的导航点并切换地图层？", null, null, () =>
+        {
+            MM.MainIslandData.IsPause = false;
+            MM.MainIslandData.Reset();
             MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
             //进入新区域
             MM.UnlockMapRegion(MM.CurRegionNum);
             this.Refresh();
-        };
+            uIIslandUpdatePanel.EnableBack_performed();
+        }, () => { MM.MainIslandData.IsPause = false; uIIslandUpdatePanel.EnableBack_performed(); }));
     }
     #endregion
 }
