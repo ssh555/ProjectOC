@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace ML.Editor.Animation
 {
@@ -65,6 +66,7 @@ namespace ML.Editor.Animation
                 set => PreviewWindow.Instance.GetAnimations.NormalizedTime = value;
             }
 
+            private bool isdragging = false;
             public void DrawTimelineGUI()
             {
                 //scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(timelineHeight));
@@ -122,7 +124,9 @@ namespace ML.Editor.Animation
                 GUI.color = color;
 
                 // 处理鼠标滚轮缩放
-                if (rect.Contains(Event.current.mousePosition))
+                
+                //if (rect.Contains(Event.current.mousePosition))
+                if (TrackWindow.Instance.hasFocus)
                 {
                     if (Event.current.type == EventType.ScrollWheel)
                     {
@@ -132,12 +136,27 @@ namespace ML.Editor.Animation
                     }
                 }
 
-                // 处理鼠标左键拖拽滑块
-                //if (Event.current.button == 0 && (Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) && rect.Contains(Event.current.mousePosition))
-                if (Event.current.button == 0 && (Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) && rect.Contains(Event.current.mousePosition))
-                    {
+                Event currentEvent = Event.current;
+
+                // 检查鼠标拖动事件
+                if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && rect.Contains(Event.current.mousePosition))
+                {
+                    isdragging = true;
+                    currentEvent.Use();
                     NormalizedTime = Mathf.Max((Event.current.mousePosition.x - rect.x), 0) / timelineScale / tickSpacing / Framelength;
                     Instance.Repaint();
+                    EditorApplication.update += OnDrag;
+                }
+                else if (isdragging && currentEvent.type == EventType.MouseUp && currentEvent.button == 0)
+                {
+                    currentEvent.Use();
+                    EditorApplication.update -= OnDrag;
+                }
+                else if (isdragging && currentEvent.type == EventType.MouseDrag)
+                {
+                    NormalizedTime = Mathf.Max((Event.current.mousePosition.x - rect.x), 0) / timelineScale / tickSpacing / Framelength;
+                    Instance.Repaint();
+                    currentEvent.Use();
                 }
                 //EditorGUILayout.EndScrollView();
 
@@ -145,6 +164,11 @@ namespace ML.Editor.Animation
 
             }
 
+            private void OnDrag()
+            {
+                FocusWindowIfItsOpen<TrackWindow>();
+                Debug.Log("QWQ");
+            }
 
         }
     }

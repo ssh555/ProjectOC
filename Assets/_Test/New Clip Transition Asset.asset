@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: New Clip Transition Asset
   m_EditorClassIdentifier: 
   _Transition:
-    rid: 6791770761918414849
+    rid: 6791770897357733889
   references:
     version: 2
     RefIds:
-    - rid: 6791770761918414849
+    - rid: 6791770897357733889
       type: {class: ClipTransition, ns: Animancer, asm: Animancer}
       data:
         _FadeDuration: 0.25
         _Events:
-          _NormalizedTimes:
-          - 0.6287962
-          - NaN
+          _NormalizedTimes: []
           _Callbacks: []
           _Names: []
         _Clip: {fileID: 0}

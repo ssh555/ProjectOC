@@ -41,7 +41,14 @@ public class _Test : MonoBehaviour
 
     public void DebugLog()
     {
-        Debug.Log(_animancer.States.Current.NormalizedTime);
+        if(_animancer && _animancer.States != null && _animancer.States.Current != null)
+        {
+            Debug.Log(_animancer.States.Current.NormalizedTime);
+        }
+        else
+        {
+            Debug.Log("QWQ");
+        }
     }
 }
 

@@ -15,7 +15,8 @@ MonoBehaviour:
   clipTransition:
     _FadeDuration: 0.25
     _Events:
-      _NormalizedTimes: []
+      _NormalizedTimes:
+      - 1
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4ae6a6e5c9379b94b8c5b5ca31f36f1a, type: 2}
@@ -23,7 +24,7 @@ MonoBehaviour:
     _NormalizedStartTime: NaN
   _Events:
   - Name: TestEvent
-    NormalizedTime: 0.10414414
-    Event:
+    NormalizedTime: 0.109549545
+    UnityEvents:
       m_PersistentCalls:
         m_Calls: []

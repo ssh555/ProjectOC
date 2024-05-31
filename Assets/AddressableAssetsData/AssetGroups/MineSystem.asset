@@ -39,7 +39,7 @@ MonoBehaviour:
     - Config_Mine_MineEditorData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d7a9cce9ec08f074d827af8988ed98da
-    m_Address: Assets/_ProjectOC/OCResources/MineSystem/Texture2D/SmallMapTex
+    m_Address: SmallMapTex
     m_ReadOnly: 0
     m_SerializedLabels:
     - Texture2D_Mine_SmallMapTex

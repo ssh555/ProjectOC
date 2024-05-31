@@ -22,6 +22,7 @@ namespace ML.Engine.Animation
         protected List<IAssetHasEvents.AssetEvent> _Events;
         public List<IAssetHasEvents.AssetEvent> Events => _Events;
 
+        public float FrameLength => clipTransition.Clip.length * clipTransition.Clip.frameRate;
 
         public override ITransition GetTransition()
         {

@@ -9,6 +9,8 @@ using static ML.Engine.Animation.IAssetHasEvents;
 using UnityEngine.Events;
 using Animancer.Editor;
 using System.Diagnostics.Eventing.Reader;
+using static Unity.Burst.Intrinsics.X86.Avx;
+using System.Diagnostics.Tracing;
 
 namespace ML.Editor.Animation
 {
@@ -29,6 +31,9 @@ namespace ML.Editor.Animation
             return true;
         }
 
+        /// <summary>
+        /// 用于在AnimationWindow窗口中绘制常规配置项(不包括Track)
+        /// </summary>
         public virtual void DrawInEditorWindow()
         {
             //Debug.LogWarning($"{this.target.GetType()} 没有实现Editor");
@@ -37,12 +42,16 @@ namespace ML.Editor.Animation
 
         /// <summary>
         /// 绘制自定义的Track
-        /// 默认只绘制 EventTrack
+        /// 需在此调用Track.DrawTrackGUI()
         /// </summary>
         public virtual void DrawTrackGUI()
         {
         }
 
+        /// <summary>
+        /// 等效于OnEnable -> 用于窗口打包这个资产时的初始化编辑器
+        /// 用于初始化所使用的轨道
+        /// </summary>
         public virtual void Init()
         {
 
@@ -53,9 +62,12 @@ namespace ML.Editor.Animation
 
     [System.Serializable]
     public class EventTrack : TrackWindow.Track
-    {
+{
         public EventTrack(IAssetHasEvents transition)
         {
+            this.Start = 0;
+            this.End = transition.FrameLength;
+
             TargetTransition = transition;
             // 不能使用foreach: Events和EventName是分开存的的
             if(transition.Events != null)
@@ -109,7 +121,7 @@ namespace ML.Editor.Animation
             void OnEnable()
             {
                 serializedObject = new SerializedObject(this);
-                eventProperty = serializedObject.FindProperty("Event.Event");
+                eventProperty = serializedObject.FindProperty("Event.UnityEvents");
             }
 
             public override void DoSelectedGUI()
@@ -129,6 +141,7 @@ namespace ML.Editor.Animation
                 {
                     serializedObject.ApplyModifiedProperties();
                     EditorUtility.SetDirty(_asset as ScriptableObject);
+                    AssetDatabase.SaveAssetIfDirty(_asset as ScriptableObject);
                 }
             }
         }

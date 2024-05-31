@@ -76,9 +76,15 @@ namespace ML.Engine.Animation
         {
             public string Name;
             public float NormalizedTime;
-            public UnityEvent Event;
+            public UnityEvent UnityEvents;
+            ///// <summary>
+            ///// 引用函数库中的函数 -> 只传id，不传参数
+            ///// </summary>
+            //public List<string> FunctionEvents;
         }
         public List<AssetEvent> Events { get; }
+        public float FrameLength
+        { get; }
 
         public AnimancerEvent.Sequence GetEventsOptional()
         {
@@ -92,7 +98,7 @@ namespace ML.Engine.Animation
 
             for (int i = 0; i < timeCount; ++i)
             {
-                Action callback = GetInvoker(Events[i].Event);
+                Action callback = GetInvoker(Events[i].UnityEvents);
                 _Events.Add(new AnimancerEvent(Events[i].NormalizedTime, callback));
                 _Events.SetName(i, Events[i].Name);
             }
