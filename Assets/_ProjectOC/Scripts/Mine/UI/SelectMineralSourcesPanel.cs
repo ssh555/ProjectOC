@@ -129,7 +129,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     public int PreSelectRegion { get { return preSelectRegion; }  }
     [ShowInInspector]
     private int curSelectRegion = -1;
-    public int CurSelectRegion { get { return  curSelectRegion; } }
+    public int CurSelectRegion { get { return  curSelectRegion; } set { curSelectRegion = value; } }
 
     private void DetectMainIslandCurRegion()
     {

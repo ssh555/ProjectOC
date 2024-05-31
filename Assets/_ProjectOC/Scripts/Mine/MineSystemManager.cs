@@ -259,7 +259,7 @@ namespace ProjectOC.MineSystem
         }*/
 
 
-        private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
+        private const string bigMapDataJson = "OCTableData/WorldMap.json";
         private string _jsonData;
         private int[,] bigMapTableData;
         public int[,] BigMapTableData { get { return bigMapTableData; } }
@@ -313,7 +313,7 @@ namespace ProjectOC.MineSystem
         private void LoadBigMapTableData()
         {
             //策划大地图数据
-            _jsonData = File.ReadAllText(bigMapDataJson);
+            _jsonData = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<TextAsset>(bigMapDataJson).WaitForCompletion().text;
             bigMapTableData = JsonConvert.DeserializeObject<int[,]>(_jsonData);
             synchronizerInOrder.Check(1);
         }
@@ -572,7 +572,21 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 加入矿圈数据
         /// </summary>
-        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int curSlectNum)
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int RegionNum, int MapLayerIndex)
+        {
+            PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (RegionNum, MapLayerIndex));
+            placeCircleData.PlaceCirclePosition = CirclePos;
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlacedCircleDataDic.Remove(ProNodeId);
+            }
+            this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+        }
+
+        /// <summary>
+        /// 加入矿圈数据
+        /// </summary>
+        public void AddMineralCircleData(Vector2 CirclePos, string ProNodeId, int curSlectNum)
         {
             PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curSlectNum, curMapLayerIndex));
             placeCircleData.PlaceCirclePosition = CirclePos;

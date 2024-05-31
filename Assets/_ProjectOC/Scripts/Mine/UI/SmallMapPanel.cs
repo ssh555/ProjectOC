@@ -64,9 +64,10 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 
     #region Internal
     private Dictionary<SelectedButton, MineData> BtnToMineDataDic = new Dictionary<SelectedButton, MineData>();
+    private PlaceCircleData placeCircleData = null;
     private void InitData()
     {
-        PlaceCircleData placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId, isCheckRegionNum);
+        placeCircleData = MM.GetMineralCircleData(selectMineralSourcesPanel.ProNodeId, isCheckRegionNum);
         if (placeCircleData != null)
         {
             MM.SetMineralMapData(placeCircleData.SmallMapTuple.Item1, placeCircleData.SmallMapTuple.Item2);
@@ -197,7 +198,15 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     {
         //Éú³É¿óÈ¦
         this.PlacedCircle.anchoredPosition = this.cursorNavigation.CenterPos;
-        MM.AddMineralCircleData(this.cursorNavigation.CenterPos, selectMineralSourcesPanel.ProNodeId, selectMineralSourcesPanel.CurSelectRegion);
+        
+        if(placeCircleData != null)
+        {
+            MM.AddMineralCircleData(this.cursorNavigation.CenterPos, selectMineralSourcesPanel.ProNodeId, placeCircleData.SmallMapTuple.Item1, placeCircleData.SmallMapTuple.Item2);
+        }
+        else
+        {
+            MM.AddMineralCircleData(this.cursorNavigation.CenterPos, selectMineralSourcesPanel.ProNodeId, selectMineralSourcesPanel.CurSelectRegion);
+        }
         if(hasPlacedCircle == false)
         {
             this.PlacedCircle.gameObject.SetActive(true);
