@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 161a78b8e18f47d429e6cd903568d02a
   m_currentHash:
     serializedVersion: 2
-    Hash: 9abaf332b9b2887e0f9a9ef00c600200
+    Hash: 13250c7784c2998fcd8fdb2a4b49480f
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -118,6 +118,7 @@ MonoBehaviour:
     - PinchFace_TypePackage
     - BS_SA_UI_Category
     - Config_Mine_MineEditorData
+    - Texture2D_Mine_SmallMapTex
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: c4fe07db2f63a424e946087755813f1e, type: 2}

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f22f56f91a6ad479aae8d478eec263, type: 3}
+  m_Name: MineSystemConfigAsset
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Config:
+    MainIslandSpeed: 0.5
+    MainIslandInitPos: {x: 96, y: 50}
+    MiningCircleRadius: 3
+    IslandRudderSensitivity: 2
+    IslandRudderInitZoomRate: 0.5
+    IslandRudderZoomSpeed: 1
+    IslandRudderZoomInLimit: 2
+    IslandRudderZoomOutLimit: 0.5
+    SelectMineralSourcesSensitivity: 2
+    SelectMineralSourcesInitZoomRate: 0.5
+    SelectMineralSourcesZoomSpeed: 1
+    SelectMineralSourcesZoomInLimit: 2
+    SelectMineralSourcesZoomOutLimit: 0.5
+    SmallMapSensitivity: 2
+    SmallMapInitZoomRate: 0.5
+    SmallMapZoomSpeed: 1
+    SmallMapZoomInLimit: 2
+    SmallMapZoomOutLimit: 0.5

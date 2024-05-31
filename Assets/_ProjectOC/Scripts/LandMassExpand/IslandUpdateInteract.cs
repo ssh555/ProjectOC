@@ -40,7 +40,7 @@ namespace ProjectOC.LandMassExpand
                 .Completed +=(handle) =>
             {
                 UIIslandUpdatePanel uiPanel = handle.Result.GetComponent<UIIslandUpdatePanel>();
-                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
 
                 uiPanel.IslandUpdateInteract = this;

@@ -202,8 +202,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     var vector2 = obj.ReadValue<UnityEngine.Vector2>();
                     this.DescriptionScrollView.verticalScrollbar.value += vector2.y;
-
-
                 };
             }
         }
@@ -374,7 +372,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 BeastName.text = worker.Name;
 
                 APMaxNumText.text = worker.APMax.ToString();
-                MoodMax.text = worker.EMMax.ToString();
+                MoodMaxNumText.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
                 this.objectPool.ResetPool("DescriptionPool");

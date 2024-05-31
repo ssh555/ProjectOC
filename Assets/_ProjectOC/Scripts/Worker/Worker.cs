@@ -1,6 +1,5 @@
 using ML.Engine.Manager;
 using ML.Engine.UI;
-using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名称"), ReadOnly, ShowInInspector]
         public string Name { get; private set; }
         [LabelText("类目"), ReadOnly]
-        public WorkerCategory Category;
+        public WorkerCategory Category { get; private set; }
         [LabelText("性别"), ReadOnly, ShowInInspector]
         public Gender Gender { get; private set; }
         #endregion
@@ -40,7 +39,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("体力消耗倍率"), ReadOnly, ShowInInspector]
         private float FactorAPCost = 1;
         [LabelText("最终搬运体力消耗"), ReadOnly, ShowInInspector]
-        public int RealAPCost_Transport => (int)(APCost_Transport * FactorAPCost + ModifyAPCost);
+        public int RealAPCost_Transport { get { int value = (int)(APCost_Transport * FactorAPCost + ModifyAPCost); return value >= 0 ? value : 0; } }
         #endregion
         #region Food
         [LabelText("进食时间"), ReadOnly, ShowInInspector]
@@ -50,7 +49,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外进食时间"), ReadOnly, ShowInInspector]
         private float ModifyEatTime;
         [LabelText("最终进食时间"), ReadOnly, ShowInInspector]
-        public float RealEatTime => EatTime * FactorEatTime + ModifyEatTime;
+        public float RealEatTime { get { float value = EatTime * FactorEatTime + ModifyEatTime; return value >= 0 ? value : 0; } }
         #endregion
         #region Mood
         [LabelText("当前心情值"), ReadOnly, ShowInInspector]
@@ -82,7 +81,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外移动速度"), ReadOnly, ShowInInspector]
         private float ModifyWalkSpeed;
         [LabelText("最终移动速度"), ReadOnly, ShowInInspector]
-        public float RealWalkSpeed => WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed;
+        public float RealWalkSpeed { get { float value = WalkSpeed * FactorWalkSpeed + ModifyWalkSpeed; return value >= 1 ? value : 1; } }
         #endregion
         #region Weight
         [LabelText("负重上限"), ReadOnly, ShowInInspector]
@@ -92,7 +91,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("额外负重上限"), ReadOnly, ShowInInspector]
         private int ModifyBURMax;
         [LabelText("最终负重上限"), ReadOnly, ShowInInspector]
-        public int RealBURMax => (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport);
+        public int RealBURMax { get { int value = (int)(BURMax * FactorBURMax + ModifyBURMax) + GetEff(SkillType.Transport); return value >= 1 ? value : 1; } }
         #endregion
         #region Skill
         [LabelText("全局工作效率"), ReadOnly]
@@ -155,7 +154,7 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Init OnDestroy
-        public void Init(WorkerEcho workerEcho = null)
+        public void Init(WorkerEcho workerEcho = null, WorkerCategory category = WorkerCategory.None)
         {
             #region Event
             ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction += OnHourChangeEvent_AddWorkerEff_AllSkill;
@@ -166,6 +165,14 @@ namespace ProjectOC.WorkerNS
             var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
             ID = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerID();
             Name = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerName();
+            if (category == WorkerCategory.None)
+            {
+                Category = (WorkerCategory)UnityEngine.Random.Range(2, 8);
+            }
+            else
+            {
+                Category = category;
+            }
             Gender = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerGender();
             APMax = config.APMax;
             APWorkThreshold = config.APWorkThreshold;
@@ -191,8 +198,8 @@ namespace ProjectOC.WorkerNS
                 Skill.Add(skillType, new Skill(skillType, level));
             }
             var features = workerEcho != null ? 
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(new List<int>() { 100, 100, 100, 100}, new List<int>() { 50, 50 });
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds, Category) :
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(Category);
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);
@@ -302,15 +309,15 @@ namespace ProjectOC.WorkerNS
                 flag = true;
                 if (effect.ParamStr.StartsWith("Eff"))
                 {
-                    Skill[skillType].AlterEff(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterEff(effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("ExpRate"))
                 {
-                    Skill[skillType].AlterExpRate(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterExpRate(effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("LevelCurrent"))
                 {
-                    Skill[skillType].ChangeLevel(effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].ChangeLevel(effect.ParamInt);
                 }
                 else
                 {
@@ -383,15 +390,15 @@ namespace ProjectOC.WorkerNS
             {
                 if (effect.ParamStr.StartsWith("Eff"))
                 {
-                    Skill[skillType].AlterEff(-effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterEff(-effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("ExpRate"))
                 {
-                    Skill[skillType].AlterExpRate(-effect.ParamInt);
+                    Skill[skillType] = Skill[skillType].AlterExpRate(-effect.ParamInt);
                 }
                 else if (effect.ParamStr.StartsWith("LevelCurrent"))
                 {
-                    Skill[skillType].ChangeLevel(0);
+                    Skill[skillType] = Skill[skillType].ChangeLevel(0);
                 }
             }
         }
@@ -404,22 +411,31 @@ namespace ProjectOC.WorkerNS
             for (int i = 0; i < AddWorkerEff_AllSkillList.Count; i++)
             {
                 var tup = AddWorkerEff_AllSkillList[i];
-                if (tup.Item1 <= hour && hour <= tup.Item2 && !tup.Item4)
+                if (!tup.Item4 && tup.Item1 <= hour && hour <= tup.Item2)
                 {
                     Eff_AllSkill += tup.Item3;
-                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, true);
+                    AddWorkerEff_AllSkillList[i] = (tup.Item1, tup.Item2, tup.Item3, true);
                 }
                 else if (tup.Item4 && (tup.Item1 > hour || hour > tup.Item2))
                 {
                     Eff_AllSkill -= tup.Item3;
-                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, false);
+                    AddWorkerEff_AllSkillList[i] = (tup.Item1, tup.Item2, tup.Item3, false);
                 }
             }
         }
-        public List<Tuple<int, int, int, bool>> AddWorkerEff_AllSkillList = new List<Tuple<int, int, int, bool>>();
+        public List<(int, int, int, bool)> AddWorkerEff_AllSkillList = new List<(int, int, int, bool)>();
         public void AddWorkerEff_AllSkill(int time1, int time2, int eff)
         {
-            AddWorkerEff_AllSkillList.Add(Tuple.Create(time1, time2, eff, false));
+            int hour = ManagerNS.LocalGameManager.Instance.DispatchTimeManager.CurrentHour;
+            if (time1 <= hour && hour <= time2)
+            {
+                Eff_AllSkill += eff;
+                AddWorkerEff_AllSkillList.Add((time1, time2, eff, true));
+            }
+            else
+            {
+                AddWorkerEff_AllSkillList.Add((time1, time2, eff, false));
+            }
         }
         public void RemoveAddWorkerEff_AllSkill(int time1, int time2, int eff)
         {
@@ -436,7 +452,7 @@ namespace ProjectOC.WorkerNS
             if (index >= 0)
             {
                 var tup = AddWorkerEff_AllSkillList[index];
-                if (tup.Item4 == true)
+                if (tup.Item4)
                 {
                     Eff_AllSkill -= tup.Item3;
                 }
@@ -454,19 +470,27 @@ namespace ProjectOC.WorkerNS
                 if (status == Status.Relaxing && !tup.Item2)
                 {
                     ModifyWalkSpeed += tup.Item1;
-                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, true);
+                    RelaxExtraSpeedList[i] = (tup.Item1, true);
                 }
                 else if (status != Status.Relaxing && tup.Item2)
                 {
                     ModifyWalkSpeed -= tup.Item1;
-                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, false);
+                    RelaxExtraSpeedList[i] = (tup.Item1, false);
                 }
             }
         }
-        public List<Tuple<int, bool>> RelaxExtraSpeedList = new List<Tuple<int, bool>>();
+        public List<(int, bool)> RelaxExtraSpeedList = new List<(int, bool)>();
         public void RelaxExtraSpeed(int speed)
         {
-            RelaxExtraSpeedList.Add(Tuple.Create(speed, false));
+            if (Status == Status.Relaxing)
+            {
+                ModifyWalkSpeed += speed;
+                RelaxExtraSpeedList.Add((speed, true));
+            }
+            else
+            {
+                RelaxExtraSpeedList.Add((speed, false));
+            }
         }
         public void RemoveRelaxExtraSpeed(int speed)
         {
@@ -483,7 +507,7 @@ namespace ProjectOC.WorkerNS
             if (index >= 0)
             {
                 var tup = RelaxExtraSpeedList[index];
-                if (tup.Item2 == true)
+                if (tup.Item2)
                 {
                     ModifyWalkSpeed -= tup.Item1;
                 }
@@ -515,7 +539,7 @@ namespace ProjectOC.WorkerNS
         {
             if (status == Status.Fishing && FishInNest && (timerFishInNest == null || timerFishInNest.IsStoped))
             {
-                TimerFishInNest?.Start();
+                TimerFishInNest.Start();
             }
             else
             {
@@ -528,6 +552,10 @@ namespace ProjectOC.WorkerNS
             if (!FishInNest)
             {
                 FishInNest = true;
+                if (Status == Status.Fishing && (timerFishInNest == null || timerFishInNest.IsStoped))
+                {
+                    TimerFishInNest.Start();
+                }
                 OnStatusChangeEvent += OnStateChangeEvent_FishInNest;
             }
         }
@@ -536,6 +564,7 @@ namespace ProjectOC.WorkerNS
             if (FishInNest)
             {
                 FishInNest = false;
+                timerFishInNest?.End();
                 OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
             }
         }
@@ -563,7 +592,6 @@ namespace ProjectOC.WorkerNS
             int max = EMMax;
             current = current < max ? current : max;
             EMCurrent = current;
-            EMCurrent = value;
             if (EMCurrent >= EMHighThreshold)
             {
                 if (!HaveSetEMHighEffect)
@@ -592,7 +620,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (!HaveSetEMLowEffect)
                 {
-                    Eff_AllSkill -= EMLowEffect;
+                    Eff_AllSkill += EMLowEffect;
                     HaveSetEMLowEffect = true;
                 }
             }
@@ -600,7 +628,7 @@ namespace ProjectOC.WorkerNS
         }
         public void AlterExp(SkillType workType, int value)
         {
-            Skill[workType].AlterExp(value);
+            Skill[workType] = Skill[workType].AlterExp(value);
         }
         public void SettleTransport()
         {
@@ -639,7 +667,7 @@ namespace ProjectOC.WorkerNS
         #region Transport
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int WeightCurrent => Transport?.Weight ?? 0;
-        [LabelText("搬运"), ReadOnly]
+        [LabelText("搬运"), ReadOnly, NonSerialized]
         public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
         public bool HaveTransport { get => Transport != null && Transport.IsValid; }
@@ -670,7 +698,9 @@ namespace ProjectOC.WorkerNS
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
-                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null,LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, 
+                            new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null, 
+                            ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                     };
                     timerForNoHome.OnUpdateEvent += PushNoticeUI;
                 }
@@ -682,10 +712,11 @@ namespace ProjectOC.WorkerNS
         {
             if (Mathf.Abs((float)remainTime - 180) < 1) 
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, 
+                    new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, 
+                    ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                 timerForNoHome.OnUpdateEvent -= PushNoticeUI;
             }
-            
         }
         public void StopHomeTimer()
         {
@@ -760,26 +791,18 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 1f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
         public bool HaveDestination { get; private set; } = false;
         [ShowInInspector, ReadOnly]
         public Vector3 LastPosition;
+        public Vector3 LastTickPosition;
+        public bool JudgeHit;
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
-        private bool IsArrive;
 
-        public void OnCollisionEnter(Collision collision)
-        {
-            if (HaveDestination && collision.transform.position == Target)
-            {
-                IsArrive = true;
-            }
-        }
-
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -789,26 +812,20 @@ namespace ProjectOC.WorkerNS
                     ContainerDict[key]?.TempRemoveWorker();
                 }
             }
-            Threshold = 3;
             Agent.isStopped = false;
             Agent.speed = RealWalkSpeed;
             if (Agent.SetDestination(target))
             {
                 Target = target;
-                IsArrive = false;
                 HaveDestination = true;
                 OnArriveDisposableEvent = action;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            else { return false; }
         }
 
         public void ClearDestination()
         {
-            IsArrive = false;
             HaveDestination = false;
             if (Agent != null && Agent.enabled)
             {
@@ -832,12 +849,31 @@ namespace ProjectOC.WorkerNS
         public int lateTickPriority { get; set; }
         public void Tick(float deltatime)
         {
-            // NavMesh
-            if (HaveDestination && (Vector3.Distance(transform.position, Target) < Threshold || IsArrive))
+            if (HaveDestination)
             {
-                ClearDestination();
-                OnArriveDisposableEvent?.Invoke(this);
-                OnArriveEvent?.Invoke(this);
+                Vector3 curPos = transform.position;
+                float dist = Vector3.Distance(curPos, Target);
+                bool hasArrive = dist <= 0.5f;
+                if (!hasArrive && JudgeHit && curPos == LastTickPosition)
+                {
+                    Vector3 direction = Target - curPos;
+                    foreach (RaycastHit hit in Physics.BoxCastAll(curPos, new Vector3(3, 3, 3), direction.normalized)) 
+                    {
+                        if (hit.collider != null && Vector3.Distance(hit.collider.transform.position, Target) <= 0.1f)
+                        {
+                            hasArrive = true;
+                            break;
+                        }
+                    }
+                }
+                if (hasArrive)
+                {
+                    ClearDestination();
+                    OnArriveDisposableEvent?.Invoke(this);
+                    OnArriveEvent?.Invoke(this);
+                }
+                JudgeHit = !hasArrive && dist <= 3f && curPos != LastTickPosition;
+                LastTickPosition = curPos;
             }
             bool inSeq = ManagerNS.LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
             string icon = HaveSetEMLowEffect ? "Tex2D_Worker_UI_LowMood" : "";

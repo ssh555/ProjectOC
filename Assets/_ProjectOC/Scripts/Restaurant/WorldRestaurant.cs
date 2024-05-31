@@ -5,7 +5,7 @@ namespace ProjectOC.RestaurantNS
 {
     public class WorldRestaurant : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction
     {
-        [LabelText("²ÍÌü"), ShowInInspector, ReadOnly, SerializeField]
+        [LabelText("²ÍÌü"), ShowInInspector, ReadOnly]
         public Restaurant Restaurant;
         public string InteractType { get; set; } = "WorldRestaurant";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
@@ -26,7 +26,7 @@ namespace ProjectOC.RestaurantNS
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Restaurant_UI/Prefab_Restaurant_UI_RestaurantPanel.prefab", 
-                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
             {
                 UI.UIRestaurant uiPanel = handle.Result.GetComponent<UI.UIRestaurant>();
                 uiPanel.Restaurant = Restaurant;

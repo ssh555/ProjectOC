@@ -94,6 +94,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.DisablePlayerInput();
 
             this.Placer.BInput.Build.KeyCom.performed -= Placer_EnterKeyCom;
+            //this.Placer.BInput.Build.KeyCom.canceled -= Placer_EnterKeyCom_canceled;
             this.Placer.BInput.Build.ChangeOutLook.performed -= Placer_EnterAppearance;
             this.Placer.BInput.Build.MoveBuild.performed -= Placer_EnterEdit;
             this.Placer.BInput.Build.DestroyBuild.performed -= Placer_DestroyBPart;
@@ -112,6 +113,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.EnablePlayerInput();
 
             this.Placer.BInput.Build.KeyCom.performed += Placer_EnterKeyCom;
+            //this.Placer.BInput.Build.KeyCom.canceled += Placer_EnterKeyCom_canceled;
             this.Placer.BInput.Build.ChangeOutLook.performed += Placer_EnterAppearance;
             this.Placer.BInput.Build.MoveBuild.performed += Placer_EnterEdit;
             this.Placer.BInput.Build.DestroyBuild.performed += Placer_DestroyBPart;
@@ -127,6 +129,11 @@ namespace ML.Engine.BuildingSystem.UI
                 monoBM.PushPanel<BSInteractMode_KeyComPanel>();
             }
         }
+
+/*        private void Placer_EnterKeyCom_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+             monoBM.PopPanel();
+        }*/
 
         private void Placer_EnterAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {

@@ -103,7 +103,7 @@ namespace ProjectOC.DataNS
         }
         private void SetData(IDataObj data)
         {
-            id = data.GetDataID();
+            id = data?.GetDataID() ?? "";
             this.data = data;
         }
 

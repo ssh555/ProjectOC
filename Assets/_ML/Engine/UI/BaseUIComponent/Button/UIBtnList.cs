@@ -12,8 +12,8 @@ using Sirenix.OdinInspector;
 using static ML.Engine.UI.UIBtnListContainerInitor;
 using static ML.Engine.UI.UIBtnListInitor;
 using static UnityEngine.InputSystem.InputAction;
-using Unity.VisualScripting;
 using ML.Engine.Utility;
+using Unity.VisualScripting;
 
 namespace ML.Engine.UI
 {
@@ -34,6 +34,9 @@ namespace ML.Engine.UI
         private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//二维列表
 
         public List<List<SelectedButton>> GetTwoDimSelectedButtons { get { return TwoDimSelectedButtons; } }
+
+        private HashSet<CustomButton> customButtons = new HashSet<CustomButton>();
+
         protected int OneDimCnt = 0;
         public int BtnCnt { get { return OneDimCnt; } }
         protected int TwoDimH = 0;
@@ -51,7 +54,7 @@ namespace ML.Engine.UI
             {
                 if(value is CustomButton)
                 {
-                    //绑定PanelButton 的按键
+                    customButtons.Add(value as CustomButton);
                 }
 
                 _CurSelected = value;
@@ -95,6 +98,7 @@ namespace ML.Engine.UI
         private bool isLoop;
         private bool isWheel;
         private bool readUnActive;
+        private bool isBanMouse;
         private bool NeedToResetCurSelected = false;
         private string prefabPath = null;
 
@@ -135,7 +139,7 @@ namespace ML.Engine.UI
             this.isLoop = btnListInitData.isLoop;
             this.isWheel = btnListInitData.isWheel;
             this.readUnActive = btnListInitData.readUnActiveButton;
-
+            this.isBanMouse = btnListInitData.isBanMouse;
             if (prefabPath != null) 
             {
                 this.prefabPath = prefabPath;
@@ -935,7 +939,6 @@ namespace ML.Engine.UI
                 angle = angle + 360;
             }
 
-
             if (angle < 45 || angle > 315)
             {
                 //Debug.Log("MoveUPIUISelected " + this.isEnable);
@@ -969,34 +972,24 @@ namespace ML.Engine.UI
         {
             if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
-
             string actionName = obj.action.name;
-
             // 使用 ReadValue<T>() 方法获取附加数据
             string actionMapName = obj.action.actionMap.name;
 
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            double angle = Mathf.Atan2(vector2.x, vector2.y);
+            if(vector2.magnitude < 1f)
+            {
+                return;
+            }
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
 
             angle = angle * 180 / Mathf.PI;
             if (angle < 0)
             {
                 angle = angle + 360;
             }
-
-            double sliceAngle = 360.0 / OneDimCnt;
-            for (int i = 0; i < OneDimCnt; i++)
-            {
-                if (i != OneDimCnt - 1 && angle > sliceAngle / 2 + sliceAngle * i && angle < sliceAngle / 2 + sliceAngle * (i + 1))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-                else if (i == OneDimCnt - 1 && (angle < sliceAngle / 2 || angle > 360 - sliceAngle / 2))
-                {
-                    this.MoveIndexIUISelected(OneDimCnt - 1 - i);
-                }
-            }
-
+            float sliceAngle = 360.0f / OneDimCnt;
+            this.MoveIndexIUISelected(Mathf.RoundToInt(angle / sliceAngle));
             this.NavigationPostAction?.Invoke();
         }
 
@@ -1168,6 +1161,11 @@ namespace ML.Engine.UI
                 }
             }
 
+            foreach (var customButton in customButtons)
+            {
+                customButton.DeBindInput();
+            }
+
         }
 
         /// <summary>
@@ -1192,8 +1190,9 @@ namespace ML.Engine.UI
         /// <summary>
         /// 该函数功能为更新鼠标选中
         /// </summary>
-        public SelectedButton RefreshSelected(SelectedButton sb)
+        public SelectedButton RefreshSelected(SelectedButton sb,bool comeFromMouse = false)
         {
+            if (this.isBanMouse == true) return null;
             if (this.isEnable == false) return null;
             if (sb == null) return null;
             if (SBPosDic.ContainsKey(sb))
@@ -1213,7 +1212,6 @@ namespace ML.Engine.UI
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-
             }
             return null;
         }

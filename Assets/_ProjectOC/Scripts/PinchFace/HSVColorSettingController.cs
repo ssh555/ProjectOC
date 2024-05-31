@@ -34,7 +34,6 @@ namespace ML.Engine.UI
         {
             for (int i = 0; i < 3; i++)
             {
-                Debug.Log($"{sliders[i].slider.name} : {sliders[i].slider != null}");
                 sliders[i].slider.onValueChanged.AddListener((_value)=>
                 {
                     Color _color = ReadColor(true);

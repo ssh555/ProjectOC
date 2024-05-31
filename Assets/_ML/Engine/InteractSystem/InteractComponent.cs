@@ -196,7 +196,7 @@ namespace ML.Engine.InteractSystem
                  uiKeyTip.img.transform.parent.gameObject.SetActive(false);
 
                  // TODO
-                 uiKeyTip.img.transform.parent.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
+                 uiKeyTip.img.transform.parent.SetParent(Manager.GameManager.Instance.UIManager.NormalPanel);
 
                  // ½ûÓÃ Mono
                  this.enabled = false;

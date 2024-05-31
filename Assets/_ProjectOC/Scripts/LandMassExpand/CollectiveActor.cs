@@ -113,7 +113,7 @@ namespace ML.Engine.InventorySystem
                 .InstantiateAsync(collectUIPath).Completed += (handle) =>
             {
                 OutlineGameObejct = handle.Result;
-                OutlineGameObejct.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform);
+                OutlineGameObejct.transform.SetParent(GameManager.Instance.UIManager.NormalPanel);
 
                 OutlineGameObejct.transform.GetChild(0).GetComponent<Image>().fillAmount =
                     (float)currentCollectCount / collectCount;

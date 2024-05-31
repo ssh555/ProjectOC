@@ -81,12 +81,12 @@ namespace ProjectOC.WorkerNS
         public void SetWorkerRelateData() 
         { 
             SetFeatureID();
-            Worker?.StopHomeTimer();
+            if (Worker != null) { Worker.StopHomeTimer(); }
         }
         public void RemoveWorkerRelateData() 
         {
             ClearFeatureID();
-            Worker?.CheckHome();
+            if (Worker != null) { Worker.CheckHome(); }
         }
         #endregion
     }

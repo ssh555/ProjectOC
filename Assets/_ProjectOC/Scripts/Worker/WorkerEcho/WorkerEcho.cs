@@ -17,11 +17,10 @@ namespace ProjectOC.WorkerNS
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
-                ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
+                ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker
+                (workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho, workerCategory).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
-                    
-                    Worker.Category = workerCategory;
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
@@ -30,10 +29,10 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class WorkerEcho : IEffectObj
     {
-        public ExternWorker[] Workers = new ExternWorker[5];
+        public ExternWorker[] Workers;
         public WorkerEchoBuilding WorkerEchoBuilding = null;
-        public List<int> FeatureMax = new List<int>() { 100, 100, 100, 100};
-        public List<int> FeatureOdds = new List<int>() { 100, 100 };
+        public List<int> FeatureMax = new List<int>();
+        public List<int> FeatureOdds = new List<int>();
         public float FactorTimeCost = 1;
         public int ModifyTimeCost;
         public int GetRealTimeCost(string id)
@@ -52,7 +51,14 @@ namespace ProjectOC.WorkerNS
 
         public WorkerEcho(WorkerEchoBuilding workerEchoBuilding)
         {
+            Workers = new ExternWorker[5];
             WorkerEchoBuilding = workerEchoBuilding;
+        }
+
+        public void SetFeature()
+        {
+            FeatureMax.AddRange(ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatureMax);
+            FeatureOdds.AddRange(ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatureOdds);
         }
 
         public ExternWorker SummonWorker(WorkerCategory workerCategory, int index, ML.Engine.InventorySystem.IInventory inventory)

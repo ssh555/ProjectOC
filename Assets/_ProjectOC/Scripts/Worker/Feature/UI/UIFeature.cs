@@ -35,7 +35,7 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     Workers.Clear();
                     Workers.Add("");
-                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetNotBanWorkerIDs());
+                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSortWorkerIDForFeatureUI());
                     IsInitBtnList = false;
                     WorkerBtnList.ChangBtnNum(Workers.Count, null, () => { IsInitBtnList = true; Refresh(); });
                     WorkerBtnList.EnableBtnList();
@@ -196,7 +196,6 @@ namespace ProjectOC.WorkerNS.UI
             FeatBuild.OnCorrectEndEvent += Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             tempSprite.Add("", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Empty"));
-            tempSprite.Add("WorkerIcon", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast"));
             var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             tempSprite.Add(config.FeatTransCostItemID, ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(config.FeatTransCostItemID));
             tempSprite.Add(config.FeatUpCostItemID, ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(config.FeatUpCostItemID));
@@ -438,7 +437,8 @@ namespace ProjectOC.WorkerNS.UI
                 feat.Find("Icon").gameObject.SetActive(false);
                 feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                 feat.Find("IconNew").gameObject.SetActive(false);
-                feat.Find("IconCorrect").gameObject.SetActive(false);
+                feat.Find("IconAllow").gameObject.SetActive(false);
+                feat.Find("IconBan").gameObject.SetActive(false);
                 if (IsSeeInfo)
                 {
                     feat.Find("DescIcon").gameObject.SetActive(false);
@@ -459,7 +459,8 @@ namespace ProjectOC.WorkerNS.UI
                     string featID = seat.FeatureIDs[i];
                     Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find("Specific") : btnList.GetBtn(i).transform.Find("Normal");
                     feat.Find("IconNew").gameObject.SetActive(checkNew && seat.IsChanged[i]);
-                    feat.Find("IconCorrect").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconAllow").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find("IconBan").gameObject.SetActive(!checkNew && checkCanCorrect && !featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
                 }
             }
         }
@@ -500,7 +501,11 @@ namespace ProjectOC.WorkerNS.UI
         }
         public void RefreshWorker(Transform transform, Worker worker, bool isSelect=false)
         {
-            transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite["WorkerIcon"] : tempSprite[""];
+            if (worker != null && !tempSprite.ContainsKey(worker.Category.ToString()))
+            {
+                tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
+            }
+            transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : tempSprite[""];
             transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? "";
             transform.Find("Selected").gameObject.SetActive(isSelect);
         }
@@ -587,7 +592,19 @@ namespace ProjectOC.WorkerNS.UI
                 for (int i = 0; i < WorkerBtnList.BtnCnt; i++)
                 {
                     Transform uiworker = WorkerBtnList.GetBtn(i).transform;
-                    uiworker.Find("Icon").GetComponent<Image>().sprite = !string.IsNullOrEmpty(Workers[i]) ? tempSprite["WorkerIcon"] : tempSprite[""];
+                    if (!string.IsNullOrEmpty(Workers[i]))
+                    {
+                        WorkerCategory key = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorker(Workers[i]).Category;
+                        if (!tempSprite.ContainsKey(key.ToString()))
+                        {
+                            tempSprite[key.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(key);
+                        }
+                        uiworker.Find("Icon").GetComponent<Image>().sprite = tempSprite[key.ToString()];
+                    }
+                    else
+                    {
+                        uiworker.Find("Icon").GetComponent<Image>().sprite = tempSprite[""];
+                    }
                     uiworker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerName(Workers[i]);
                 }
                 Worker selectWorker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorker(Workers[WorkerIndex]);

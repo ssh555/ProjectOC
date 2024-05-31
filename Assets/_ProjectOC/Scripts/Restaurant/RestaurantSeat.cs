@@ -45,29 +45,27 @@ namespace ProjectOC.RestaurantNS
 
         private void EndActionForTimer()
         {
-            var restaurantManager = ManagerNS.LocalGameManager.Instance.RestaurantManager;
-            Worker.AlterAP(restaurantManager.Food_AlterAP(FoodID));
-            var mood = restaurantManager.Food_AlterMoodOdds(FoodID);
+            RestaurantManager manager = ManagerNS.LocalGameManager.Instance.RestaurantManager;
+            Worker.AlterAP(manager.Food_AlterAP(FoodID));
+            var mood = manager.Food_AlterMoodOdds(FoodID);
 
-            System.Random random = new System.Random();
-            if (random.NextDouble() <= mood.Item1)
+            if (UnityEngine.Random.Range(0f, 1f) <= mood.Item1)
             {
                 Worker.AlterMood(mood.Item2);
             }
-
             if (Worker.APCurrent >= Worker.APRelaxThreshold || !Restaurant.HaveFood)
             {
                 WorkerNS.Worker worker = Worker;
                 (this as WorkerNS.IWorkerContainer).RemoveWorker();
                 if (!Restaurant.HaveFood && Worker.APCurrent < Worker.APRelaxThreshold)
                 {
-                    restaurantManager.AddWorker(worker);
+                    manager.AddWorker(worker);
                 }
             }
             else
             {
                 string foodID = Restaurant.EatFood(Worker);
-                if (restaurantManager.Food_IsValidID(foodID))
+                if (manager.Food_IsValidID(foodID))
                 {
                     SetFood(foodID);
                 }
@@ -90,8 +88,9 @@ namespace ProjectOC.RestaurantNS
             if (IsEat)
             {
                 Timer?.End();
-                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(ManagerNS.LocalGameManager.Instance.RestaurantManager.Food_ItemID(FoodID));
-                (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(item);
+                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem
+                    (ManagerNS.LocalGameManager.Instance.RestaurantManager.Food_ItemID(FoodID));
+                ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(item);
             }
             FoodID = "";
         }

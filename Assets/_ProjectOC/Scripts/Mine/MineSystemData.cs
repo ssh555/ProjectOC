@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,7 +32,6 @@ namespace ProjectOC.MineSystem
             [LabelText("小地图数据"), ReadOnly, ShowInInspector]
             public Dictionary<string, MineralMapData> mineralMapDatas;
         }
-
         /// <summary>
         /// 区块数据
         /// </summary>
@@ -39,6 +39,8 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("区块ID"), ReadOnly, ShowInInspector]
             public string MapRegionID;
+            [LabelText("区块号"), ReadOnly, ShowInInspector]
+            public int MapRegionNo;
             [LabelText("是否为障碍物"), ReadOnly, ShowInInspector]
             public bool IsBlock;
             [LabelText("区块地图层解锁数组"), ReadOnly, ShowInInspector]
@@ -52,6 +54,7 @@ namespace ProjectOC.MineSystem
                 IsBlock = isBlock;
                 this.isUnlockLayer = new bool[MineSystemData.MAPDEPTH];
                 this.mineralDataID = new string[MineSystemData.MAPDEPTH];
+                MapRegionNo = int.Parse(MapRegionID.Split('_')[1]);
             }
         }
 
@@ -62,15 +65,38 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("采矿地图ID"), ReadOnly, ShowInInspector]
             public string MineralMapID;
-/*            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
-            public string PrefabPath;*/
             [LabelText("采矿地图中的矿物数据"), ReadOnly, ShowInInspector]
             public List<MineData> MineDatas;
+            [LabelText("采矿地图背景素材"), ReadOnly, ShowInInspector]
+            public Texture2D texture2D;
 
-            public MineralMapData(string mineralMapID, List<MineData> mineDatas)
+            public MineralMapData(string mineralMapID, List<MineData> mineDatas, Texture2D texture2D)
             {
                 MineralMapID = mineralMapID;
                 MineDatas = mineDatas;
+                this.texture2D = texture2D;
+            }
+        }
+
+        /// <summary>
+        /// 所有生产节点的矿圈数据
+        /// </summary>
+        public class PlaceCircleData
+        {
+            [LabelText("所属生产节点ID"), ReadOnly, ShowInInspector]
+            public string ProNodeID;
+            [LabelText("小地图索引元组(区块号,层数号)"), ReadOnly, ShowInInspector]
+            public (int,int) SmallMapTuple;
+            [LabelText("采矿圈中心位置"), ReadOnly, ShowInInspector]
+            public Vector2 PlaceCirclePosition;
+            [LabelText("是否放置了采矿圈"), ReadOnly, ShowInInspector]
+            public bool isPlacedCircle;
+
+            public PlaceCircleData(string proNodeID,(int,int) smallMapTuple)
+            {
+                ProNodeID = proNodeID;
+                SmallMapTuple = smallMapTuple;
+                isPlacedCircle = true;
             }
         }
 
@@ -80,17 +106,70 @@ namespace ProjectOC.MineSystem
         public class MineData
         {
             [LabelText("矿物ID"), ReadOnly, ShowInInspector]
-            public string MineID;
+            private string mineID;
+            public string MineID { get { return mineID; } }
             [LabelText("矿物位置"), ReadOnly, ShowInInspector]
-            public Vector2 position;
+            private Vector2 position;
+            public Vector2 Position { get { return position; } }
             [LabelText("剩余开采次数"), ReadOnly, ShowInInspector]
-            public int RemainMineNum;
-
-            public MineData(string mineralMapID, Vector2 position, int remainMineNum)
+            private int remainMineNum;
+            public int RemianMineNum { get { return remainMineNum; } }
+            [LabelText("一次开采获取数量"), ReadOnly, ShowInInspector]
+            private ML.Engine.InventorySystem.Formula gainItems;
+            public ML.Engine.InventorySystem.Formula GainItems => gainItems;
+            //该矿物所属的区块号
+            private int regionNum;
+            public int RegionNum { get { return regionNum; }set { regionNum = value; } }
+            //该矿物所属的层次号
+            private int layerNum;
+            public int LayerNum { get { return layerNum; } set { layerNum = value; } }
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum, ML.Engine.InventorySystem.Formula gainItems)
             {
-                MineID = mineralMapID;
+                mineID = mineralMapID;
                 this.position = position;
-                RemainMineNum = remainMineNum;
+                this.remainMineNum = remainMineNum;
+                this.gainItems = gainItems;
+                proNodeCnt = 0;
+            }
+
+            /// <summary>
+            /// 当矿物采集完一次调用一次该函数 返回true表示该矿还可以继续采集 返回false表示该矿不能继续采集
+            /// </summary>
+            public bool Consume()
+            {
+                lock(this)
+                {
+                    if (remainMineNum >= 1)
+                    {
+                        remainMineNum--;
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            private int proNodeCnt;
+
+            public int ProNodeCnt { get { return proNodeCnt; } }
+
+            /// <summary>
+            /// 注册
+            /// </summary>
+            public void RegisterProNode()
+            {
+                lock (this)
+                {
+                    proNodeCnt++;
+                }
+            }
+            /// <summary>
+            /// 注销
+            /// </summary>
+            public void UnRegisterProNode()
+            {
+                lock (this)
+                {
+                    proNodeCnt--;
+                }
             }
         }
 
@@ -100,34 +179,59 @@ namespace ProjectOC.MineSystem
         public class MainIslandData
         {
             [LabelText("移动速度"), ReadOnly, ShowInInspector]
-            private float moveSpeed = 1;
+            private float moveSpeed;
             [LabelText("主岛位置"), ReadOnly, ShowInInspector]
             private Vector2 curPos;
-            public Vector2 CurPos { get { return curPos; }  }
+            public Vector2 CurPos { get { return curPos; } set { curPos = value; } }
             [LabelText("目标位置"), ReadOnly, ShowInInspector]
             private Vector2 targetPos;
             public Vector2 TargetPos { get { return targetPos; } set {  targetPos = value; } }
             [LabelText("是否在移动"), ReadOnly, ShowInInspector]
             private bool isMoving;
-            public bool IsMoving { get { return isMoving; } set { isMoving = value; } }
+            public bool IsMoving { get { return isMoving; } set { isMoving = value; OnisMovingChanged?.Invoke(value); } }
+            public event Action<bool> OnisMovingChanged;
             [LabelText("当前所在的地图层"), ReadOnly, ShowInInspector]
             private int curMineLayer;
             [LabelText("当前所在的大地图区块ID"), ReadOnly, ShowInInspector]
             private string curMapRegionID;
 
+            private Vector2 lastPos;
+            public Vector2 LastPos { get { return lastPos; } }
+            public Vector2 MovingDir { get { return (targetPos - curPos).normalized; } }
+            private bool isPause;
+            public bool IsPause { get { return isPause; } set { isPause = value; } }
+            public MainIslandData(float moveSpeed,Vector2 curPos)
+            {
+                this.moveSpeed = moveSpeed;
+                this.curPos = curPos;
+                lastPos = curPos;
+                isPause = false;
+            }
+            
             public bool isReachTarget { 
             get {
+                    if(isPause) return false;
                     if (Vector2.Distance(curPos, targetPos)<1f)
                     {
-                        
-                        isMoving = false;
+                        IsMoving = false;
                         return true;
                     }
-                    if(isMoving)
+                    if(IsMoving)
+                    {
+                        lastPos = curPos;
                         curPos += moveSpeed * (targetPos - curPos).normalized;
+                    }
                     return false;
                 }
             }
+
+            public void Reset()
+            {
+                curPos = lastPos;
+                targetPos = curPos;
+                IsMoving = false;
+            }
+            
         }
 
         /// <summary>
@@ -138,7 +242,7 @@ namespace ProjectOC.MineSystem
         {
             public string ID;
             public string Icon;
-            public List<ML.Engine.InventorySystem.Formula> MineEff;
+            public ML.Engine.InventorySystem.Formula MineEff;
             public int MineNum;
         }
     }

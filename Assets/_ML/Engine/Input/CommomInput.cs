@@ -197,7 +197,7 @@ namespace ML.Engine.Input
                 {
                     ""name"": ""up"",
                     ""id"": ""c9bbb5a0-94e3-409c-96ee-dbc53b519683"",
-                    ""path"": ""<Keyboard>/upArrow"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -208,7 +208,7 @@ namespace ML.Engine.Input
                 {
                     ""name"": ""down"",
                     ""id"": ""ec454c15-3627-4d8b-bb9c-9b33d123931b"",
-                    ""path"": ""<Keyboard>/downArrow"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -219,7 +219,7 @@ namespace ML.Engine.Input
                 {
                     ""name"": ""left"",
                     ""id"": ""6522029b-21c8-4cea-977a-a88cd81affba"",
-                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -230,7 +230,7 @@ namespace ML.Engine.Input
                 {
                     ""name"": ""right"",
                     ""id"": ""34c7dc56-dd10-4fa6-afe4-9a44e386614d"",
-                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -893,8 +893,8 @@ namespace ML.Engine.Input
             public InputAction @SubInteract => m_Wrapper.m_Common_SubInteract;
             public InputAction @SubInteractHold => m_Wrapper.m_Common_SubInteractHold;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
+            public void Enable() { UnityEngine.Debug.Log("Common Enable"); Get().Enable(); }
+            public void Disable() { UnityEngine.Debug.Log("Common Disable"); Get().Disable(); }
             public bool enabled => Get().enabled;
             public static implicit operator InputActionMap(CommonActions set) { return set.Get(); }
             public void AddCallbacks(ICommonActions instance)

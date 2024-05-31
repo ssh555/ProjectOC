@@ -10,50 +10,26 @@ namespace ProjectOC.ProNodeNS
         // Container Index 0:Product, 1:Raw, 2:Parent1, 3:Parent2, 4:Discard
         #region ProNode
         public int OutputThreshold;
-        public ML.Engine.InventorySystem.CreatureItem Creature1 => HasRecipe ? DataContainer.GetData(2) as ML.Engine.InventorySystem.CreatureItem : null;
-        public ML.Engine.InventorySystem.CreatureItem Creature2 => HasRecipe ? DataContainer.GetData(3) as ML.Engine.InventorySystem.CreatureItem : null;
-        public ML.Engine.InventorySystem.CreatureItem Child => HasRecipe ? DataContainer.GetData(0) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature1 => HasRecipe && DataContainer.HaveSetData(2) ? 
+            DataContainer.GetData(2) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature2 => HasRecipe && DataContainer.HaveSetData(3) ? 
+            DataContainer.GetData(3) as ML.Engine.InventorySystem.CreatureItem : null;
+        public ML.Engine.InventorySystem.CreatureItem Creature3 => HasRecipe && DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0 && (DataContainer.GetData(0) != null) ? 
+            DataContainer.GetData(0) as ML.Engine.InventorySystem.CreatureItem : null;
         public bool HasCreature => HasRecipe && DataContainer.GetAmount(2, DataNS.DataOpType.Storage) > 0 && DataContainer.GetAmount(3, DataNS.DataOpType.Storage) > 0;
         public int DiscardStackAll => HasCreature ? DataContainer.GetAmount(4, DataNS.DataOpType.StorageAll) : 0;
         public int DiscardStack => HasCreature ? DataContainer.GetAmount(4, DataNS.DataOpType.Storage) : 0;
         public int DiscardReserve;
         public BreedProNode(ProNodeTableData config) : base(config) { OnDataChangeEvent += CheckDiscardReserve; }
-        public bool ChangeCreature(int index, ML.Engine.InventorySystem.CreatureItem creature)
-        {
-            lock (this)
-            {
-                if (index != 0 || index != 1 || (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature))) { return false; }
-                if (index == 0)
-                {
-                    OutputThreshold = 0;
-                    DiscardReserve = 0;
-                    if (creature != null && ChangeRecipe(creature.ProRecipeID))
-                    {
-                        DataContainer.AddCapacity(3, new List<int> { 1, 1, creature.Discard.num * StackMax });
-                        ChangeData(2, creature);
-                        ChangeData(4, new DataNS.ItemIDDataObj(creature.Discard.id), false);
-                        DataContainer.ChangeAmount(2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
-                        return true;
-                    }
-                    else { ChangeRecipe(""); }
-                }
-                else
-                {
-                    if (HasRecipe && creature != null)
-                    {
-                        ChangeData(3, creature);
-                        DataContainer.ChangeAmount(3, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
-                        return true;
-                    }
-                    else { ChangeData(3, null); }
-                }
-                return false;
-            }
-        }
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Creature1?.Output ?? 0) * 3; }
+        public override int GetEff() 
+        {
+            return ManagerNS.LocalGameManager.Instance != null && Creature1 != null ? 
+                EffBase + Creature1.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
+                EffBase;
+        }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { FastAdd(1); }
         public override void Destroy() { RemoveRecipe(); }
@@ -61,11 +37,11 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasRecipe)
             {
-                if (!HasCreature) { return false; }
+                if (DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
+                if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
                 foreach (var kv in Recipe.Raw) { if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; } }
+                if (!HasCreature) { return false; }
                 if (DiscardStackAll >= Creature1.Discard.num * StackMax) { return false; }
-                if (StackAll >= StackMax * ProductNum) { return false; }
-                if (DataContainer.HaveSetData(0)) { return false; }
                 if (RequirePower && WorldProNode != null && WorldProNode.PowerCount <= 0) { return false; }
                 return true;
             }
@@ -81,8 +57,7 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, 
-                        data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
                 }
             }
             if (StackReserve > 0)
@@ -114,14 +89,14 @@ namespace ProjectOC.ProNodeNS
                     {
                         bounds.Add((4 * low + (high - low) * i) / 4);
                     }
-                    List<int> ranges = new List<int>() { 1, 10, 31, 52, 101 };
+                    List<int> ranges = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.OutputRanges;
                     int output = 0;
                     int rand = UnityEngine.Random.Range(1, 101);
                     for (int i = 0; i < 4; i++)
                     {
                         if (ranges[i] <= rand && rand <= ranges[i + 1] - 1)
                         {
-                            output = UnityEngine.Random.Range(bounds[i], bounds[i + 1]);
+                            output = UnityEngine.Random.Range(bounds[i], bounds[i + 1] + 1);
                             break;
                         }
                     }
@@ -157,6 +132,50 @@ namespace ProjectOC.ProNodeNS
         }
         public override void PutIn(int index, DataNS.IDataObj data, int amount) { }
         #endregion
+
+        #region Method
+        public bool ChangeCreature(int index, ML.Engine.InventorySystem.CreatureItem creature)
+        {
+            lock (this)
+            {
+                if ((index != 0 && index != 1) || (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature))) { return false; }
+                if (index == 0)
+                {
+                    OutputThreshold = 0;
+                    DiscardReserve = 0;
+                    if (creature != null && ChangeRecipe(creature.BreRecipeID))
+                    {
+                        DataContainer.AddCapacity(3, new List<int> { 1, 1, creature.Discard.num * StackMax });
+                        ChangeData(2, creature);
+                        ChangeData(4, new DataNS.ItemIDDataObj(creature.Discard.id), false);
+                        DataContainer.ChangeAmount(2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                        return true;
+                    }
+                    else { ChangeRecipe(""); }
+                }
+                else
+                {
+                    if (HasRecipe && creature != null && creature != Creature1)
+                    {
+                        ChangeData(3, creature);
+                        DataContainer.ChangeAmount(3, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                        return true;
+                    }
+                    else { ChangeData(3, null); }
+                }
+                return false;
+            }
+        }
+
+        public void Remove()
+        {
+            if (HasCreature)
+            {
+                StackReserve = 0;
+                ChangeData(0, null);
+            }
+        }
+
         public void CheckDiscardReserve()
         {
             if (HasCreature)
@@ -187,5 +206,6 @@ namespace ProjectOC.ProNodeNS
                 }
             }
         }
+        #endregion
     }
 }

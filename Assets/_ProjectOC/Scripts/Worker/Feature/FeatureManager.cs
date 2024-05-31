@@ -29,6 +29,7 @@ namespace ProjectOC.WorkerNS
         #region ILocalManager
         private Dictionary<FeatureType, List<string>> FeatureTypeDict = new Dictionary<FeatureType, List<string>>();
         private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
+        private Dictionary<WorkerCategory, string> RaceDict = new Dictionary<WorkerCategory, string>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
         public FeatureConfig Config;
         public void OnRegister()
@@ -48,14 +49,16 @@ namespace ProjectOC.WorkerNS
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<FeatureConfigAsset>("Config_Feature").Completed += (handle) =>
             {
-                FeatureConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = new FeatureConfig(handle.Result.Config);
+                foreach (var tup in Config.CategoryFeatureList)
+                {
+                    RaceDict.Add(tup.category, tup.feature);
+                }
             };
         }
         #endregion
 
         #region Spawn
-        private System.Random Random = new System.Random();
         public int GetRandomIndex(List<int> weights)
         {
             int totalWeight = 0;
@@ -63,7 +66,7 @@ namespace ProjectOC.WorkerNS
             {
                 totalWeight += weight;
             }
-            int num = Random.Next(0, totalWeight+1);
+            int num = UnityEngine.Random.Range(0, totalWeight+1);
             int cur = 0;
             for (int i = 0; i < weights.Count; i++)
             {
@@ -75,8 +78,14 @@ namespace ProjectOC.WorkerNS
             }
             return 0;
         }
-        public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds)
+        public List<Feature> CreateFeature(WorkerCategory category)
         {
+            return CreateFeature(Config.FeatureMax, Config.FeatureOdds, category);
+        }
+        public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds, WorkerCategory category)
+        {
+            if (featureMax == null) { featureMax = Config.FeatureMax; }
+            if (featureOdds == null) { featureOdds = Config.FeatureOdds; }
             List<Feature> result = new List<Feature>();
             if (featureMax.Count != 4 || featureOdds.Count != 2) 
             { 
@@ -84,10 +93,13 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
             int maxFeatureNum = GetRandomIndex(featureMax);
-            string featureID = FeatureTypeDict[FeatureType.Race][Random.Next(0, FeatureTypeDict[FeatureType.Race].Count)];
-            result.Add(SpawnFeature(featureID));
+            if (RaceDict.ContainsKey(category))
+            {
+                result.Add(SpawnFeature(RaceDict[category]));
+            }
             HashSet<string> buffs = FeatureTypeDict[FeatureType.Buff].ToHashSet();
             HashSet<string> debuffs = FeatureTypeDict[FeatureType.DeBuff].ToHashSet();
+            string featureID;
             for (int i = 0; i < maxFeatureNum; i++)
             {
                 if (buffs.Count == 0 && debuffs.Count == 0) { break; }
@@ -101,7 +113,7 @@ namespace ProjectOC.WorkerNS
                 {
                     sets = buffs.Count > 0 ? buffs : debuffs;
                 }
-                featureID = sets.ToList()[Random.Next(0, sets.Count)];
+                featureID = sets.ToList()[UnityEngine.Random.Range(0, sets.Count)];
                 sets.Remove(featureID);
                 result.Add(SpawnFeature(featureID));
             }
@@ -250,7 +262,7 @@ namespace ProjectOC.WorkerNS
                     if (reverseType == FeatureType.DeBuff) { return new Color(1.0f, 0.8431f, 0.0f); }
                 }
             }
-            return Color.black;
+            return Color.green;
         }
         public string GetColorStrForUI(string id)
         {
@@ -266,7 +278,7 @@ namespace ProjectOC.WorkerNS
                     if (reverseType == FeatureType.DeBuff) { return "#FFD700"; }
                 }
             }
-            return "black";
+            return "green";
         }
         #endregion
     }

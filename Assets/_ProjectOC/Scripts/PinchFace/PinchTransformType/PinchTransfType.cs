@@ -24,7 +24,6 @@ namespace ProjectOC.PinchFace
 
         public PinchTransfType(int _index)
         {
-            Debug.Log($"构造函数触发");
             index = _index;
         }
         

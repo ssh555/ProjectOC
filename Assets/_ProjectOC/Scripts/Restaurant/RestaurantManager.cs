@@ -37,8 +37,7 @@ namespace ProjectOC.RestaurantNS
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RestaurantConfigAsset>("Config_Restaurant").Completed += (handle) =>
             {
-                RestaurantConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = handle.Result.Config;
             };
             Timer = new ML.Engine.Timer.CounterDownTimer(Config.BroadcastTime, true, true);
             Timer.OnEndEvent += EndActionForTimer;
@@ -211,10 +210,7 @@ namespace ProjectOC.RestaurantNS
                         bool flag = false;
                         foreach (int index in indexs)
                         {
-                            if (flag)
-                            {
-                                break;
-                            }
+                            if (flag) { break; }
                             if (dict.ContainsKey(index))
                             {
                                 List<Restaurant> removes = new List<Restaurant>();
@@ -225,10 +221,7 @@ namespace ProjectOC.RestaurantNS
                                         flag = true;
                                         break;
                                     }
-                                    else
-                                    {
-                                        removes.Add(restaurant);
-                                    }
+                                    else { removes.Add(restaurant); }
                                 }
                                 foreach (var remove in removes)
                                 {
@@ -236,11 +229,7 @@ namespace ProjectOC.RestaurantNS
                                 }
                             }
                         }
-
-                        if (!flag)
-                        {
-                            break;
-                        }
+                        if (!flag) { break; }
                     }
                 }
             }

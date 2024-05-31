@@ -61,9 +61,9 @@ namespace ML.Engine.UI
 
         protected override void RegisterInput()
         {
-            this.UIBtnList.BindInputAction("ConfirmBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(); });
+            this.UIBtnList.BindInputAction("ConfirmBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false); });
 
-            this.UIBtnList.BindInputAction("CancleBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Back, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(); });
+            this.UIBtnList.BindInputAction("CancleBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Back, UIBtnListContainer.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(true); });
         }
 
         #endregion
@@ -83,7 +83,8 @@ namespace ML.Engine.UI
             {
                 this.Msg1.text = popUpUIData.msg1;
                 this.Msg2.text = popUpUIData.msg2;
-                this.UIBtnList.SetBtnAction("ConfirmBtn", popUpUIData.action);
+                this.UIBtnList.SetBtnAction("ConfirmBtn", popUpUIData.ConfirmAction);
+                this.UIBtnList.SetBtnAction("CancleBtn", popUpUIData.CancelAction);
             }
 
         }

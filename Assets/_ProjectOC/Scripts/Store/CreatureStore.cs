@@ -9,8 +9,9 @@ namespace ProjectOC.StoreNS
         [LabelText("ÑøÖ³ÉúÎïID"), ReadOnly, ShowInInspector]
         public string CreatureItemID { get; private set; }
 
-        public CreatureStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) : base(storeType)
+        public CreatureStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level) : base(storeType, level, false)
         {
+            CreatureItemID = "";
             InitData(15, 1);
             ChangeDataAutoSort = true;
         }
@@ -18,11 +19,26 @@ namespace ProjectOC.StoreNS
         {
             if (ManagerNS.LocalGameManager.Instance.ItemManager.GetItemType(itemID) == ML.Engine.InventorySystem.ItemType.Creature)
             {
-                if (CreatureItemID != itemID)
-                {
-                    ClearData();
-                }
+                if (CreatureItemID != itemID) { ClearData(false); }
                 CreatureItemID = itemID;
+            }
+        }
+        public void FastAdd()
+        {
+            if (!string.IsNullOrEmpty(CreatureItemID))
+            {
+                foreach (var item in ManagerNS.LocalGameManager.Instance.Player.GetInventory().GetItemList())
+                {
+                    if (item.ID == CreatureItemID && item is ML.Engine.InventorySystem.CreatureItem creature)
+                    {
+                        int index = DataContainer.GetEmptyIndex();
+                        if (index >= 0 && ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(item))
+                        {
+                            ChangeData(index, creature);
+                            DataContainer.ChangeAmount(creature, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                        }
+                    }
+                }
             }
         }
     }

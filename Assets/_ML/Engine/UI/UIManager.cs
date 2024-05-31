@@ -26,6 +26,12 @@ namespace ML.Engine.UI
             private set;
         }
 
+        private Transform normalPanel;
+        public Transform NormalPanel { get { return normalPanel; } }
+
+        private Transform bottomPanel;
+        public Transform BottomPanel { get { return bottomPanel; } }
+
         #region UI栈管理
         /// <summary>
         /// 当前显示的UI栈
@@ -117,32 +123,46 @@ namespace ML.Engine.UI
 
         private Canvas CreateCanvas()
         {
-            // 创建一个新的GameObject，并将Canvas组件附加到它
+            // 创建一个新的 GameObject，并将 Canvas 组件附加到它
             GameObject canvasObject = new GameObject("Canvas");
             GameObject.DontDestroyOnLoad(canvasObject);
             Canvas canvas = canvasObject.AddComponent<Canvas>();
 
-            // 设置Canvas的属性
+            // 设置 Canvas 的属性
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            
 
-            // 添加CanvasScaler组件，确保UI在不同分辨率下保持一致
-            var cscalar = canvasObject.AddComponent<CanvasScaler>();
-            cscalar.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            cscalar.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-            cscalar.referenceResolution = new Vector2(1920, 1080);
+            // 添加 CanvasScaler 组件，确保 UI 在不同分辨率下保持一致
+            CanvasScaler canvasScaler = canvasObject.AddComponent<CanvasScaler>();
+            canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            canvasScaler.referenceResolution = new Vector2(1920, 1080);
 
-
-            // 添加GraphicRaycaster组件，确保Canvas可以与鼠标和触摸交互
+            // 添加 GraphicRaycaster 组件，确保 Canvas 可以与鼠标和触摸交互
             canvasObject.AddComponent<GraphicRaycaster>();
 
-            // 创建一个新的EventSystem对象，并将其设置为Canvas的子对象
+            // 创建一个新的 EventSystem 对象，并将其设置为 Canvas 的子对象
             GameObject eventSystem = new GameObject("EventSystem");
             GameObject.DontDestroyOnLoad(eventSystem);
             eventSystem.AddComponent<UnityEngine.EventSystems.EventSystem>();
             eventSystem.AddComponent<InputSystemUIInputModule>();
             eventSystem.transform.SetParent(canvasObject.transform);
 
+            // 在 Canvas 下创建 NormalPanel
+            GameObject normalPanel = new GameObject("NormalPanel");
+            normalPanel.transform.SetParent(canvasObject.transform, false);
+            // 添加所需的 UI 组件和脚本
+            normalPanel.AddComponent<RectTransform>();
+            normalPanel.AddComponent<CanvasRenderer>();
+            normalPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(1920, 1080);
+            this.normalPanel = normalPanel.transform;
+            // 在 Canvas 下创建 BottomPanel
+            GameObject bottomPanel = new GameObject("BottomPanel");
+            bottomPanel.transform.SetParent(canvasObject.transform, false);
+            // 添加所需的 UI 组件和脚本
+            bottomPanel.AddComponent<RectTransform>();
+            bottomPanel.AddComponent<CanvasRenderer>();
+            bottomPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(1920, 1080);
+            this.bottomPanel = bottomPanel.transform;
             return canvas;
         }
 
@@ -184,7 +204,7 @@ namespace ML.Engine.UI
                 {
                     this.BtnUIPrefab = prefab;
                 }
-                prefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                prefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 prefab.GetComponent<T>().SaveAsInstance();
             };
         }
@@ -217,15 +237,17 @@ namespace ML.Engine.UI
             public string msg1;
             public string msg2;
             public List<Sprite> spriteList;
-            public UnityAction action;
+            public UnityAction ConfirmAction;
+            public UnityAction CancelAction;
 
             // 构造函数
-            public PopUpUIData(string message1, string message2, List<Sprite> sprites, UnityAction act)
+            public PopUpUIData(string message1, string message2, List<Sprite> sprites, UnityAction confirmAction,UnityAction cancelAction = null)
             {
                 msg1 = message1;
                 msg2 = message2;
                 spriteList = sprites;
-                action = act;
+                ConfirmAction = confirmAction;
+                CancelAction = cancelAction;
             }
         }
 
@@ -255,15 +277,15 @@ namespace ML.Engine.UI
                     panelGo = GameObject.Instantiate(this.FloatTextUIPrefab);
                     FloatTextUIData floatTextData = (FloatTextUIData)(object)data;
                     panelGo.GetComponent<FloatTextUI>().CopyInstance(floatTextData);
-                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
                     break;
                 case NoticeUIType.BtnUI:
 
-                    if(GetCanvas.transform.Find("PlayerUIBotPanel(Clone)") == null)
+                    if(bottomPanel.Find("PlayerUIBotPanel(Clone)") == null)
                     {
                         return;
                     }
-                    Transform BtnNoticeUI = GetCanvas.transform.Find("PlayerUIBotPanel(Clone)").Find("BtnNoticeUI");
+                    Transform BtnNoticeUI = bottomPanel.Find("PlayerUIBotPanel(Clone)").Find("BtnNoticeUI");
                     if (BtnNoticeUI != null)
                     {
                         var Content = BtnNoticeUI.Find("Scroll View").Find("Viewport").Find("Content");
@@ -285,16 +307,16 @@ namespace ML.Engine.UI
                     panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
 
                     
-                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel();
+                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false);
                     GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
 
-                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.normalPanel, false);
                     break;
                 case NoticeUIType.SideBarUI:
                     panelGo = GameObject.Instantiate(this.SideBarUIPrefab);
                     SideBarUIData sideBarData = (SideBarUIData)(object)data;
                     panelGo.GetComponent<SideBarUI>().CopyInstance(sideBarData);
-                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.normalPanel, false);
                     break;
             }
         }

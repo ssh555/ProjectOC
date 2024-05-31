@@ -1,5 +1,6 @@
 using ML.Engine.Manager;
 using ProjectOC.ResonanceWheelSystem.UI;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.WorkerNS
@@ -14,10 +15,20 @@ namespace ProjectOC.WorkerNS
         private string uIResonanceWheelPrefab = "Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI.prefab";
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheelInstance;
 
+
+        public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        {
+            if (isFirstBuild)
+            {
+                WorkerEcho.SetFeature();
+            }
+            base.OnChangePlaceEvent(oldPos, newPos);
+        }
+
         protected override void Awake()
         {
-            base.Awake();
             WorkerEcho = new WorkerEcho(this);
+            base.Awake();
             CheckCanDestory += CheckCanDestroyOrEdit();
             CheckCanEdit += CheckCanDestroyOrEdit();
         }
@@ -29,7 +40,7 @@ namespace ProjectOC.WorkerNS
                 {
                     uIResonanceWheelInstance = handle.Result.GetComponent<ResonanceWheelUI>();
                     uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = (GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-                    uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
                 };
             }

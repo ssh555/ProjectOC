@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.WorkerNS
 {
+    [System.Serializable]
     public enum WorkerCategory
     {
         None,

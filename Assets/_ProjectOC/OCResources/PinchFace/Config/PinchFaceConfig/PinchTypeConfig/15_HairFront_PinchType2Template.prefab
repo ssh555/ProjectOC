@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7085922709440061500}
   - component: {fileID: 941177828869125519}
   - component: {fileID: 5149175071535902403}
+  - component: {fileID: -4374563546676601883}
   m_Layer: 0
   m_Name: 15_HairFront_PinchType2Template
   m_TagString: Untagged
@@ -45,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeIndex: -1
   distributionMode: 0
 --- !u!114 &5149175071535902403
 MonoBehaviour:
@@ -59,7 +61,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorChangeType: 1
-  param1: 0
-  param2: 0
-  color1: {r: 0, g: 0, b: 0, a: 0}
-  color2: {r: 0, g: 0, b: 0, a: 0}
+  CurColorChangeType: 0
+  smoothStepThreshold: 0.2
+  smoothStrength: 0.2
+  colors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &-4374563546676601883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4280774634301395310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da66732878699b74589189848f512f2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransformType: 1
+  pinchRangeX: {x: 0, y: 1}
+  pinchBraidRangeY: {x: 0, y: 1}
+  curValue: {x: 0, y: 0}

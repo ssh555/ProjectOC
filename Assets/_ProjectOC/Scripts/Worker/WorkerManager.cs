@@ -48,8 +48,7 @@ namespace ProjectOC.WorkerNS
 
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<WorkerConfigAsset>("Config_Worker").Completed += (handle) =>
             {
-                WorkerConfigAsset data = handle.Result;
-                Config = new WorkerConfig(data.Config);
+                Config = new WorkerConfig(handle.Result.Config);
             };
         }
 
@@ -68,7 +67,6 @@ namespace ProjectOC.WorkerNS
         private Dictionary<string, Worker> Workers = new Dictionary<string, Worker>();
         public System.Action<Worker> OnAddWokerEvent;
         public System.Action<Worker> OnDeleteWorkerEvent;
-        private System.Random Random = new System.Random();
         #endregion
 
         #region Get
@@ -99,9 +97,11 @@ namespace ProjectOC.WorkerNS
             result.RemoveAll(worker => worker.HaveFeatSeat);
             return result;
         }
-        public List<string> GetNotBanWorkerIDs(bool needSort = true)
+        public List<string> GetSortWorkerIDForFeatureUI()
         {
-            return GetNotBanWorkers(needSort).Select(x => x.ID).ToList();
+            List<Worker> workers = GetNotBanWorkers(false);
+            workers.Sort(new Worker.SortForFeatureUI());
+            return workers.Select(x => x.ID).ToList();
         }
 
         /// <summary>
@@ -126,11 +126,11 @@ namespace ProjectOC.WorkerNS
         }
         public string GetOneNewWorkerName()
         {
-            return WorkerNames[Random.Next(0, WorkerNames.Count)];
+            return WorkerNames[UnityEngine.Random.Range(0, WorkerNames.Count)];
         }
         public Gender GetOneNewWorkerGender()
         {
-            return Random.Next(0, 2) == 0 ? Gender.Male : Gender.Female;
+            return UnityEngine.Random.Range(0, 2) == 0 ? Gender.Male : Gender.Female;
         }
         public Sprite GetWorkerIcon(Worker worker)
         {
@@ -147,7 +147,7 @@ namespace ProjectOC.WorkerNS
             double standardDeviation = System.Math.Sqrt(Config.SkillStdDev);
             double beta = (mean - Config.SkillStdLowBound) / standardDeviation;
             double alpha = (Config.SkillStdHighBound - mean) / standardDeviation;
-            double u = Random.NextDouble();
+            double u = UnityEngine.Random.Range(0f, 1f);
             int k;
             if (u < alpha / (alpha + beta))
             {
@@ -162,7 +162,7 @@ namespace ProjectOC.WorkerNS
             for (int i = 0; i < 6; i++)
             {
                 int min = System.Math.Max(k - (5 - i) * 10, 0);
-                int randomInt = Random.Next(min, System.Math.Min(k, 10) + 1);
+                int randomInt = UnityEngine.Random.Range(min, System.Math.Min(k, 10) + 1);
                 k -= randomInt;
                 result.Add(randomInt);
             }
@@ -188,7 +188,8 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn Delete
-        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, bool isAdd = true, WorkerEcho workerEcho = null, string name = "Prefab_Worker_Worker")
+        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> SpawnWorker
+            (Vector3 pos, Quaternion rot, bool isAdd = true, WorkerEcho workerEcho = null, WorkerCategory category = WorkerCategory.None, string name = "Prefab_Worker_Worker")
         {
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
@@ -201,7 +202,7 @@ namespace ProjectOC.WorkerNS
                     {
                         worker = obj.AddComponent<Worker>();
                     }
-                    worker.Init(workerEcho);
+                    worker.Init(workerEcho, category);
                     if (isAdd)
                     {
                         Workers.Add(worker.ID, worker);

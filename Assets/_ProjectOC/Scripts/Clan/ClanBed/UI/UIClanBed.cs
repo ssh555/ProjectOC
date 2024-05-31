@@ -175,6 +175,7 @@ namespace ProjectOC.ClanNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
+            tempSprite.Clear();
         }
         #endregion
 

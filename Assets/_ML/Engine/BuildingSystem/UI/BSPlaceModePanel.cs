@@ -8,6 +8,13 @@ using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
 using Sirenix.OdinInspector;
+using ML.Engine.Utility;
+using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
+using ProjectOC.Player;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using static Unity.Burst.Intrinsics.X86.Avx;
+using System.Linq;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -29,6 +36,8 @@ namespace ML.Engine.BuildingSystem.UI
 
         private Transform KT_AlterHeight;
         private Transform KT_AlterSocket;
+
+        private Transform Slots;
         #endregion
 
         #endregion
@@ -45,6 +54,7 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.KT_AlterHeight = this.transform.Find("KT_AlterHeight");
             this.KT_AlterSocket = this.transform.Find("KeyTip").Find("KT_AlterSocket");
+            this.Slots = this.transform.Find("Slots");
         }
 
         #endregion
@@ -90,66 +100,38 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Refresh
-        private bool isChangeStyle = true;
-        private bool isChangeHeight = false;
         public override void Refresh()
         {
             if (!IsInit)
             {
                 return;
             }
-            if(!isChangeStyle && !isChangeHeight)
+            ClearInstance();
+            for (int i = 0;i<stylecnt;i++)
             {
-                isChangeStyle = true;
-            }
-            var styles = BM.GetAllStyleByBPartHeight(this.Placer.SelectedPartInstance);
-            var heights = BM.GetAllHeightByBPartStyle(this.Placer.SelectedPartInstance);
-            this.ClearInstance();
-            var s = styles[0];
-
-            Array.Sort(styles);
-            Array.Sort(heights);
-
-            foreach (var style in styles)
-            {
-                var go = Instantiate<GameObject>(this.templateStyle.gameObject, this.styleParent, false);
-                go.GetComponentInChildren<Image>().sprite = GetStyleSprite(style);
-                //go.GetComponentInChildren<TextMeshProUGUI>().text = style.ToString();
-                go.SetActive(true);
-                this.styleInstance.Add(style, go.transform as RectTransform);
+                if (swichArray[i][index_j] != null)
+                {
+                    var style = swichArray[i][index_j].Classification.Category3;
+                    var go = Instantiate<GameObject>(this.templateStyle.gameObject, this.styleParent, false);
+                    go.GetComponentInChildren<Image>().sprite = GetStyleSprite(style);
+                    go.SetActive(true);
+                    this.styleInstance.Add(style, go.transform as RectTransform);
+                }
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.styleParent.parent.GetComponent<RectTransform>());
             // 更换 Style
             foreach (var instance in this.styleInstance)
             {
                 var img = instance.Value.GetComponentInChildren<Image>();
-                if (isChangeStyle)
+                if (instance.Key != swichArray[index_i][index_j].Classification.Category3)
                 {
-                    if (instance.Key != s)
-                    {
-                        Disactive(img);
-                    }
-                    else
-                    {
-                        Active(img);
-                    }
+                    Disactive(img);
                 }
-                else if(isChangeHeight)
+                else
                 {
-                    if (instance.Key != this.Placer.SelectedPartInstance.Classification.Category3)
-                    {
-                        Disactive(img);
-                    }
-                    else
-                    {
-                        Active(img);
-                    }
+                    Active(img);
                 }
             }
-            isChangeStyle = false;
-            isChangeHeight = false;
-
-            // 更换 Height
 
             // 下侧显示
             bool active = (BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.Placer.SelectedPartInstance) > 1 || BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.Placer.SelectedPartInstance) > 1);
@@ -203,6 +185,7 @@ namespace ML.Engine.BuildingSystem.UI
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
             BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
+            InitSwitchData();
         }
 
         public override void OnPause()
@@ -308,7 +291,10 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ComfirmPlaceBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.ComfirmPlaceBPart();
+            if(this.Placer.ComfirmPlaceBPart())
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
         }
 
         private void Placer_EnterAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -318,15 +304,15 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ChangeBPartStyle(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            isChangeStyle = true;
-            this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() < 0);
+            var offset = obj.ReadValue<float>() < 0 ? -1 : 1;
+            this.Placer.AlternateBPart(GetNextOnSwichingStyle(offset));
             this.Refresh();
         }
-
         private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            isChangeHeight = true;
-            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() > 0);
+            if (this.Placer.SelectedPartInstance.Classification.Category1 != BuildingCategory1.House) return; 
+            var offset = obj.ReadValue<float>() < 0 ? -1 : 1;
+            this.Placer.AlternateBPart(GetNextOnSwichingHeight(offset));
             this.Refresh();
         }
 
@@ -390,13 +376,15 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            return ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
+            var check = ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
+            return check;
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
             ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()), needJudgeNum:true, priority:-1);
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            this.RefreshSlots();
         }
 
         private void Placer_OnPlaceModeChangeBPart(IBuildingPart obj)
@@ -404,6 +392,8 @@ namespace ML.Engine.BuildingSystem.UI
             obj.CheckCanInPlaceMode += CheckCostResources;
         }
         #endregion
+
+        #region Resource
 
         #region TextContent
         [System.Serializable]
@@ -417,6 +407,77 @@ namespace ML.Engine.BuildingSystem.UI
             this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSPlaceModePanel";
             this.description = "BSPlaceModePanel数据加载完成";
+        }
+        #endregion
+        protected override void InitObjectPool()
+        {
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_BuildingSystem/Prefab_BS_UI_Slot.prefab", (handle) => { RefreshSlots(); });
+            base.InitObjectPool();
+        }
+        private void RefreshSlots()
+        {
+            var PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+            this.objectPool.ResetPool("SlotPool");
+            foreach (var raw in BuildingManager.Instance.GetRaw(this.Placer.SelectedPartInstance.Classification.ToString()))
+            {
+                var tPrefab = this.objectPool.GetNextObject("SlotPool", Slots);
+                int needNum = raw.num;
+                int haveNum = PlayerInventory.GetItemAllNum(raw.id);
+                tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                if (needNum > haveNum)
+                {
+                    tPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                }
+                tPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(raw.id);
+                tPrefab.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(raw.id);
+            }
+        }
+        #endregion
+
+        #region SwitchHightAndStyle
+        [ShowInInspector]
+        private int heightcnt = 0;
+        [ShowInInspector]
+        private int stylecnt = 0;
+        [ShowInInspector]
+        private List<List<IBuildingPart>> swichArray = new List<List<IBuildingPart>>();
+        [ShowInInspector]
+        private int index_i = 0;
+        [ShowInInspector]
+        private int index_j = 0;
+        private void InitSwitchData()
+        {
+            var stylesBuildingPart = BM.GetAllStyleIBuildingPartOnHeight1(this.Placer.SelectedPartInstance);
+            stylecnt = stylesBuildingPart.Count;
+            foreach (var style in stylesBuildingPart)
+            {
+                var tlist = BM.GetAllHeightIBuildingPartOnStyle(style);
+                heightcnt = Mathf.Max(tlist.Count, heightcnt);
+                swichArray.Add(tlist);
+            }
+
+            for (int i = 0; i < swichArray.Count; i++)
+            {
+                for (int j = 0; j < heightcnt; j++) 
+                {
+                    if (j >= swichArray[i].Count) swichArray[i].Add(null);
+                }
+            }
+        }
+        private IBuildingPart GetNextOnSwichingStyle(int offset)
+        {
+            int cnt = 1;
+            while (swichArray[(index_i + stylecnt + cnt * offset)%stylecnt][index_j]==null) ++cnt;
+            index_i = (index_i + stylecnt + cnt * offset) % stylecnt;
+            return swichArray[index_i][index_j];
+        }
+
+        private IBuildingPart GetNextOnSwichingHeight(int offset)
+        {
+            int cnt = 1;
+            while (swichArray[index_i][(index_j + heightcnt + cnt * offset) % heightcnt] == null) ++cnt;
+            index_j = (index_j + heightcnt + cnt * offset) % heightcnt;
+            return swichArray[index_i][index_j];
         }
         #endregion
     }

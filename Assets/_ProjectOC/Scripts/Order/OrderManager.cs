@@ -95,7 +95,7 @@ namespace ProjectOC.Order
         #region 策划配置项
         /*        [LabelText("紧急订单刷新时间间隔（现实时间的min为单位）")]*/
         [ShowInInspector]
-        public float UrgentRefreshInterval = 0.1f;
+        public float UrgentRefreshInterval = 2f;
         #endregion
 
         #region Base
@@ -133,7 +133,7 @@ namespace ProjectOC.Order
 
 
             //初始化Timer
-            this.UrgentOrderRefreshTimer = new CounterDownTimer(0.1f * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale, autocycle: false, autoStart: true);
+            this.UrgentOrderRefreshTimer = new CounterDownTimer(UrgentRefreshInterval * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale, autocycle: false, autoStart: true);
             this.CanBeCommitRefreshTimer = new CounterDownTimer(5, autocycle: true, autoStart: true);
             this.UrgentOrderRefreshTimer.OnEndEvent += () =>
             {

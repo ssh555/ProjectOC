@@ -33,9 +33,9 @@ namespace ML.Engine.InventorySystem
         Processor,
         [LabelText("风味工坊")]
         Kitchen,
-        [LabelText("养殖生物培育舱")]
+        [LabelText("培育舱")]
         CreaturePro,
-        [LabelText("养殖生物繁育仪")]
+        [LabelText("繁育仪")]
         CreatureBreed,
         [LabelText("演算仪")]
         Calculus

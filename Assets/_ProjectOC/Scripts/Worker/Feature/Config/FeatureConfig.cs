@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 namespace ProjectOC.WorkerNS
 {
@@ -39,5 +40,45 @@ namespace ProjectOC.WorkerNS
         public int FeatDelCostItemNum;
         [LabelText("词条删除消等待时间(s)")]
         public int FeatDelTime;
+
+        [LabelText("词条上限权重")]
+        public List<int> FeatureMax;
+        [LabelText("增减词条权重")]
+        public List<int> FeatureOdds;
+
+        [LabelText("隐兽种类对应的词条ID")]
+        public List<CategoryFeature> CategoryFeatureList;
+
+        public FeatureConfig(FeatureConfig config)
+        {
+            FeatTransCostItemID = config.FeatTransCostItemID;
+            FeatTransCostItemNum = config.FeatTransCostItemNum;
+            FeatTransTime = config.FeatTransTime;
+            FeatUpCostItemID = config.FeatUpCostItemID;
+            FeatUpCostItemNum = config.FeatUpCostItemNum;
+            FeatUpTime = config.FeatUpTime;
+            FeatDownCostItemID = config.FeatDownCostItemID;
+            FeatDownCostItemNum = config.FeatDownCostItemNum;
+            FeatDownTime = config.FeatDownTime;
+            FeatReverseCostItemID = config.FeatReverseCostItemID;
+            FeatReverseCostItemNum = config.FeatReverseCostItemNum;
+            FeatReverseTime = config.FeatReverseTime;
+            FeatDelCostItemID = config.FeatDelCostItemID;
+            FeatDelCostItemNum = config.FeatDelCostItemNum;
+            FeatDelTime = config.FeatDelTime;
+            FeatureMax = new List<int>();
+            FeatureMax.AddRange(config.FeatureMax);
+            FeatureOdds = new List<int>();
+            FeatureOdds.AddRange(config.FeatureOdds);
+            CategoryFeatureList = new List<CategoryFeature>();
+            CategoryFeatureList.AddRange(config.CategoryFeatureList);
+        }
+    }
+
+    [System.Serializable]
+    public struct CategoryFeature
+    {
+        public WorkerCategory category;
+        public string feature;
     }
 }

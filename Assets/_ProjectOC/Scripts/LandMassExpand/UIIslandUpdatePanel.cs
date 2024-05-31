@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.BuildingSystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
@@ -27,12 +28,12 @@ namespace ProjectOC.LandMassExpand
         private Transform emoijTransform;
         [SerializeField, FoldoutGroup("UI")] 
         private SelectedButton _updateBtn;
-        
+
         [HideInInspector]
         public IslandUpdateInteract IslandUpdateInteract;
 
         private SpriteAtlas sa;
-        //private int currentIslandIndex = 0;
+        private int currentIslandIndex = 0;
         #endregion
 
         #region Internal
@@ -43,17 +44,23 @@ namespace ProjectOC.LandMassExpand
 
         protected override void RegisterInput()
         {
-            base.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed += Maininteract_performed;
+
+            // 切换类目
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed += LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed += NextTerm_performed;
         }
         protected override void UnregisterInput()
         {
-            base.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= Maininteract_performed;
+
+            // 切换类目
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed -= LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed -= NextTerm_performed;
         }
 
         private void Maininteract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -68,12 +75,24 @@ namespace ProjectOC.LandMassExpand
         
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            if (currentIslandIndex == 2)
+            {
+                IslandRudderPanelInstance.transform.SetParent(null, false);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+            }
             ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
 
-        private void LBRB_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //切换岛屿
+            currentIslandIndex = (currentIslandIndex + Function.childCount - 1) % Function.childCount;
+            this.Refresh();
+        }
+
+        private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            currentIslandIndex = (currentIslandIndex + 1) % Function.childCount;
+            this.Refresh();
         }
         #endregion
 
@@ -160,7 +179,77 @@ namespace ProjectOC.LandMassExpand
             StateText.text = _StateText;
             EventText.text = _EventText;
         }
-        
+
+        public override void Refresh()
+        {
+            #region FunctionType
+            for (int i = 0; i < Function.childCount; i++)
+            {
+                Function.GetChild(i).Find("Selected").gameObject.SetActive(currentIslandIndex == i);
+                FunctionPanel.GetChild(i).gameObject.SetActive(currentIslandIndex == i);
+            }
+
+            if(currentIslandIndex == 2)
+            {
+                PushIslandRudderPanel();
+            }
+            else
+            {
+                if(isPushed)
+                {
+                    isPushed = false;
+                    IslandRudderPanelInstance.transform.SetParent(null, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                }
+            }
+            #endregion
+        }
+
+        private void PushIslandRudderPanel()
+        {
+            IslandRudderPanelInstance.gameObject.SetActive(true);
+            IslandRudderPanelInstance.transform.SetParent(this.transform, false);
+            this.SetHidePanel(false);
+            IslandRudderPanelInstance.UIIslandUpdatePanel = this;
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(IslandRudderPanelInstance);
+            isPushed = true;
+        }
+
+        #endregion
+        #region override
+        public override void OnExit()
+        {
+            base.OnExit();
+            this.SetHidePanel(true);
+        }
+        public override void OnPause()
+        {
+            //不走base.OnPause();
+        }
+
+        public override void OnRecovery()
+        {
+            //不走base.OnRecovery();
+        }
+        #endregion
+
+        #region IslandRudderPanel
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform Function;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform FunctionPanel;
+        private bool isPushed = false;
+        private IslandRudderPanel IslandRudderPanelInstance => LocalGameManager.Instance.MineSystemManager.IslandRudderPanelInstance;
+
+        public void ChangeToIslandRudderPanel()
+        {
+            ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= Maininteract_performed;
+        }
+
+        public void IslandRudderPanelChangeTo()
+        {
+            ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed += Maininteract_performed;
+        }
 
         #endregion
     }

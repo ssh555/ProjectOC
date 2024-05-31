@@ -57,12 +57,12 @@ namespace ML.Engine.Timer
                 // Æô¶¯
                 if (!this._isStoped)
                 {
-                    CDMInstance.AddTimer(this, this.TimerType);
+                    CDMInstance?.AddTimer(this, this.TimerType);
                 }
                 // ÔÝÍ£
                 else
                 {
-                    CDMInstance.RemoveTimer(this);
+                    CDMInstance?.RemoveTimer(this);
                 }
             }
         }
