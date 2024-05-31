@@ -36,6 +36,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //Gizmos_Active = true;
             //#endif
+            //Debug.Log("OnActive " + this.transform.parent.name);
             BuildingManager.Instance.VisualSocket.SetActive(true);
             BuildingManager.Instance.VisualSocket.transform.SetParent(this.transform);
             BuildingManager.Instance.VisualSocket.transform.localPosition = Vector3.zero;
@@ -49,6 +50,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //            Gizmos_Active = false;
             //#endif
+            //Debug.Log("OnDisactive " + this.transform.parent.name);
             BuildingManager.Instance.ResetVisualSocket();
         }
 

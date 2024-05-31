@@ -74,6 +74,7 @@ namespace ML.Engine.BuildingSystem.UI
         private bool needPop = true;
         private void CopyBuild_perfomed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            BuildingManager.Instance.ResetVisualSocket();
             var bpart = BuildingManager.Instance.GetOneBPartCopyInstance(this.Placer.SelectedPartInstance);
             if (bpart != null)
             {

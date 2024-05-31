@@ -13,7 +13,7 @@ namespace ML.Engine.InventorySystem
         public string BreRecipeID;
         public Formula Discard;
         public int Activity;
-        public bool HasSex;
+        public bool Sextype;
     }
     [LabelText("生物管理器"), System.Serializable]
     public sealed class CreatureManager : Manager.LocalManager.ILocalManager
@@ -40,6 +40,6 @@ namespace ML.Engine.InventorySystem
         public string GetBreRecipeID(string id) { return IsValidID(id) ? TableDict[id].BreRecipeID : ""; }
         public Formula GetDiscard(string id) { return IsValidID(id) ? TableDict[id].Discard : new Formula() { id = ""}; }
         public int GetActivity(string id) { return IsValidID(id) ? TableDict[id].Activity : 0; }
-        public bool GetHasSex(string id) { return IsValidID(id) ? TableDict[id].HasSex : false; }
+        public bool GetHasSex(string id) { return IsValidID(id) ? TableDict[id].Sextype : false; }
     }
 }
