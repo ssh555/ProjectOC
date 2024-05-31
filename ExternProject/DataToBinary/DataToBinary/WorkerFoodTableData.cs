@@ -24,9 +24,9 @@ namespace ProjectOC.RestaurantNS
             // 1 -> ItemID
             this.ItemID = Program.ParseString(row[1]);
             // 2 -> AlterAP
-            this.AlterAP = Program.ParseInt(row[3]);
+            this.AlterAP = Program.ParseInt(row[2]);
             // 3 4 -> AlterMoodOdds
-            var alterMoodOdds = Program.ParseStringList(row[4]);
+            var alterMoodOdds = Program.ParseStringList(row[3]);
             if (alterMoodOdds.Count == 2)
             {
                 this.AlterMoodOddsProb = Program.ParseFloat(alterMoodOdds[0]);
