@@ -200,9 +200,10 @@ namespace ProjectOC.MineSystem
             public Vector2 MovingDir { get { return (targetPos - curPos).normalized; } }
             private bool isPause;
             public bool IsPause { get { return isPause; } set { isPause = value; } }
-            public MainIslandData(float moveSpeed)
+            public MainIslandData(float moveSpeed,Vector2 curPos)
             {
                 this.moveSpeed = moveSpeed;
+                this.curPos = curPos;
                 lastPos = curPos;
                 isPause = false;
             }
