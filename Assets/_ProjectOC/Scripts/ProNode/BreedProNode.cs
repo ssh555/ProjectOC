@@ -37,8 +37,8 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasRecipe)
             {
-                if (DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
-                if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
+                //if (DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
+                //if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
                 foreach (var kv in Recipe.Raw) { if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; } }
                 if (!HasCreature) { return false; }
                 if (DiscardStackAll >= Creature1.Discard.num * StackMax) { return false; }
@@ -102,7 +102,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     output = output <= 0 ? 0 : output;
                     output = output >= 50 ? 50 : output;
-                    if (output >= OutputThreshold)
+                    if (output >= OutputThreshold || DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0)
                     {
                         creature.Output = output;
                         ChangeData(0, creature);
