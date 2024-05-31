@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -8,6 +9,9 @@ namespace ProjectOC.ProNodeNS
     {
         [LabelText("主岛的移动速度")]
         public float MainIslandSpeed;
+        [LabelText("主岛的初始位置 大地图中的坐标")]
+        public UnityEngine.Vector2 MainIslandInitPos;
+
         [LabelText("采矿圈半径")]
         public float MiningCircleRadius;
 
@@ -47,6 +51,7 @@ namespace ProjectOC.ProNodeNS
         public MineSystemConfig(MineSystemConfig config)
         {
             MainIslandSpeed = config.MainIslandSpeed;
+            MainIslandInitPos = config.MainIslandInitPos;
             MiningCircleRadius = config.MiningCircleRadius;
             IslandRudderSensitivity = config.IslandRudderSensitivity;
 
