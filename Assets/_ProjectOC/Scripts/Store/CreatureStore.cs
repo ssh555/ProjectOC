@@ -19,7 +19,7 @@ namespace ProjectOC.StoreNS
         {
             if (ManagerNS.LocalGameManager.Instance.ItemManager.GetItemType(itemID) == ML.Engine.InventorySystem.ItemType.Creature)
             {
-                if (CreatureItemID != itemID) { ClearData(); }
+                if (CreatureItemID != itemID) { ClearData(false); }
                 CreatureItemID = itemID;
             }
         }
@@ -32,7 +32,7 @@ namespace ProjectOC.StoreNS
                     if (item.ID == CreatureItemID && item is ML.Engine.InventorySystem.CreatureItem creature)
                     {
                         int index = DataContainer.GetEmptyIndex();
-                        if (index >= 0)
+                        if (index >= 0 && ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(item))
                         {
                             ChangeData(index, creature);
                             DataContainer.ChangeAmount(creature, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
