@@ -572,7 +572,21 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// 加入矿圈数据
         /// </summary>
-        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int curSlectNum)
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int RegionNum, int MapLayerIndex)
+        {
+            PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (RegionNum, MapLayerIndex));
+            placeCircleData.PlaceCirclePosition = CirclePos;
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlacedCircleDataDic.Remove(ProNodeId);
+            }
+            this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+        }
+
+        /// <summary>
+        /// 加入矿圈数据
+        /// </summary>
+        public void AddMineralCircleData(Vector2 CirclePos, string ProNodeId, int curSlectNum)
         {
             PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curSlectNum, curMapLayerIndex));
             placeCircleData.PlaceCirclePosition = CirclePos;
