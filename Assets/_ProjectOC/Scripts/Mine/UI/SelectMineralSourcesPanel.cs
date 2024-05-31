@@ -63,6 +63,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         {
             BigMapInstanceTrans = handle.Result.transform;
             NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
+            BlockRegions = BigMapInstanceTrans.Find("BlockRegion");
             BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
             BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
@@ -103,7 +104,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        if(MM.MineralMapData != null)                                               
+        if (curSelectRegion > 0 && MM.MineralMapData != null)                                          
         {
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
             {
@@ -164,6 +165,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     private Transform BigMapInstanceTrans;
     private Transform NormalRegions;
+    private Transform BlockRegions;
 
     /// <summary>
     ///该ui对应的生产节点 id 在push该ui时赋值
@@ -190,6 +192,19 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
             NormalRegions.GetChild(i).Find("Selected").gameObject.SetActive(isUnlocked && i + 1 == curSelectRegion);
+        }
+
+        for (int i = 0; i < BlockRegions.childCount; i++)
+        {
+            var child = BlockRegions.GetChild(i);
+            string regionNumstr = child.name.Split('_')[1];
+            int regionNum;
+            bool isRegionNum = int.TryParse(regionNumstr, out regionNum);
+            if (isRegionNum)
+            {
+                var isUnlocked = MM.CheckRegionIsUnlocked(regionNum);
+                BlockRegions.GetChild(i).Find("Normal").gameObject.SetActive(!isUnlocked);
+            }
         }
         #endregion
     }
