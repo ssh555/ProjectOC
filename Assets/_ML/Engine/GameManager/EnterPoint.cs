@@ -14,6 +14,8 @@ namespace ML.Engine.Manager
 
         public EnterPoint()
         {
+            Resources.UnloadUnusedAssets();
+
             this.GetStartMenuPanelInstance().Completed += (handle) =>
             {
                 // สตภýปฏ
