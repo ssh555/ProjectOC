@@ -22,11 +22,13 @@ namespace ProjectOC.StoreNS.UI
             set
             {
                 DataBtnList.DisableBtnList();
+                DataBtnList.SetCurSelectedNull();
                 ItemBtnList.DisableBtnList();
                 curMode = value;
                 if (curMode == Mode.Creature)
                 {
                     DataBtnList.EnableBtnList();
+                    DataBtnList.MoveIndexIUISelected(0);
                 }
                 else if (curMode == Mode.ChangeItem)
                 {
@@ -151,7 +153,9 @@ namespace ProjectOC.StoreNS.UI
         {
             Store.DataContainer.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
-            tempSprite.Add("", transform.Find("TopTitle").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add("", transform.Find("Store").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add("Male", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale"));
+            tempSprite.Add("Female", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale"));
             base.Enter();
         }
         protected override void Exit()
@@ -195,7 +199,7 @@ namespace ProjectOC.StoreNS.UI
         }
         private void Alter_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
+            if (CurMode == Mode.Store || CurMode == Mode.Creature)
             {
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
@@ -221,7 +225,7 @@ namespace ProjectOC.StoreNS.UI
         }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
+            if (CurMode == Mode.Store || CurMode == Mode.Creature)
             {
                 ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(Store.CreatureItemID, Store.WorldStore.transform,
                         new Vector3(0, Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),

@@ -1083,7 +1083,7 @@ namespace ML.Engine.BuildingSystem
         public List<InventorySystem.Formula> GetRawAll(string CID)
         {
             List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
-            string[] cids = CID.Split('_');
+            /*string[] cids = CID.Split('_');
             if (cids.Length == 4)
             {
                 int level = int.Parse(cids[3]);
@@ -1096,6 +1096,12 @@ namespace ML.Engine.BuildingSystem
                         result.AddRange(raws);
                     }
                 }
+                
+            }*/
+            var raws = GetRaw(CID);
+            if (raws != null)
+            {
+                result.AddRange(raws);
             }
             return result;
         }
@@ -1279,6 +1285,7 @@ namespace ML.Engine.BuildingSystem
 
         public void ResetVisualSocket()
         {
+            //Debug.Log("ResetVisualSocket ");
             VisualSocket.transform.parent = null;
             VisualSocket.gameObject.SetActive(false);
         }

@@ -74,7 +74,7 @@ namespace ProjectOC.StoreNS
                 {
                     if (!judgeInteracting || !store.IsInteracting)
                     {
-                        int storeAmount = store.DataContainer.GetAmount(data, DataNS.DataOpType.Storage, false, judgeCanOut);
+                        int storeAmount = store.DataContainer.GetAmount(data.GetDataID(), DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)

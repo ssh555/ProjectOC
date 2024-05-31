@@ -173,6 +173,7 @@ namespace ProjectOC.MineSystem
                 islandRudderPanelInstance.gameObject.SetActive(false);
                 MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
                 ColliderRadiu = MainIslandRectTransform.GetComponent<CircleCollider2D>().radius;
+                IslandRudderGraphCursorNavigation = handle.Result.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
                 {
                     bigMapInstance = handle.Result;
@@ -377,12 +378,13 @@ namespace ProjectOC.MineSystem
 
         private RectTransform MapRegionRectTransform;
         private RectTransform MainIslandRectTransform;
+        private GraphCursorNavigation IslandRudderGraphCursorNavigation;
         private bool isRectTransformInit = false;
 
         private void DetectMainIslandCurRegion()
         {
             PreColliderPointRegion = CurColliderPointRegion;
-            CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu);
+            CurColliderPointRegion = DetectRegion(MainIslandRectTransform.position + (Vector3)mainIslandData.MovingDir * ColliderRadiu * IslandRudderGraphCursorNavigation.CurZoomRate);
             if (PreColliderPointRegion != CurColliderPointRegion && CurColliderPointRegion <= 0)
             {
                 //ÕÏ°­Åö×²
@@ -510,6 +512,10 @@ namespace ProjectOC.MineSystem
             if(!CheckRegionIsUnlocked(curSelectRegion))
             {
                 this.mineralMapData = null;
+                return;
+            }
+            if(curSelectRegion <= 0)
+            {
                 return;
             }
             string MineralMapDataID = RegionNumToRegionDic[curSelectRegion].mineralDataID[CurMapLayerIndex];

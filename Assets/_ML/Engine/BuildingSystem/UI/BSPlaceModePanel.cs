@@ -100,8 +100,6 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Refresh
-        private bool isChangeStyle = true;
-        private bool isChangeHeight = false;
         public override void Refresh()
         {
             if (!IsInit)
@@ -293,7 +291,10 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ComfirmPlaceBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.ComfirmPlaceBPart();
+            if(this.Placer.ComfirmPlaceBPart())
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
         }
 
         private void Placer_EnterAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -309,6 +310,7 @@ namespace ML.Engine.BuildingSystem.UI
         }
         private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            if (this.Placer.SelectedPartInstance.Classification.Category1 != BuildingCategory1.House) return; 
             var offset = obj.ReadValue<float>() < 0 ? -1 : 1;
             this.Placer.AlternateBPart(GetNextOnSwichingHeight(offset));
             this.Refresh();
@@ -374,13 +376,15 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            return ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
+            var check = ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
+            return check;
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
             ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()), needJudgeNum:true, priority:-1);
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            this.RefreshSlots();
         }
 
         private void Placer_OnPlaceModeChangeBPart(IBuildingPart obj)
@@ -430,7 +434,7 @@ namespace ML.Engine.BuildingSystem.UI
         }
         #endregion
 
-        #region SwitchHightAndWeight
+        #region SwitchHightAndStyle
         [ShowInInspector]
         private int heightcnt = 0;
         [ShowInInspector]
@@ -460,7 +464,6 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
         }
-
         private IBuildingPart GetNextOnSwichingStyle(int offset)
         {
             int cnt = 1;
@@ -476,7 +479,6 @@ namespace ML.Engine.BuildingSystem.UI
             index_j = (index_j + heightcnt + cnt * offset) % heightcnt;
             return swichArray[index_i][index_j];
         }
-
         #endregion
     }
 }

@@ -19,7 +19,7 @@ namespace ProjectOC.DataNS
         {
             DataContainer = new DataContainer(capacity, dataCapacitys);
         }
-        public void ClearData()
+        public void ClearData(bool clearSize=true)
         {
             (this as MissionNS.IMissionObj).Clear();
             if (DataContainer != null)
@@ -30,7 +30,14 @@ namespace ProjectOC.DataNS
                     kv.Key.AddToPlayerInventory(kv.Value);
                 }
             }
-            DataContainer.Clear();
+            if (clearSize)
+            {
+                DataContainer.Clear();
+            }
+            else
+            {
+                DataContainer.ClearData();
+            }
         }
         public void ResetData(List<IDataObj> datas, List<int> dataCapacity)
         {
