@@ -78,11 +78,16 @@ namespace ProjectOC.PinchFace
             }
             else if (_type2 == PinchPartType2.HairBraid)
             {
-                //应该再判断Type3是否一样
+                if (braid != null)
+                {
+                    braid.Release();
+                }
+                Transform _HeadBone = boneDic["Head"];
                 _handle.Completed += (handle) =>
                 {
-                    braid = new PinchBraid(typeIndex);
+                    braid = new PinchBraid(_HeadBone,_handle.Result,typeIndex,Vector2.zero);
                 };
+                return _handle;
                 
             }
             #endregion
@@ -241,12 +246,12 @@ namespace ProjectOC.PinchFace
 
         public void ChangeTransform(PinchPartType2 boneType2,Vector2 param)
         {
-            
             if(boneType2 == PinchPartType2.EarTop)
             {
-                topEar.ModifyValue(param);
+                if(topEar != null)
+                    topEar.ModifyValue(param);
             }
-            else if (boneType2 == PinchPartType2.HairBraid)
+            else if (boneType2 == PinchPartType2.HairFront)
             {
                 if(braid != null)
                     braid.ModifyValue(param);
@@ -319,21 +324,22 @@ namespace ProjectOC.PinchFace
    
             }
         }
-
+        string matColorName = "_ColorChange";
+        //头发双色用
+        // string matColorName2 = "Mat_ColorChange2";
         private Material GetMaterial(PinchPartType2 _type2)
         {
-            string matColorName = "_ColorChange";
-            //头发双色用
-            // string matColorName2 = "Mat_ColorChange2";
-            
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
             {
                 Debug.LogWarning($"没有捏脸部件:{_type2.ToString()}");
                 return null;
             }
-                
-            
+            return GetMaterial(_replaceGo);
+        }
+
+        private Material GetMaterial(GameObject _replaceGo)
+        {
             Material[] mats = _replaceGo.GetComponentInChildren<SkinnedMeshRenderer>().materials;
             if (mats == null)
             {
@@ -343,23 +349,10 @@ namespace ProjectOC.PinchFace
             {
                 if (_mat.name.Contains(matColorName))
                     return _mat;
-                // if (_index == 0)
-                // {
-                //     if (_mat.name.Contains(matColorName))
-                //         return _mat;
-                // }
-                // else if(_index == 1)
-                // {
-                //     if (_mat.name.Contains(matColorName2))
-                //         return _mat;
-                // }
-                
             }
-            
-            
             return null;
         }
-
+        
         private string changeColorShaderKey = "_BaseColor";
         private string changeColroShaderKey2 = "_Color2";
         /// <summary>
@@ -371,6 +364,15 @@ namespace ProjectOC.PinchFace
         /// <param name="colorType">分色模式</param>
         public void ChangeColor(PinchPartType2 _type2, Color _color,int _index)
         {
+            //特殊处理
+            // if (_type2 == PinchPartType2.EarTop)
+            // {
+            //     Material _targetMat = GetMaterial();
+            //     _targetMat.SetColor(changeColorShaderKey,_color);   
+            //     return;
+            // }
+            //
+            
             if (_type2 == PinchPartType2.HairFront)
             {
                 ChangeColor( PinchPartType2.HairBack, _color, _index);
@@ -405,8 +407,6 @@ namespace ProjectOC.PinchFace
                 return;
             if (colorType != -1)
             {
-                
-                
                 int _curColor = 1 << colorType;
                 if (_type2 == PinchPartType2.HairFront &&
                     (pinchFaceManager.Config.HairFrontChangeColorTypes[curHairIndex] & _curColor) != 0
@@ -620,7 +620,15 @@ namespace ProjectOC.PinchFace
         public PinchCharacterCameraView CameraView;
 
         #endregion
-
-        
+#if UNITY_EDITOR
+        // void OnDrawGizmos()
+        // {
+        //     if (braid != null)
+        //     {
+        //         Vector3 center = braid.CalculateCenter(braid.headBone,braid.offset);
+        //         Gizmos.DrawWireSphere(center,braid.radius);
+        //     }
+        // }
+#endif
     }
 }
