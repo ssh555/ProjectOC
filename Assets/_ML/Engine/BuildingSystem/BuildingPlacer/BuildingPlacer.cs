@@ -268,6 +268,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             if (this.SelectedPartInstance.CanPlaceInPlaceMode)
             {
                 this.SelectedPartInstance.Mode = BuildingMode.None;
+                BuildingManager.Instance.ResetVisualSocket();
                 // ¿½±´Ò»·Ý
                 var tmp = GameObject.Instantiate(this.SelectedPartInstance.gameObject).GetComponent<BuildingPart.IBuildingPart>();
 

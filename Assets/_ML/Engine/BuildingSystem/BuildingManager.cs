@@ -1279,6 +1279,7 @@ namespace ML.Engine.BuildingSystem
 
         public void ResetVisualSocket()
         {
+            //Debug.Log("ResetVisualSocket ");
             VisualSocket.transform.parent = null;
             VisualSocket.gameObject.SetActive(false);
         }

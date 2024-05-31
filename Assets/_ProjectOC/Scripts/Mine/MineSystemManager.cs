@@ -512,6 +512,11 @@ namespace ProjectOC.MineSystem
                 this.mineralMapData = null;
                 return;
             }
+            Debug.Log("ChangeCurMineralMapData " + curSelectRegion);
+            if(curSelectRegion <= 0)
+            {
+                return;
+            }
             string MineralMapDataID = RegionNumToRegionDic[curSelectRegion].mineralDataID[CurMapLayerIndex];
             if(!mineralMapDatas.ContainsKey(MineralMapDataID) )
             {
