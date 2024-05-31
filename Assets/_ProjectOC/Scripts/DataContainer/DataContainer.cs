@@ -44,6 +44,15 @@ namespace ProjectOC.DataNS
             ResetIndexDict();
             OnDataChangeEvent?.Invoke();
         }
+        public void ClearData()
+        {
+            for (int i = 0; i < Datas.Length; i++)
+            {
+                Datas[i].Reset();
+            }
+            ResetIndexDict();
+            OnDataChangeEvent?.Invoke();
+        }
         public void Clear()
         {
             Array.Resize(ref Datas, 0);
@@ -396,7 +405,15 @@ namespace ProjectOC.DataNS
                     }
                     if (needSort)
                     {
-                        Array.Sort(Datas, (x, y) => x.GetData().CompareTo(y.GetData()));
+                        Array.Sort(Datas, (x, y) =>
+                        {
+                            var xData = x.GetData();
+                            var yData = y.GetData();
+                            if (xData == null && yData == null) return 0;
+                            if (xData == null) return 1;
+                            if (yData == null) return -1;
+                            return xData.CompareTo(yData);
+                        });
                     }
                     OnDataChangeEvent?.Invoke();
                 }
