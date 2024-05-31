@@ -401,8 +401,6 @@ namespace ProjectOC.TechTree.UI
             }
         }
 
-
-
         private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private List<CounterDownTimer> tempTimer = new List<CounterDownTimer>();
         private List<GameObject> tempGO = new List<GameObject>();

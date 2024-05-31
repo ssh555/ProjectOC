@@ -1,3 +1,4 @@
+using ML.Engine.Manager;
 using ML.Engine.Utility;
 using Sirenix.OdinInspector;
 using System;
@@ -97,7 +98,6 @@ namespace ML.Engine.UI
             this.hidePanel = hidePanel;
         }
 
-
         protected virtual void Enter()
         {
             this.RegisterInput();
@@ -108,7 +108,6 @@ namespace ML.Engine.UI
         {
             this.UnregisterInput();
         }
-
 
         protected virtual void UnregisterInput()
         {
@@ -155,8 +154,6 @@ namespace ML.Engine.UI
         {
 
         }
-
-
     }
 
     /// <summary>
@@ -171,6 +168,7 @@ namespace ML.Engine.UI
         public string description;
 
         public UIKeyTipList<T> UIKeyTipList;
+        private List<AsyncOperationHandle> jsonHandles = new List<AsyncOperationHandle>();
 
         /// <summary>
         /// 加载Json完成后执行的回调，默认自动初始化KeyTip
@@ -184,14 +182,13 @@ namespace ML.Engine.UI
         /// </summary>
         private List<AsyncOperationHandle> InitUITextContents()
         {
-            var handles = new List<AsyncOperationHandle>();
             var handle = this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
             {
                this.OnLoadJsonAssetComplete(datas);
             }, this.description);
-            handles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
+            jsonHandles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
 
-            return handles;
+            return jsonHandles;
         }
         /// <summary>
         /// 初始化KeyTip
@@ -209,6 +206,15 @@ namespace ML.Engine.UI
         protected override void Enter()
         {
             base.Enter();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            foreach (var handle in jsonHandles)
+            {
+                GameManager.Instance.ABResourceManager.Release(handle);
+            }
         }
 
         protected virtual void InitTextContentPathData()
