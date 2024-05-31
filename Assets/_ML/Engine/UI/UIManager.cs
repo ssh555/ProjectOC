@@ -70,7 +70,6 @@ namespace ML.Engine.UI
             // ‘›Õ£’ª∂•
             if (panelStack.Count > 0)
             {
-                
                 panelStack.Peek().OnPause();
             }
             // —π»Î’ª
