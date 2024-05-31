@@ -25,17 +25,17 @@ MonoBehaviour:
     MainIslandSpeed: 0.5
     MainIslandInitPos: {x: 96, y: 50}
     MiningCircleRadius: 3
-    IslandRudderSensitivity: 0.5
+    IslandRudderSensitivity: 2
     IslandRudderInitZoomRate: 0.5
     IslandRudderZoomSpeed: 1
     IslandRudderZoomInLimit: 2
     IslandRudderZoomOutLimit: 0.5
-    SelectMineralSourcesSensitivity: 0.5
+    SelectMineralSourcesSensitivity: 5
     SelectMineralSourcesInitZoomRate: 0.5
     SelectMineralSourcesZoomSpeed: 1
     SelectMineralSourcesZoomInLimit: 2
     SelectMineralSourcesZoomOutLimit: 0.5
-    SmallMapSensitivity: 0.5
+    SmallMapSensitivity: 5
     SmallMapInitZoomRate: 0.5
     SmallMapZoomSpeed: 1
     SmallMapZoomInLimit: 2
