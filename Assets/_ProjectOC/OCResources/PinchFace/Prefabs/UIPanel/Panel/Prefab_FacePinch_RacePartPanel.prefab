@@ -209,7 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.78039217, g: 0.7359098, b: 0.7359098, a: 0.8352941}
+  m_Color: {r: 0.2, g: 0.20784314, b: 0.20784314, a: 0.8352941}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -537,6 +537,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &2714225800377092980
 GameObject:
@@ -1340,6 +1341,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &5057420741021801662
 GameObject:
@@ -1402,7 +1404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.95686275, g: 0.9372549, b: 1, a: 0.14117648}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1583,6 +1585,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 0
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &5792835379767574618
 GameObject:
@@ -1867,7 +1870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.95555556, g: 0.936, b: 1, a: 0.14117648}
+  m_Color: {r: 0.8800118, g: 0.8254717, b: 1, a: 0.14117648}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

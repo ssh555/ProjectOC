@@ -123,9 +123,9 @@ namespace ML.Engine.BuildingSystem
                         {
                             Debug.LogError($"{bpart.Classification.ToString()} 重复配置: {bpart.gameObject.name}");
                         }
-                        
+
                         // to-do : 仅测试用，后续接入科技树后需注释掉
-#if UNITY_EDITOR
+#if UNITY_EDITOR||DEVELOPMENT_BUILD
                         if (IsAddBPartOnRegister)
                         {
                             BM.RegisterBPartPrefab(bpart);
@@ -152,10 +152,18 @@ namespace ML.Engine.BuildingSystem
         }
         #endregion
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR||DEVELOPMENT_BUILD
         [LabelText("加载建筑物时是否标记为可用"), SerializeField]
         private bool IsAddBPartOnRegister = true;
 #endif
+
+        ///// <summary>
+        ///// TODO : 正式打包需要删掉
+        ///// </summary>
+        //public void AddAllBPartPrefab()
+        //{
+
+        //}
     }
 
 }

@@ -14,7 +14,7 @@ namespace ProjectOC.ProNodeNS
             DataContainer.GetData(2) as ML.Engine.InventorySystem.CreatureItem : null;
         public ML.Engine.InventorySystem.CreatureItem Creature2 => HasRecipe && DataContainer.HaveSetData(3) ? 
             DataContainer.GetData(3) as ML.Engine.InventorySystem.CreatureItem : null;
-        public ML.Engine.InventorySystem.CreatureItem Creature3 => HasRecipe && DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0 ? 
+        public ML.Engine.InventorySystem.CreatureItem Creature3 => HasRecipe && DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0 && (DataContainer.GetData(0) != null) ? 
             DataContainer.GetData(0) as ML.Engine.InventorySystem.CreatureItem : null;
         public bool HasCreature => HasRecipe && DataContainer.GetAmount(2, DataNS.DataOpType.Storage) > 0 && DataContainer.GetAmount(3, DataNS.DataOpType.Storage) > 0;
         public int DiscardStackAll => HasCreature ? DataContainer.GetAmount(4, DataNS.DataOpType.StorageAll) : 0;
@@ -37,8 +37,8 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasRecipe)
             {
-                if (DataContainer.GetData(0) == null || DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
-                if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
+                //if (DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
+                //if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
                 foreach (var kv in Recipe.Raw) { if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; } }
                 if (!HasCreature) { return false; }
                 if (DiscardStackAll >= Creature1.Discard.num * StackMax) { return false; }
@@ -102,7 +102,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     output = output <= 0 ? 0 : output;
                     output = output >= 50 ? 50 : output;
-                    if (output >= OutputThreshold)
+                    if (output >= OutputThreshold || DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0)
                     {
                         creature.Output = output;
                         ChangeData(0, creature);

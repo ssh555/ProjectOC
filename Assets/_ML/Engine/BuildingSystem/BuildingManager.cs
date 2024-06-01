@@ -652,6 +652,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingHeight的三级分类
         /// </summary>
+        [ShowInInspector]
         private Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnHeight(IBuildingPart BPart)
@@ -793,6 +794,7 @@ namespace ML.Engine.BuildingSystem
         {
             return GetBPartPrefabCountOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4);
         }
+
         public BuildingCategory3[] GetAllStyleByBPartHeight(IBuildingPart BPart)
         {
             var bparts = BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4].ToArray();
@@ -803,6 +805,16 @@ namespace ML.Engine.BuildingSystem
             }
             return styles;
         }
+
+        public List<IBuildingPart> GetAllStyleIBuildingPartOnHeight1(IBuildingPart BPart)
+        {
+            return BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][1].ToArray().ToList();
+        }
+        public List<IBuildingPart> GetAllHeightIBuildingPartOnStyle(IBuildingPart BPart)
+        {
+            return BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3].ToArray().ToList();
+        }
+
         #endregion
 
         #region Material
@@ -1071,7 +1083,7 @@ namespace ML.Engine.BuildingSystem
         public List<InventorySystem.Formula> GetRawAll(string CID)
         {
             List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
-            string[] cids = CID.Split('_');
+            /*string[] cids = CID.Split('_');
             if (cids.Length == 4)
             {
                 int level = int.Parse(cids[3]);
@@ -1084,6 +1096,12 @@ namespace ML.Engine.BuildingSystem
                         result.AddRange(raws);
                     }
                 }
+                
+            }*/
+            var raws = GetRaw(CID);
+            if (raws != null)
+            {
+                result.AddRange(raws);
             }
             return result;
         }
@@ -1218,7 +1236,7 @@ namespace ML.Engine.BuildingSystem
             }
         }
 
-        public int GetBuildingCount(BuildingCategory2 _buildingType)
+        public int GetBuildingCount(BuildingCategory2 _buildingType,int level)
         {
             if (!buildingInstanceDic.ContainsKey(_buildingType))
             {
@@ -1226,7 +1244,21 @@ namespace ML.Engine.BuildingSystem
             }
             else
             {
-                return buildingInstanceDic[_buildingType].Count;
+                if (level == 1)
+                {
+                    return buildingInstanceDic[_buildingType].Count;
+                }
+                else
+                {
+                    int _res = 0;
+                    foreach (var _buildingPart in buildingInstanceDic[_buildingType])
+                    {
+                        //向下兼容,实际等级大于需要等级
+                        if ((_buildingPart.Classification.Category4 - 1) >= level)
+                            _res++;
+                    }
+                    return _res;
+                }
             }
         }
         #endregion
@@ -1253,6 +1285,7 @@ namespace ML.Engine.BuildingSystem
 
         public void ResetVisualSocket()
         {
+            //Debug.Log("ResetVisualSocket ");
             VisualSocket.transform.parent = null;
             VisualSocket.gameObject.SetActive(false);
         }

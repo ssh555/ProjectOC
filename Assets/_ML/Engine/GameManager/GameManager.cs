@@ -4,7 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using ML.PlayerCharacterNS;
 using UnityEngine;
-
+using UnityEngine.ResourceManagement;
+using UnityEngine.AddressableAssets;
 
 namespace ML.Engine.Manager
 {
@@ -81,6 +82,7 @@ namespace ML.Engine.Manager
             this.Init();
             EnterPoint = new EnterPoint();
         }
+
 
         /// <summary>
         /// µ¥Àý³õÊ¼»¯

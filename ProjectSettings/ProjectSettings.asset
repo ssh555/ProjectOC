@@ -85,7 +85,7 @@ PlayerSettings:
   deferSystemGesturesMode: 0
   hideHomeButton: 0
   submitAnalytics: 1
-  usePlayerLog: 0
+  usePlayerLog: 1
   dedicatedServerOptimizations: 0
   bakeCollisionMeshes: 0
   forceSingleInstance: 1
@@ -139,6 +139,7 @@ PlayerSettings:
   preloadedAssets:
   - {fileID: 102900000, guid: 4d8e67c31d8280c418fea4346d451dc4, type: 3}
   - {fileID: 102900000, guid: c14098454720c4e4eaf2737ca2b9304c, type: 3}
+  - {fileID: 11400000, guid: a92ad17f4b81c184faa5ad7cae4f6e93, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
