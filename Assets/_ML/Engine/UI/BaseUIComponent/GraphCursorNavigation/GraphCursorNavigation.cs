@@ -207,7 +207,7 @@ namespace ML.Engine.UI
                 NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
                 NavagateMapTimer.OnEndEvent += () =>
                 {
-
+                    //Debug.Log("NavagateMap_started ");
                     if(isEnable == false) { return; }
 
                     canControlCenterxLeft = false;
