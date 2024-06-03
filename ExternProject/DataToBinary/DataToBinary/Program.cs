@@ -81,6 +81,7 @@ namespace ExcelToJson
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 22, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 23, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 24, BinaryFilePath = rootPath + "MainInteractRing.json", type = typeof(ProjectOC.MainInteract.MainInteractRingTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 25, BinaryFilePath = rootPath + "Dialog.json", type = typeof(ProjectOC.Dialog.DialogTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 26, BinaryFilePath = rootPath + "Option.json", type = typeof(ProjectOC.Dialog.OptionTableData) });
 

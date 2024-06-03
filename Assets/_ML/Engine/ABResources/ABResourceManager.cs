@@ -846,7 +846,6 @@ namespace ML.Engine.ABResources
         }
         public AsyncOperationHandle<TObject> LoadAssetAsync<TObject>(object key, bool isGlobal = false)
         {
-            //ResourceManager.Dispose();
             var handle = Addressables.LoadAssetAsync<TObject>(key);
             handle.Completed += (ash) =>
             {
