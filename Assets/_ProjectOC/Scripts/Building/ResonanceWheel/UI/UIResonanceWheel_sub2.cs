@@ -11,12 +11,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using static ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel_sub2;
+using static ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheel_sub2 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub2Struct>
+    public class UIResonanceWheel_sub2 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub2Struct>
     {
         #region Unity
         public bool IsInit = false;
@@ -158,7 +158,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        public ResonanceWheelUI parentUI = null;
+        public UIResonanceWheel parentUI = null;
         private Transform ring;
         //ring
         [ShowInInspector]

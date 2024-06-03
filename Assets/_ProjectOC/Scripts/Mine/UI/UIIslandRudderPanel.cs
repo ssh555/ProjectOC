@@ -10,8 +10,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static ak.wwise;
-using static IslandRudderPanel;
-public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
+using static UIIslandRudderPanel;
+public class UIIslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 {
     #region Unity
     protected override void Awake()
@@ -100,7 +100,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         Vector2 targetPostion;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(cursorNavigation.Content as RectTransform, screenPoint, null, out targetPostion);
-        //UnityEngine.Debug.Log("targetPostion " + targetPostion);
+        UnityEngine.Debug.Log("targetPostion " + targetPostion);
         cursorNavigation.MoveCenterToPos(targetPostion);
     }
     protected override void UnregisterInput()

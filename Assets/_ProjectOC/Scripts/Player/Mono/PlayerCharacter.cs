@@ -59,7 +59,7 @@ namespace ProjectOC.Player
         public RectTransform playerUIBotPanel;
         [FoldoutGroup("UI")]
         public UI.PlayerUIPanel playerUIPanel;
-        public ProjectOC.ResonanceWheelSystem.UI.BeastPanel beastPanel;
+        public ProjectOC.ResonanceWheelSystem.UI.UIBeastPanel beastPanel;
         #endregion
 
         #region 背包 to-do : 临时测试使用
@@ -145,12 +145,14 @@ namespace ProjectOC.Player
                 this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
             }
 
+#if UNITY_EDITOR||DEVELOPMENT_BUILD
+
             if (Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
             }
-
+#endif
 
             //// In-Window
             //if (Application.isFocused)
@@ -181,7 +183,6 @@ namespace ProjectOC.Player
         }
 
         #endregion
-
 
         #region to-delete
         [Button("测试用: AddAllItems")]

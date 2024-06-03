@@ -125,7 +125,7 @@ namespace ProjectOC.Player.UI
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
-                    var panel = handle.Result.GetComponent<BeastPanel>();
+                    var panel = handle.Result.GetComponent<UIBeastPanel>();
                     panel.transform.localScale = Vector3.one;
                     panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
