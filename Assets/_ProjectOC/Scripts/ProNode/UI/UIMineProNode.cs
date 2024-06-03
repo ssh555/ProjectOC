@@ -8,6 +8,9 @@ using static ProjectOC.ProNodeNS.UI.UIMineProNode;
 using Sirenix.OdinInspector;
 using ProjectOC.ManagerNS;
 using ML.Engine.Manager;
+using ML.Engine.UI;
+using ProjectOC.LandMassExpand;
+using System.Collections;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -327,14 +330,7 @@ namespace ProjectOC.ProNodeNS.UI
                             selectMineralSourcesPanel.UIMineProNode = this;
                             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(selectMineralSourcesPanel);
                             MM.ChangeCurMineralMapData(MineralCircleData.SmallMapTuple.Item1);
-                            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
-                            {
-                                var panel = handle.Result.GetComponent<SmallMapPanel>();
-                                panel.IsCheckRegionNum = false;
-                                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
-                                panel.SelectMineralSourcesPanel = selectMineralSourcesPanel;
-                                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                            };
+                            GameManager.Instance.StartCoroutine(PushSmallMapPanel(selectMineralSourcesPanel));
                         };
                     }
                     else
@@ -362,6 +358,25 @@ namespace ProjectOC.ProNodeNS.UI
             }
             Refresh();
         }
+
+        private IEnumerator PushSmallMapPanel(SelectMineralSourcesPanel selectMineralSourcesPanel)
+        {
+            while (!selectMineralSourcesPanel.objectPool.IsLoadFinish())
+            {
+                yield return null;
+            }
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
+            {
+                var panel = handle.Result.GetComponent<SmallMapPanel>();
+                panel.IsCheckRegionNum = false;
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                panel.SelectMineralSourcesPanel = selectMineralSourcesPanel;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            };
+        }
+
+
+
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.ProNode)

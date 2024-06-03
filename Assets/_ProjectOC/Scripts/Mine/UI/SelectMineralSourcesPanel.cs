@@ -50,8 +50,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
     protected override void Enter()
     {
-        base.Enter();
         this.MapLayerUIBtnList.EnableBtnList();
+        this.MapLayerUIBtnList.MoveIndexIUISelected(MM.CurMapLayerIndex);
+        base.Enter();
         this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
     }
     #endregion
@@ -128,7 +129,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     public int PreSelectRegion { get { return preSelectRegion; }  }
     [ShowInInspector]
     private int curSelectRegion = -1;
-    public int CurSelectRegion { get { return  curSelectRegion; } }
+    public int CurSelectRegion { get { return  curSelectRegion; } set { curSelectRegion = value; } }
 
     private void DetectMainIslandCurRegion()
     {
@@ -184,7 +185,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         {
             return;
         }
-
         #region ¸üÐÂÃÔÎí
         for (int i = 0;i< NormalRegions.childCount;i++)
         {

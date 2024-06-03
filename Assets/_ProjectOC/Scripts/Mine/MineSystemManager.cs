@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
 
 namespace ProjectOC.MineSystem
@@ -61,6 +62,9 @@ namespace ProjectOC.MineSystem
 
         #region SmallMap
         [ShowInInspector]
+        /// <summary>
+        ///当前所选小地图的矿物集合
+        /// </summary>
         private MineralMapData mineralMapData;
         public MineralMapData MineralMapData { get { return mineralMapData; } }
 
@@ -190,6 +194,7 @@ namespace ProjectOC.MineSystem
                     cursorNavigation.ZoomOutLimit = MineSystemConfig.IslandRudderZoomOutLimit;
 
                     isRectTransformInit = true;
+                    
                     CalculateMainIslandWorldPos();
                     DetectMainIslandCurRegion();
                 };
@@ -249,7 +254,14 @@ namespace ProjectOC.MineSystem
         private Dictionary<int,Texture2D> IndexToTextureDic = new Dictionary<int,Texture2D>();
 
         //策划大地图数据
-        private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
+/*        [System.Serializable]
+        public struct BigMapTableData
+        {
+            public List<List<int>> BigMapData;
+        }*/
+
+
+        private const string bigMapDataJson = "OCTableData/WorldMap.json";
         private string _jsonData;
         private int[,] bigMapTableData;
         public int[,] BigMapTableData { get { return bigMapTableData; } }
@@ -303,7 +315,7 @@ namespace ProjectOC.MineSystem
         private void LoadBigMapTableData()
         {
             //策划大地图数据
-            _jsonData = File.ReadAllText(bigMapDataJson);
+            _jsonData = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<TextAsset>(bigMapDataJson).WaitForCompletion().text;
             bigMapTableData = JsonConvert.DeserializeObject<int[,]>(_jsonData);
             synchronizerInOrder.Check(1);
         }
@@ -377,10 +389,12 @@ namespace ProjectOC.MineSystem
         private float ColliderRadiu;
 
         private RectTransform MapRegionRectTransform;
+
+        public Vector3 MainIslandWorldPos { get { return MapRegionRectTransform.TransformPoint(mainIslandData.CurPos);} }
+
         private RectTransform MainIslandRectTransform;
         private GraphCursorNavigation IslandRudderGraphCursorNavigation;
         private bool isRectTransformInit = false;
-
         private void DetectMainIslandCurRegion()
         {
             PreColliderPointRegion = CurColliderPointRegion;
@@ -409,7 +423,6 @@ namespace ProjectOC.MineSystem
             }
         }
 
-
         [ShowInInspector]
         private int smallMapcurSelectRegion = -1;
         public int SmallMapCurSelectRegion { set { smallMapcurSelectRegion = value; } }
@@ -428,7 +441,7 @@ namespace ProjectOC.MineSystem
             return bigMapTableData[gridPos.y, gridPos.x];
         }
 
-        private void CalculateMainIslandWorldPos()
+        public void CalculateMainIslandWorldPos()
         {
             int width = bigMapTableData.GetLength(0);
             Vector2 anchorPosition = Vector2.zero;
@@ -439,6 +452,7 @@ namespace ProjectOC.MineSystem
             Vector2 localPosition = Vector2.zero;
             localPosition.x = (anchorPosition.x - 0.5f) * referenceSize.x;
             localPosition.y = (anchorPosition.y - 0.5f) * referenceSize.y;
+
             Vector2 worldPosition = RectTransformUtility.WorldToScreenPoint(null, MapRegionRectTransform.TransformPoint(localPosition));
             // 将世界坐标转换为屏幕坐标
             Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
@@ -449,6 +463,35 @@ namespace ProjectOC.MineSystem
             MainIslandRectTransform.anchoredPosition = localPoint;
         }
 
+        public Vector3 GetWorldPosition(RectTransform rectTransform)
+        {
+            if (rectTransform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return Vector3.zero;
+            }
+
+            Vector3 worldPosition = rectTransform.localPosition;
+            Transform parent = rectTransform.parent;
+
+            while (parent != null)
+            {
+                RectTransform parentRectTransform = parent.GetComponent<RectTransform>();
+                if (parentRectTransform != null)
+                {
+                    Vector3 parentScale = parentRectTransform.localScale;
+                    worldPosition = Vector3.Scale(worldPosition, parentScale) + parentRectTransform.localPosition;
+                }
+                else
+                {
+                    Debug.LogWarning("Parent does not have RectTransform component!");
+                }
+
+                parent = parent.parent;
+            }
+
+            return worldPosition;
+        }
 
         #endregion
         #endregion
@@ -502,6 +545,12 @@ namespace ProjectOC.MineSystem
             return RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex];
         }
 
+        public bool CheckRegionIsUnlocked(int RegionNum,int MapLayerIndex)
+        {
+            if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return false;
+            return RegionNumToRegionDic[RegionNum].isUnlockLayer[MapLayerIndex];
+        }
+
         public void ChangeCurMineralMapData(int curSelectRegion)
         {
             if(!RegionNumToRegionDic.ContainsKey(curSelectRegion))
@@ -527,10 +576,50 @@ namespace ProjectOC.MineSystem
             this.mineralMapData =  mineralMapDatas[MineralMapDataID];
         }
 
+        public void SetMineralMapData(int RegionNum,int MapLayerIndex)
+        {
+            if (!RegionNumToRegionDic.ContainsKey(RegionNum))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            if (!CheckRegionIsUnlocked(RegionNum, MapLayerIndex))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            if (RegionNum <= 0)
+            {
+                return;
+            }
+
+            string MineralMapDataID = RegionNumToRegionDic[RegionNum].mineralDataID[MapLayerIndex];
+            if (!mineralMapDatas.ContainsKey(MineralMapDataID))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            this.mineralMapData = mineralMapDatas[MineralMapDataID];
+        }
+
         /// <summary>
         /// 加入矿圈数据
         /// </summary>
-        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int curSlectNum)
+        public void AddMineralCircleData(Vector2 CirclePos,string ProNodeId, int RegionNum, int MapLayerIndex)
+        {
+            PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (RegionNum, MapLayerIndex));
+            placeCircleData.PlaceCirclePosition = CirclePos;
+            if (this.PlacedCircleDataDic.ContainsKey(ProNodeId))
+            {
+                PlacedCircleDataDic.Remove(ProNodeId);
+            }
+            this.PlacedCircleDataDic.Add(ProNodeId, placeCircleData);
+        }
+
+        /// <summary>
+        /// 加入矿圈数据
+        /// </summary>
+        public void AddMineralCircleData(Vector2 CirclePos, string ProNodeId, int curSlectNum)
         {
             PlaceCircleData placeCircleData = new PlaceCircleData(ProNodeId, (curSlectNum, curMapLayerIndex));
             placeCircleData.PlaceCirclePosition = CirclePos;

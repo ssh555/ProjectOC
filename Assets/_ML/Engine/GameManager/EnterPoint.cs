@@ -14,47 +14,21 @@ namespace ML.Engine.Manager
 
         public EnterPoint()
         {
-            //InitUIPrefabs();
+            //Resources.UnloadUnusedAssets();
+            this.GetStartMenuPanelInstance().Completed += (handle) =>
+            {
+                // 实例化
+                var panel = handle.Result.GetComponent<StartMenuPanel>();
 
+                panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
-            System.Action<string, string> postCallback = (string s1,string s2) => {
-                this.GetStartMenuPanelInstance().Completed += (handle) =>
-                {
-                    // 实例化
-                    var panel = handle.Result.GetComponent<StartMenuPanel>();
+                GameManager.Instance.UIManager.PushPanel(panel);
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
-
-                    GameManager.Instance.UIManager.PushPanel(panel);
-
-                    //panel.OnEnter();
-                };
-
+                //panel.OnEnter();
             };
-
-            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_PreScene", null, postCallback));
         }
 
         #region Prefab
-        //public void InitUIPrefabs()
-        //{
-        //    this.PrefabsAB = null;
-        //    var abmgr = GameManager.Instance.ABResourceManager;
-
-        //    var crequest = abmgr.LoadLocalABAsync("ui/baseuipanel", null, out var PrefabsAB);
-
-
-        //    PrefabsAB = crequest.assetBundle;
-
-        //    this.PrefabsAB = PrefabsAB;
-        //    StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
-        //    LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
-        //    OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
-        //    this.isInit = true;
-           
-        //}
-        
-
         public AsyncOperationHandle<GameObject> GetStartMenuPanelInstance()
         {
             return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.StartMenuPanelPrefab, isGlobal: true);

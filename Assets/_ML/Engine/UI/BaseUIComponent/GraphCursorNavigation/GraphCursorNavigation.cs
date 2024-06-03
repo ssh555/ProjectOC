@@ -58,7 +58,8 @@ namespace ML.Engine.UI
         [LabelText("边距配置（左右间距，上下间距）")]
         public Vector2 Margin = new Vector2();
         [LabelText("导航速度")]
-        public float NavagationSpeed = 1;
+        public float navagationSpeed = 1;
+        public float NavagationSpeed { get { return navagationSpeed * curZoomscale; } set { navagationSpeed = value; } }
         [LabelText("是否启用缩放功能")]
         public bool IsZoomEnabled = false;
         [ShowIf("IsZoomEnabled", true)]
@@ -91,10 +92,8 @@ namespace ML.Engine.UI
                 return curZoomscale;
             }
         }
-        [ShowInInspector]
-        public float valueToPosX { get { return ((this.content as RectTransform).rect.width - (this.transform as RectTransform).rect.width) * curZoomRate; } }
-        [ShowInInspector]
-        public float valueToPosY { get { return ((this.content as RectTransform).rect.height - (this.transform as RectTransform).rect.height) * curZoomRate; } }
+        public float valueToPosX { get { return ((this.content as RectTransform).rect.width - (this.transform as RectTransform).rect.width) * curZoomscale; } }
+        public float valueToPosY { get { return ((this.content as RectTransform).rect.height - (this.transform as RectTransform).rect.height) * curZoomscale; } }
 
         public event Action OnScaleChanged;
         public event Action OnCenterPosChanged;
@@ -209,7 +208,7 @@ namespace ML.Engine.UI
                 NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
                 NavagateMapTimer.OnEndEvent += () =>
                 {
-
+                    //Debug.Log("NavagateMap_started ");
                     if(isEnable == false) { return; }
 
                     canControlCenterxLeft = false;
@@ -439,6 +438,49 @@ namespace ML.Engine.UI
             this.ScrollRect.content.position = this.center.position + Offset;
             OnScaleChanged?.Invoke();
         }
+
+        /// <summary>
+        /// 移动到指定位置 传入指定位置在Content坐标系下的anchoredPosition
+        /// </summary>
+        public void MoveCenterToPos(Vector2 targetPos)
+        {
+            //判断是否在内框
+
+            RectTransform ViewPort = this.content.parent as RectTransform;
+            RectTransform Content = this.content as RectTransform;
+            Vector2 ViewPortSize = ViewPort.rect.size;
+            Vector2 ContentSize = Content.rect.size;
+
+            bool isTouchDown = Vector2.Distance(targetPos, new Vector2(0, -(ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
+            bool isTouchUP = Vector2.Distance(targetPos, new Vector2(0, (ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
+            bool isTouchLeft = Vector2.Distance(targetPos, new Vector2(-(ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;
+            bool isTouchRight = Vector2.Distance(targetPos, new Vector2((ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;
+
+            if (isTouchDown || isTouchUP || isTouchLeft|| isTouchRight) 
+            {
+                //调整Center的pos 使 Center在Content坐标系下的坐标为TargetPos
+
+                //计算targetPos在 Center坐标系下的坐标
+
+                //计算targetPos的世界坐标
+                var WorldPos = Content.TransformPoint(targetPos);
+                Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, WorldPos);
+                Vector2 localPosition;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(center, screenPoint, null, out localPosition);
+                //Debug.Log("localPosition " + localPosition);
+                center.anchoredPosition = localPosition;
+            }
+            else
+            {
+                //在内框 只需改变Content的位置与Center重合
+                //Debug.Log("Content.position " + Content.TransformPoint(targetPos));
+                Content.position = Content.TransformPoint(targetPos);
+                Content.anchoredPosition *= -1;
+            }
+        }
+
+
+
         public void EnableGraphCursorNavigation(InputAction NavigationInputAction, InputAction ZoomInInputAction = null, InputAction ZoomOutInputAction = null)
         {
             this.BindNavigationInput(NavigationInputAction);

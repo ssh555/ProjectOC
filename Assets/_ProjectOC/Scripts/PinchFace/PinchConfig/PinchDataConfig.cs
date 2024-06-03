@@ -27,8 +27,8 @@ namespace ProjectOC.PinchFace.Config
                 typeCount = _count;
             }
         }
-#if UNITY_EDITOR
 
+#if UNITY_EDITOR
         [Button("∂¡»°–≈œ¢")]
         public void LoadConfig()
         {

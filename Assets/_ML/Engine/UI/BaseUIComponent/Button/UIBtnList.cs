@@ -711,7 +711,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetBtnAction(string BtnName, UnityAction action)
         {
-            if (this.SBDic.ContainsKey(BtnName))
+            if (this.SBDic.ContainsKey(BtnName) && !action.IsUnityNull())
             {
                 SBDic[BtnName].onClick.AddListener(action);
             }
@@ -722,7 +722,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetBtnAction(SelectedButton selectedButton, UnityAction action)
         {
-            if (selectedButton.GetUIBtnList() == this)
+            if (selectedButton.GetUIBtnList() == this && !action.IsUnityNull())
             {
                 selectedButton.onClick.AddListener(action);
             }
@@ -776,13 +776,6 @@ namespace ML.Engine.UI
         public SelectedButton GetCurSelected()
         {
             return this.CurSelected;
-        }
-        /// <summary>
-        /// 获取当前选中按钮
-        /// </summary>
-        public void SetCurSelected(SelectedButton selectedButton)
-        {
-            this.CurSelected = selectedButton;
         }
         /// <summary>
         /// 置空当前选中按钮
