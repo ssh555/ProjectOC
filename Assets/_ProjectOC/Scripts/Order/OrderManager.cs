@@ -88,8 +88,6 @@ namespace ProjectOC.Order
         private CounterDownTimer CanBeCommitRefreshTimer;
 
         public event Action OrderPanelRefreshOrderUrgentDelegation;
-        public event Action OrderPanelRefreshAcceptedOrder;
-
         private IInventory PlayerInventory;
 
         #region ≤ﬂªÆ≈‰÷√œÓ

@@ -14,7 +14,6 @@ namespace ML.Engine.Manager
 
         public EnterPoint()
         {
-            //Resources.UnloadUnusedAssets();
             this.GetStartMenuPanelInstance().Completed += (handle) =>
             {
                 // สตภýปฏ
@@ -23,9 +22,21 @@ namespace ML.Engine.Manager
                 panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
 
                 GameManager.Instance.UIManager.PushPanel(panel);
-
-                //panel.OnEnter();
             };
+
+            //System.Action<string, string> postCallback = (string s1,string s2) => {
+            //    this.GetStartMenuPanelInstance().Completed += (handle) =>
+            //    {
+            //        var panel = handle.Result.GetComponent<StartMenuPanel>();
+
+            //        panel.transform.SetParent(GameManager.Instance.UIManager.NormalPanel, false);
+
+            //        GameManager.Instance.UIManager.PushPanel(panel);
+            //    };
+
+            //};
+
+            //GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_PreScene", null, postCallback));
         }
 
         #region Prefab
