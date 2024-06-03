@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AmazingAssets.TerrainToMesh;
 using ML.Engine.UI;
 using ProjectOC.PinchFace;
@@ -99,10 +100,17 @@ namespace ProjectOC.PinchFace
             
             _handle.Completed += (handle)=>
             {
-                EquipItem(_type2,handle.Result,inCamera);
+                //延迟一帧执行
+                StartCoroutine(EquipExecuteAfterOneFrame());
+                IEnumerator EquipExecuteAfterOneFrame()
+                {
+                    yield return null;
+                    EquipItem(_type2,handle.Result,inCamera);
+                }
             };
             return _handle;
         }
+
         
         
         public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
@@ -203,6 +211,7 @@ namespace ProjectOC.PinchFace
             SkinnedMeshRenderer[] smrs = sourceClothing.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var smr in smrs)
             {
+                // Destroy(smr);
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
                 if (inCamera)
                 {
@@ -226,14 +235,10 @@ namespace ProjectOC.PinchFace
             {
                 target = parent.AddComponent<SkinnedMeshRenderer> ();
             }
-
-            target.sharedMesh = source.sharedMesh;
-            target.materials = source.materials;
+            
+            target.sharedMaterials = source.materials;
             //todo ?AB包导出材质丢失
-            foreach (var _mat in target.materials)
-            {
-                _mat.shader = Shader.Find(_mat.shader.name);
-            }
+            target.sharedMesh = source.sharedMesh;
             return target;
         }
         private Transform[] TranslateTransforms (Transform[] sources, Dictionary<string,Transform> _boneCatalog)
