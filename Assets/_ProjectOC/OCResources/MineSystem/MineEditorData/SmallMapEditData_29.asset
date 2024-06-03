@@ -244,3 +244,5 @@ MonoBehaviour:
     - {x: 0.97696686, y: 18.630558}
   - MineID: refer
     MinePoses: []
+  - MineID: refer2
+    MinePoses: []

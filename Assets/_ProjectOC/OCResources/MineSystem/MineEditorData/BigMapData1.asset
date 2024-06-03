@@ -16,7 +16,7 @@ MonoBehaviour:
   - mineID: Mineral_Ag_1
     mineIcon: {fileID: 21300000, guid: 017b3bd867124a54d90a9c6de9c93312, type: 3}
     brushData:
-      brushSize: 1.5
+      brushSize: 3
       brushHard: 5
       brushDensity: 14
       brushSizeMin: 0
@@ -148,9 +148,9 @@ MonoBehaviour:
   - mineID: Mineral_Cu_2
     mineIcon: {fileID: 21300000, guid: 9e990bec72499c84bac87107fe512cad, type: 3}
     brushData:
-      brushSize: 5
+      brushSize: 3
       brushHard: 0
-      brushDensity: 4
+      brushDensity: 2
       brushSizeMin: 0
       brushSizeMax: 10
       brushHardMin: 0
@@ -304,9 +304,9 @@ MonoBehaviour:
   - mineID: Mineral_Rock_1
     mineIcon: {fileID: 21300000, guid: 6de62f81a145f83459e0249494e0aa1e, type: 3}
     brushData:
-      brushSize: 3.99
+      brushSize: 3
       brushHard: 0
-      brushDensity: 2
+      brushDensity: 3
       brushSizeMin: 0
       brushSizeMax: 10
       brushHardMin: 0
@@ -316,9 +316,9 @@ MonoBehaviour:
   - mineID: Mineral_Rock_2
     mineIcon: {fileID: 21300000, guid: b6fa3945b8f06ff4884edb2c87ccf3fe, type: 3}
     brushData:
-      brushSize: 1
+      brushSize: 3
       brushHard: 0
-      brushDensity: 5
+      brushDensity: 2
       brushSizeMin: 0
       brushSizeMax: 10
       brushHardMin: 0
@@ -328,7 +328,7 @@ MonoBehaviour:
   - mineID: Mineral_Rock_3
     mineIcon: {fileID: 21300000, guid: 6ea10a3b46856c14cb60fdf1cc385450, type: 3}
     brushData:
-      brushSize: 1.5
+      brushSize: 2
       brushHard: 0
       brushDensity: 2
       brushSizeMin: 0
@@ -338,6 +338,18 @@ MonoBehaviour:
       brushDensityMin: 0
       brushDensityMax: 20
   - mineID: refer
+    mineIcon: {fileID: 21300000, guid: f29b74a2922751f43a7f9f9a1aaf4fe1, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: refer2
     mineIcon: {fileID: 21300000, guid: 12788a28e9733764ba7a941c6e38516d, type: 3}
     brushData:
       brushSize: 10

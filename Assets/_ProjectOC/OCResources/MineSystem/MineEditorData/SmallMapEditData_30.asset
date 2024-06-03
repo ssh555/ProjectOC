@@ -182,3 +182,5 @@ MonoBehaviour:
     MinePoses: []
   - MineID: refer
     MinePoses: []
+  - MineID: refer2
+    MinePoses: []
