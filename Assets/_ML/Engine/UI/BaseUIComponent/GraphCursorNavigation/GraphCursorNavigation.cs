@@ -467,13 +467,13 @@ namespace ML.Engine.UI
                 Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, WorldPos);
                 Vector2 localPosition;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(center, screenPoint, null, out localPosition);
-                Debug.Log("localPosition " + localPosition);
+                //Debug.Log("localPosition " + localPosition);
                 center.anchoredPosition = localPosition;
             }
             else
             {
                 //在内框 只需改变Content的位置与Center重合
-                Debug.Log("Content.position " + Content.TransformPoint(targetPos));
+                //Debug.Log("Content.position " + Content.TransformPoint(targetPos));
                 Content.position = Content.TransformPoint(targetPos);
                 Content.anchoredPosition *= -1;
             }
