@@ -55,6 +55,7 @@ public class TestPos : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TestPos))]
 public class TestPosEditor : Editor
 {
@@ -75,3 +76,4 @@ public class TestPosEditor : Editor
         }
     }
 }
+#endif
