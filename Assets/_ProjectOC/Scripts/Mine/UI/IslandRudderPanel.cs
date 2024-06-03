@@ -53,6 +53,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         MM.MainIslandData.OnisMovingChanged -= RefreshOnChangeMovingState;
         this.uIIslandUpdatePanel.IslandRudderPanelChangeTo();
+        (this.cursorNavigation.Content as RectTransform).anchoredPosition = Vector2.zero;
     }
 
     protected override void Exit()
@@ -89,6 +90,18 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
 
         //初始化主岛的位置
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
+        this.MainIsland.ForceUpdateRectTransforms();
+        //初始化光标位置
+        //计算主岛位置在Conten坐标系下的位置
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(MM.IslandRudderPanelInstance.transform as RectTransform);
+        // 将世界坐标转换为屏幕坐标
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, this.MainIsland.position);
+        Vector2 targetPostion;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(cursorNavigation.Content as RectTransform, screenPoint, null, out targetPostion);
+        //UnityEngine.Debug.Log("targetPostion " + targetPostion);
+        cursorNavigation.MoveCenterToPos(targetPostion);
     }
     protected override void UnregisterInput()
     {

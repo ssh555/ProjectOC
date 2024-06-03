@@ -39,9 +39,10 @@ namespace ML.Engine.Utility
             
             for (int i = 0; i < enumerators.Count; i++)
             {
+                //yield return null;
                 yield return enumerators[i];
             }
-            yield return null;
+            //yield return null;
             this.isFinished = true;
             this.onAllFunctionsCompleted?.Invoke();
         }
