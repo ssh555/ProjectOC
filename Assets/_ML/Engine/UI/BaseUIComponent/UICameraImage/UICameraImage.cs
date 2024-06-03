@@ -30,8 +30,6 @@ namespace ML.Engine.UI
         private GameObject currentObjectBeingObserved;
         [ShowInInspector]
         private Camera uiCamera;
-        [ShowInInspector]
-        private bool isInit = false;
 
         private static string LayerName = "UICamera";
         //public LayerMask layerMask; 
@@ -69,8 +67,6 @@ namespace ML.Engine.UI
             currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
             currentObjectBeingObserved.transform.localPosition = Vector3.zero;
             currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
-            
-            this.isInit = true;
         }
         
         public void LookAtGameObject(GameObject _targetGo,bool modeLayer = true)

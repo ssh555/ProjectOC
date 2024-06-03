@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static Animancer.Easing;
+using static UnityEditor.Rendering.FilterWindow;
 
 namespace ML.Engine.UI
 {
@@ -445,38 +446,49 @@ namespace ML.Engine.UI
         public void MoveCenterToPos(Vector2 targetPos)
         {
             //判断是否在内框
-
-            RectTransform ViewPort = this.content.parent as RectTransform;
+            //RectTransform ViewPort = this.content.parent as RectTransform;
             RectTransform Content = this.content as RectTransform;
-            Vector2 ViewPortSize = ViewPort.rect.size;
-            Vector2 ContentSize = Content.rect.size;
+            //Vector2 ViewPortSize = ViewPort.rect.size;
+            //Vector2 ContentSize = Content.rect.size;
 
-            bool isTouchDown = Vector2.Distance(targetPos, new Vector2(0, -(ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
-            bool isTouchUP = Vector2.Distance(targetPos, new Vector2(0, (ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
-            bool isTouchLeft = Vector2.Distance(targetPos, new Vector2(-(ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;
-            bool isTouchRight = Vector2.Distance(targetPos, new Vector2((ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;
+            /*            bool isTouchDown = Vector2.Distance(targetPos, new Vector2(0, -(ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
+                        bool isTouchUP = Vector2.Distance(targetPos, new Vector2(0, (ContentSize.y - ViewPortSize.y) / 2)) < 0.1;
+                        bool isTouchLeft = Vector2.Distance(targetPos, new Vector2(-(ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;
+                        bool isTouchRight = Vector2.Distance(targetPos, new Vector2((ContentSize.x - ViewPortSize.x) / 2,0)) < 0.1;*/
 
+/*            bool isTouchDown = targetPos.y < -(ContentSize.y - ViewPortSize.y) / 2;
+            bool isTouchUP = targetPos.y > (ContentSize.y - ViewPortSize.y) / 2;
+            bool isTouchLeft = targetPos.x < -(ContentSize.x - ViewPortSize.x) / 2;
+            bool isTouchRight = targetPos.x > (ContentSize.x - ViewPortSize.x) / 2;*/
+
+/*            Debug.Log(isTouchUP + " " + isTouchDown + " " + isTouchLeft + " " + isTouchRight);
             if (isTouchDown || isTouchUP || isTouchLeft|| isTouchRight) 
             {
+
+                center.anchoredPosition = Vector2.zero;
+                Content.position = Content.TransformPoint(targetPos);
+                Content.anchoredPosition *= -1;
                 //调整Center的pos 使 Center在Content坐标系下的坐标为TargetPos
+                Vector3 worldPoint;
+                RectTransformUtility.ScreenPointToWorldPointInRectangle(Content, Content.TransformPoint(targetPos), null, out worldPoint);
+                Vector2 localPoint;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(center as RectTransform, worldPoint, null, out localPoint);
+                center.anchoredPosition = localPoint;
 
-                //计算targetPos在 Center坐标系下的坐标
-
-                //计算targetPos的世界坐标
-                var WorldPos = Content.TransformPoint(targetPos);
-                Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, WorldPos);
-                Vector2 localPosition;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(center, screenPoint, null, out localPosition);
-                //Debug.Log("localPosition " + localPosition);
-                center.anchoredPosition = localPosition;
             }
             else
             {
                 //在内框 只需改变Content的位置与Center重合
-                //Debug.Log("Content.position " + Content.TransformPoint(targetPos));
+
+                center.anchoredPosition = Vector2.zero;
+                Debug.Log("Content.position " + Content.TransformPoint(targetPos));
                 Content.position = Content.TransformPoint(targetPos);
                 Content.anchoredPosition *= -1;
-            }
+            }*/
+
+            center.anchoredPosition = Vector2.zero;
+            Content.position = Content.TransformPoint(targetPos);
+            Content.anchoredPosition *= -1;
         }
 
 

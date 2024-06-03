@@ -4394,7 +4394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -370.99408, y: 384.54718}
+  m_AnchoredPosition: {x: -370.99408, y: 384.74493}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3759539099081840311
@@ -9791,7 +9791,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1047093728779744075}
   - component: {fileID: 257790905731768433}
-  - component: {fileID: 7803237609680240840}
+  - component: {fileID: 802429735969256534}
   m_Layer: 0
   m_Name: Prefab_OrderSystem_UI_OrderBoardPanel
   m_TagString: Untagged
@@ -9831,7 +9831,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5374525249118679032}
   m_CullTransparentMesh: 1
---- !u!114 &7803237609680240840
+--- !u!114 &802429735969256534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9840,7 +9840,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5374525249118679032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fa183bcfff39ae488449a168769cd28, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cf0581b04e97e443b6eb3f6b8ecdd75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   abpath: 
@@ -17656,8 +17656,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4190107103590345731}
   m_HandleRect: {fileID: 3110786692263499898}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.50000006
+  m_Value: 0
+  m_Size: 0.9999261
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

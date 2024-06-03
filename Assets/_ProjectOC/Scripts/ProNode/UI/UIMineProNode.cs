@@ -324,7 +324,7 @@ namespace ProjectOC.ProNodeNS.UI
                     {
                         ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
                         {
-                            SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                            UISelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<UISelectMineralSourcesPanel>();
                             selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                             selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
                             selectMineralSourcesPanel.UIMineProNode = this;
@@ -337,7 +337,7 @@ namespace ProjectOC.ProNodeNS.UI
                     {
                         ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SelectMineralSourcesPanel.prefab").Completed += (handle) =>
                         {
-                            SelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<SelectMineralSourcesPanel>();
+                            UISelectMineralSourcesPanel selectMineralSourcesPanel = handle.Result.GetComponent<UISelectMineralSourcesPanel>();
                             selectMineralSourcesPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                             selectMineralSourcesPanel.ProNodeId = ProNode.GetUID();
                             selectMineralSourcesPanel.UIMineProNode = this;
@@ -359,7 +359,7 @@ namespace ProjectOC.ProNodeNS.UI
             Refresh();
         }
 
-        private IEnumerator PushSmallMapPanel(SelectMineralSourcesPanel selectMineralSourcesPanel)
+        private IEnumerator PushSmallMapPanel(UISelectMineralSourcesPanel selectMineralSourcesPanel)
         {
             while (!selectMineralSourcesPanel.objectPool.IsLoadFinish())
             {
@@ -367,7 +367,7 @@ namespace ProjectOC.ProNodeNS.UI
             }
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
             {
-                var panel = handle.Result.GetComponent<SmallMapPanel>();
+                var panel = handle.Result.GetComponent<UISmallMapPanel>();
                 panel.IsCheckRegionNum = false;
                 panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 panel.SelectMineralSourcesPanel = selectMineralSourcesPanel;

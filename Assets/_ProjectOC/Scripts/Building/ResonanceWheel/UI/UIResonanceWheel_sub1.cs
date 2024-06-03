@@ -13,11 +13,11 @@ using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
+using static ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel_sub1;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub1Struct>
+    public class UIResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub1Struct>
     {
         #region Unity
         protected override void Awake()
@@ -144,7 +144,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
-            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
+            UIResonanceWheel.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
 
             this.objectPool.ResetPool("SimpleDescriptionPool");
             this.objectPool.ResetPool("FullDescriptionPool");
@@ -156,7 +156,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
             
-            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
+            UIResonanceWheel.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
             UIMgr.PopPanel();
         }
 
@@ -205,7 +205,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        public ResonanceWheelUI parentUI;
+        public UIResonanceWheel parentUI;
         //BeastInfo
         private Image ProfileImage;
         private Image GenderImage;
