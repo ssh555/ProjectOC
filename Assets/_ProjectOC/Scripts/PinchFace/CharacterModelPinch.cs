@@ -400,7 +400,6 @@ namespace ProjectOC.PinchFace
             if (_targetMat == null)
                 return;
             
-            Debug.LogError($"Mat:{_targetMat.name} Shader:{_targetMat.shader.name}");
             if (_index == 0)
             {
                 _targetMat.SetColor(changeColorShaderKey,_color);   
