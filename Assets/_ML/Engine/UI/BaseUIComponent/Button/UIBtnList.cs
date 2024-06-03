@@ -711,7 +711,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetBtnAction(string BtnName, UnityAction action)
         {
-            if (this.SBDic.ContainsKey(BtnName))
+            if (this.SBDic.ContainsKey(BtnName) && !action.IsUnityNull())
             {
                 SBDic[BtnName].onClick.AddListener(action);
             }
@@ -722,7 +722,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetBtnAction(SelectedButton selectedButton, UnityAction action)
         {
-            if (selectedButton.GetUIBtnList() == this)
+            if (selectedButton.GetUIBtnList() == this && !action.IsUnityNull())
             {
                 selectedButton.onClick.AddListener(action);
             }
