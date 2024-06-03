@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
 
 namespace ProjectOC.MineSystem
@@ -119,8 +120,8 @@ namespace ProjectOC.MineSystem
         private static MineSystemManager instance;
 
         #region 岛舵台UI
-        private IslandRudderPanel islandRudderPanelInstance;
-        public IslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
+        private UIIslandRudderPanel islandRudderPanelInstance;
+        public UIIslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
         private GameObject bigMapInstance;
         public GameObject BigMapInstance { get { return bigMapInstance; } }
         #endregion 
@@ -172,7 +173,7 @@ namespace ProjectOC.MineSystem
 
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
             {
-                islandRudderPanelInstance = handle.Result.GetComponent<IslandRudderPanel>();
+                islandRudderPanelInstance = handle.Result.GetComponent<UIIslandRudderPanel>();
                 islandRudderPanelInstance.gameObject.SetActive(false);
                 MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
                 ColliderRadiu = MainIslandRectTransform.GetComponent<CircleCollider2D>().radius;
@@ -193,6 +194,7 @@ namespace ProjectOC.MineSystem
                     cursorNavigation.ZoomOutLimit = MineSystemConfig.IslandRudderZoomOutLimit;
 
                     isRectTransformInit = true;
+                    
                     CalculateMainIslandWorldPos();
                     DetectMainIslandCurRegion();
                 };
@@ -387,10 +389,12 @@ namespace ProjectOC.MineSystem
         private float ColliderRadiu;
 
         private RectTransform MapRegionRectTransform;
+
+        public Vector3 MainIslandWorldPos { get { return MapRegionRectTransform.TransformPoint(mainIslandData.CurPos);} }
+
         private RectTransform MainIslandRectTransform;
         private GraphCursorNavigation IslandRudderGraphCursorNavigation;
         private bool isRectTransformInit = false;
-
         private void DetectMainIslandCurRegion()
         {
             PreColliderPointRegion = CurColliderPointRegion;
@@ -419,7 +423,6 @@ namespace ProjectOC.MineSystem
             }
         }
 
-
         [ShowInInspector]
         private int smallMapcurSelectRegion = -1;
         public int SmallMapCurSelectRegion { set { smallMapcurSelectRegion = value; } }
@@ -438,7 +441,7 @@ namespace ProjectOC.MineSystem
             return bigMapTableData[gridPos.y, gridPos.x];
         }
 
-        private void CalculateMainIslandWorldPos()
+        public void CalculateMainIslandWorldPos()
         {
             int width = bigMapTableData.GetLength(0);
             Vector2 anchorPosition = Vector2.zero;
@@ -449,6 +452,7 @@ namespace ProjectOC.MineSystem
             Vector2 localPosition = Vector2.zero;
             localPosition.x = (anchorPosition.x - 0.5f) * referenceSize.x;
             localPosition.y = (anchorPosition.y - 0.5f) * referenceSize.y;
+
             Vector2 worldPosition = RectTransformUtility.WorldToScreenPoint(null, MapRegionRectTransform.TransformPoint(localPosition));
             // 将世界坐标转换为屏幕坐标
             Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
@@ -459,6 +463,35 @@ namespace ProjectOC.MineSystem
             MainIslandRectTransform.anchoredPosition = localPoint;
         }
 
+        public Vector3 GetWorldPosition(RectTransform rectTransform)
+        {
+            if (rectTransform == null)
+            {
+                Debug.LogError("RectTransform is null!");
+                return Vector3.zero;
+            }
+
+            Vector3 worldPosition = rectTransform.localPosition;
+            Transform parent = rectTransform.parent;
+
+            while (parent != null)
+            {
+                RectTransform parentRectTransform = parent.GetComponent<RectTransform>();
+                if (parentRectTransform != null)
+                {
+                    Vector3 parentScale = parentRectTransform.localScale;
+                    worldPosition = Vector3.Scale(worldPosition, parentScale) + parentRectTransform.localPosition;
+                }
+                else
+                {
+                    Debug.LogWarning("Parent does not have RectTransform component!");
+                }
+
+                parent = parent.parent;
+            }
+
+            return worldPosition;
+        }
 
         #endregion
         #endregion

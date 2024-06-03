@@ -224,6 +224,7 @@ namespace ProjectOC.LandMassExpand
         }
 
         #endregion
+
         #region override
         public override void OnExit()
         {
@@ -247,7 +248,7 @@ namespace ProjectOC.LandMassExpand
         [SerializeField, FoldoutGroup("UI")]
         private Transform FunctionPanel;
         private bool isPushed = false;
-        private IslandRudderPanel IslandRudderPanelInstance => LocalGameManager.Instance.MineSystemManager.IslandRudderPanelInstance;
+        private UIIslandRudderPanel IslandRudderPanelInstance => LocalGameManager.Instance.MineSystemManager.IslandRudderPanelInstance;
 
         public void ChangeToIslandRudderPanel()
         {

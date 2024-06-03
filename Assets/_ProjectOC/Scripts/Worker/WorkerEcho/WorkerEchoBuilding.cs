@@ -13,7 +13,7 @@ namespace ProjectOC.WorkerNS
         public WorkerEcho WorkerEcho;
 
         private string uIResonanceWheelPrefab = "Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI.prefab";
-        public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheelInstance;
+        public ResonanceWheelSystem.UI.UIResonanceWheel uIResonanceWheelInstance;
 
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
@@ -38,8 +38,8 @@ namespace ProjectOC.WorkerNS
             {
                 GameManager.Instance.ABResourceManager.InstantiateAsync(uIResonanceWheelPrefab).Completed += (handle) =>
                 {
-                    uIResonanceWheelInstance = handle.Result.GetComponent<ResonanceWheelUI>();
-                    uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = (GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+                    uIResonanceWheelInstance = handle.Result.GetComponent<UIResonanceWheel>();
+                    uIResonanceWheelInstance.GetComponentInParent<UIResonanceWheel>().inventory = (GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
                     uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
                 };
