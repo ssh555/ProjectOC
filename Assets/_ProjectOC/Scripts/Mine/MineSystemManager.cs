@@ -120,8 +120,8 @@ namespace ProjectOC.MineSystem
         private static MineSystemManager instance;
 
         #region µº¶æÌ¨UI
-        private IslandRudderPanel islandRudderPanelInstance;
-        public IslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
+        private UIIslandRudderPanel islandRudderPanelInstance;
+        public UIIslandRudderPanel IslandRudderPanelInstance { get { return islandRudderPanelInstance; } }
         private GameObject bigMapInstance;
         public GameObject BigMapInstance { get { return bigMapInstance; } }
         #endregion 
@@ -173,7 +173,7 @@ namespace ProjectOC.MineSystem
 
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
             {
-                islandRudderPanelInstance = handle.Result.GetComponent<IslandRudderPanel>();
+                islandRudderPanelInstance = handle.Result.GetComponent<UIIslandRudderPanel>();
                 islandRudderPanelInstance.gameObject.SetActive(false);
                 MainIslandRectTransform = handle.Result.transform.Find("GraphCursorNavigation").Find("Scroll View").Find("Viewport").Find("Content").Find("MainIsland").GetComponent<RectTransform>();
                 ColliderRadiu = MainIslandRectTransform.GetComponent<CircleCollider2D>().radius;

@@ -65,6 +65,7 @@ namespace ProjectOC.Player.UI
             base.Exit();
         }
         #endregion
+
         #region Tick
         private TextMeshProUGUI TimeText;
         public int tickPriority { get; set; }
@@ -78,6 +79,7 @@ namespace ProjectOC.Player.UI
         }
 
         #endregion
+
         #region Internal
 
         protected override void UnregisterInput()
@@ -136,7 +138,7 @@ namespace ProjectOC.Player.UI
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("ÎÒµÄÊÏ×å"));
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_SmallMapPanel.prefab").Completed += (handle) =>
                 {
-                    var panel = handle.Result.GetComponent<SmallMapPanel>();
+                    var panel = handle.Result.GetComponent<UISmallMapPanel>();
                     panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -147,7 +149,7 @@ namespace ProjectOC.Player.UI
             {
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
                 {
-                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
+                    UIOrderBoardPanel orderBoardPanel = handle.Result.GetComponent<UIOrderBoardPanel>();
 
                     orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);

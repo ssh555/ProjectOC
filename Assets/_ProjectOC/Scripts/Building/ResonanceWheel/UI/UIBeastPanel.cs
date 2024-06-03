@@ -13,7 +13,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using System;
-using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
+using static ProjectOC.ResonanceWheelSystem.UI.UIBeastPanel;
 using ML.Engine.Utility;
 using static ML.Engine.UI.UIBtnListContainer;
 using UnityEngine.UIElements;
@@ -29,7 +29,7 @@ using Debug = UnityEngine.Debug;
 using ProjectOC.Order;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
+    public class UIBeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
