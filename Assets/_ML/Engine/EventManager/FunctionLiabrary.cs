@@ -274,9 +274,11 @@ namespace ML.Engine.Event
         #endregion
 
         #region Load
+        private ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]> EventTableDataABJAProcessor;
+        private ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]> ConditionTableDataABJAProcessor;
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]> EventTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]>("OCTableData", "Event", (datas) =>
+            EventTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]>("OCTableData", "Event", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -285,7 +287,7 @@ namespace ML.Engine.Event
             }, "EventÊý¾Ý");
             EventTableDataABJAProcessor.StartLoadJsonAssetData();
 
-            ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]> ConditionTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]>("OCTableData", "Condition", (datas) =>
+            ConditionTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]>("OCTableData", "Condition", (datas) =>
             {
                 foreach (var data in datas)
                 {
