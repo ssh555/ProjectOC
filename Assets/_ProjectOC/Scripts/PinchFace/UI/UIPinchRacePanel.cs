@@ -129,7 +129,7 @@ namespace ProjectOC.PinchFace
                         pinchFaceManager.RacePinchDatas.Remove(raceData);
                         
                         UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
-                    }));   
+                    },null));   
             }
         }
         

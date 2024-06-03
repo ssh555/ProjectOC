@@ -54,13 +54,13 @@ namespace ProjectOC.PinchFace
         private int curHairIndex = -1;
         public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex,bool inCamera = false)
         {
+            
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
             if (_type3 == PinchPartType3.HF_HairFront)
             {
                 curHairIndex = typeIndex;
             }
-            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
-            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
-            
             #region 马尾、角  特殊处理
             if(_type2 == PinchPartType2.EarTop)
             {
@@ -229,6 +229,11 @@ namespace ProjectOC.PinchFace
 
             target.sharedMesh = source.sharedMesh;
             target.materials = source.materials;
+            //todo ?AB包导出材质丢失
+            foreach (var _mat in target.materials)
+            {
+                _mat.shader = Shader.Find(_mat.shader.name);
+            }
             return target;
         }
         private Transform[] TranslateTransforms (Transform[] sources, Dictionary<string,Transform> _boneCatalog)
@@ -381,7 +386,6 @@ namespace ProjectOC.PinchFace
             //     return;
             // }
             //
-            
             if (_type2 == PinchPartType2.HairFront)
             {
                 ChangeColor( PinchPartType2.HairBack, _color, _index);
@@ -391,6 +395,7 @@ namespace ProjectOC.PinchFace
             if (_targetMat == null)
                 return;
             
+            Debug.LogError($"Mat:{_targetMat.name} Shader:{_targetMat.shader.name}");
             if (_index == 0)
             {
                 _targetMat.SetColor(changeColorShaderKey,_color);   
