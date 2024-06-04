@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
-    public interface IDataObj : System.IComparable<IDataObj>
+    public interface IDataObj
     {
         public string GetDataID();
         public int GetDataWeight();
@@ -12,5 +12,6 @@ namespace ProjectOC.DataNS
         public int RemoveFromPlayerInventory(int num, bool containStore = false);
         public void ConvertToWorldObj(int num, Transform transform);
         public List<ML.Engine.InventorySystem.Item> ConvertToItem(int num);
+        public int DataCompareTo(IDataObj other);
     }
 }

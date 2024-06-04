@@ -6,10 +6,7 @@ using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UIMineProNode;
 using Sirenix.OdinInspector;
-using ProjectOC.ManagerNS;
 using ML.Engine.Manager;
-using ML.Engine.UI;
-using ProjectOC.LandMassExpand;
 using System.Collections;
 
 namespace ProjectOC.ProNodeNS.UI
@@ -318,7 +315,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if(CurProNodeMode == ProNodeSelectMode.Mine)
                 {
-                    var MM = LocalGameManager.Instance.MineSystemManager;
+                    var MM = ManagerNS.LocalGameManager.Instance.MineSystemManager;
                     var MineralCircleData = MM.GetMineralCircleData(ProNode.GetUID());
                     if (MineralCircleData != null)
                     {
@@ -728,7 +725,7 @@ namespace ProjectOC.ProNodeNS.UI
                 var onDuty = ProNode_Worker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
                 onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
                 ProNode_Eff.Find("EffPrefix").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEff;
-                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.GetEff().ToString() + "%";
+                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode?.GetEff().ToString() ?? "") + "%";
                 string buildID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(ProNode.WorldProNode.Classification.ToString());
                 if (!tempSprite.ContainsKey(buildID))
                 {
