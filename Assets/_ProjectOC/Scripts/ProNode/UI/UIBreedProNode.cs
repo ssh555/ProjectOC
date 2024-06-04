@@ -249,7 +249,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if (CurMode == Mode.Discard)
                 {
-                    if (offset.x > 0) { CurMode = Mode.Creature3; }
+                    if (offset.x > 0 && ProNode.Creature3 != null) { CurMode = Mode.Creature3; }
                     else if (offset.y > 0) { CurMode = Mode.Output; }
                 }
                 else if (CurMode == Mode.Creature3)
@@ -267,7 +267,7 @@ namespace ProjectOC.ProNodeNS.UI
                 CurMode = Mode.ChangeCreature;
                 Refresh();
             }
-            else if (CurMode == Mode.ChangeCreature && CheckChangeMode(preMode))
+            else if (CurMode == Mode.ChangeCreature && CheckChangeMode(preMode) && BotKeyTips1.Find("KT_Confirm").gameObject.activeSelf)
             {
                 ProNode.ChangeCreature((int)preMode, Creatures[CreatureIndex]);
                 UpdateBtnInfo();
@@ -340,8 +340,9 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Discard.Find("Selected").gameObject.SetActive(CurMode == Mode.Discard);
                 BotKeyTips.Find("KT_ChangeCreature").gameObject.SetActive(CheckChangeMode(CurMode));
                 BotKeyTips.Find("KT_ChangeBar").gameObject.SetActive(CurMode == Mode.Output);
-                BotKeyTips.Find("KT_FastRemove").gameObject.SetActive(CurMode == Mode.Discard || CurMode == Mode.Creature3);
-                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Creature1);
+                BotKeyTips.Find("KT_FastRemove").gameObject.SetActive(CurMode == Mode.Discard);
+                BotKeyTips.Find("KT_Remove").gameObject.SetActive(CurMode == Mode.Creature3);
+                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Creature1 && ProNode.HasRecipe);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(BotKeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
             }
         }
@@ -466,6 +467,7 @@ namespace ProjectOC.ProNodeNS.UI
                         creature.Gender != Gender.None : creature.Gender == ProNode.Creature1.Gender;
                 }
                 bool canBreed = showWarn && !notTheSameCreature && !notTheSameGender;
+                BotKeyTips1.Find("KT_Confirm").gameObject.SetActive(creature == null || preMode == Mode.Creature1 || canBreed);
                 Creature_Recipe.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textBreedResult;
                 Creature_Recipe.Find("Warn").gameObject.SetActive(showWarn);
                 Creature_Recipe.Find("Warn").GetComponent<TMPro.TextMeshProUGUI>().text = notTheSameCreature ? PanelTextContent.textWarnCreature : 
@@ -481,10 +483,15 @@ namespace ProjectOC.ProNodeNS.UI
                     int high = 3 + output1 <= output2 ? output2 : output1;
                     Creature_Recipe.Find("OutputValue").GetComponent<TMPro.TextMeshProUGUI>().text = $"{low}~{high}";
                 }
-                bool isValidCreature = creature != null && (preMode == Mode.Creature1 || canBreed);
+                bool isValidCreature = creature != null;
                 string recipeID = isValidCreature ? creature.BreRecipeID : "";
-                Creature_Recipe.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textTime + ":"
-                    + ManagerNS.LocalGameManager.Instance.RecipeManager.GetTimeCost(recipeID).ToString() + "s";
+                string timeText = PanelTextContent.textTime + ":";
+                if (canBreed)
+                {
+                    timeText = timeText + ManagerNS.LocalGameManager.Instance.RecipeManager.GetTimeCost(recipeID).ToString() + "s";
+                }
+                Creature_Recipe.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = timeText;
+                Creature_Recipe.Find("Empty1").gameObject.SetActive(!canBreed);
                 #endregion
 
                 #region Desc
