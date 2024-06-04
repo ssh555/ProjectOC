@@ -36,7 +36,6 @@ namespace ProjectOC.PinchFace
         
         private void Awake()
         {
-            
             this.enabled = false;
         }
 
@@ -49,6 +48,7 @@ namespace ProjectOC.PinchFace
             if (_type2 == PinchPartType2.HairFront)
             {
                 Apply(PinchPartType2.HairBack,PinchPartType3.HB_HairBack,_modelPinch);
+                Apply(PinchPartType2.HairBraid,PinchPartType3.HB_HairBraid,_modelPinch);
             }
 
             _modelPinch.ChangeColor(_type2,colors[0],0);

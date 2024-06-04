@@ -704,6 +704,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetBtnAction(int i, int j, UnityAction action)
         {
+            if(action.IsUnityNull())return;
             this.TwoDimSelectedButtons[i][j].onClick.AddListener(action);
         }
         /// <summary>
@@ -728,12 +729,12 @@ namespace ML.Engine.UI
             }
         }
 
-
         /// <summary>
         /// 设置全部Btn的Action
         /// </summary>
         public void SetAllBtnAction(UnityAction action)
         {
+            if(action.IsUnityNull())return;
             foreach (var item in this.TwoDimSelectedButtons)
             {
                 foreach (var btn in item)
@@ -1076,8 +1077,16 @@ namespace ML.Engine.UI
         {
             //统一点击与按键 并且加入preAction 与 postAction
             SelectedButton btn = GetBtn(btnName);
+
             btn.SetPreAndPostInteract(preAction, postAction);
-            Action<InputAction.CallbackContext> buttonClickAction = (context) => { preAction?.Invoke(); btn.onClick.Invoke(); postAction?.Invoke(); };
+            Action<InputAction.CallbackContext> buttonClickAction = (context) =>
+            {
+                Debug.Log("btn "+btn);
+                preAction?.Invoke(); 
+                Debug.Log("btn "+btn.onClick);
+                btn.onClick.Invoke(); 
+                postAction?.Invoke();
+            };
 
             try
             {
