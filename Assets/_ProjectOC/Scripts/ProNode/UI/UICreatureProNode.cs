@@ -325,7 +325,7 @@ namespace ProjectOC.ProNodeNS.UI
             if (CurMode == Mode.Discard)
             {
                 ItemIsDestroyed = true;
-                int num = ProNode.Stack;
+                int num = ProNode.DiscardStack;
                 num = num < 10 ? num : 10;
                 int index = ProNode.DataContainer.GetCapacity() - 1;
                 ProNode.Remove(index, num);
