@@ -11,18 +11,31 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalRenderPipeline"}
+        Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque"  }
         LOD 100
 
         Pass
         {
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+                //"LightMode" = "UniversalGBuffer"
+            }
             HLSLPROGRAM  //URP 程序块开始
-            #pragma vertex vert
+			#pragma target 4.5
+			#pragma vertex vert
             #pragma fragment frag
-            
+
+			//URP函数库
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-			CBUFFER_START(UnityPerMaterial) //变量引入开始
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+
+			#pragma multi_compile  _MAIN_LIGHT_SHADOWS
+			#pragma multi_compile  _MAIN_LIGHT_SHADOWS_CASCADE
+			#pragma multi_compile  _SHADOWS_SOFT
+
+
+            CBUFFER_START(UnityPerMaterial) //变量引入开始
 			float _smoothStepThreshold,_smoothStrength;
             float4 _BaseColor,_Color2;
             int _ColorType;
@@ -43,6 +56,7 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
+                float3 positionWS :  TEXCOORD1;
 				float3 normalWS : NORMAL;
             };
 
@@ -52,6 +66,7 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
                 VertexOutput o;
 				VertexPositionInputs positionInputs = GetVertexPositionInputs(v.vertex.xyz);
                 o.vertex = positionInputs.positionCS;
+                o.positionWS = positionInputs.positionWS;
                 VertexNormalInputs normalInputs = GetVertexNormalInputs(v.normalOS.xyz);
 				o.normalWS = normalInputs.normalWS;
                 
@@ -66,8 +81,10 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
                 float3 worldLightDir = normalize(mainLight.direction); //主光源方向
                 float ndotLRaw = dot(IN.normalWS, worldLightDir);
                 float halfLambert = ndotLRaw * 0.5f + 0.5f;
-                
+                float4 SHADOW_COORDS = TransformWorldToShadowCoord(IN.positionWS);
+                Light  lightData = GetMainLight(SHADOW_COORDS);
                 float4 color = float4(1,1,1,1);
+                half shadow = lightData.shadowAttenuation;
                 // <0.5 主色    >0.5 副色
                 //0纯色 1分色 2动态渐变 3静态渐变 
                 if(_ColorType == 0)
@@ -91,7 +108,9 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
                 
                 return color*halfLambert*mainLightColor;
             }
-            ENDHLSL
+          ENDHLSL  //URP 程序块结束
         }
+		//当前模型创建阴影计算
+	 UsePass "Universal Render Pipeline/Lit/ShadowCaster"
     }
 }

@@ -277,6 +277,7 @@ namespace  ProjectOC.PinchFace
                 ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HF_HairFront,_index,inCamera));    
                 //ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HD_Dai,_index,inCamera));    
                 ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HB_HairBack,_index,inCamera));
+                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HB_HairBraid,0,inCamera));
                 //根据头发的组件增加颜色类型和UI
             }
             else
@@ -305,7 +306,9 @@ namespace  ProjectOC.PinchFace
                     if (PinchPartType3 == PinchPartType3.HF_HairFront)
                     {
                         ChangeColorPinchSetting _colorPinchSetting = handle.Result.GetComponent<ChangeColorPinchSetting>();
-                        curColorChangeType |= _colorPinchSetting.colorChangeType;
+                        //Braid 暂不需要
+                        if(_colorPinchSetting != null)
+                            curColorChangeType |= _colorPinchSetting.colorChangeType;
                         _isInit--;
                         if (_isInit == 0)
                         {

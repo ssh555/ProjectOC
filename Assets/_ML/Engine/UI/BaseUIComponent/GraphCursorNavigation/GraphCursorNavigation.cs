@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static Animancer.Easing;
-using static UnityEditor.Rendering.FilterWindow;
 
 namespace ML.Engine.UI
 {

@@ -57,7 +57,7 @@ namespace ML.Engine.ABResources
 
         ~ABJsonAssetProcessor()
         {
-            Manager.GameManager.Instance.ABResourceManager.Release(this.handle);
+            //Manager.GameManager.Instance.ABResourceManager.Release(this.handle);
         }
 
         public AsyncOperationHandle StartLoadJsonAssetData()
