@@ -1,23 +1,31 @@
 namespace ProjectOC.RestaurantNS
 {
-    public struct RestaurantData : System.Collections.Generic.IComparer<RestaurantData>
+    public struct RestaurantData
     {
         public string ID;
         public int Index;
         public FoodPriority Priority;
         public bool HaveFood;
         public int AlterAP;
-
         public RestaurantData(string itemID, int index, int amount)
         {
             ID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
             Index = index;
-            Priority = index == 0 ? FoodPriority.No1 : FoodPriority.None;
-            Priority = index == 1 ? FoodPriority.No2 : FoodPriority.None;
+            if (index == 0 || index == 1)
+            {
+                Priority = index == 0 ? FoodPriority.No1 : FoodPriority.No2;
+            }
+            else
+            {
+                Priority = FoodPriority.None;
+            }
             HaveFood = amount > 0;
             AlterAP = ManagerNS.LocalGameManager.Instance.RestaurantManager.Food_AlterAP(ID);
         }
+    }
 
+    public class SortForRestaurantData : System.Collections.Generic.IComparer<RestaurantData>
+    {
         public int Compare(RestaurantData x, RestaurantData y)
         {
             // 1.有食物的排在前面
