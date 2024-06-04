@@ -202,6 +202,7 @@ namespace ProjectOC.ProNodeNS.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed -= Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started -= Alter_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.canceled -= Alter_canceled;
         }
         protected override void RegisterInput()
         {
@@ -214,10 +215,40 @@ namespace ProjectOC.ProNodeNS.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed += Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started += Alter_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.canceled += Alter_canceled;
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             CurPriority = (MissionNS.TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(MissionNS.TransportPriority)).Length);
+        }
+        private ML.Engine.Timer.CounterDownTimer alterTimer;
+        private ML.Engine.Timer.CounterDownTimer AlterTimer
+        {
+            get
+            {
+                if (alterTimer == null)
+                {
+                    alterTimer = new ML.Engine.Timer.CounterDownTimer(0.1f, true, false);
+                    alterTimer.OnEndEvent += OnAlterTimerEndEvent;
+                }
+                return alterTimer;
+            }
+        }
+        private int alterMode;
+        private void OnAlterTimerEndEvent()
+        {
+            if (CurMode == Mode.Output)
+            {
+                if (alterMode > 0 && ProNode.OutputThreshold < 50)
+                {
+                    ProNode.OutputThreshold += 1;
+                }
+                else if (alterMode < 0 && ProNode.OutputThreshold > 0)
+                {
+                    ProNode.OutputThreshold -= 1;
+                }
+                Refresh();
+            }
         }
         private void Alter_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -241,10 +272,8 @@ namespace ProjectOC.ProNodeNS.UI
                     else if (offset.y < 0) { CurMode = Mode.Discard; }
                     else if (offset.x != 0) 
                     {
-                        int cur = ProNode.OutputThreshold + (offset.x > 0 ? 1 : -1);
-                        cur = System.Math.Min(cur, 50);
-                        cur = System.Math.Max(cur, 0);
-                        ProNode.OutputThreshold = cur;
+                        alterMode = offset.x;
+                        AlterTimer.Reset(0.2f);
                     }
                 }
                 else if (CurMode == Mode.Discard)
@@ -258,6 +287,13 @@ namespace ProjectOC.ProNodeNS.UI
                     else if (offset.y > 0) { CurMode = Mode.Output; }
                 }
                 Refresh();
+            }
+        }
+        private void Alter_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Output)
+            {
+                alterTimer?.End();
             }
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

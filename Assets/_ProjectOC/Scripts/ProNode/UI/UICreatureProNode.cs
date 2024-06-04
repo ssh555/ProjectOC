@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UICreatureProNode;
-using System;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -69,7 +68,7 @@ namespace ProjectOC.ProNodeNS.UI
             CreatureBtnList.OnSelectButtonChanged += Refresh;
 
             RecipeRawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeCreature").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab", 
+            RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab",
                 () => { synchronizer.Check(); CreatureBtnList.OnSelectButtonChanged += UpdateBtnInfo; });
         }
         protected void UpdateBtnInfo()
@@ -226,6 +225,7 @@ namespace ProjectOC.ProNodeNS.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed -= Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started -= Alter_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.canceled -= Alter_canceled;
         }
         protected override void RegisterInput()
         {
@@ -240,10 +240,40 @@ namespace ProjectOC.ProNodeNS.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed += Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started += Alter_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.canceled += Alter_canceled;
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             CurPriority = (MissionNS.TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(MissionNS.TransportPriority)).Length);
+        }
+        private ML.Engine.Timer.CounterDownTimer alterTimer;
+        private ML.Engine.Timer.CounterDownTimer AlterTimer
+        {
+            get
+            {
+                if (alterTimer == null)
+                {
+                    alterTimer = new ML.Engine.Timer.CounterDownTimer(0.1f, true, false);
+                    alterTimer.OnEndEvent += OnAlterTimerEndEvent;
+                }
+                return alterTimer;
+            }
+        }
+        private int alterMode;
+        private void OnAlterTimerEndEvent()
+        {
+            if (CurMode == Mode.Output)
+            {
+                if (alterMode > 0 && ProNode.OutputThreshold < 50)
+                {
+                    ProNode.OutputThreshold += 1;
+                }
+                else if (alterMode < 0 && ProNode.OutputThreshold > 0)
+                {
+                    ProNode.OutputThreshold -= 1;
+                }
+                Refresh();
+            }
         }
         private void Alter_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -261,16 +291,17 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else if (offset.y != 0 && CurMode == Mode.Output)
                 {
-                    if (offset.y > 0 && ProNode.OutputThreshold < 50)
-                    {
-                        ProNode.OutputThreshold += 1;
-                    }
-                    else if (offset.y < 0 && ProNode.OutputThreshold > 0)
-                    {
-                        ProNode.OutputThreshold -= 1;
-                    }
+                    alterMode = offset.y;
+                    AlterTimer.Reset(0.2f);
                 }
                 Refresh();
+            }
+        }
+        private void Alter_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Output)
+            {
+                alterTimer?.End();
             }
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
