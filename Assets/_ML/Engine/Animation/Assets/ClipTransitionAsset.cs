@@ -18,6 +18,8 @@ namespace ML.Engine.Animation
         { }
 
         public ClipTransition clipTransition;
+
+        #region IAssetHasEvents
         [SerializeField]
         protected List<IAssetHasEvents.AssetEvent> _Events;
         public List<IAssetHasEvents.AssetEvent> Events => _Events;
@@ -27,6 +29,8 @@ namespace ML.Engine.Animation
         [SerializeField]
         protected IAssetHasEvents.AssetEvent _EndEvent;
         public IAssetHasEvents.AssetEvent EndEvent => _EndEvent;
+
+        #endregion
 
         public override ITransition GetTransition()
         {

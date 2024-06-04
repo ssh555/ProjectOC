@@ -21,8 +21,6 @@ namespace ML.Editor.Animation
         // ÊÂ¼þ
         protected SerializedProperty _endEventProperty;
 
-
-
         public override void Init()
         {
             asset = (ClipTransitionAsset)target;

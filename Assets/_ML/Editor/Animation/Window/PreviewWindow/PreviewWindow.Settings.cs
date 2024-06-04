@@ -19,7 +19,7 @@ namespace ML.Editor.Animation
             /// </summary>
             public static void DoInspectorGUI()
             {
-                AnimancerSettings.SerializedObject.Update();
+                AnimationSettings.SerializedObject.Update();
 
                 EditorGUI.indentLevel++;
 
@@ -34,13 +34,16 @@ namespace ML.Editor.Animation
 
                 EditorGUI.indentLevel--;
 
-                AnimancerSettings.SerializedObject.ApplyModifiedProperties();
+                AnimationSettings.SerializedObject.ApplyModifiedProperties();
             }
 
             #region Misc
             private static void DoMiscGUI()
             {
                 _instance.DoPropertyField(nameof(_AutoClose));
+                _instance.DoPropertyField(nameof(_SceneLighting));
+                _instance.DoPropertyField(nameof(_ShowSkybox));
+                _instance.DoPropertyField(nameof(_DrawGizmos));
             }
 
 
@@ -130,63 +133,68 @@ namespace ML.Editor.Animation
             #region Models
             private static void DoModelsGUI()
             {
-                var property = ModelsProperty;
-                var count = property.arraySize = EditorGUILayout.DelayedIntField(nameof(Models), property.arraySize);
+                EditorGUILayout.PropertyField(ModelsProperty, new GUIContent("Models"));
+                //EditorGUI.indentLevel++;
+                //var property = ModelsProperty;
+                //var count = property.arraySize = EditorGUILayout.DelayedIntField(nameof(Models), property.arraySize);
+                //EditorGUI.indentLevel--;
 
-                // Drag and Drop to add model.
-                var area = GUILayoutUtility.GetLastRect();
-                AnimancerGUI.HandleDragAndDrop<GameObject>(area,
-                    (gameObject) =>
-                    {
-                        return
-                            EditorUtility.IsPersistent(gameObject) &&
-                            !Models.Contains(gameObject) &&
-                            gameObject.GetComponentInChildren<Animator>() != null;
-                    },
-                    (gameObject) =>
-                    {
-                        var modelsProperty = ModelsProperty;// Avoid Closure.
-                        modelsProperty.serializedObject.Update();
+                //// Drag and Drop to add model.
+                //var area = GUILayoutUtility.GetLastRect();
+                //AnimancerGUI.HandleDragAndDrop<GameObject>(area,
+                //    (gameObject) =>
+                //    {
+                //        return
+                //            EditorUtility.IsPersistent(gameObject) &&
+                //            !Models.Contains(gameObject) &&
+                //            gameObject.GetComponentInChildren<Animator>() != null;
+                //    },
+                //    (gameObject) =>
+                //    {
+                //        var modelsProperty = ModelsProperty;// Avoid Closure.
+                //        modelsProperty.serializedObject.Update();
 
-                        var i = modelsProperty.arraySize;
-                        modelsProperty.arraySize = i + 1;
-                        modelsProperty.GetArrayElementAtIndex(i).objectReferenceValue = gameObject;
-                        modelsProperty.serializedObject.ApplyModifiedProperties();
-                    });
+                //        var i = modelsProperty.arraySize;
+                //        modelsProperty.arraySize = i + 1;
+                //        modelsProperty.GetArrayElementAtIndex(i).objectReferenceValue = gameObject;
+                //        modelsProperty.serializedObject.ApplyModifiedProperties();
+                //    });
+                //if (count == 0)
+                //    return;
+                //EditorGUI.indentLevel--;
+                //property.isExpanded = EditorGUI.Foldout(area, property.isExpanded, GUIContent.none, true);
+                ////property.isExpanded = true;
+                //EditorGUI.indentLevel++;
 
-                if (count == 0)
-                    return;
+                //if (!property.isExpanded)
+                //    return;
 
-                property.isExpanded = EditorGUI.Foldout(area, property.isExpanded, GUIContent.none, true);
-                if (!property.isExpanded)
-                    return;
+                //EditorGUI.indentLevel++;
 
-                EditorGUI.indentLevel++;
+                //// 绘制模型列表的GUI
+                //var model = property.GetArrayElementAtIndex(0);
+                //for (int i = 0; i < count; i++)
+                //{
+                //    GUILayout.BeginHorizontal();
 
-                // 绘制模型列表的GUI
-                var model = property.GetArrayElementAtIndex(0);
-                for (int i = 0; i < count; i++)
-                {
-                    GUILayout.BeginHorizontal();
+                //    EditorGUILayout.ObjectField(model);
 
-                    EditorGUILayout.ObjectField(model);
+                //    if (GUILayout.Button("x", AnimancerGUI.MiniButton))
+                //    {
+                //        Serialization.RemoveArrayElement(property, i);
+                //        property.serializedObject.ApplyModifiedProperties();
 
-                    if (GUILayout.Button("x", AnimancerGUI.MiniButton))
-                    {
-                        Serialization.RemoveArrayElement(property, i);
-                        property.serializedObject.ApplyModifiedProperties();
+                //        AnimancerGUI.Deselect();
+                //        GUIUtility.ExitGUI();
+                //        return;
+                //    }
 
-                        AnimancerGUI.Deselect();
-                        GUIUtility.ExitGUI();
-                        return;
-                    }
+                //    GUILayout.Space(EditorStyles.objectField.margin.right);
+                //    GUILayout.EndHorizontal();
+                //    model.Next(false);
+                //}
 
-                    GUILayout.Space(EditorStyles.objectField.margin.right);
-                    GUILayout.EndHorizontal();
-                    model.Next(false);
-                }
-
-                EditorGUI.indentLevel--;
+                //EditorGUI.indentLevel--;
             }
 
             /// <summary>
