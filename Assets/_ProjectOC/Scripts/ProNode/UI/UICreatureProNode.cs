@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System.Linq;
 using ML.Engine.Utility;
 using static ProjectOC.ProNodeNS.UI.UICreatureProNode;
+using System;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -145,6 +146,8 @@ namespace ProjectOC.ProNodeNS.UI
             public KeyTip ChangeRecipe;
             public KeyTip ChangeBar;
             public KeyTip FastRemove;
+            public KeyTip Remove1;
+            public KeyTip Remove10;
             public KeyTip FastAdd;
             public KeyTip Return;
             public KeyTip Confirm;
@@ -217,6 +220,8 @@ namespace ProjectOC.ProNodeNS.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed -= NextPriority_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled -= Remove1;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed -= Remove10;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled -= Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed -= Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_performed;
@@ -229,6 +234,8 @@ namespace ProjectOC.ProNodeNS.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed += NextPriority_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled += Remove1;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed += Remove10;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled += Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed += Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_performed;
@@ -299,6 +306,32 @@ namespace ProjectOC.ProNodeNS.UI
                 Refresh();
             }
         }
+        private bool ItemIsDestroyed = false;
+        private void Remove1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Discard)
+            {
+                if (ItemIsDestroyed) { ItemIsDestroyed = false; }
+                else
+                {
+                    int index = ProNode.DataContainer.GetCapacity() - 1;
+                    ProNode.Remove(index, 1);
+                    Refresh();
+                }
+            }
+        }
+        private void Remove10(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Discard)
+            {
+                ItemIsDestroyed = true;
+                int num = ProNode.Stack;
+                num = num < 10 ? num : 10;
+                int index = ProNode.DataContainer.GetCapacity() - 1;
+                ProNode.Remove(index, num);
+                Refresh();
+            }
+        }
         private void Remove_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (ProNode.HasRecipe)
@@ -306,9 +339,6 @@ namespace ProjectOC.ProNodeNS.UI
                 if (CurMode == Mode.Creature)
                 {
                     ProNode.Remove(0, ProNode.Stack);
-                }
-                else if (CurMode == Mode.Discard)
-                {
                     int index = ProNode.DataContainer.GetCapacity() - 1;
                     ProNode.Remove(index, ProNode.DiscardStack);
                 }
@@ -338,8 +368,10 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Discard.Find("Selected").gameObject.SetActive(CurMode == Mode.Discard);
                 BotKeyTips.Find("KT_ChangeRecipe").gameObject.SetActive(CurMode == Mode.Creature);
                 BotKeyTips.Find("KT_ChangeBar").gameObject.SetActive(CurMode == Mode.Output);
-                BotKeyTips.Find("KT_FastRemove").gameObject.SetActive(CurMode == Mode.Creature || CurMode == Mode.Discard);
-                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Creature);
+                BotKeyTips.Find("KT_FastRemove").gameObject.SetActive(CurMode == Mode.Creature && ProNode.HasRecipe);
+                BotKeyTips.Find("KT_Remove1").gameObject.SetActive(CurMode == Mode.Discard);
+                BotKeyTips.Find("KT_Remove10").gameObject.SetActive(CurMode == Mode.Discard);
+                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Creature && ProNode.HasRecipe);
                 BotKeyTips.Find("KT_Return").gameObject.SetActive(CurMode != Mode.ChangeCreature);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(BotKeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
             }
