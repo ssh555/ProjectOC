@@ -37,8 +37,9 @@ namespace ProjectOC.PinchFace
             {
                 if (_type2 == PinchPartType2.HairFront)
                 {
-                    IsInit = 2;
+                    IsInit = 3;
                     _modelPinch.ChangeType(PinchPartType3.HB_HairBack, typeIndex).Completed += ChangeTypeCallBack;
+                    _modelPinch.ChangeType(PinchPartType3.HB_HairBraid, 0).Completed += ChangeTypeCallBack;
                 }
                 _modelPinch.ChangeType(_type3, typeIndex).Completed += ChangeTypeCallBack;;
             }

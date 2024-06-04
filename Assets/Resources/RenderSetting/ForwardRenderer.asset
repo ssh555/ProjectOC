@@ -20,7 +20,7 @@ MonoBehaviour:
     Source: 1
     NormalSamples: 1
     Intensity: 1.5
-    DirectLightingStrength: 0.25
+    DirectLightingStrength: 0.428
     Radius: 0.3
     Samples: 2
     BlurQuality: 0
@@ -87,7 +87,7 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
-  m_RenderingMode: 1
+  m_RenderingMode: 0
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 0
   m_AccurateGbufferNormals: 0
