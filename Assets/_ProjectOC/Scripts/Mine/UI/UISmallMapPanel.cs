@@ -15,9 +15,9 @@ using UnityEngine.Rendering;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.MineSystem.MineSystemData;
-using static SmallMapPanel;
+using static UISmallMapPanel;
 
-public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
+public class UISmallMapPanel : UIBasePanel<SmallMapPanelStruct>
 {
     #region Unity
     protected override void Awake()
@@ -253,8 +253,8 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     /// </summary>
     private int EnlargeRate = 50;
 
-    private SelectMineralSourcesPanel selectMineralSourcesPanel;
-    public SelectMineralSourcesPanel SelectMineralSourcesPanel { set { selectMineralSourcesPanel = value; } }
+    private UISelectMineralSourcesPanel selectMineralSourcesPanel;
+    public UISelectMineralSourcesPanel SelectMineralSourcesPanel { set { selectMineralSourcesPanel = value; } }
     #endregion
 
     public override void Refresh()

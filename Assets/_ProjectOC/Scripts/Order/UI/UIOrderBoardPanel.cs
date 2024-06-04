@@ -11,10 +11,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ML.Engine.UI.UIBtnListContainer;
-using static OrderBoardPanel;
+using static UIOrderBoardPanel;
 using static ProjectOC.Order.OrderManager;
 
-public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
+public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 {
     #region Unity
     protected override void Awake()
@@ -53,13 +53,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     {
         base.OnEnter();
         OrderManager.Instance.OrderPanelRefreshOrderUrgentDelegation += OrderPanelRefreshOrderUrgentDelegationAction;
-        OrderManager.Instance.OrderPanelRefreshAcceptedOrder += OrderPanelRefreshAcceptedOrderAction;
     }
     public override void OnExit()
     {
         base.OnExit();
         OrderManager.Instance.OrderPanelRefreshOrderUrgentDelegation -= OrderPanelRefreshOrderUrgentDelegationAction;
-        OrderManager.Instance.OrderPanelRefreshAcceptedOrder -= OrderPanelRefreshAcceptedOrderAction;
     }
     protected override void Exit()
     {

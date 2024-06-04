@@ -11,13 +11,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using static ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel;
 using ProjectOC.ManagerNS;
 using ML.Engine.UI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel<ResonanceWheelPanel>,ITickComponent
+    public class UIResonanceWheel : ML.Engine.UI.UIBasePanel<ResonanceWheelPanel>,ITickComponent
     {
         public IInventory inventory;
         private SpriteAtlas resonanceAtlas;
@@ -261,7 +261,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI_sub2.prefab").Completed += (handle) =>
             {
-                var panel = handle.Result.GetComponent<ResonanceWheel_sub2>();
+                var panel = handle.Result.GetComponent<UIResonanceWheel_sub2>();
                 panel.transform.SetParent(this.transform.parent, false);
                 panel.parentUI = this;
                 GameManager.Instance.UIManager.PushPanel(panel);
@@ -479,7 +479,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI对象引用
         public WorkerEcho workerEcho;
         public Transform exclusivePart;//主ui独有部分
-        private ResonanceWheel_sub1 Sub1nstance = null;
+        private UIResonanceWheel_sub1 Sub1nstance = null;
         private bool hasSub1Instance = false;//是否有sub1的单一生成实例
         public bool isQuit = false;
 
@@ -685,7 +685,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Resource
 
-        private ResonanceWheel_sub1 ResonanceWheel_sub1Instance;
+        private UIResonanceWheel_sub1 ResonanceWheel_sub1Instance;
         private bool isInitPool = false;
         #region TextContent
         [System.Serializable]
@@ -727,6 +727,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
+            Synchronizer synchronizer = new Synchronizer(7, () => { isInitPool = true; Refresh(); });
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "SA_ResonanceWheel_UI", (handle) =>
             {
@@ -744,9 +745,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(WorkerCategory.TransportWorker, resonanceAtlas.GetSprite(Pre + WorkerCategory.TransportWorker));
                 beastTypeDic.Add(WorkerCategory.CollectWorker, resonanceAtlas.GetSprite(Pre + WorkerCategory.CollectWorker));
                 beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + WorkerCategory.Random));
+                synchronizer.Check();
             }
             );
-            Synchronizer synchronizer = new Synchronizer(6, () => {isInitPool = true;Refresh(); });
+            
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
                 synchronizer.Check();
@@ -754,7 +756,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "ResonanceWheelUI_sub1", 1, "Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI_sub1.prefab", (handle) =>
             {
-                ResonanceWheel_sub1Instance = (handle.Result as GameObject).GetComponent<ResonanceWheel_sub1>();
+                ResonanceWheel_sub1Instance = (handle.Result as GameObject).GetComponent<UIResonanceWheel_sub1>();
                 synchronizer.Check();
             });
             base.InitObjectPool();
