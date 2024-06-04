@@ -198,7 +198,7 @@ MonoBehaviour:
     brushData:
       brushSize: 3
       brushHard: 0
-      brushDensity: 5
+      brushDensity: 3
       brushSizeMin: 0
       brushSizeMax: 10
       brushHardMin: 0
