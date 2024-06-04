@@ -146,9 +146,10 @@ namespace ProjectOC.DataNS
         {
             var xData = x.GetData();
             var yData = y.GetData();
-            if (xData == null && yData == null) return 0;
-            if (xData == null) return 1;
-            if (yData == null) return -1;
+            if (xData == null || yData == null)
+            {
+                return (xData == null).CompareTo((yData == null));
+            }
             return xData.DataCompareTo(yData);
         }
     }
