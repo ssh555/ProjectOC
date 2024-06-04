@@ -41,7 +41,8 @@ namespace ProjectOC.MissionNS
         #endregion
 
         #region Method
-        public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false)
+        public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, 
+            MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false)
         {
             if (data == null) { return; }
             Type = type;

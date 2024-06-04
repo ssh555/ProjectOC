@@ -20,16 +20,13 @@ namespace ProjectOC.MissionNS
         public Transform GetTransform();
         public string GetUID();
         public MissionObjType GetMissionObjType();
-        public int GetAmount(IDataObj data, DataOpType type, bool needCanIn = false, bool needCanOut = false);
-        public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false);
-        public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false);
         #endregion
 
         #region Get
-        public int GetReservePutIn(IDataObj data) { return GetAmount(data, DataOpType.EmptyReserve); }
-        public int GetReservePutOut(IDataObj data) { return GetAmount(data, DataOpType.StorageReserve); }
-        public Dictionary<IDataObj, int> GetReservePutIn() { return GetAmount(DataOpType.EmptyReserve); }
-        public Dictionary<IDataObj, int> GetReservePutOut() { return GetAmount(DataOpType.StorageReserve); }
+        public int GetReservePutIn(IDataObj data);
+        public int GetReservePutOut(IDataObj data);
+        public Dictionary<IDataObj, int> GetReservePutIn();
+        public Dictionary<IDataObj, int> GetReservePutOut();
         public TransportPriority GetTransportPriority() { return TransportPriority; }
         public int GetMissionNum(IDataObj data, bool isPutIn = true)
         {
@@ -95,21 +92,12 @@ namespace ProjectOC.MissionNS
 
         #region Set
         public void PutIn(int index, IDataObj data, int amount);
+        public bool PutIn(IDataObj data, int amount);
         public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false);
         public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false);
         public int PutOut(IDataObj data, int amount, bool removeEmpty = false);
-        public bool PutIn(IDataObj data, int amount)
-        {
-            return ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve, exceed: true) == amount;
-        }
-        public int ReservePutOut(IDataObj data, int amount)
-        {
-            return ChangeAmount(data, amount, DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
-        }
-        public int RemoveReservePutOut(IDataObj data, int amount)
-        {
-            return ChangeAmount(data, amount, DataOpType.Storage, DataOpType.StorageReserve);
-        }
+        public int ReservePutOut(IDataObj data, int amount, bool recplaceData = false, Transport transport = null);
+        public int RemoveReservePutOut(IDataObj data, int amount);
         #endregion
 
         #region Transports Missions
