@@ -35,6 +35,7 @@ namespace ProjectOC.Player.UI
             base.Awake();
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
             this.Ring = this.transform.Find("Ring");
+            this.Ring.gameObject.SetActive(false);
         }
 
         protected override void Start()
