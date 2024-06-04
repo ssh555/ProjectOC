@@ -48,6 +48,13 @@ namespace ProjectOC.ProNodeNS
         [LabelText("潜航器小地图最小缩小倍数")]
         public float SmallMapZoomOutLimit;
 
+        [LabelText("矿物小缩放倍率")]
+        public float SmallMineScale;
+        [LabelText("矿物中缩放倍率")]
+        public float MidMineScale;
+        [LabelText("矿物大缩放倍率")]
+        public float BigMineScale;
+
         public MineSystemConfig(MineSystemConfig config)
         {
             MainIslandSpeed = config.MainIslandSpeed;
@@ -71,6 +78,10 @@ namespace ProjectOC.ProNodeNS
             SmallMapZoomSpeed = config.SmallMapZoomSpeed;
             SmallMapZoomInLimit = config.SmallMapZoomInLimit;
             SmallMapZoomOutLimit = config.SmallMapZoomOutLimit;
+
+            SmallMineScale = config.SmallMineScale;
+            MidMineScale = config.MidMineScale;
+            BigMineScale = config.BigMineScale;
         }
     }
 
