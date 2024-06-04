@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
+using Animancer.Editor;
+using UnityEditor.VersionControl;
+using System.Linq;
 
 namespace ML.Editor.Animation
 {
@@ -14,38 +18,61 @@ namespace ML.Editor.Animation
         protected ClipTransitionAsset asset;
         // 动画Property
         protected SerializedProperty _clipProperty;
+        // 事件
+        protected SerializedProperty _endEventProperty;
+
+
 
         public override void Init()
         {
             asset = (ClipTransitionAsset)target;
             eventTrack = new EventTrack(asset);
-            _clipProperty = serializedObject.FindProperty("clipTransition").FindPropertyRelative("_Clip");
+            var p = serializedObject.FindProperty("clipTransition");
+            _clipProperty = p.FindPropertyRelative("_Clip");
+            _endEventProperty = serializedObject.FindProperty("_EndEvent");
         }
+
 
         public override void DrawTrackGUI()
         {
             eventTrack.DrawTrackGUI();
         }
 
+        private bool bShowFadeDuration = true;
+        private bool bStartTime = true;
+        private bool bEndTime = true;
         public override void DrawInEditorWindow()
         {
             serializedObject.Update();
-
             // 动画选择
             EditorGUILayout.PropertyField(_clipProperty, new GUIContent("动画片段"), true);
 
             if(_clipProperty.objectReferenceValue != null)
             {
-                EditorGUILayout.LabelField("QWQ");
-                // Fade Duration -> 过渡时间
+                float length = asset.clipTransition.Clip.length;
+                float frameRate = asset.clipTransition.Clip.frameRate;
+                float speed = asset.clipTransition.Speed;
+                // 帧率
+                DoClipFrameGUI(asset.clipTransition.Clip);
 
                 // Speed -> 播放速度
+                DoSpeedGUI(asset.clipTransition);
+
+                #region 时间轴 -> 使用秒数时间
+                EditorGUILayout.Space();
+                DoAnimTimelineGUI(asset.clipTransition, asset.EndEvent.NormalizedTime, length, frameRate);
+
+                EditorGUILayout.Space();
+                #endregion
+
+                // Fade Duration -> 过渡时间
+                asset.clipTransition.FadeDuration = DoFadeDurationGUI(asset.clipTransition, length, frameRate, ref bShowFadeDuration);
 
                 // StartTime -> 开始时间
+                DoStartTimeGUI(asset.clipTransition, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 0 : 1, ref bStartTime);
 
                 // End Time -> 结束时间
-
-                // End Callback -> OnEnd 结束事件回调
+                DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);
             }
 
             serializedObject.ApplyModifiedProperties();

@@ -24,10 +24,13 @@ namespace ML.Engine.Animation
 
         public float FrameLength => clipTransition.Clip.length * clipTransition.Clip.frameRate;
 
+        [SerializeField]
+        protected IAssetHasEvents.AssetEvent _EndEvent;
+        public IAssetHasEvents.AssetEvent EndEvent => _EndEvent;
+
         public override ITransition GetTransition()
         {
             var events = ((IAssetHasEvents)this).GetEventsOptional();
-            events.EndEvent = clipTransition.Events.EndEvent;
             clipTransition.Events.CopyFrom(events);
 
             return clipTransition;

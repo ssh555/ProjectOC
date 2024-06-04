@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Anim_CT_Test
   m_EditorClassIdentifier: 
   clipTransition:
-    _FadeDuration: 0.25
+    _FadeDuration: 0.24999999
     _Events:
-      _NormalizedTimes:
-      - 1
+      _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4ae6a6e5c9379b94b8c5b5ca31f36f1a, type: 2}
@@ -25,6 +24,12 @@ MonoBehaviour:
   _Events:
   - Name: TestEvent
     NormalizedTime: 0.109549545
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []
+  _EndEvent:
+    Name: 
+    NormalizedTime: NaN
     UnityEvents:
       m_PersistentCalls:
         m_Calls: []

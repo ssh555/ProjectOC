@@ -167,7 +167,6 @@ namespace ML.Editor.Animation
             private void OnDrag()
             {
                 FocusWindowIfItsOpen<TrackWindow>();
-                Debug.Log("QWQ");
             }
 
         }

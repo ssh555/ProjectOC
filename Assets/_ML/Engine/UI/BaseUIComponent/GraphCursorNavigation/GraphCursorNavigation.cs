@@ -25,7 +25,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// Center 在Content 坐标系下的坐标
         /// </summary>
-        [ShowInInspector]
+        //[ShowInInspector]
         public Vector3 CenterPos { get {
 
                 Vector2 localPosition;

@@ -82,6 +82,7 @@ namespace ML.Engine.Animation
             ///// </summary>
             //public List<string> FunctionEvents;
         }
+        public AssetEvent EndEvent { get; }
         public List<AssetEvent> Events { get; }
         public float FrameLength
         { get; }
@@ -102,7 +103,9 @@ namespace ML.Engine.Animation
                 _Events.Add(new AnimancerEvent(Events[i].NormalizedTime, callback));
                 _Events.SetName(i, Events[i].Name);
             }
-
+            // EndEvent
+            Action endcallback = GetInvoker(EndEvent.UnityEvents);
+            _Events.EndEvent = new AnimancerEvent(EndEvent.NormalizedTime, endcallback);
             return _Events;
         }
 
