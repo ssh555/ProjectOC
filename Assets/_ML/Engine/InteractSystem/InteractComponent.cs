@@ -1,3 +1,4 @@
+using ML.Engine.BuildingSystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
@@ -130,6 +131,8 @@ namespace ML.Engine.InteractSystem
         }
         public void Enable()
         {
+            //不处于建造模式 且 不处于空中才能Enable
+            if (BuildingManager.Instance.Mode != BuildingMode.None) return;
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
         #endregion
