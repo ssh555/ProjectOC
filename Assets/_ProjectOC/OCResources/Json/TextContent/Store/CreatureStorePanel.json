@@ -77,6 +77,17 @@
             "English" : "Fast Add"
         }
     },
+    "Add" : {
+        "keyname" : "KT_Add",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "存放",
+            "English" : "Add"
+        }
+    },
     "Return" : {
         "keyname" : "KT_Return",
         "keymap": {

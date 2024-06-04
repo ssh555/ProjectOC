@@ -134,6 +134,7 @@ namespace ProjectOC.StoreNS.UI
             public ML.Engine.TextContent.KeyTip NextPriority;
             public ML.Engine.TextContent.KeyTip ChangeItem;
             public ML.Engine.TextContent.KeyTip FastAdd;
+            public ML.Engine.TextContent.KeyTip Add;
             public ML.Engine.TextContent.KeyTip Remove;
             public ML.Engine.TextContent.KeyTip Return;
             public ML.Engine.TextContent.KeyTip Confirm;
@@ -204,7 +205,7 @@ namespace ProjectOC.StoreNS.UI
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
                 int dataIndex = DataIndex;
-                if (CurMode == Mode.Store && offset.y < 0)
+                if (CurMode == Mode.Store && offset.y < 0 && !string.IsNullOrEmpty(Store.CreatureItemID))
                 {
                     CurMode = Mode.Creature;
                 }
@@ -220,6 +221,11 @@ namespace ProjectOC.StoreNS.UI
             if (CurMode == Mode.Store)
             {
                 Store.FastAdd();
+                Refresh();
+            }
+            else if (CurMode == Mode.Creature && !Store.DataContainer.HaveSetData(DataIndex))
+            {
+                Store.AddCreature(DataIndex);
                 Refresh();
             }
         }
@@ -271,8 +277,9 @@ namespace ProjectOC.StoreNS.UI
             if (CurMode == Mode.Store || CurMode == Mode.Creature)
             {
                 KeyTips.Find("KT_ChangeItem").gameObject.SetActive(CurMode == Mode.Store);
-                KeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Store);
+                KeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Store && !string.IsNullOrEmpty(Store.CreatureItemID));
                 KeyTips.Find("KT_Remove").gameObject.SetActive(CurMode == Mode.Creature && Store.DataContainer.HaveSetData(DataIndex));
+                KeyTips.Find("KT_Add").gameObject.SetActive(CurMode == Mode.Creature && !Store.DataContainer.HaveSetData(DataIndex));
                 LayoutRebuilder.ForceRebuildLayoutImmediate(KeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
             }
         }
@@ -301,7 +308,7 @@ namespace ProjectOC.StoreNS.UI
                     item.Find("ActivityIcon").gameObject.SetActive(notNull);
                     item.Find("Activity").gameObject.SetActive(notNull);
                     item.Find("Gender").gameObject.SetActive(notNull && creature.Gender != Gender.None);
-                    item.Find("State").gameObject.SetActive(notNull && Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll) == 0);
+                    item.Find("State").gameObject.SetActive(notNull && Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageReserve) > 0);
                     item.Find("State").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_WaitPutIn;
                     if (notNull)
                     {
