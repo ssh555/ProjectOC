@@ -446,6 +446,7 @@ namespace ProjectOC.StoreNS.UI
                     progressBar2.Find("None").gameObject.SetActive(level < 2);
                     progressBar3.Find("None").gameObject.SetActive(level < 3);
                     float storage = level * (float)amount / amountMax;
+                    storage = storage <= 3 ? storage : 3;
                     int storageStage = (int)storage;
                     for (int stage = 0; stage < storageStage; stage++)
                     {
@@ -458,6 +459,7 @@ namespace ProjectOC.StoreNS.UI
                         cur1[curStage].sizeDelta = new Vector2(400 * curPos, cur1[curStage].sizeDelta.y);
                     }
                     float storageReserve = level * (float)Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageReserve) / amountMax;
+                    storageReserve = storageReserve <= 3 ? storageReserve : 3;
                     int storageReserveStage = (int)(storage + storageReserve);
                     for (int stage = curStage; stage < storageReserveStage; stage++)
                     {
@@ -470,6 +472,7 @@ namespace ProjectOC.StoreNS.UI
                         cur2[curStage].sizeDelta = new Vector2(400 * curPos, cur2[curStage].sizeDelta.y);
                     }
                     float emptyReserve = level * (float)Store.DataContainer.GetAmount(i, DataNS.DataOpType.EmptyReserve) / amountMax;
+                    emptyReserve = emptyReserve <= 3 ? emptyReserve : 3;
                     int emptyReserveStage = (int)(storage + storageReserve + emptyReserve);
                     for (int stage = curStage; stage < emptyReserveStage; stage++)
                     {
