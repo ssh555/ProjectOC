@@ -6,9 +6,10 @@ namespace ProjectOC.ProNodeNS
     {
         [LabelText("真实生产节点"), ShowInInspector, ReadOnly]
         public MineProNode RealProNode => ProNode as MineProNode;
+        private const string str = "Prefab_ProNode_UI/Prefab_ProNode_UI_MineProNodePanel.prefab";
         public override void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ProNode_UI/Prefab_ProNode_UI_MineProNodePanel.prefab",
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(str,
                 ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
                 {
                     UI.UIMineProNode uiPanel = handle.Result.GetComponent<UI.UIMineProNode>();

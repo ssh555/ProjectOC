@@ -70,13 +70,14 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Get
+        private const string str = "";
         public Worker GetWorker(string ID)
         {
             return Workers.ContainsKey(ID) ? Workers[ID] : null;
         }
         public string GetWorkerName(string ID)
         {
-            return Workers.ContainsKey(ID) ? Workers[ID].Name : "";
+            return Workers.ContainsKey(ID) ? Workers[ID].Name : str;
         }
         public List<Worker> GetWorkers(bool needSort = true)
         {
@@ -173,10 +174,10 @@ namespace ProjectOC.WorkerNS
         {
             return workerAtlas.GetSprite(name);
         }
-
+        private const string strTex2D_Worker_UI_ = "Tex2D_Worker_UI_";
         public Sprite GetWorkerProfile(WorkerCategory category)
         {
-            return workerAtlas.GetSprite("Tex2D_Worker_UI_" + category.ToString());
+            return workerAtlas.GetSprite(strTex2D_Worker_UI_ + category.ToString());
         }
         /// <summary>
         /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
@@ -239,13 +240,14 @@ namespace ProjectOC.WorkerNS
             }
             return false;
         }
+        private const string strWorkerEcho_ = "WorkerEcho_";
         public bool OnlyCostResource(ML.Engine.InventorySystem.IInventory inventory, string workerID)
         {
             if (!CanComposite(inventory, workerID))
             {
                 return false;
             }
-            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw("WorkerEcho_"+workerID))
+            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(strWorkerEcho_ + workerID))
             {
                 inventory.RemoveItem(formula.id, formula.num);
             }

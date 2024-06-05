@@ -68,10 +68,10 @@ namespace ProjectOC.WorkerNS
             this.TempLastPos = Worker.LastPosition;
             (this as IWorkerContainer).RemoveWorker();
         }
-
+        private const string str = "Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab";
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", 
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(str, 
                 ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
             {
                 UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();

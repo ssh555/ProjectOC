@@ -22,6 +22,11 @@ namespace ProjectOC.StoreNS
                 if (CreatureItemID != itemID) { ClearData(false); }
                 CreatureItemID = itemID;
             }
+            else
+            {
+                CreatureItemID = "";
+                ClearData(false);
+            }
         }
         public void FastAdd()
         {

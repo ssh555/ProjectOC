@@ -46,6 +46,10 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Set
         public void ChangeCapacity(int capacity, int dataCapacity)
         {
@@ -117,7 +121,7 @@ namespace ProjectOC.DataNS
         public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false)
         {
             if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, needCanIn: true, needSort: ChangeDataAutoSort) < 0) { return 0; }
-            return DataContainer.ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true);
+            return DataContainer.ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true, exceed: true);
         }
         public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false)
         {
@@ -135,7 +139,7 @@ namespace ProjectOC.DataNS
         {
             if (recplaceData && transport != null)
             {
-                Dictionary<IDataObj, int> result = DataContainer.ChangeAmountForUniqueData(data?.GetDataID() ?? "", amount,
+                Dictionary<IDataObj, int> result = DataContainer.ChangeAmountForUniqueData(data?.GetDataID() ?? str, amount,
                     DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
                 int cnt = 0;
                 if (result.Count > 0)
@@ -155,7 +159,7 @@ namespace ProjectOC.DataNS
         }
         public bool PutIn(IDataObj data, int amount)
         {
-            return DataContainer.ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve, exceed: true) == amount;
+            return DataContainer.ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve) == amount;
         }
         public int RemoveReservePutOut(IDataObj data, int amount)
         {
@@ -170,11 +174,17 @@ namespace ProjectOC.DataNS
             {
                 if (item is IDataObj dataObj)
                 {
-                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    if (DataContainer.GetAmount(dataObj, DataOpType.Empty) > 0)
+                    {
+                        return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    }
                 }
                 else
                 {
-                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    if (DataContainer.GetAmount(item.ID, DataOpType.Empty) > 0)
+                    {
+                        return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    }
                 }
             }
             return false;

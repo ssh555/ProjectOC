@@ -109,9 +109,10 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region ProNode
+        private const string str = "";
         public IProNode(ProNodeTableData config)
         {
-            ID = config.ID ?? "";
+            ID = config.ID ?? str;
             InitData(0, 0);
             InitAPCost_Duty = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             EffBase = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.EffBase;
@@ -304,18 +305,16 @@ namespace ProjectOC.ProNodeNS
         {
             if (effect.EffectType != WorkerNS.EffectType.AlterProNodeVariable) { Debug.Log("type != AlterProNodeVariable"); return; }
             bool flag = true;
-            if (effect.ParamStr == "EffBase")
+            if (Enum.TryParse(effect.ParamStr, out WorkerNS.EffectEnum result))
             {
-                EffBase += effect.ParamInt;
+                switch (result)
+                {
+                    case WorkerNS.EffectEnum.EffBase: EffBase += effect.ParamInt; break;
+                    case WorkerNS.EffectEnum.FactorAPCostDuty: FactorAPCost_Duty += effect.ParamFloat; break;
+                    default: flag = false; break;
+                }
             }
-            else if (effect.ParamStr == "FactorAPCostDuty")
-            {
-                FactorAPCost_Duty += effect.ParamFloat;
-            }
-            else
-            {
-                flag = false;
-            }
+            else { flag = false; }
             if (flag)
             {
                 Effects.Add(effect);
@@ -329,13 +328,13 @@ namespace ProjectOC.ProNodeNS
         {
             if (effect.EffectType != WorkerNS.EffectType.AlterProNodeVariable) { Debug.Log("type != AlterProNodeVariable"); return; }
             Effects.Remove(effect);
-            if (effect.ParamStr == "EffBase")
+            if (Enum.TryParse(effect.ParamStr, out WorkerNS.EffectEnum result))
             {
-                EffBase -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "FactorAPCostDuty")
-            {
-                FactorAPCost_Duty -= effect.ParamFloat;
+                switch (result)
+                {
+                    case WorkerNS.EffectEnum.EffBase: EffBase -= effect.ParamInt; break;
+                    case WorkerNS.EffectEnum.FactorAPCostDuty: FactorAPCost_Duty -= effect.ParamFloat; break;
+                }
             }
         }
         #endregion
