@@ -646,6 +646,7 @@ namespace ProjectOC.WorkerNS.UI
                 ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatTransTime :
                 ManagerNS.LocalGameManager.Instance.FeatureManager.GetFeatureCorrectTime(FeatBuild.CorrectType);
             float sizeDeltaX = (float)(470 * (1 - time / total));
+            sizeDeltaX = sizeDeltaX <= 470 ? sizeDeltaX : 470;
             bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
         }
         #endregion
