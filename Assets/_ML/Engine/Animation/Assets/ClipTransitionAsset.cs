@@ -39,11 +39,6 @@ namespace ML.Engine.Animation
 
             return clipTransition;
         }
-
-        public override ITransition GetPreviewTransition()
-        {
-            return clipTransition;
-        }
     }
 
 }

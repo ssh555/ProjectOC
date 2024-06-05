@@ -56,8 +56,6 @@ namespace ML.Engine.Animation
             /************************************************************************************************************************/
         }
 
-
-        public abstract ITransition GetPreviewTransition();
     }
 
 

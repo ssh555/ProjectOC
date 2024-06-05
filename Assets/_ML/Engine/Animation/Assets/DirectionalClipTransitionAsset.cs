@@ -21,11 +21,6 @@ namespace ML.Engine.Animation
         {
             return directionalClipTransition;
         }
-
-        public override ITransition GetPreviewTransition()
-        {
-            return directionalClipTransition;
-        }
     }
 
 }

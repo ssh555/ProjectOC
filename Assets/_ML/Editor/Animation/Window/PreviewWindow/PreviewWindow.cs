@@ -206,7 +206,7 @@ namespace ML.Editor.Animation
             {
                 if (SelectedAsset == null)
                     return null;
-                return SelectedAsset.GetPreviewTransition();
+                return SelectedAsset.GetTransition();
             }
         }
 
