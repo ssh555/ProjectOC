@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    MainIslandSpeed: 0.5
+    MainIslandSpeed: 25
     MainIslandInitPos: {x: 65, y: 66}
     MiningCircleRadius: 3
     IslandRudderSensitivity: 2
