@@ -139,4 +139,18 @@ namespace ProjectOC.DataNS
         }
         #endregion
     }
+
+    public class SortForData : System.Collections.Generic.IComparer<Data>
+    {
+        public int Compare(Data x, Data y)
+        {
+            var xData = x.GetData();
+            var yData = y.GetData();
+            if (xData == null || yData == null)
+            {
+                return (xData == null).CompareTo((yData == null));
+            }
+            return xData.DataCompareTo(yData);
+        }
+    }
 }

@@ -92,6 +92,21 @@ public class UISmallMapPanel : UIBasePanel<SmallMapPanelStruct>
                 btn.GetComponent<RectTransform>().localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 BtnToMineDataDic.Add(btn, minedata);
                 btn.transform.Find("Image").GetComponent<Image>().sprite = MM.GetMineSprite(minedata.MineID);
+                //¿óÎïËõ·Å±¶ÂÊ
+                int MineType = int.Parse(minedata.MineID.Split('_')[2]);
+                if(MineType == 1)
+                {
+                    btn.transform.localScale = new Vector3(MM.MineSystemConfig.SmallMineScale, MM.MineSystemConfig.SmallMineScale, MM.MineSystemConfig.SmallMineScale);
+                }
+                else if(MineType == 2)
+                {
+                    btn.transform.localScale = new Vector3(MM.MineSystemConfig.MidMineScale, MM.MineSystemConfig.MidMineScale, MM.MineSystemConfig.MidMineScale);
+                }
+                else
+                {
+                    btn.transform.localScale = new Vector3(MM.MineSystemConfig.BigMineScale, MM.MineSystemConfig.BigMineScale, MM.MineSystemConfig.BigMineScale);
+                }
+
             }, OnFinishAdd: () => { synchronizer.Check(); }
             ); ;
         }

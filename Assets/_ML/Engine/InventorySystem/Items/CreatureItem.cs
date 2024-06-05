@@ -47,7 +47,7 @@ namespace ML.Engine.InventorySystem
 #pragma warning restore CS4014
         }
         public List<Item> ConvertToItem(int num) { return new List<Item>() { this }; }
-        public int CompareTo(ProjectOC.DataNS.IDataObj other)
+        public int DataCompareTo(ProjectOC.DataNS.IDataObj other)
         {
             if (this == null || other == null)
             {

@@ -30,7 +30,6 @@
     <type fullname="AkGameObjPositionOffsetData" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="IslandRudderPanel" preserve="all" />
     <type fullname="ML.Engine.BuildingSystem.BSBPartMatPackage" preserve="all" />
     <type fullname="ML.Engine.BuildingSystem.BuildingArea.BuildingArea" preserve="all" />
     <type fullname="ML.Engine.BuildingSystem.BuildingPart.BuildingPart" preserve="all" />
@@ -65,7 +64,6 @@
     <type fullname="ML.Engine.UI.UIKeyTipComponent" preserve="all" />
     <type fullname="ML.MathExtension.BezierComponent" preserve="all" />
     <type fullname="ML.PlayerCharacterNS.StartPoint" preserve="all" />
-    <type fullname="OrderBoardPanel" preserve="all" />
     <type fullname="ProjectOC.ClanNS.ClanBed" preserve="all" />
     <type fullname="ProjectOC.ClanNS.UI.UIClanBed" preserve="all" />
     <type fullname="ProjectOC.Dialog.UIDialogPanel" preserve="all" />
@@ -112,10 +110,10 @@
     <type fullname="ProjectOC.ProNodeNS.UI.UICreatureProNode" preserve="all" />
     <type fullname="ProjectOC.ProNodeNS.UI.UIManualProNode" preserve="all" />
     <type fullname="ProjectOC.ProNodeNS.UI.UIMineProNode" preserve="all" />
-    <type fullname="ProjectOC.ResonanceWheelSystem.UI.BeastPanel" preserve="all" />
-    <type fullname="ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1" preserve="all" />
-    <type fullname="ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2" preserve="all" />
-    <type fullname="ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI" preserve="all" />
+    <type fullname="ProjectOC.ResonanceWheelSystem.UI.UIBeastPanel" preserve="all" />
+    <type fullname="ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel" preserve="all" />
+    <type fullname="ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel_sub1" preserve="all" />
+    <type fullname="ProjectOC.ResonanceWheelSystem.UI.UIResonanceWheel_sub2" preserve="all" />
     <type fullname="ProjectOC.RestaurantNS.RestaurantConfigAsset" preserve="all" />
     <type fullname="ProjectOC.RestaurantNS.UI.UIRestaurant" preserve="all" />
     <type fullname="ProjectOC.RestaurantNS.WorldRestaurant" preserve="all" />
@@ -132,11 +130,13 @@
     <type fullname="ProjectOC.WorkerNS.WorkerConfigAsset" preserve="all" />
     <type fullname="ProjectOC.WorkerNS.WorkerEchoBuilding" preserve="all" />
     <type fullname="ProjectOC.WorkerNS.WorkerHome" preserve="all" />
-    <type fullname="SelectMineralSourcesPanel" preserve="all" />
     <type fullname="SideBarUI" preserve="all" />
-    <type fullname="SmallMapPanel" preserve="all" />
     <type fullname="ToolColorButtonGenerate" preserve="all" />
+    <type fullname="UIIslandRudderPanel" preserve="all" />
+    <type fullname="UIOrderBoardPanel" preserve="all" />
     <type fullname="UIPolygon" preserve="all" />
+    <type fullname="UISelectMineralSourcesPanel" preserve="all" />
+    <type fullname="UISmallMapPanel" preserve="all" />
     <type fullname="Wise_PlayerEvent" preserve="all" />
     <type fullname="IslandAreaManager" preserve="nothing" serialized="true" />
     <type fullname="ML.Engine.BuildingSystem.BuildingArea.BuildingAreaType" preserve="nothing" serialized="true" />
