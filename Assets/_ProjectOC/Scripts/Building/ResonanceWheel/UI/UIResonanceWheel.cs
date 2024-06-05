@@ -727,6 +727,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
+            Synchronizer synchronizer = new Synchronizer(7, () => { isInitPool = true; Refresh(); });
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "SA_ResonanceWheel_UI", (handle) =>
             {
@@ -744,9 +745,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(WorkerCategory.TransportWorker, resonanceAtlas.GetSprite(Pre + WorkerCategory.TransportWorker));
                 beastTypeDic.Add(WorkerCategory.CollectWorker, resonanceAtlas.GetSprite(Pre + WorkerCategory.CollectWorker));
                 beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + WorkerCategory.Random));
+                synchronizer.Check();
             }
             );
-            Synchronizer synchronizer = new Synchronizer(6, () => {isInitPool = true;Refresh(); });
+            
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
                 synchronizer.Check();

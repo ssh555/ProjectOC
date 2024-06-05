@@ -1244,7 +1244,7 @@ namespace ML.Engine.BuildingSystem
             }
             else
             {
-                if (level == 1)
+                if (level == 0)
                 {
                     return buildingInstanceDic[_buildingType].Count;
                 }

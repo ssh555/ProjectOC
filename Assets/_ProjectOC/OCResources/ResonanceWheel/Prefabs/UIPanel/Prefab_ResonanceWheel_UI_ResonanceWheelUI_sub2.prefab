@@ -2419,7 +2419,7 @@ MonoBehaviour:
   abname: 
   description: 
   IsInit: 0
-  parentUI: {fileID: 8098490139189892449, guid: e3cccacf36309724291b2682109de3e0, type: 3}
+  parentUI: {fileID: 0}
 --- !u!1 &5652871592665624669
 GameObject:
   m_ObjectHideFlags: 0

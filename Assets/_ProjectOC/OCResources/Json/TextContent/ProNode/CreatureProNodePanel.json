@@ -93,6 +93,28 @@
             "English" : "Fast Remove"
         }
     },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出1个",
+            "English" : "Remove 1"
+        }
+    },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出10个",
+            "English" : "Remove 10"
+        }
+    },
     "FastAdd" : {
         "keyname" : "KT_FastAdd",
         "keymap": {

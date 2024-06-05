@@ -186,7 +186,7 @@ namespace ProjectOC.ProNodeNS
                             DataContainer.ChangeAmount(i, gainNum, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
                             int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(i), false);
                             int stack = DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
-                            if (stack >= StackReserves[i] + needAssignNum + MineTransThreshold * gainNum)
+                            if (stack >= StackReserves[i] + needAssignNum + MineTransThreshold)
                             {
                                 StackReserves[i] = stack - needAssignNum;
                             }

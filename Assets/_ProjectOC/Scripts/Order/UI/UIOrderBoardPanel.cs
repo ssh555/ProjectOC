@@ -53,13 +53,11 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     {
         base.OnEnter();
         OrderManager.Instance.OrderPanelRefreshOrderUrgentDelegation += OrderPanelRefreshOrderUrgentDelegationAction;
-        OrderManager.Instance.OrderPanelRefreshAcceptedOrder += OrderPanelRefreshAcceptedOrderAction;
     }
     public override void OnExit()
     {
         base.OnExit();
         OrderManager.Instance.OrderPanelRefreshOrderUrgentDelegation -= OrderPanelRefreshOrderUrgentDelegationAction;
-        OrderManager.Instance.OrderPanelRefreshAcceptedOrder -= OrderPanelRefreshAcceptedOrderAction;
     }
     protected override void Exit()
     {
@@ -268,7 +266,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
 
 
-    [ShowInInspector]
+    //[ShowInInspector]
     private string curSelectedOrderInstanceIDInOrderDelegation 
     {   get 
         {

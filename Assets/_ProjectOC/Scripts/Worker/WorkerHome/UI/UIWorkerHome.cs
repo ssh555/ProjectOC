@@ -351,7 +351,9 @@ namespace ProjectOC.WorkerNS.UI
             if (hasHome)
             {
                 var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.EMCurrent / Worker.EMMax;
+                float percent = ((float)Worker.EMCurrent) / ((float)Worker.EMMax);
+                percent = percent <= 1 ? percent : 1;
+                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
                 HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
                 HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
@@ -377,7 +379,9 @@ namespace ProjectOC.WorkerNS.UI
             if (hasWorker)
             {
                 var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.EMCurrent / Worker.EMMax;
+                float percent = ((float)Worker.EMCurrent) / ((float)Worker.EMMax);
+                percent = percent <= 1 ? percent : 1;
+                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
                 HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
                 HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();

@@ -36,10 +36,10 @@ namespace ML.Engine.Utility
                     enumerators.Add(enumerator);
                 }
             }
-            
+
+            yield return null;
             for (int i = 0; i < enumerators.Count; i++)
             {
-                //yield return null;
                 yield return enumerators[i];
             }
             //yield return null;
