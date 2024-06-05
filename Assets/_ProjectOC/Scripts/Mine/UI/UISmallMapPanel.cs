@@ -58,7 +58,7 @@ public class UISmallMapPanel : UIBasePanel<SmallMapPanelStruct>
     protected override void Enter()
     {
         base.Enter();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ProjectOC.Input.InputManager.PlayerInput.SmallMap.RT, ProjectOC.Input.InputManager.PlayerInput.SmallMap.LT);
     }
     #endregion
 

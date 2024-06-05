@@ -53,7 +53,7 @@ public class UISelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanel
         this.MapLayerUIBtnList.EnableBtnList();
         this.MapLayerUIBtnList.MoveIndexIUISelected(MM.CurMapLayerIndex);
         base.Enter();
-        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm);
+        this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ProjectOC.Input.InputManager.PlayerInput.IslandRudder.RT, ProjectOC.Input.InputManager.PlayerInput.IslandRudder.LT);
     }
     #endregion
 

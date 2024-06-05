@@ -40,3 +40,6 @@ MonoBehaviour:
     SmallMapZoomSpeed: 1
     SmallMapZoomInLimit: 2
     SmallMapZoomOutLimit: 0.5
+    SmallMineScale: 1
+    MidMineScale: 1.5
+    BigMineScale: 2
