@@ -508,7 +508,9 @@ namespace ProjectOC.ProNodeNS.UI
                     int activityValue = creature.Activity > 0 ? creature.Activity : 0;
                     initActivity = System.Math.Max(activityValue, initActivity);
                     RectTransform activityCurRect = activity.Find("Cur").GetComponent<RectTransform>();
-                    activityCurRect.sizeDelta = new Vector2(activityCurRect.sizeDelta.x, (120f * activityValue) / initActivity);
+                    float percent = (120f * activityValue) / initActivity;
+                    percent = percent <= 120 ? percent : 120;
+                    activityCurRect.sizeDelta = new Vector2(activityCurRect.sizeDelta.x, percent);
                     activity.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = activityValue.ToString();
                 }
                 #endregion

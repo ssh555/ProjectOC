@@ -261,7 +261,9 @@ namespace ProjectOC.RestaurantNS.UI
                     uidata.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = amount.ToString();
                     uidata.Find("MaxCapacity").GetComponent<TMPro.TextMeshProUGUI>().text = maxCapacity.ToString();
                     var bar = uidata.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                    float sizeDeltaX = uidata.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * amount / maxCapacity;
+                    float percent = ((float)amount) / ((float)maxCapacity);
+                    percent = percent <= 1 ? percent : 1;
+                    float sizeDeltaX = uidata.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
                     bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
 
                     string name = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID);
