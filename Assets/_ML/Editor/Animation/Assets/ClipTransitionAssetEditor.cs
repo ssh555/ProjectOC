@@ -25,7 +25,7 @@ namespace ML.Editor.Animation
         {
             asset = (ClipTransitionAsset)target;
             eventTrack = new EventTrack(asset);
-            var p = serializedObject.FindProperty("clipTransition");
+            var p = serializedObject.FindProperty("transition");
             _clipProperty = p.FindPropertyRelative("_Clip");
             _endEventProperty = serializedObject.FindProperty("_EndEvent");
         }
@@ -47,27 +47,27 @@ namespace ML.Editor.Animation
 
             if(_clipProperty.objectReferenceValue != null)
             {
-                float length = asset.clipTransition.Clip.length;
-                float frameRate = asset.clipTransition.Clip.frameRate;
-                float speed = asset.clipTransition.Speed;
+                float length = asset.transition.Clip.length;
+                float frameRate = asset.transition.Clip.frameRate;
+                float speed = asset.transition.Speed;
                 // 帧率
-                DoClipFrameGUI(asset.clipTransition.Clip);
+                DoClipFrameGUI(asset.transition.Clip);
 
                 // Speed -> 播放速度
-                DoSpeedGUI(asset.clipTransition);
+                DoSpeedGUI(asset.transition);
 
                 #region 时间轴 -> 使用秒数时间
                 EditorGUILayout.Space();
-                DoAnimTimelineGUI(asset.clipTransition, asset.EndEvent.NormalizedTime, length, frameRate);
+                DoAnimTimelineGUI(asset.transition, asset.EndEvent.NormalizedTime, length, frameRate);
 
                 EditorGUILayout.Space();
                 #endregion
 
                 // Fade Duration -> 过渡时间
-                asset.clipTransition.FadeDuration = DoFadeDurationGUI(asset.clipTransition, length, frameRate, ref bShowFadeDuration);
+                asset.transition.FadeDuration = DoFadeDurationGUI(asset.transition, length, frameRate, ref bShowFadeDuration);
 
                 // StartTime -> 开始时间
-                DoStartTimeGUI(asset.clipTransition, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 0 : 1, ref bStartTime);
+                DoStartTimeGUI(asset.transition, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 0 : 1, ref bStartTime);
 
                 // End Time -> 结束时间
                 DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);

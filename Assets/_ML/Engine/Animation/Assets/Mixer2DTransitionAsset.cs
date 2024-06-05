@@ -16,14 +16,14 @@ namespace ML.Engine.Animation
         { }
 
 
-        public MixerTransition2D mixerTransition2D;
+        public MixerTransition2D transition;
         public override ITransition GetTransition()
         {
-            return mixerTransition2D;
+            return transition;
         }
         public override ITransition GetPreviewTransition()
         {
-            return mixerTransition2D;
+            return transition;
         }
     }
 

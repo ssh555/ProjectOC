@@ -56,6 +56,16 @@ namespace ML.Engine.Animation
             /************************************************************************************************************************/
         }
 
+
+        public virtual float FrameRate { get; }
+        public virtual float Length { get; }
+        public virtual float FrameLength => FrameRate * Length;
+
+
+        /// <summary>
+        /// 用于预览不带事件的Transition
+        /// </summary>
+        /// <returns></returns>
         public abstract ITransition GetPreviewTransition();
         public static bool TryGetLength(object motionOrTransition, out float length)
         {
@@ -106,8 +116,8 @@ namespace ML.Engine.Animation
         [Serializable]
         public class AssetEvent
         {
-            public string Name;
-            public float NormalizedTime;
+            public string Name = "";
+            public float NormalizedTime = float.NaN;
             public UnityEvent UnityEvents;
             ///// <summary>
             ///// 引用函数库中的函数 -> 只传id，不传参数

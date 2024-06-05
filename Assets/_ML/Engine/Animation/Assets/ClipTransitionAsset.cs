@@ -17,18 +17,18 @@ namespace ML.Engine.Animation
             ClipState.ITransition
         { }
 
-        public ClipTransition clipTransition;
+        public ClipTransition transition;
         public override ITransition GetTransition()
         {
             var events = ((IAssetHasEvents)this).GetEventsOptional();
-            clipTransition.Events.CopyFrom(events);
+            transition.Events.CopyFrom(events);
 
-            return clipTransition;
+            return transition;
         }
 
         public override ITransition GetPreviewTransition()
         {
-            return clipTransition;
+            return transition;
         }
 
         #region IAssetHasEvents
@@ -36,7 +36,22 @@ namespace ML.Engine.Animation
         protected List<IAssetHasEvents.AssetEvent> _Events;
         public List<IAssetHasEvents.AssetEvent> Events => _Events;
 
-        public float FrameLength => clipTransition.Clip.length * clipTransition.Clip.frameRate;
+        public override float FrameRate
+        {
+            get
+            {
+                return transition.Clip == null ? 24 : transition.Clip.frameRate;
+            }
+        }
+
+        public override float Length
+        {
+            get
+            {
+                return transition.Clip == null ? 0.01f : transition.Clip.length;
+            }
+        }
+
 
         [SerializeField]
         protected IAssetHasEvents.AssetEvent _EndEvent;

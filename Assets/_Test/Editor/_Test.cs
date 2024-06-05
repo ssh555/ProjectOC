@@ -33,7 +33,7 @@ public class _Test : MonoBehaviour
         //    _animancer.Playable.DestroyGraph();
         //};
 
-        _modifyclip.clipTransition.Events.SetNormalizedTime(0, 0.23f);
+        _modifyclip.transition.Events.SetNormalizedTime(0, 0.23f);
 
 
     }

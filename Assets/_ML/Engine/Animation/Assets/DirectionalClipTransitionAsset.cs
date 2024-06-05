@@ -16,14 +16,14 @@ namespace ML.Engine.Animation
             ClipState.ITransition
         { }
 
-        public DirectionalClipTransition directionalClipTransition;
+        public DirectionalClipTransition transition;
         public override ITransition GetTransition()
         {
-            return directionalClipTransition;
+            return transition;
         }
         public override ITransition GetPreviewTransition()
         {
-            return directionalClipTransition;
+            return transition;
         }
     }
 

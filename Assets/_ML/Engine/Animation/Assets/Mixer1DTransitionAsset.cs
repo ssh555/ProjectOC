@@ -17,15 +17,15 @@ namespace ML.Engine.Animation
         { }
 
 
-        public LinearMixerTransition mixerTransition1D;
+        public LinearMixerTransition transition;
         public override ITransition GetTransition()
         {
-            return mixerTransition1D;
+            return transition;
         }
 
         public override ITransition GetPreviewTransition()
         {
-            return mixerTransition1D;
+            return transition;
         }
     }
 

@@ -221,7 +221,6 @@ namespace ML.Editor.Animation
                     }
                 }
                 endevent.NormalizedTime = tmp;
-
             }
         }
 
@@ -254,6 +253,7 @@ namespace ML.Editor.Animation
             // End >= ClipEnd -> TimeEnd = End+Fade*Speed
             // End < ClipEnd -> TimeEnd = ClipEnd
             float end = (float.IsNaN(endNormalizedTime) ? (isReverse ? 0 : 1) : endNormalizedTime) * length;
+            Debug.Log($"{start} {end}");
             float timeEnd = (end <= 0 || end >= length) ? end + transition.FadeDuration * speed : (isReverse ? 0 : length);
             var area = EditorGUILayout.GetControlRect();
             //var color = new Color(70 / 256f, 89 / 256f, 153 / 256f, 1);

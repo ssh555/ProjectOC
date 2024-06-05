@@ -21,18 +21,18 @@ namespace ML.Engine.Animation
         { }
 
 
-        public WeightMixerTransition manualMixerTransition;
+        public WeightMixerTransition transition;
         public override ITransition GetTransition()
         {
             var events = ((IAssetHasEvents)this).GetEventsOptional();
-            manualMixerTransition.Events.CopyFrom(events);
+            transition.Events.CopyFrom(events);
 
-            return manualMixerTransition;
+            return transition;
         }
 
         public override ITransition GetPreviewTransition()
         {
-            return manualMixerTransition;
+            return transition;
         }
 
 
@@ -41,51 +41,49 @@ namespace ML.Engine.Animation
         protected List<IAssetHasEvents.AssetEvent> _Events;
         public List<IAssetHasEvents.AssetEvent> Events => _Events;
 
-        public float FrameRate
+        public override float FrameRate
         {
             get
             {
-                if (manualMixerTransition.Animations == null)
+                if (transition.Animations == null)
                     return 0;
 
                 var framerate = 0f;
 
-                for (int i = manualMixerTransition.Animations.Length - 1; i >= 0; i--)
+                for (int i = transition.Animations.Length - 1; i >= 0; i--)
                 {
-                    if (!TryGetFrameRate(manualMixerTransition.Animations[i], out var frame))
+                    if (!TryGetFrameRate(transition.Animations[i], out var frame))
                         continue;
 
                     if (framerate < frame)
                         framerate = frame;
                 }
 
-                return framerate;
+                return Mathf.Max(framerate, 24);
             }
         }
 
-        public float Length
+        public override float Length
         {
             get
             {
-                if (manualMixerTransition.Animations == null)
+                if (transition.Animations == null)
                     return 0;
 
                 var duration = 0f;
 
-                for (int i = manualMixerTransition.Animations.Length - 1; i >= 0; i--)
+                for (int i = transition.Animations.Length - 1; i >= 0; i--)
                 {
-                    if (!AnimancerUtilities.TryGetLength(manualMixerTransition.Animations[i], out var length))
+                    if (!AnimancerUtilities.TryGetLength(transition.Animations[i], out var length))
                         continue;
 
                     if (duration < length)
                         duration = length;
                 }
 
-                return duration;
+                return Mathf.Max(duration, 0.01f);
             }
         }
-
-        public float FrameLength => Length * FrameRate;
 
         [SerializeField]
         protected IAssetHasEvents.AssetEvent _EndEvent;
