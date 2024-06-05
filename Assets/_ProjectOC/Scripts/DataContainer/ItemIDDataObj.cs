@@ -8,8 +8,9 @@ namespace ProjectOC.DataNS
     {
         [LabelText("ŒÔ∆∑ID"), ReadOnly, ShowInInspector]
         private string ID;
+        private const string str = "";
         public ItemIDDataObj(string id) { ID = id; }
-        public string GetDataID() { return ID ?? ""; }
+        public string GetDataID() { return ID ?? str; }
         public int GetDataWeight()
         {
             return ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ItemManager.GetWeight(ID) : 0;

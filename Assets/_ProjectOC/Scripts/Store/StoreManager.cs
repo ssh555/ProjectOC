@@ -107,7 +107,7 @@ namespace ProjectOC.StoreNS
             if (data != null && amount > 0)
             {
                 bool flag = data is DataNS.ItemIDDataObj;
-                List <IStore> stores = GetStores(priorityType);
+                List<IStore> stores = GetStores(priorityType);
                 foreach (IStore store in stores)
                 {
                     if (!judgeInteracting || !store.IsInteracting)

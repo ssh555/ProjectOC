@@ -21,6 +21,9 @@ namespace ProjectOC.ProNodeNS
     [LabelText("生产节点管理器"), System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        #region Str
+        private const string str = "";
+        #endregion
         #region ILocalManager
         [ShowInInspector]
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
@@ -126,7 +129,7 @@ namespace ProjectOC.ProNodeNS
         }
         public string GetName(string id)
         {
-            return IsValidID(id) ? ProNodeTableDict[id].Name : "";
+            return IsValidID(id) ? ProNodeTableDict[id].Name : str;
         }
         public ProNodeType GetProNodeType(string id)
         {

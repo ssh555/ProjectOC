@@ -8,11 +8,12 @@ namespace ProjectOC.RestaurantNS
     [LabelText("²ÍÌü"), Serializable]
     public class Restaurant : DataNS.DataContainerOwner
     {
+        private const string str = "";
         #region Data
         [LabelText("ÊÀ½ç²ÍÌü"), ReadOnly, NonSerialized]
         public WorldRestaurant WorldRestaurant;
         [ShowInInspector, ReadOnly]
-        public string UID => WorldRestaurant?.InstanceID ?? "";
+        public string UID => WorldRestaurant?.InstanceID ?? str;
         [LabelText("×ùÎ»"), ShowInInspector, ReadOnly]
         private RestaurantSeat[] Seats;
         #endregion
