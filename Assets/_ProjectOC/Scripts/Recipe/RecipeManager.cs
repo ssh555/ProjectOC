@@ -49,6 +49,7 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         #region Getter
+        private const string str = "";
         public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) && RecipeTableDict.ContainsKey(id); }
         public UnityEngine.Sprite GetRecipeIcon(string id) { return IsValidID(id) ? ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id) : null; }
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
@@ -78,7 +79,7 @@ namespace ML.Engine.InventorySystem
             }
             return resultes;
         }
-        public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : ""; }
+        public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : str; }
         public int GetSort(string id) { return IsValidID(id) ? RecipeTableDict[id].Sort : int.MaxValue; }
         public RecipeCategory GetCategory(string id) { return IsValidID(id) ? RecipeTableDict[id].Category : RecipeCategory.None; }
         public List<Formula> GetRaw(string id)
@@ -90,7 +91,7 @@ namespace ML.Engine.InventorySystem
             }
             return result;
         }
-        public Formula GetProduct(string id) { return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = "" }; }
+        public Formula GetProduct(string id) { return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = str }; }
         public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 0; }
         public int GetExpRecipe(string id) { return IsValidID(id) ? RecipeTableDict[id].ExpRecipe : 0; }
         #endregion

@@ -137,6 +137,7 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Method
+        private const string str = "";
         public bool ChangeCreature(int index, ML.Engine.InventorySystem.CreatureItem creature)
         {
             lock (this)
@@ -154,7 +155,7 @@ namespace ProjectOC.ProNodeNS
                         DataContainer.ChangeAmount(2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                         return true;
                     }
-                    else { ChangeRecipe(""); }
+                    else { ChangeRecipe(str); }
                 }
                 else
                 {

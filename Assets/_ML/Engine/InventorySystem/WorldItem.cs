@@ -54,6 +54,10 @@ namespace ML.Engine.InventorySystem
                     creature.Activity = Activity;
                     creature.Output = Output;
                 }
+                else
+                {
+                    Debug.Log($"Error WorldCreatureItemData SetItemData {item.ID}");
+                }
             }
         }
 
