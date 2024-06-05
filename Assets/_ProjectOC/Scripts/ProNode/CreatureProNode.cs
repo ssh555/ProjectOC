@@ -17,6 +17,7 @@ namespace ProjectOC.ProNodeNS
         public int DiscardStack => HasCreature ? DataContainer.GetAmount(DataContainer.GetCapacity() - 1, DataNS.DataOpType.Storage) : 0;
         public int DiscardReserve;
         public CreatureProNode(ProNodeTableData config) : base(config) { OnDataChangeEvent += CheckDiscardReserve; }
+        private const string str = "";
         public bool ChangeCreature(ML.Engine.InventorySystem.CreatureItem creature)
         {
             lock (this)
@@ -32,7 +33,7 @@ namespace ProjectOC.ProNodeNS
                     ChangeData(capacity-1, new DataNS.ItemIDDataObj(creature.Discard.id), false, false);
                     DataContainer.ChangeAmount(capacity-2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                 }
-                else { ChangeRecipe(""); }
+                else { ChangeRecipe(str); }
                 return true;
             }
         }

@@ -46,6 +46,10 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Set
         public void ChangeCapacity(int capacity, int dataCapacity)
         {
@@ -135,7 +139,7 @@ namespace ProjectOC.DataNS
         {
             if (recplaceData && transport != null)
             {
-                Dictionary<IDataObj, int> result = DataContainer.ChangeAmountForUniqueData(data?.GetDataID() ?? "", amount,
+                Dictionary<IDataObj, int> result = DataContainer.ChangeAmountForUniqueData(data?.GetDataID() ?? str, amount,
                     DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
                 int cnt = 0;
                 if (result.Count > 0)

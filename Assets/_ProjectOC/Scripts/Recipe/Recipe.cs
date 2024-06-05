@@ -7,6 +7,7 @@ namespace ML.Engine.InventorySystem
     [LabelText("配方"), System.Serializable]
     public struct Recipe
     {
+        private const string str = "";
         [LabelText("ID"), ReadOnly]
         public string ID;
         public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
@@ -14,7 +15,7 @@ namespace ML.Engine.InventorySystem
         [LabelText("原料"), ShowInInspector, ReadOnly]
         public List<Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<Formula>();
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : new Formula() { id = "" };
+        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : new Formula() { id = str };
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
         public string ProductID => Product.id;
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
@@ -26,7 +27,7 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         public Recipe(RecipeTableData config) { ID = config.ID; }
-        public void ClearData() { ID = ""; }
+        public void ClearData() { ID = str; }
         public int GetRawNum(string itemID)
         {
             if (!string.IsNullOrEmpty(itemID))

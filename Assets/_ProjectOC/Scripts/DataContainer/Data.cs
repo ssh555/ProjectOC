@@ -26,6 +26,10 @@ namespace ProjectOC.DataNS
         private int EmptyReserve;
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Property
         public string ID => id;
         public bool CanIn => canIn;
@@ -39,7 +43,7 @@ namespace ProjectOC.DataNS
         #region Constructor
         public Data(IDataObj data, int maxCapacity)
         {
-            id = data?.GetDataID() ?? "";
+            id = data?.GetDataID() ?? str;
             this.data = data;
             canIn = true;
             canOut = true;
@@ -51,7 +55,7 @@ namespace ProjectOC.DataNS
         }
         public Data(int maxCapacity)
         {
-            id = "";
+            id = str;
             data = null;
             canIn = true;
             canOut = true;
@@ -89,7 +93,7 @@ namespace ProjectOC.DataNS
         #region Set
         public void Reset()
         {
-            id = "";
+            id = str;
             data = null;
             Storage = 0;
             Empty = MaxCapacity;
@@ -103,7 +107,7 @@ namespace ProjectOC.DataNS
         }
         private void SetData(IDataObj data)
         {
-            id = data?.GetDataID() ?? "";
+            id = data?.GetDataID() ?? str;
             this.data = data;
         }
 
