@@ -22,10 +22,10 @@ namespace ProjectOC.RestaurantNS
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
-
+        private const string str = "Prefab_Restaurant_UI/Prefab_Restaurant_UI_RestaurantPanel.prefab";
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Restaurant_UI/Prefab_Restaurant_UI_RestaurantPanel.prefab", 
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(str, 
                 ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
             {
                 UI.UIRestaurant uiPanel = handle.Result.GetComponent<UI.UIRestaurant>();

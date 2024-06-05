@@ -237,13 +237,14 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region Food Getter
+        private const string str = "";
         public bool Food_IsValidID(string id)
         {
             return !string.IsNullOrEmpty(id) ? WorkerFoodTableDict.ContainsKey(id) : false;
         }
         public string Food_ItemID(string id)
         {
-            return Food_IsValidID(id) ? WorkerFoodTableDict[id].ItemID : "";
+            return Food_IsValidID(id) ? WorkerFoodTableDict[id].ItemID : str;
         }
         public int Food_AlterAP(string id)
         {
@@ -257,7 +258,7 @@ namespace ProjectOC.RestaurantNS
         }
         public string ItemIDToFoodID(string itemID)
         {
-            return !string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID) ? ItemToFoodDict[itemID] : "";
+            return !string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID) ? ItemToFoodDict[itemID] : str;
         }
         #endregion
     }

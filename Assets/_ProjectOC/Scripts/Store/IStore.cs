@@ -8,11 +8,12 @@ namespace ProjectOC.StoreNS
     [LabelText("≤÷ø‚"), Serializable]
     public abstract class IStore : DataNS.DataContainerOwner
     {
+        private const string str = "";
         #region Data
         [LabelText(" ¿ΩÁ≤÷ø‚"), ReadOnly, ShowInInspector, NonSerialized]
         public IWorldStore WorldStore;
         [ShowInInspector, ReadOnly]
-        public string UID { get { return WorldStore?.InstanceID ?? ""; } }
+        public string UID { get { return WorldStore?.InstanceID ?? str; } }
         [LabelText("≤÷ø‚√˚◊÷"), ReadOnly]
         public string Name = "";
         [LabelText("≤÷ø‚¿‡–Õ"), ReadOnly]
