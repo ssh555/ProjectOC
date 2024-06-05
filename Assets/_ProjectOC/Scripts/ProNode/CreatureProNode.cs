@@ -89,7 +89,7 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Output <= OutputThreshold && (this as MissionNS.IMissionObj).GetMissionNum(creature, false) == 0)
+                if (creature.Output <= OutputThreshold && (this as MissionNS.IMissionObj).GetMissionNum(creature.ID, false) == 0)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
@@ -154,10 +154,11 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasCreature)
             {
-                int cur = DiscardReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(DataContainer.GetCapacity() - 1), false) - DiscardStack;
+                int index = DataContainer.GetCapacity() - 1;
+                int cur = DiscardReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(index), false) - DiscardStack;
                 if (cur > 0)
                 {
-                    foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(DataContainer.GetData(DataContainer.GetCapacity() - 1), false))
+                    foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(DataContainer.GetData(index), false))
                     {
                         int needAssignNum = mission.NeedAssignNum;
                         int missionNum = mission.MissionNum;

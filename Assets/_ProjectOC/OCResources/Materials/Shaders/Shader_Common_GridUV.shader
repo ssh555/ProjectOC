@@ -10,15 +10,19 @@ Shader "Universal Render Pipeline/GridUVScale"
     }
         SubShader
         {
-			//渲染类型为URP
-           Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalRenderPipeline"}
+        	Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque"  }
 			//多距离级别
             LOD 100 
             //Cull [_CullMode]
 		 Pass
         {
+        	Tags
+            {
+                "LightMode" = "UniversalForward"
+                //"LightMode" = "UniversalGBuffer"
+            }
             HLSLPROGRAM  //URP 程序块开始
-
+			#pragma target 4.5
 			//顶点程序片段 vert
 			#pragma vertex vert
 			//表面程序片段 frag
@@ -27,7 +31,7 @@ Shader "Universal Render Pipeline/GridUVScale"
 
 			//URP函数库
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
 			CBUFFER_START(UnityPerMaterial) //变量引入开始
 			float _UVScale;
@@ -102,5 +106,6 @@ Shader "Universal Render Pipeline/GridUVScale"
 
             ENDHLSL  //URP 程序块结束            
         }
+UsePass "Universal Render Pipeline/Lit/ShadowCaster"
     }
 }

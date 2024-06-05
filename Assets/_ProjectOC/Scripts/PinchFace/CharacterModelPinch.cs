@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using AmazingAssets.TerrainToMesh;
 using ML.Engine.UI;
 using ProjectOC.PinchFace;
@@ -54,13 +55,13 @@ namespace ProjectOC.PinchFace
         private int curHairIndex = -1;
         public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex,bool inCamera = false)
         {
+            
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
             if (_type3 == PinchPartType3.HF_HairFront)
             {
                 curHairIndex = typeIndex;
             }
-            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
-            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
-            
             #region 马尾、角  特殊处理
             if(_type2 == PinchPartType2.EarTop)
             {
@@ -78,11 +79,16 @@ namespace ProjectOC.PinchFace
             }
             else if (_type2 == PinchPartType2.HairBraid)
             {
-                //应该再判断Type3是否一样
+                if (braid != null)
+                {
+                    braid.Release();
+                }
+                Transform _HeadBone = boneDic["Head"];
                 _handle.Completed += (handle) =>
                 {
-                    braid = new PinchBraid(typeIndex);
+                    braid = new PinchBraid(_HeadBone,_handle.Result,typeIndex,Vector2.zero);
                 };
+                return _handle;
                 
             }
             #endregion
@@ -94,10 +100,17 @@ namespace ProjectOC.PinchFace
             
             _handle.Completed += (handle)=>
             {
-                EquipItem(_type2,handle.Result,inCamera);
+                //延迟一帧执行
+                StartCoroutine(EquipExecuteAfterOneFrame());
+                IEnumerator EquipExecuteAfterOneFrame()
+                {
+                    yield return null;
+                    EquipItem(_type2,handle.Result,inCamera);
+                }
             };
             return _handle;
         }
+
         
         
         public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
@@ -111,6 +124,15 @@ namespace ProjectOC.PinchFace
 
         public void UnEquipItem(PinchPartType2 _type2)
         {
+            if (_type2 == PinchPartType2.EarTop)
+            {
+                if (topEar != null)
+                {
+                    topEar.Release();
+                    topEar = null;    
+                }
+            }
+            
             if (_type2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
                 boneWeightDictionary.Remove(BoneWeightType.Tail);
             
@@ -189,6 +211,7 @@ namespace ProjectOC.PinchFace
             SkinnedMeshRenderer[] smrs = sourceClothing.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var smr in smrs)
             {
+                // Destroy(smr);
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
                 if (inCamera)
                 {
@@ -212,9 +235,10 @@ namespace ProjectOC.PinchFace
             {
                 target = parent.AddComponent<SkinnedMeshRenderer> ();
             }
-
+            
+            target.sharedMaterials = source.materials;
+            //todo ?AB包导出材质丢失
             target.sharedMesh = source.sharedMesh;
-            target.materials = source.materials;
             return target;
         }
         private Transform[] TranslateTransforms (Transform[] sources, Dictionary<string,Transform> _boneCatalog)
@@ -241,12 +265,12 @@ namespace ProjectOC.PinchFace
 
         public void ChangeTransform(PinchPartType2 boneType2,Vector2 param)
         {
-            
             if(boneType2 == PinchPartType2.EarTop)
             {
-                topEar.ModifyValue(param);
+                if(topEar != null)
+                    topEar.ModifyValue(param);
             }
-            else if (boneType2 == PinchPartType2.HairBraid)
+            else if (boneType2 == PinchPartType2.HairFront)
             {
                 if(braid != null)
                     braid.ModifyValue(param);
@@ -319,21 +343,22 @@ namespace ProjectOC.PinchFace
    
             }
         }
-
+        string matColorName = "_ColorChange";
+        //头发双色用
+        // string matColorName2 = "Mat_ColorChange2";
         private Material GetMaterial(PinchPartType2 _type2)
         {
-            string matColorName = "_ColorChange";
-            //头发双色用
-            // string matColorName2 = "Mat_ColorChange2";
-            
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
             {
                 Debug.LogWarning($"没有捏脸部件:{_type2.ToString()}");
                 return null;
             }
-                
-            
+            return GetMaterial(_replaceGo);
+        }
+
+        private Material GetMaterial(GameObject _replaceGo)
+        {
             Material[] mats = _replaceGo.GetComponentInChildren<SkinnedMeshRenderer>().materials;
             if (mats == null)
             {
@@ -343,23 +368,10 @@ namespace ProjectOC.PinchFace
             {
                 if (_mat.name.Contains(matColorName))
                     return _mat;
-                // if (_index == 0)
-                // {
-                //     if (_mat.name.Contains(matColorName))
-                //         return _mat;
-                // }
-                // else if(_index == 1)
-                // {
-                //     if (_mat.name.Contains(matColorName2))
-                //         return _mat;
-                // }
-                
             }
-            
-            
             return null;
         }
-
+        
         private string changeColorShaderKey = "_BaseColor";
         private string changeColroShaderKey2 = "_Color2";
         /// <summary>
@@ -371,6 +383,14 @@ namespace ProjectOC.PinchFace
         /// <param name="colorType">分色模式</param>
         public void ChangeColor(PinchPartType2 _type2, Color _color,int _index)
         {
+            //特殊处理
+            // if (_type2 == PinchPartType2.EarTop)
+            // {
+            //     Material _targetMat = GetMaterial();
+            //     _targetMat.SetColor(changeColorShaderKey,_color);   
+            //     return;
+            // }
+            //
             if (_type2 == PinchPartType2.HairFront)
             {
                 ChangeColor( PinchPartType2.HairBack, _color, _index);
@@ -405,8 +425,6 @@ namespace ProjectOC.PinchFace
                 return;
             if (colorType != -1)
             {
-                
-                
                 int _curColor = 1 << colorType;
                 if (_type2 == PinchPartType2.HairFront &&
                     (pinchFaceManager.Config.HairFrontChangeColorTypes[curHairIndex] & _curColor) != 0
@@ -620,7 +638,15 @@ namespace ProjectOC.PinchFace
         public PinchCharacterCameraView CameraView;
 
         #endregion
-
-        
+#if UNITY_EDITOR
+        // void OnDrawGizmos()
+        // {
+        //     if (braid != null)
+        //     {
+        //         Vector3 center = braid.CalculateCenter(braid.headBone,braid.offset);
+        //         Gizmos.DrawWireSphere(center,braid.radius);
+        //     }
+        // }
+#endif
     }
 }

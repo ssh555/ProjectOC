@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static Animancer.Easing;
-using static UnityEditor.Rendering.FilterWindow;
 
 namespace ML.Engine.UI
 {
@@ -25,7 +23,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// Center 在Content 坐标系下的坐标
         /// </summary>
-        [ShowInInspector]
+        //[ShowInInspector]
         public Vector3 CenterPos { get {
 
                 Vector2 localPosition;

@@ -57,7 +57,7 @@ namespace ProjectOC.RestaurantNS.UI
         #region BtnList
         private ML.Engine.UI.UIBtnList DataBtnList;
         private int DataIndex => DataBtnList?.GetCurSelectedPos1() ?? 0;
-        List<string> FoodItemIDs = new List<string>() { "" };
+        List<string> FoodItemIDs = new List<string>();
         private ML.Engine.UI.UIBtnList FoodBtnList;
         private int FoodIndex => FoodBtnList?.GetCurSelectedPos1() ?? 0;
         private bool IsInitBtnList = false;
@@ -78,7 +78,9 @@ namespace ProjectOC.RestaurantNS.UI
                 {
                     FoodItemIDs.Add(itemID);
                 }
+                FoodItemIDs = ML.Engine.InventorySystem.ItemManager.Instance.SortItemIDs(FoodItemIDs);
             }
+            FoodItemIDs.Insert(0, "");
             itemIDs = ML.Engine.InventorySystem.ItemManager.Instance.SortItemIDs(itemIDs);
             FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab", () => { synchronizer.Check(); });
         }
@@ -259,7 +261,9 @@ namespace ProjectOC.RestaurantNS.UI
                     uidata.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = amount.ToString();
                     uidata.Find("MaxCapacity").GetComponent<TMPro.TextMeshProUGUI>().text = maxCapacity.ToString();
                     var bar = uidata.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                    float sizeDeltaX = uidata.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * amount / maxCapacity;
+                    float percent = ((float)amount) / ((float)maxCapacity);
+                    percent = percent <= 1 ? percent : 1;
+                    float sizeDeltaX = uidata.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
                     bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
 
                     string name = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID);

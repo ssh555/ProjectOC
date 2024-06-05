@@ -80,6 +80,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TransformType: 1
-  pinchRangeX: {x: 0, y: 1}
-  pinchBraidRangeY: {x: 0, y: 1}
+  pinchRangeX: {x: -30, y: 30}
+  pinchBraidRangeY: {x: -20, y: 20}
   curValue: {x: 0, y: 0}
