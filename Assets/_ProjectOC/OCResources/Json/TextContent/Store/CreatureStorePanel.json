@@ -58,8 +58,8 @@
     "Remove" : {
         "keyname" : "KT_Remove",
         "keymap": {
-            "ActionMapName": "UIStore",
-            "ActionName": "Remove"
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
           },
         "description" : {
             "Chinese" : "取出",

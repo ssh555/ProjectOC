@@ -24,6 +24,8 @@ namespace ProjectOC.DataNS
         private int StorageReserve;
         [LabelText("Ô¤Áô¿ÕÓàÁ¿"), ShowInInspector, ReadOnly]
         private int EmptyReserve;
+        [LabelText("Òç³ö¿ÕÓàÁ¿"), ShowInInspector, ReadOnly]
+        private int RemoveEmpty;
         #endregion
 
         #region Str
@@ -52,6 +54,7 @@ namespace ProjectOC.DataNS
             Empty = maxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
+            RemoveEmpty = 0;
         }
         public Data(int maxCapacity)
         {
@@ -64,6 +67,7 @@ namespace ProjectOC.DataNS
             Empty = maxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
+            RemoveEmpty = 0;
         }
         #endregion
 
@@ -99,6 +103,7 @@ namespace ProjectOC.DataNS
             Empty = MaxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
+            RemoveEmpty = 0;
         }
         public void ChangeData(IDataObj data)
         {
@@ -115,6 +120,7 @@ namespace ProjectOC.DataNS
         public void ChangeCanOut(bool canOut) { this.canOut = canOut; }
         public void ChangeAmount(DataOpType type, int amount)
         {
+            int empty = 0;
             switch (type)
             {
                 case DataOpType.Storage:
@@ -125,17 +131,45 @@ namespace ProjectOC.DataNS
                     break;
                 case DataOpType.EmptyReserve:
                     EmptyReserve += amount;
-                    EmptyReserve = EmptyReserve >= 0 ? EmptyReserve : 0;
                     break;
                 case DataOpType.Empty:
-                    Empty += amount;
-                    Empty = Empty >= 0 ? Empty : 0;
+                    if (RemoveEmpty > 0 && amount > 0)
+                    {
+                        if (amount > RemoveEmpty)
+                        {
+                            amount -= RemoveEmpty;
+                            RemoveEmpty = 0;
+                        }
+                        else
+                        {
+                            RemoveEmpty -= amount;
+                            amount = 0;
+                        }
+                    }
+                    empty = Empty + amount;
+                    if (empty < 0)
+                    {
+                        RemoveEmpty -= empty;
+                        Empty = 0;
+                    }
+                    else
+                    {
+                        Empty = empty;
+                    }
                     break;
                 case DataOpType.MaxCapacity:
                     if (amount > 0)
                     {
-                        Empty = (amount - Storage - StorageReserve - EmptyReserve);
-                        Empty = Empty >= 0 ? Empty : 0;
+                        empty = amount - Storage - StorageReserve - EmptyReserve - RemoveEmpty;
+                        if (empty < 0)
+                        {
+                            RemoveEmpty = -1 * empty;
+                            Empty = 0;
+                        }
+                        else
+                        {
+                            Empty = empty;
+                        }
                         MaxCapacity = amount;
                     }
                     break;

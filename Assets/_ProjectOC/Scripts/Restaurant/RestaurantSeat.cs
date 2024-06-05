@@ -57,7 +57,7 @@ namespace ProjectOC.RestaurantNS
             {
                 WorkerNS.Worker worker = Worker;
                 (this as WorkerNS.IWorkerContainer).RemoveWorker();
-                if (!Restaurant.HaveFood && Worker.APCurrent < Worker.APRelaxThreshold)
+                if (!Restaurant.HaveFood && worker.APCurrent < worker.APRelaxThreshold)
                 {
                     manager.AddWorker(worker);
                 }

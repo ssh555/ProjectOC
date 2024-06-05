@@ -375,14 +375,14 @@ namespace ProjectOC.WorkerNS.UI
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
                         new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + strNewLine + PanelTextContent.textCancleResultDesc, null, null,
-                            () => { FeatBuild.CancleExchange(); }));
+                            () => { FeatBuild.CancelExchange(); }));
                 }
                 else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
                         new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + strNewLine + PanelTextContent.textCancleResultDesc, null, null,
-                            () => { FeatBuild.CancleCorrect(); }));
+                            () => { FeatBuild.CancelCorrect(); }));
                 }
                 else
                 {
@@ -455,11 +455,11 @@ namespace ProjectOC.WorkerNS.UI
         {
             if (CurMode == Mode.Exchange && FeatBuild.IsExchange)
             {
-                FeatBuild.CancleExchange();
+                FeatBuild.CancelExchange();
             }
             else if (CurMode == Mode.Correct && FeatBuild.IsCorrect)
             {
-                FeatBuild.CancleCorrect();
+                FeatBuild.CancelCorrect();
             }
             Refresh();
         }
