@@ -145,9 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c19e81b48b5134c818fcd10cc20b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clip:
-    _Asset: {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
-  _animancer: {fileID: 81136283}
 --- !u!114 &81136283
 MonoBehaviour:
   m_ObjectHideFlags: 0
