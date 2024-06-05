@@ -14,6 +14,7 @@ Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	63926730	BGNoise_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_C797EE82.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise_01		4010708
 	158127460	Wave	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\wave_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Wave		11885936
+	187490933	TempBGM2	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\TempBGM2_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\Music\BGM\temp_BGM2\TempBGM2		46089312
 	230924643	Sprint1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Sprint_A4CD14E7.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1		36112
 	299161394	BGNoise	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_90AEA377.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		4855788
 	386136567	jump_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\jump_AC9FBBAE.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_03		142652
