@@ -145,12 +145,10 @@ namespace ML.Editor.Animation
                     currentEvent.Use();
                     NormalizedTime = Mathf.Max((Event.current.mousePosition.x - rect.x), 0) / timelineScale / tickSpacing / Framelength;
                     Instance.Repaint();
-                    EditorApplication.update += OnDrag;
                 }
                 else if (isdragging && currentEvent.type == EventType.MouseUp && currentEvent.button == 0)
                 {
                     currentEvent.Use();
-                    EditorApplication.update -= OnDrag;
                 }
                 else if (isdragging && currentEvent.type == EventType.MouseDrag)
                 {
@@ -162,11 +160,6 @@ namespace ML.Editor.Animation
 
 
 
-            }
-
-            private void OnDrag()
-            {
-                FocusWindowIfItsOpen<TrackWindow>();
             }
 
         }

@@ -144,9 +144,17 @@ namespace ML.Editor.Animation
             {
                 get
                 {
-                    // 尝试播放当前动画
-                    var state = Instance._Scene.Animancer.States[Transition];
-                    return state.Length;
+                    var state = Instance._Scene.Animancer.States.Current;
+                    float length = state.Clip == null ? 1 : state.Clip.length;
+                    for (int i = 0; i < state.ChildCount; ++i)
+                    {
+                        float tmp = state.GetChild(i).Clip == null ? 1 : state.GetChild(i).Clip.length;
+                        if (tmp > length)
+                        {
+                            length = tmp;
+                        }
+                    }
+                    return length;
                 }
             }
 
@@ -154,9 +162,17 @@ namespace ML.Editor.Animation
             {
                 get
                 {
-                    // 尝试播放当前动画
-                    var state = Instance._Scene.Animancer.States[Transition];
-                    return state.Clip.frameRate;
+                    var state = Instance._Scene.Animancer.States.Current;
+                    float frameRate = state.Clip == null ? 1 : state.Clip.frameRate;
+                    for(int i = 0; i < state.ChildCount; ++i)
+                    {
+                        float tmp = state.GetChild(i).Clip == null ? 1 : state.GetChild(i).Clip.frameRate;
+                        if(tmp > frameRate)
+                        {
+                            frameRate = tmp;
+                        }
+                    }
+                    return frameRate;
                 }
             }
 
@@ -658,7 +674,9 @@ namespace ML.Editor.Animation
 
                 // 警告
                 var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();
+                targetState.NormalizedTime = 0;
                 // 播放结束事件
+                targetState.NormalizedEndTime = 1;
                 targetState.Events.OnEnd = () =>
                 {
                     // 播放下一个动画 Next Animation
@@ -673,6 +691,8 @@ namespace ML.Editor.Animation
                         //// TODO: 不可访问
                         //animancer.Layers[0].IncrementCommandCount();
                         animancer.PauseGraph();
+                        targetState.NormalizedTime = 1;
+                        //Debug.Log(targetState.NormalizedTime + " " + targetState.NormalizedEndTime);
                     }
                 };
                 warnings.Enable();

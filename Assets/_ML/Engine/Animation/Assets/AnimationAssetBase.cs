@@ -56,6 +56,40 @@ namespace ML.Engine.Animation
             /************************************************************************************************************************/
         }
 
+        public abstract ITransition GetPreviewTransition();
+        public static bool TryGetLength(object motionOrTransition, out float length)
+        {
+            if (motionOrTransition is AnimationClip clip)
+            {
+                length = clip.length;
+                return true;
+            }
+            
+            else if (AnimancerUtilities.TryGetWrappedObject(motionOrTransition, out ITransitionDetailed transition))
+            {
+                length = transition.MaximumDuration;
+                return true;
+            }
+            else
+            {
+                length = 0;
+                return false;
+            }
+        }
+
+        public static bool TryGetFrameRate(object motionOrTransition, out float frameRate)
+        {
+            if (motionOrTransition is AnimationClip clip)
+            {
+                frameRate = clip.frameRate;
+                return true;
+            }
+            else
+            {
+                frameRate = 60;
+                return false;
+            }
+        }
     }
 
 

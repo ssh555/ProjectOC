@@ -331,7 +331,6 @@ namespace Animancer
                     var state = ChildStates[i];
                     length += state.Length * state.Weight;
                 }
-
                 return length / totalChildWeight;
             }
         }

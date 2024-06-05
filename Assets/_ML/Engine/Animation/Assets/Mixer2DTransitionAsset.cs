@@ -21,6 +21,10 @@ namespace ML.Engine.Animation
         {
             return mixerTransition2D;
         }
+        public override ITransition GetPreviewTransition()
+        {
+            return mixerTransition2D;
+        }
     }
 
 }

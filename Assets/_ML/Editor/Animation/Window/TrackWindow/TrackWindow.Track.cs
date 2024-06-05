@@ -185,6 +185,8 @@ namespace ML.Editor.Animation
 
             public Rect PaintRect;
 
+            private bool isdragging = false;
+
             /// <summary>
             /// 绘制Signal
             /// </summary>
@@ -206,20 +208,34 @@ namespace ML.Editor.Animation
                 // 被选中
                 if(this.IsSelected)
                 {
-                    if (Event.current.button == 0 && Event.current.type == EventType.MouseDrag && AttachedTrack.PaintRect.Contains(Event.current.mousePosition))
-                    {
-                        //PreviewWindow.Instance.GetScene.Animancer.States.Current.Events.SetShouldNotModifyReason(null);
-                        //PreviewWindow.Instance.GetScene.Animancer.States.Destroy(PreviewWindow.Transition);
+                    Event currentEvent = Event.current;
 
+                    // 检查鼠标拖动事件
+                    if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && rect.Contains(Event.current.mousePosition))
+                    {
+                        isdragging = true;
+                        currentEvent.Use();
                         NormalizedTime = Mathf.Max((Event.current.mousePosition.x - AttachedTrack.PaintRect.x), 0) / Instance._timeline.timelineScale / Timeline.tickSpacing / Instance._timeline.Framelength;
                         Instance.Repaint();
                         DetailWindow.Instance.Repaint();
+                    }
+                    else if (isdragging && currentEvent.type == EventType.MouseUp && currentEvent.button == 0)
+                    {
+                        currentEvent.Use();
+                    }
+                    else if (isdragging && currentEvent.type == EventType.MouseDrag)
+                    {
+                        NormalizedTime = Mathf.Max((Event.current.mousePosition.x - AttachedTrack.PaintRect.x), 0) / Instance._timeline.timelineScale / Timeline.tickSpacing / Instance._timeline.Framelength;
+                        Instance.Repaint();
+                        DetailWindow.Instance.Repaint();
+                        currentEvent.Use();
                     }
 
                     // 按下Delete键删除
                     if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Delete)
                     {
                         AttachedTrack.DeleteSignal(this);
+                        Instance.Repaint();
                         DetailWindow.Instance.Repaint();
                     }
                 }

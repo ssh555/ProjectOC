@@ -88,9 +88,7 @@ namespace ML.Editor.Animation
             menu.AddItem(new GUIContent("ÐÂ½¨Event"), false, () =>
             {
                 var signal = this.CreateSignalOnMouse<EventTrackSignal>();
-                var e = new AssetEvent();
-                signal.Event = e;
-                TargetTransition.Events.Add(e);
+                TargetTransition.Events.Add(signal.Event);
             });
         }
 
