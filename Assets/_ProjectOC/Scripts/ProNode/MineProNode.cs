@@ -124,7 +124,7 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return Worker != null ? EffBase + Worker.GetEff(ExpType) : 0; }
+        public override int GetEff() { return Worker != null ? (EffBase + Worker.GetEff(ExpType)) : 0; }
         public override int GetTimeCost() { int eff = GetEff(); return HasMine && eff > 0 ? (int)Math.Ceiling((double)100 * MineTimeCost / eff) : 0; }
         public override void Destroy()
         {

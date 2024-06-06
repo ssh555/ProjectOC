@@ -469,12 +469,10 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (CurMode == Mode.ProNode)
             {
-                if (ProNode.HasRecipe)
-                {
-                    ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, ProNode.WorldProNode.transform,
+                string id = ProNode.HasRecipe ? ProNode.Recipe.Product.id : "";
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(id, ProNode.WorldProNode.transform,
                     new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one,
                     (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
-                }
                 UIMgr.PopPanel();
             }
             else

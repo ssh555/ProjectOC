@@ -374,12 +374,10 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (CurMode != Mode.ChangeCreature)
             {
-                if (ProNode.HasRecipe)
-                {
-                    ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, ProNode.WorldProNode.transform,
+                string id = ProNode.HasRecipe ? ProNode.Recipe.Product.id : "";
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(id, ProNode.WorldProNode.transform,
                     new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one,
                     (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
-                }
                 UIMgr.PopPanel();
             }
             else
@@ -574,8 +572,8 @@ namespace ProjectOC.ProNodeNS.UI
                 {
                     int output1 = ProNode.Creature1.Output;
                     int output2 = creature.Output;
-                    int low = -3 + output1 <= output2 ? output1 : output2;
-                    int high = 3 + output1 <= output2 ? output2 : output1;
+                    int low = -3 + (output1 <= output2 ? output1 : output2);
+                    int high = 3 + (output1 <= output2 ? output2 : output1);
                     Creature_Recipe.Find(strOutputValue).GetComponent<TMPro.TextMeshProUGUI>().text = $"{low}~{high}";
                 }
                 bool isValidCreature = creature != null;
