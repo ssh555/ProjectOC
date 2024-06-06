@@ -26,9 +26,9 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff() 
         {
-            return ManagerNS.LocalGameManager.Instance != null && Creature1 != null ? 
-                EffBase + Creature1.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
-                EffBase;
+            return (ManagerNS.LocalGameManager.Instance != null && Creature1 != null) ? 
+                (EffBase + Creature1.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff) : 
+                (EffBase);
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { FastAdd(1); }
