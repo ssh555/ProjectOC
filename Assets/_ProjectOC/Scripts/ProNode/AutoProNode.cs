@@ -39,7 +39,15 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    var list = (this as MissionNS.IMissionObj).GetMissions(data);
+                    if (list.Count > 0)
+                    {
+                        list[0].ChangeMissionNum(list[0].MissionNum + missionNum);
+                    }
+                    else
+                    {
+                        ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    }
                 }
             }
             if (StackReserve > 0)
