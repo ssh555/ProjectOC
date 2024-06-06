@@ -77,6 +77,7 @@ namespace ProjectOC.PinchFace
         {
             base.RegisterInput();
             UIBtnListContainer.UIBtnLists[0].InitBtnInfo();
+            // UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
             UIBtnListContainer.UIBtnLists[1].SetBtnAction(0,0,() =>
             {
                 //创建种族
@@ -128,7 +129,6 @@ namespace ProjectOC.PinchFace
                         }
                         pinchFaceManager.RacePinchDatas.Remove(raceData);
                         
-                        UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
                     },null));   
             }
         }
@@ -181,7 +181,6 @@ namespace ProjectOC.PinchFace
                 raceNameText.SetText(raceData.raceName);
                 raceDescription.SetText(raceData.raceDescription);
                 CouldDeleteRace = !raceData.isDefault;
-                Debug.Log($"{raceData.raceName} {CouldDeleteRace}");
                 //随机生成
                 if (pinchFaceManager.ModelPinch != null)
                 {
@@ -209,11 +208,27 @@ namespace ProjectOC.PinchFace
                 }
                 _btn.onClick.AddListener(() =>
                 {
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-                    pinchFaceManager.GeneratePinchFaceUI(RacePinchDatas[tmpI]);
+                    LeftBtnClick(tmpI);
                 });
             }
         }
+
+        void LeftBtnClick(int _index)
+        {
+            RacePinchData curRaceData = RacePinchDatas[_index];
+            //直接生成or  FaceTemplate
+            if (curRaceData.PinchFaceTemplate.Count == 0)
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                pinchFaceManager.GeneratePinchFaceUI(curRaceData);
+            }
+            else
+            {
+                pinchFaceManager.GenerateFaceTemplateUI(curRaceData,true);
+            }
+            
+        }
+        
         
         private void InitBtnData(PinchRacePanelStruct datas)
         {

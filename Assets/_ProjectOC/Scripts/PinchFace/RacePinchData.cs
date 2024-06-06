@@ -11,7 +11,7 @@ namespace ProjectOC.PinchFace
         public string raceDescription;
         public List<PinchPartType3> pinchPartType3s;
         public bool isDefault = false;
-
+        public List<PinchFaceTemplateData> PinchFaceTemplate = new List<PinchFaceTemplateData>();
         public RacePinchData()
         {
             pinchPartType3s = new List<PinchPartType3>();
@@ -21,6 +21,18 @@ namespace ProjectOC.PinchFace
             this.raceName = _raceName;
             this.raceDescription = _raceDescription;
             this.pinchPartType3s = _pinchPartType3s;
+        }
+
+        public class PinchFaceTemplateData
+        {
+            public string faceTemplateName;
+            public List<PinchPart.PinchPartData> PinchPartDatas;
+
+            public PinchFaceTemplateData(string _faceTemplateName,List<PinchPart.PinchPartData> _pinchPartDatas)
+            {
+                faceTemplateName = _faceTemplateName;
+                PinchPartDatas = _pinchPartDatas;
+            }
         }
     }
 }

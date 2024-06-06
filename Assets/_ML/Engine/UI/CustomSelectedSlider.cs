@@ -49,6 +49,11 @@ namespace ML.Engine.UI
             headText.text = _str;
             slider.onValueChanged.AddListener(sliderAction);
         }
+        public void SetSliderConfig(string _str,UnityAction<float> sliderAction,float startValue)
+        {
+            SetSliderConfig(_str, sliderAction);
+            SetValueWithoutNotify(startValue);
+        }
 
         public void SetValueWithoutNotify(float _value)
         {

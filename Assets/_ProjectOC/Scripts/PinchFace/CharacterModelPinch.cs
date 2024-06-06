@@ -20,9 +20,62 @@ namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
-        #region Unity
-
+        #region 数据部分
         
+        //重新生成或复活时 需要装备，所以也需要存储
+        public List<PinchPart.PinchPartData> PinchPartDatas { get; private set; }
+
+        public void SetPinchPartDatas(List<PinchPart.PinchPartData> _PinchPartDatas,bool Apply)
+        {
+            PinchPartDatas = _PinchPartDatas;
+            if (Apply)
+            {
+                if (_PinchPartDatas == null)
+                {
+                    ChangeType(PinchPartType3.HF_HairFront, 0);
+                    ChangeType(PinchPartType3.HB_HairBack, 0);
+                }
+                else
+                {
+                    foreach (var _pinchPartData in PinchPartDatas)
+                    {
+                        _pinchPartData.ApplyPinchSetting(pinchFaceManager.TargetModelPinch);
+                    }   
+                }
+            }
+        }
+
+        #endregion
+
+        #region Unity
+        void Awake()
+        {
+            //数据初始化
+            pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+            CameraView.Init(pinchFaceManager);
+                
+            Array enumValues = Enum.GetValues(typeof(PinchPartType2));
+            for(int i = 0;i<enumValues.Length;i++)
+                replaceGo.Add(null);
+            avatar = transform.Find("AnMiXiuBone");
+            characterSkinMeshRenderer = transform.Find("AnMiXiu_Mesh").GetComponent<SkinnedMeshRenderer>();
+            CataBonelog(boneDic,avatar);
+            //骨骼字典初始化
+            boneWeightDictionary.Add(BoneWeightType.Head,new BoneData(boneDic["Head"]));
+            //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
+            //boneWeightDictionary.Add(BoneWeightType.Arm,transform);
+            boneWeightDictionary.Add(BoneWeightType.Waist,new BoneData(boneDic["Spine"]));
+            boneWeightDictionary.Add(BoneWeightType.Leg,new BoneData(boneDic["Weight_Thin"]));
+            boneWeightDictionary.Add(BoneWeightType.HeadTop,new BoneData(boneDic["Add_HeadTop"]));
+            boneWeightDictionary.Add(BoneWeightType.Root,new BoneData(boneDic["Root"]));
+
+
+            if (pinchFaceManager.TargetModelPinch == null)
+                pinchFaceManager.TargetModelPinch = this;
+            
+            this.enabled = false;
+        }
+        //存档进入或死亡复活
 
         #endregion
         
@@ -89,7 +142,6 @@ namespace ProjectOC.PinchFace
                     braid = new PinchBraid(_HeadBone,_handle.Result,typeIndex,Vector2.zero);
                 };
                 return _handle;
-                
             }
             #endregion
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
@@ -100,13 +152,14 @@ namespace ProjectOC.PinchFace
             
             _handle.Completed += (handle)=>
             {
+                EquipItem(_type2,handle.Result,inCamera);
                 //延迟一帧执行
-                StartCoroutine(EquipExecuteAfterOneFrame());
-                IEnumerator EquipExecuteAfterOneFrame()
-                {
-                    yield return null;
-                    EquipItem(_type2,handle.Result,inCamera);
-                }
+                // StartCoroutine(EquipExecuteAfterOneFrame());
+                // IEnumerator EquipExecuteAfterOneFrame()
+                // {
+                //     yield return null;
+                //     EquipItem(_type2,handle.Result,inCamera);
+                // }
             };
             return _handle;
         }
@@ -116,10 +169,17 @@ namespace ProjectOC.PinchFace
         public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
         {
             // sourceClothing衣服 targetAvatar 角色
+            Debug.Log($"Equip: {_type2} {_PinchGo!=null} {avatar.gameObject}");
             replaceGo[Type2ToTypeReplaceGoIndex(_type2)] = Stitch(_PinchGo, avatar.gameObject,inCamera);
+            Destroy(_PinchGo,0.1f);
+            //StartCoroutine(DelayDestroy());
+            //_PinchGo后面还需要用，延迟一帧删除
+            // IEnumerator DelayDestroy()
+            // {
+            //     yield return null;
+            //     Destroy(_PinchGo);
+            // }
             
-            //to-do: 更新骨骼解算目录
-            Destroy(_PinchGo);
         }
 
         public void UnEquipItem(PinchPartType2 _type2)
@@ -303,8 +363,6 @@ namespace ProjectOC.PinchFace
                     }
                 }
             };
-
-
         }
 
         
@@ -343,19 +401,7 @@ namespace ProjectOC.PinchFace
    
             }
         }
-        string matColorName = "_ColorChange";
-        //头发双色用
-        // string matColorName2 = "Mat_ColorChange2";
-        private Material GetMaterial(PinchPartType2 _type2)
-        {
-            GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
-            if (_replaceGo == null)
-            {
-                Debug.LogWarning($"没有捏脸部件:{_type2.ToString()}");
-                return null;
-            }
-            return GetMaterial(_replaceGo);
-        }
+
 
         private Material GetMaterial(GameObject _replaceGo)
         {
@@ -394,11 +440,16 @@ namespace ProjectOC.PinchFace
             if (_type2 == PinchPartType2.HairFront)
             {
                 ChangeColor( PinchPartType2.HairBack, _color, _index);
+                ChangeColor( PinchPartType2.HairBraid, _color, _index);
             }
             
             Material _targetMat = GetMaterial(_type2);
             if (_targetMat == null)
                 return;
+            // else
+            // {
+            //     Debug.Log($"_targetMat: {_targetMat.name}");
+            // }
             
             if (_index == 0)
             {
@@ -467,7 +518,20 @@ namespace ProjectOC.PinchFace
                 
             return resColor;
         }
-        
+
+        //头发双色获取渐变位置、程度用
+        string matColorName = "ColorChange";
+        // string matColorName2 = "Mat_ColorChange2";
+        public Material GetMaterial(PinchPartType2 _type2)
+        {
+            GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
+            if (_replaceGo == null)
+            {
+                //Debug.LogWarning($"没有捏脸部件:{_type2.ToString()}");
+                return null;
+            }
+            return GetMaterial(_replaceGo);
+        }
 
         #endregion
         
@@ -484,7 +548,6 @@ namespace ProjectOC.PinchFace
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
             [ShowInInspector, ReadOnly, FoldoutGroup("骨骼字典")]
             public Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
-            private List<PinchPart.PinchPartData> PinchPartDatas = new List<PinchPart.PinchPartData>();
             
             public class BoneData
             {
@@ -504,39 +567,7 @@ namespace ProjectOC.PinchFace
             PinchJiao topEar;
             PinchBraid braid;
             
-            void Awake()
-            {
-                //数据初始化
-                pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-                CameraView.Init(pinchFaceManager);
-                
-                Array enumValues = Enum.GetValues(typeof(PinchPartType2));
-                for(int i = 0;i<enumValues.Length;i++)
-                    replaceGo.Add(null);
-                avatar = transform.Find("AnMiXiuBone");
-                characterSkinMeshRenderer = transform.Find("AnMiXiu_Mesh").GetComponent<SkinnedMeshRenderer>();
-                CataBonelog(boneDic,avatar);
-                //骨骼字典初始化
-                boneWeightDictionary.Add(BoneWeightType.Head,new BoneData(boneDic["Head"]));
-                //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
-                //boneWeightDictionary.Add(BoneWeightType.Arm,transform);
-                boneWeightDictionary.Add(BoneWeightType.Waist,new BoneData(boneDic["Spine"]));
-                boneWeightDictionary.Add(BoneWeightType.Leg,new BoneData(boneDic["Weight_Thin"]));
-                boneWeightDictionary.Add(BoneWeightType.HeadTop,new BoneData(boneDic["Add_HeadTop"]));
-                boneWeightDictionary.Add(BoneWeightType.Root,new BoneData(boneDic["Root"]));
-
-
-                if (pinchFaceManager.Config != null)
-                {
-                    ChangeType(PinchPartType3.HF_HairFront, 0);
-                    //ChangeType(PinchPartType3.HD_Dai, 0);
-                    ChangeType(PinchPartType3.HB_HairBack, 0);
-                    // ChangeType(PinchPartType3.HB_HairBraid, 0);
-                }
-                
-                this.enabled = false;
-            }
-            
+     
             
             //将子物体加入字典    containThis : 需不需要把自身加入字典
             private void CataBonelog (Dictionary<string,Transform>dic, Transform transform,bool containThis = true)

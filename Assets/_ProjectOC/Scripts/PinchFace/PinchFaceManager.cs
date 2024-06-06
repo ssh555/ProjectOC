@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.Manager;
+using ML.Engine.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.PinchFace.Config;
 using ProjectOC.Player;
@@ -17,10 +18,10 @@ namespace ProjectOC.PinchFace
     public class PinchFaceManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Init
-
         //引用
         public PinchFaceHelper pinchFaceHelper;
-        public CharacterModelPinch ModelPinch;
+        //当前正在修改的Model，没必要存储Player，因为可能多个Player
+        public CharacterModelPinch ModelPinch,TargetModelPinch;
         
         [ShowInInspector]
         public Dictionary<PinchPartType3, PinchPartType2> pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType2>();
@@ -31,7 +32,6 @@ namespace ProjectOC.PinchFace
 
         // public List<PinchType1Struct> PinchType1Structs;
         private const string PinchPartTypePath = "PinchFace_TypePackage";
-        private const string PinchPartPath = "PinchFacePart";
 
         public void OnRegister()
         {
@@ -47,21 +47,15 @@ namespace ProjectOC.PinchFace
                 if (playerCharacter != null)
                 {
                     CharacterModelPinch _modelPinch = playerCharacter.GetComponentInChildren<CharacterModelPinch>();
-                    _modelPinch.ChangeType(PinchPartType3.HF_HairFront, 0);
-                    // _modelPinch.ChangeType(PinchPartType3.HD_Dai, 0);
-                    _modelPinch.ChangeType(PinchPartType3.HB_HairBack, 0);
+                    _modelPinch.SetPinchPartDatas(null,true);
                 }
             };
 
             //GeneratePinchRaceUI();
             //GenerateCustomRaceUI();
-            // GeneratePinchFaceUI(); 
+            //GeneratePinchFaceUI(); 
         }
-
-        public void UnRegister()
-        {
-            
-        }
+        
 
         void DataStructInit()
         {
@@ -161,6 +155,7 @@ namespace ProjectOC.PinchFace
         private const string PinchRaceUIPath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePanel.prefab";
         private const string CustomRacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePartPanel.prefab";
         private const string PinchFacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_FacePanel.prefab";
+        private const string FaceTemplatePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_FaceTemplate.prefab";
         [HideInInspector]
         public string playerModelPrefabPath = "Prefabs_PinchPart/PinchPart/Prefab_PinchModel.prefab";
         [SerializeField]
@@ -186,12 +181,8 @@ namespace ProjectOC.PinchFace
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
         }
-
-        public void GeneratePinchFaceUI()
-        {
-            GeneratePinchFaceUI(RacePinchDatas[0]); 
-        }
-        public void GeneratePinchFaceUI(RacePinchData _raceData)
+        
+        public void GeneratePinchFaceUI(RacePinchData _raceData,List<PinchPart.PinchPartData> PinchPartDatas = null)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(PinchFacePath)
                 .Completed += (handle) =>
@@ -200,10 +191,22 @@ namespace ProjectOC.PinchFace
                 panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
 
-                panel.InitRaceData(_raceData);
+                panel.InitRaceData(_raceData,PinchPartDatas);
             };
         }
-        
+
+        public void GenerateFaceTemplateUI(RacePinchData _raceData,bool _isLoad,List<PinchPart.PinchPartData> _pinchPartDatas = null,string inputName = "")
+        {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(FaceTemplatePath)
+                .Completed += (handle) =>
+            {
+                var panel = handle.Result.GetComponent<UIFaceTemplatePanel>();
+                panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+
+                panel.Init(_raceData,_isLoad,_pinchPartDatas,inputName);
+            };
+        }
         #endregion
     }
 }

@@ -97,7 +97,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 666.58, y: 92.897}
+  m_SizeDelta: {x: 800, y: 92.897}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8247387733407214583
 CanvasRenderer:
@@ -385,7 +385,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -450,6 +450,9 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
+    isBanMouse: 0
+    scrollRect: {fileID: 0}
 --- !u!1 &4513888980492734937
 GameObject:
   m_ObjectHideFlags: 0

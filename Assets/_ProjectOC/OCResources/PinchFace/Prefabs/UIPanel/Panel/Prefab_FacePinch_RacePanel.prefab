@@ -56,6 +56,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &1072243567136344609
 GameObject:
@@ -332,11 +333,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnListInitData:
     limitNum: 1
-    hasInitSelect: 0
+    hasInitSelect: 1
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 0
+    isBanMouse: 0
     scrollRect: {fileID: 0}
 --- !u!1 &1966615384337926440
 GameObject:
