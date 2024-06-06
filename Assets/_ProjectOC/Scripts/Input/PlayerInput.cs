@@ -3317,6 +3317,24 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LT"",
+                    ""type"": ""Button"",
+                    ""id"": ""94e87036-34f6-4988-862d-cdcc6f989e93"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RT"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c1f04fa-007b-430f-8d55-a661a793dc9e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -3429,6 +3447,50 @@ namespace ProjectOC.Input
                     ""action"": ""SwichBtn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a08c2d7f-fa02-4901-8311-0ec5a05d6d9b"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a0829cc-a97b-4c3e-9c7c-35d492f24653"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""07290aa8-daf1-46c4-b4b4-a2c33e5e29be"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""017c96b9-c167-4efe-ada5-cc5aa049012f"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -3722,6 +3784,8 @@ namespace ProjectOC.Input
             // SmallMap
             m_SmallMap = asset.FindActionMap("SmallMap", throwIfNotFound: true);
             m_SmallMap_SwichBtn = m_SmallMap.FindAction("SwichBtn", throwIfNotFound: true);
+            m_SmallMap_LT = m_SmallMap.FindAction("LT", throwIfNotFound: true);
+            m_SmallMap_RT = m_SmallMap.FindAction("RT", throwIfNotFound: true);
             // IslandRudder
             m_IslandRudder = asset.FindActionMap("IslandRudder", throwIfNotFound: true);
             m_IslandRudder_ChangeMapLayer = m_IslandRudder.FindAction("ChangeMapLayer", throwIfNotFound: true);
@@ -4901,11 +4965,15 @@ namespace ProjectOC.Input
         private readonly InputActionMap m_SmallMap;
         private List<ISmallMapActions> m_SmallMapActionsCallbackInterfaces = new List<ISmallMapActions>();
         private readonly InputAction m_SmallMap_SwichBtn;
+        private readonly InputAction m_SmallMap_LT;
+        private readonly InputAction m_SmallMap_RT;
         public struct SmallMapActions
         {
             private @PlayerInput m_Wrapper;
             public SmallMapActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @SwichBtn => m_Wrapper.m_SmallMap_SwichBtn;
+            public InputAction @LT => m_Wrapper.m_SmallMap_LT;
+            public InputAction @RT => m_Wrapper.m_SmallMap_RT;
             public InputActionMap Get() { return m_Wrapper.m_SmallMap; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -4918,6 +4986,12 @@ namespace ProjectOC.Input
                 @SwichBtn.started += instance.OnSwichBtn;
                 @SwichBtn.performed += instance.OnSwichBtn;
                 @SwichBtn.canceled += instance.OnSwichBtn;
+                @LT.started += instance.OnLT;
+                @LT.performed += instance.OnLT;
+                @LT.canceled += instance.OnLT;
+                @RT.started += instance.OnRT;
+                @RT.performed += instance.OnRT;
+                @RT.canceled += instance.OnRT;
             }
 
             private void UnregisterCallbacks(ISmallMapActions instance)
@@ -4925,6 +4999,12 @@ namespace ProjectOC.Input
                 @SwichBtn.started -= instance.OnSwichBtn;
                 @SwichBtn.performed -= instance.OnSwichBtn;
                 @SwichBtn.canceled -= instance.OnSwichBtn;
+                @LT.started -= instance.OnLT;
+                @LT.performed -= instance.OnLT;
+                @LT.canceled -= instance.OnLT;
+                @RT.started -= instance.OnRT;
+                @RT.performed -= instance.OnRT;
+                @RT.canceled -= instance.OnRT;
             }
 
             public void RemoveCallbacks(ISmallMapActions instance)
@@ -5118,6 +5198,8 @@ namespace ProjectOC.Input
         public interface ISmallMapActions
         {
             void OnSwichBtn(InputAction.CallbackContext context);
+            void OnLT(InputAction.CallbackContext context);
+            void OnRT(InputAction.CallbackContext context);
         }
         public interface IIslandRudderActions
         {

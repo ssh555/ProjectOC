@@ -98,9 +98,7 @@ public class UIIslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         // 将世界坐标转换为屏幕坐标
         Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(null, this.MainIsland.position);
         Vector2 targetPostion;
-
         RectTransformUtility.ScreenPointToLocalPointInRectangle(cursorNavigation.Content as RectTransform, screenPoint, null, out targetPostion);
-        UnityEngine.Debug.Log("targetPostion " + targetPostion);
         cursorNavigation.MoveCenterToPos(targetPostion);
     }
     protected override void UnregisterInput()
@@ -154,7 +152,6 @@ public class UIIslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         }, () => { MM.MainIslandData.IsPause = false; uIIslandUpdatePanel.EnableBack_performed(); }));
     }
     #endregion
-
 
     #region UI
 
@@ -236,7 +233,6 @@ public class UIIslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.DotLine.gameObject.SetActive(isMoving);
     }
     #endregion
-
 
     #region Resource
 
