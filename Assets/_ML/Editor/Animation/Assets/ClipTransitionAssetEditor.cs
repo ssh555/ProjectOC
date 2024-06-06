@@ -42,37 +42,7 @@ namespace ML.Editor.Animation
         public override void DrawInEditorWindow()
         {
             serializedObject.Update();
-            // 动画选择
-            EditorGUILayout.PropertyField(_clipProperty, new GUIContent("动画片段"), true);
-
-            if(_clipProperty.objectReferenceValue != null)
-            {
-                float length = asset.transition.Clip.length;
-                float frameRate = asset.transition.Clip.frameRate;
-                float speed = asset.transition.Speed;
-                // 帧率
-                DoClipFrameGUI(asset.transition.Clip);
-
-                // Speed -> 播放速度
-                DoSpeedGUI(asset.transition);
-
-                #region 时间轴 -> 使用秒数时间
-                EditorGUILayout.Space();
-                DoAnimTimelineGUI(asset.transition, asset.EndEvent.NormalizedTime, length, frameRate);
-
-                EditorGUILayout.Space();
-                #endregion
-
-                // Fade Duration -> 过渡时间
-                asset.transition.FadeDuration = DoFadeDurationGUI(asset.transition, length, frameRate, ref bShowFadeDuration);
-
-                // StartTime -> 开始时间
-                DoStartTimeGUI(asset.transition, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 0 : 1, ref bStartTime);
-
-                // End Time -> 结束时间
-                DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);
-            }
-
+            DoClipTransitionGUI(asset.transition, _clipProperty, _endEventProperty, ref bShowFadeDuration, ref bStartTime, ref bEndTime);
             serializedObject.ApplyModifiedProperties();
         }
 

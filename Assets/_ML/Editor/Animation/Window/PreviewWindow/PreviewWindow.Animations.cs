@@ -664,13 +664,14 @@ namespace ML.Editor.Animation
                 // 获取旧的播放状态
                 animancer.States.TryGet(transition, out var oldState);
 
+                // 销毁旧状态
+                if (oldState != null)
+                    oldState.Destroy();
+
                 // 播放新的动画的状态
                 var targetState = animancer.Play(transition);
                 OnPlayAnimation();
 
-                // 销毁旧状态
-                if (oldState != null && oldState != targetState)
-                    oldState.Destroy();
 
                 // 警告
                 var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();

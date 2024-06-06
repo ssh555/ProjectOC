@@ -24,7 +24,9 @@ MonoBehaviour:
     - {fileID: 7400000, guid: 50faf38ee494dd844b6d252ed131f3bb, type: 2}
     _Speeds: []
     _SynchronizeChildren: 
-    _Weights: []
+    _Weights:
+    - 0.5
+    - 0.5
   _Events: []
   _EndEvent:
     Name: 

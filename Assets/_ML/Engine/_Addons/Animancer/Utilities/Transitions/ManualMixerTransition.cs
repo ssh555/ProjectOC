@@ -576,30 +576,30 @@ namespace Animancer
             {
                 ReorderableList.defaultBehaviours.DrawFooter(area, _CurrentChildList);
 
-                //EditorGUI.BeginChangeCheck();
+                EditorGUI.BeginChangeCheck();
 
-                //area.xMax = EditorGUIUtility.labelWidth + IndentSize;
+                area.xMax = EditorGUIUtility.labelWidth + IndentSize;
 
-                //area.y++;
-                //area.height = LineHeight;
+                area.y++;
+                area.height = LineHeight;
 
-                //using (ObjectPool.Disposable.AcquireContent(out var label, "Count"))
-                //{
-                //    var indentLevel = EditorGUI.indentLevel;
-                //    EditorGUI.indentLevel = 0;
+                using (ObjectPool.Disposable.AcquireContent(out var label, "Count"))
+                {
+                    var indentLevel = EditorGUI.indentLevel;
+                    EditorGUI.indentLevel = 0;
 
-                //    var labelWidth = EditorGUIUtility.labelWidth;
-                //    EditorGUIUtility.labelWidth = CalculateLabelWidth(label.text);
+                    var labelWidth = EditorGUIUtility.labelWidth;
+                    EditorGUIUtility.labelWidth = CalculateLabelWidth(label.text);
 
-                //    var count = EditorGUI.DelayedIntField(area, label, _CurrentChildList.count);
+                    var count = EditorGUI.DelayedIntField(area, label, _CurrentChildList.count);
 
-                //    if (EditorGUI.EndChangeCheck())
-                //        ResizeList(count);
+                    if (EditorGUI.EndChangeCheck())
+                        ResizeList(count);
 
-                //    EditorGUIUtility.labelWidth = labelWidth;
+                    EditorGUIUtility.labelWidth = labelWidth;
 
-                //    EditorGUI.indentLevel = indentLevel;
-                //}
+                    EditorGUI.indentLevel = indentLevel;
+                }
             }
 
             /************************************************************************************************************************/
