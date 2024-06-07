@@ -431,8 +431,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         case TimeStatus.Relax:
                             img.color = UnityEngine.Color.green;
                             break;
-                        case TimeStatus.Work_Transport:
-                        case TimeStatus.Work_OnDuty:
+                        case TimeStatus.Work:
                             img.color = UnityEngine.Color.blue;
                             break;
                     }
@@ -552,9 +551,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     if (worker.TimeArrangement.Status[time] == TimeStatus.Relax)
                     {
-                        worker.SetTimeStatus(time, TimeStatus.Work_Transport);
+                        worker.SetTimeStatus(time, (TimeStatus)TimeStatus.Work);
                     }
-                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work_Transport || worker.TimeArrangement.Status[time] == TimeStatus.Work_OnDuty)
+                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work)
                     {
                         worker.SetTimeStatus(time, TimeStatus.Relax);
                     }
