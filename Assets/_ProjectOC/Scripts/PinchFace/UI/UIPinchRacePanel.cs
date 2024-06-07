@@ -20,7 +20,7 @@ namespace ProjectOC.PinchFace
             raceNameText = transform.Find("RaceInfo/RaceText").GetComponent<TextMeshProUGUI>();
             raceDescription = transform.Find("RaceInfo/RaceDesciption").GetComponent<TextMeshProUGUI>();
             raceBtnTemplate = transform
-                .Find("RaceButtonGroup/ScrollView/ButtonList/Container/Prefab_PinchRaceButtonTemplate")
+                .Find("RaceButtonGroup/ScrollView/ViewPort/Container/Prefab_PinchRaceButtonTemplate")
                 .GetComponent<SelectedButton>();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             GenerateCharacterModel();
