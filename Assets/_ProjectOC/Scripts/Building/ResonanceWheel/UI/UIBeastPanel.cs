@@ -110,6 +110,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.RegisterInput();
         }
 
+        public override void OnPause()
+        {
+            this.UnregisterInput();
+        }
+
         public override void OnEnter()
         {
             base.OnEnter();
