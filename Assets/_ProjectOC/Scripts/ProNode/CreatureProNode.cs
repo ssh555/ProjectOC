@@ -103,7 +103,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
-                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true);
+                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true, OutputThreshold);
                 }
                 if (DiscardReserve > 0)
                 {
