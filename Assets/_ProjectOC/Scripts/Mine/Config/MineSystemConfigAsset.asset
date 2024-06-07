@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes: []
   Config:
     MainIslandSpeed: 25
-    MainIslandInitPos: {x: 65, y: 66}
+    MainIslandInitPos: {x: 96, y: 50}
     MiningCircleRadius: 1.5
     IslandRudderSensitivity: 2
     IslandRudderInitZoomRate: 0.5
