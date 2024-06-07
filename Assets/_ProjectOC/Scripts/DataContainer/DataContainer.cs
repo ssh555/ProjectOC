@@ -396,7 +396,10 @@ namespace ProjectOC.DataNS
                     ChangeData(index, null);
                 }
             }
-            Array.Sort(Datas, new SortForData());
+            if (needSort)
+            {
+                Array.Sort(Datas, new SortForData());
+            }
         }
         /// <summary>
         /// 修改存储的数据
