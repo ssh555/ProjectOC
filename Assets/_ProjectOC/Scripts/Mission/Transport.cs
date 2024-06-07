@@ -90,15 +90,18 @@ namespace ProjectOC.MissionNS
         private void OnSourceArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveSource = true;
-            worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
+            bool flag = worker.Transport.PutOutSource();
+            if (flag)
+            {
+                worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
+            }
         }
         private void OnTargetArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveTarget = true;
             worker.Transport.PutInTarget();
         }
-        public void PutOutSource()
+        public bool PutOutSource()
         {
             int weight = Data.GetDataWeight();
             int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : SoureceReserveNum;
@@ -112,8 +115,13 @@ namespace ProjectOC.MissionNS
                 {
                     SoureceReserveNum -= Source.RemoveReservePutOut(Data, SoureceReserveNum);
                 }
+                return true;
             }
-            else { End(); }
+            else 
+            { 
+                End();
+                return false;
+            }
         }
         public void PutInTarget()
         {
