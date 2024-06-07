@@ -85,7 +85,7 @@ namespace ProjectOC.PinchFace
                 LocalGameManager.Instance.PinchFaceManager.GenerateCustomRaceUI();
             });
             
- 
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -97,6 +97,8 @@ namespace ProjectOC.PinchFace
             base.UnregisterInput();
             UIBtnListContainer.UIBtnLists[0].DeBindInputAction();
             UIBtnListContainer.UIBtnLists[1].DeBindInputAction();
+
+            this.UIBtnListContainer.ClearSelectButtonChange();
             Input.InputManager.PlayerInput.PlayerUI.Disable();
             UIBtnListContainer.DeBindNavigationInputAction();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -160,7 +162,7 @@ namespace ProjectOC.PinchFace
             {
                 _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
             }
-            this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
+            
             GenerateLeftBtnList();
             base.InitBtnInfo();
         }
@@ -217,7 +219,7 @@ namespace ProjectOC.PinchFace
         {
             RacePinchData curRaceData = RacePinchDatas[_index];
             //直接生成or  FaceTemplate
-            if (curRaceData.PinchFaceTemplate.Count == 0)
+            if (curRaceData.FaceTemplateIsEmpty())
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
                 pinchFaceManager.GeneratePinchFaceUI(curRaceData);

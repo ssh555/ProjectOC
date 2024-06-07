@@ -56,9 +56,10 @@ namespace ML.Engine.UI
             {
                 _text.text = "空";
             }
-            for(int i = 0;i<racePinchData.PinchFaceTemplate.Count;i++)
+            for(int i = 0;i<racePinchData.PinchFaceTemplates.Length;i++)
             {
-                texts[i].text = racePinchData.PinchFaceTemplate[i].faceTemplateName;
+                if(racePinchData.PinchFaceTemplateNotNullIn(i))
+                    texts[i].text = racePinchData.PinchFaceTemplates[i].faceTemplateName;
             }
         }
         #endregion
@@ -108,30 +109,30 @@ namespace ML.Engine.UI
             int index = UIBtnList.GetCurSelectedPos1();
             if (index != -1)
             {
-                if (isLoad && index< racePinchData.PinchFaceTemplate.Count)
+                if (isLoad && racePinchData.PinchFaceTemplateNotNullIn(index))
                 {
                     //退出 FaceTemplate,Race面板 ,加载模板进入捏脸面板
                     ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
                     ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-                    pinchFaceManager.GeneratePinchFaceUI(racePinchData,racePinchData.PinchFaceTemplate[index].PinchPartDatas);
+                    pinchFaceManager.GeneratePinchFaceUI(racePinchData,racePinchData.PinchFaceTemplates[index].PinchPartDatas);
                 }
                 else if(!isLoad)
                 {
                     var _pinchFaceTemplateData = new RacePinchData.PinchFaceTemplateData(templateName, pinchPartDatas);
-                    if (index < racePinchData.PinchFaceTemplate.Count)
+                    if (racePinchData.PinchFaceTemplateNotNullIn(index))
                     {
                         //替换 覆盖   
                         GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, 
-                            new UIManager.PopUpUIData($"确认覆盖该栏位的角色形象吗？",$"这将删除角色形象 {racePinchData.PinchFaceTemplate[index].faceTemplateName} 。", null, 
+                            new UIManager.PopUpUIData($"确认覆盖该栏位的角色形象吗？",$"这将删除角色形象 {racePinchData.PinchFaceTemplates[index].faceTemplateName} 。", null, 
                                 () =>
                                 {
-                                    racePinchData.PinchFaceTemplate[index] = _pinchFaceTemplateData;
+                                    racePinchData.PinchFaceTemplates[index] = _pinchFaceTemplateData;
                                     RefreshText();
                                 },null));
                     }
                     else
                     {
-                        racePinchData.PinchFaceTemplate.Add(_pinchFaceTemplateData);
+                        racePinchData.PinchFaceTemplates[index] = _pinchFaceTemplateData;
                         RefreshText();
                     }
                 }
@@ -142,14 +143,14 @@ namespace ML.Engine.UI
         private void Delete_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             int index = UIBtnList.GetCurSelectedPos1();
-            if (index != -1 && index < racePinchData.PinchFaceTemplate.Count)
+            if (index != -1 && racePinchData.PinchFaceTemplateNotNullIn(index))
             {
-                var templateData = racePinchData.PinchFaceTemplate[index];
+                var templateData = racePinchData.PinchFaceTemplates[index];
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, 
                     new UIManager.PopUpUIData($"确认删除角色形象 {templateData.faceTemplateName} 吗?","", null, 
                         () =>
                         {
-                            racePinchData.PinchFaceTemplate.Remove(templateData);
+                            racePinchData.PinchFaceTemplates[index] = null;
                             RefreshText();
                         },null));
             }

@@ -169,7 +169,6 @@ namespace ProjectOC.PinchFace
         public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
         {
             // sourceClothing衣服 targetAvatar 角色
-            Debug.Log($"Equip: {_type2} {_PinchGo!=null} {avatar.gameObject}");
             replaceGo[Type2ToTypeReplaceGoIndex(_type2)] = Stitch(_PinchGo, avatar.gameObject,inCamera);
             Destroy(_PinchGo,0.1f);
             //StartCoroutine(DelayDestroy());
@@ -446,10 +445,6 @@ namespace ProjectOC.PinchFace
             Material _targetMat = GetMaterial(_type2);
             if (_targetMat == null)
                 return;
-            // else
-            // {
-            //     Debug.Log($"_targetMat: {_targetMat.name}");
-            // }
             
             if (_index == 0)
             {
@@ -527,7 +522,6 @@ namespace ProjectOC.PinchFace
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
             {
-                //Debug.LogWarning($"没有捏脸部件:{_type2.ToString()}");
                 return null;
             }
             return GetMaterial(_replaceGo);

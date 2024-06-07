@@ -55,22 +55,19 @@ namespace ProjectOC.PinchFace
         void Init_RedeceCheckCallBack()
         {
             IsInit--;
-            Debug.Log(IsInit);
             if (IsInit == 0)
             {
                 //生成随机PinchPart和CommonPart
-                if (pinchPartDatas == null)
+                if (isInhrit)
                 {
-                    Debug.Log("随机生成");
-                    RandomPinchPart();
-                }
-                else
-                {
-                    Debug.Log("继承数据");
-                    foreach (var _pinchPartData in pinchPartDatas)
+                    foreach (var _pinchPartData in PinchPartDatas)
                     {
                         _pinchPartData.ApplyPinchSetting(modelPinch);
                     }
+                }
+                else
+                {
+                    RandomPinchPart();
                 }
                 
                 
@@ -139,7 +136,7 @@ namespace ProjectOC.PinchFace
             void PushFaceTemplate(string _str1,string str2)
             {
                 //本身就是异步，不需要推迟一帧
-                pinchFaceManager.GenerateFaceTemplateUI(raceData,false,pinchPartDatas,_str1);
+                pinchFaceManager.GenerateFaceTemplateUI(raceData,false,PinchPartDatas,_str1);
             }
             void ApplyAndPop()
             {
@@ -314,7 +311,6 @@ namespace ProjectOC.PinchFace
         private string pinchFaceSAPath = "SA_UI_PinchFace/SA_PinchFace.spriteatlasv2";
         private const int commonType3Count = 4;
         private int IsInit = 2;
-        private bool NeedInitPinchPart = false;
         private PinchPartType2 curType2;
         public PinchPartType2 CurType2
         {
@@ -337,16 +333,17 @@ namespace ProjectOC.PinchFace
         }
 
         private CurrentMouseState CurrentState = CurrentMouseState.Left;
-        public List<PinchPart.PinchPartData> pinchPartDatas;
+        public List<PinchPart.PinchPartData> PinchPartDatas;
+        private bool isInhrit = false;
         public void InitRaceData(RacePinchData _racePinchData,List<PinchPart.PinchPartData> _PinchPartDatas)
         {
             //初始化raceData
             raceData = _racePinchData;
-            pinchPartDatas = _PinchPartDatas;
             Dictionary<PinchPartType3, PinchPart.PinchPartData> dataDic = new Dictionary<PinchPartType3, PinchPart.PinchPartData>();
-            if (pinchPartDatas != null)
+            if (_PinchPartDatas != null)
             {
-                foreach (var _pinchPartData in pinchPartDatas)
+                isInhrit = true;
+                foreach (var _pinchPartData in _PinchPartDatas)
                 {
                     dataDic.Add(_pinchPartData.PinchPartType3,_pinchPartData);
                 }
@@ -358,7 +355,6 @@ namespace ProjectOC.PinchFace
             int _pinchPartTypeCount = _racePinchData.pinchPartType3s.Count + commonType3Count;
             if (pinchParts == null)
             {
-                NeedInitPinchPart = true;
                 pinchParts = new List<PinchPart>();
                 for (int i = 0; i < _pinchPartTypeCount; i++)
                 {
@@ -372,18 +368,23 @@ namespace ProjectOC.PinchFace
             {
                 PinchPartType3 _type3 = raceData.pinchPartType3s[i];
                 PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
-                SetPinchPartTypes(i,  _type2,_type3);
+                InitPinchPartTypes(i,  _type2,_type3);
             }
 
             int _pinchPart3Count = raceData.pinchPartType3s.Count;
-            SetPinchPartTypes(_pinchPart3Count+0, PinchPartType2.Body, PinchPartType3.B_Body);
-            SetPinchPartTypes(_pinchPart3Count+1, PinchPartType2.HairFront, PinchPartType3.HF_HairFront);
-            SetPinchPartTypes(_pinchPart3Count+2, PinchPartType2.Eye, PinchPartType3.O_Orbit);
-            SetPinchPartTypes(_pinchPart3Count+3, PinchPartType2.FaceDress, PinchPartType3.FD_FaceDress);
-
+            InitPinchPartTypes(_pinchPart3Count+0, PinchPartType2.Body, PinchPartType3.B_Body);
+            InitPinchPartTypes(_pinchPart3Count+1, PinchPartType2.HairFront, PinchPartType3.HF_HairFront);
+            InitPinchPartTypes(_pinchPart3Count+2, PinchPartType2.Eye, PinchPartType3.O_Orbit);
+            InitPinchPartTypes(_pinchPart3Count+3, PinchPartType2.FaceDress, PinchPartType3.FD_FaceDress);
+            //如果是继承则不需要异步初始化，直接回调
+            if (_PinchPartDatas != null)
+            {
+                SavePinchPartData();
+                Init_RedeceCheckCallBack();
+            }
             
                 
-            void SetPinchPartTypes(int _index,PinchPartType2 _type2, PinchPartType3 _type3)
+            void InitPinchPartTypes(int _index,PinchPartType2 _type2, PinchPartType3 _type3)
             {
                 if (dataDic.ContainsKey(_type3))
                 {
@@ -393,8 +394,8 @@ namespace ProjectOC.PinchFace
                 {
                     setDataCounter++;
                     
-                    if( _PinchPartDatas == null)
-                        Debug.Log($"Has no: {_type3}");
+                    if( _PinchPartDatas != null)
+                        Debug.LogError($"Has no: {_type3}");
                     string pathFore = "PinchAsset_PinchFaceSetting/PinchTypeConfig";
                     string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 
@@ -408,12 +409,22 @@ namespace ProjectOC.PinchFace
                         setDataCounter--;
                         if (setDataCounter == 0)
                         {
+                            SavePinchPartData();
                             Init_RedeceCheckCallBack();    
                         }
                     };
                 }
             }
-            
+
+            void SavePinchPartData()
+            {
+                List<PinchPart.PinchPartData> tempPinchPartDatas = new List<PinchPart.PinchPartData>();
+                foreach (var _pinchPart in pinchParts)
+                {
+                    tempPinchPartDatas.Add(_pinchPart.pinchPartData);
+                }
+                PinchPartDatas = tempPinchPartDatas;
+            }
             
             //UI生成
             //生成左侧List<PinchPartType3>
