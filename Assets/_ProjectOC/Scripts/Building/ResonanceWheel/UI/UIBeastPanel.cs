@@ -425,21 +425,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 
                 for (int i = 0; i < workerTimeStatus.Length; i++)
                 {
-                    //Debug.Log("34 " + i);
                     Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
                         case TimeStatus.Relax:
-                            //Debug.Log("workerTimeStatus Relax");
                             img.color = UnityEngine.Color.green;
                             break;
                         case TimeStatus.Work_Transport:
-                            //Debug.Log("workerTimeStatus Work_Transport");
-                            img.color = UnityEngine.Color.blue;
-                            break;
                         case TimeStatus.Work_OnDuty:
-                            //Debug.Log("workerTimeStatus Work_OnDuty");
-                            img.color = UnityEngine.Color.yellow;
+                            img.color = UnityEngine.Color.blue;
                             break;
                     }
                 }
@@ -560,7 +554,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     {
                         worker.SetTimeStatus(time, TimeStatus.Work_Transport);
                     }
-                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work_Transport)
+                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work_Transport || worker.TimeArrangement.Status[time] == TimeStatus.Work_OnDuty)
                     {
                         worker.SetTimeStatus(time, TimeStatus.Relax);
                     }
