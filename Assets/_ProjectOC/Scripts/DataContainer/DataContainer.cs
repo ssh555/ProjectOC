@@ -393,9 +393,10 @@ namespace ProjectOC.DataNS
             {
                 if (GetAmount(index, DataOpType.StorageAll) == 0 && GetAmount(index, DataOpType.EmptyReserve) == 0)
                 {
-                    ChangeData(index, null, needSort);
+                    ChangeData(index, null);
                 }
             }
+            Array.Sort(Datas, new SortForData());
         }
         /// <summary>
         /// 修改存储的数据
