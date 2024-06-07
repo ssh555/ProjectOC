@@ -109,7 +109,11 @@ namespace ProjectOC.MineSystem
             for(int i = _regionTemplateParentTransf.childCount-1;i>=0;i--)
             {
                 if(_regionTemplateParentTransf.GetChild(i).name != _regionTemplate.name)
-                    DestroyImmediate(_regionTemplateParentTransf.GetChild(i));
+                {
+                    Transform _targetTransf = _regionTemplateParentTransf.GetChild(i);
+                    DestroyImmediate(_targetTransf.GetComponent<Image>());
+                    DestroyImmediate(_targetTransf.gameObject);   
+                }
             }
             
             //修改部分: 生成对应的Tex和 Collider2D
