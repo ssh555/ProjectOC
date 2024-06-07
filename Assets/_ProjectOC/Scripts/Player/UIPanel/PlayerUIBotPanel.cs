@@ -130,6 +130,7 @@ namespace ProjectOC.Player.UI
             {
                 // GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
                 // 临时用作捏脸
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
                 LocalGameManager.Instance.PinchFaceManager.GeneratePinchRaceUI();
             }
             );
