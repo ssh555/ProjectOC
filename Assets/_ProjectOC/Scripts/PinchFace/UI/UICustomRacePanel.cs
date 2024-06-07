@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
@@ -15,7 +16,6 @@ namespace ProjectOC.PinchFace
     public class UICustomRacePanel : ML.Engine.UI.UIBasePanel<UICustomRacePanel.PinchCustomRacePanelStruct>
     {
         #region Unity
-
         protected override void Awake()
         {
             base.Awake();
@@ -67,17 +67,25 @@ namespace ProjectOC.PinchFace
             UIBtnListContainer.UIBtnLists[6].SetBtnAction(0,0,() =>
             {
                 //完成种族创建，加入
-                raceData.raceName = "raceName: " + pinchFaceManager.RacePinchDatas.Count;
-                raceData.raceDescription = "raceDescription: " + pinchFaceManager.RacePinchDatas.Count;
-                pinchFaceManager.RacePinchDatas.Add(raceData);
-                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-                pinchFaceManager.GeneratePinchRaceUI();
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.InputFieldUI,
+                    new UIManager.InputFieldUIData("请输入种族名称","请输入种族描述",null,(_str1, _str2) =>
+                    {
+                        raceData.raceName = _str1;
+                        raceData.raceDescription = _str2;
+                        pinchFaceManager.RacePinchDatas.Add(raceData);
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                        pinchFaceManager.GeneratePinchRaceUI();
+                    },null));
             });
         }
         protected override void UnregisterInput()
         {
+            base.UnregisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
+            this.UIBtnListContainer.DisableUIBtnListContainer();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+            UIBtnListContainer.UIBtnLists[6].RemoveAllListener();
         }
         
         //btnList0 随机种族
@@ -132,8 +140,6 @@ namespace ProjectOC.PinchFace
                     PinchPartType3 _type3 = curPinchPartType.pinchPartType3s[_curPos];
                     pinchFaceManager.RandomPinchPart(_type3,true);
                 }
-                
-                
             }
             
         }
@@ -258,7 +264,11 @@ namespace ProjectOC.PinchFace
             //如果当前在btnList[7]
             if (CurrentState == CurrentMouseState.Left)
             {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, 
+                    new UIManager.PopUpUIData("确认终止角色创建吗?", "你将丢失当前未保存的数据", null, 
+                        () => {
+                            ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                        },null));
             }
             else
             {

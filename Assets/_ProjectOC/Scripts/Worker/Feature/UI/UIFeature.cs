@@ -568,7 +568,7 @@ namespace ProjectOC.WorkerNS.UI
                 tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
             }
             transform.Find(strIcon).GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : tempSprite[str];
-            transform.Find(str).GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? str;
+            transform.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? str;
             transform.Find(strSelected).gameObject.SetActive(isSelect);
         }
         public void RefreshItem(Transform transform, string id, int cur, int need, bool isSelect = false)

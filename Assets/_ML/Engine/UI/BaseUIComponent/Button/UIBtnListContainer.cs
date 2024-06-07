@@ -120,7 +120,15 @@ namespace ML.Engine.UI
         {
             this.OnSelectButtonChanged?.Invoke();
         }
-
+        /// <summary>
+        /// 清空选择Button和上一个选择Button的Action
+        /// </summary>
+        public void ClearSelectButtonChange()
+        {
+            OnSelectButtonChanged = null;
+            OnSelectButtonListChanged = null;
+        }
+        
         public UIBtnListContainer(UIBtnListContainerInitor uIBtnListContainerInitor)
         {
             this.parent = uIBtnListContainerInitor.transform;

@@ -47,6 +47,7 @@ MonoBehaviour:
     - {x: 12.110661, y: 11.315621}
     - {x: 12.288665, y: 10.568003}
     - {x: 12.644673, y: 9.713581}
+    - {x: 0.98815155, y: 15.942949}
   - MineID: Mineral_Fe_2
     MinePoses:
     - {x: 1.5748272, y: 11.354368}
@@ -62,8 +63,7 @@ MonoBehaviour:
   - MineID: Mineral_Pt_3
     MinePoses: []
   - MineID: Mineral_Cu_1
-    MinePoses:
-    - {x: 1.0008497, y: 15.952396}
+    MinePoses: []
   - MineID: Mineral_Cu_2
     MinePoses: []
   - MineID: Mineral_Cu_3
