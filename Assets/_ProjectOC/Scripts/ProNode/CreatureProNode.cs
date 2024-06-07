@@ -129,7 +129,8 @@ namespace ProjectOC.ProNodeNS
             if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
             {
                 int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
-                creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
+                int output = creature.Output - ((descValue <= creature.Output) ? descValue : creature.Output);
+                creature.Output = output >= 0 ? output : 0;
             }
             // 下一次生产
             if (!StartProduce()) { StopProduce(); }
