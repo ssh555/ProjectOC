@@ -664,7 +664,6 @@ namespace ProjectOC.WorkerNS
         {
             if (Mathf.Abs((float)remainTime - 180) < 1) 
             {
-                Debug.Log("Mathf.Abs((float)remainTime - 180) < 1");
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, 
                     new UIManager.SideBarUIData(strWorkerWillLeaveIsland, null, 
                     ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
