@@ -20,7 +20,7 @@ namespace ProjectOC.PinchFace
             raceNameText = transform.Find("RaceInfo/RaceText").GetComponent<TextMeshProUGUI>();
             raceDescription = transform.Find("RaceInfo/RaceDesciption").GetComponent<TextMeshProUGUI>();
             raceBtnTemplate = transform
-                .Find("RaceButtonGroup/ScrollView/ButtonList/Container/Prefab_PinchRaceButtonTemplate")
+                .Find("RaceButtonGroup/ScrollView/ViewPort/Container/Prefab_PinchRaceButtonTemplate")
                 .GetComponent<SelectedButton>();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             GenerateCharacterModel();
@@ -77,6 +77,7 @@ namespace ProjectOC.PinchFace
         {
             base.RegisterInput();
             UIBtnListContainer.UIBtnLists[0].InitBtnInfo();
+            // UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
             UIBtnListContainer.UIBtnLists[1].SetBtnAction(0,0,() =>
             {
                 //创建种族
@@ -84,7 +85,7 @@ namespace ProjectOC.PinchFace
                 LocalGameManager.Instance.PinchFaceManager.GenerateCustomRaceUI();
             });
             
- 
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -96,6 +97,8 @@ namespace ProjectOC.PinchFace
             base.UnregisterInput();
             UIBtnListContainer.UIBtnLists[0].DeBindInputAction();
             UIBtnListContainer.UIBtnLists[1].DeBindInputAction();
+
+            this.UIBtnListContainer.ClearSelectButtonChange();
             Input.InputManager.PlayerInput.PlayerUI.Disable();
             UIBtnListContainer.DeBindNavigationInputAction();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -128,7 +131,6 @@ namespace ProjectOC.PinchFace
                         }
                         pinchFaceManager.RacePinchDatas.Remove(raceData);
                         
-                        UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[0]);
                     },null));   
             }
         }
@@ -160,7 +162,7 @@ namespace ProjectOC.PinchFace
             {
                 _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
             }
-            this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
+            
             GenerateLeftBtnList();
             base.InitBtnInfo();
         }
@@ -181,7 +183,6 @@ namespace ProjectOC.PinchFace
                 raceNameText.SetText(raceData.raceName);
                 raceDescription.SetText(raceData.raceDescription);
                 CouldDeleteRace = !raceData.isDefault;
-                Debug.Log($"{raceData.raceName} {CouldDeleteRace}");
                 //随机生成
                 if (pinchFaceManager.ModelPinch != null)
                 {
@@ -209,11 +210,27 @@ namespace ProjectOC.PinchFace
                 }
                 _btn.onClick.AddListener(() =>
                 {
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-                    pinchFaceManager.GeneratePinchFaceUI(RacePinchDatas[tmpI]);
+                    LeftBtnClick(tmpI);
                 });
             }
         }
+
+        void LeftBtnClick(int _index)
+        {
+            RacePinchData curRaceData = RacePinchDatas[_index];
+            //直接生成or  FaceTemplate
+            if (curRaceData.FaceTemplateIsEmpty())
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                pinchFaceManager.GeneratePinchFaceUI(curRaceData);
+            }
+            else
+            {
+                pinchFaceManager.GenerateFaceTemplateUI(curRaceData,true);
+            }
+            
+        }
+        
         
         private void InitBtnData(PinchRacePanelStruct datas)
         {

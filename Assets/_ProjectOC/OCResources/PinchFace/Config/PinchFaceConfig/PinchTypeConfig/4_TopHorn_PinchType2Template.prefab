@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeIndex: -1
   distributionMode: 1
 --- !u!114 &3495451210720066266
 MonoBehaviour:
@@ -59,7 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorChangeType: 1
-  param1: 0
-  param2: 0
-  color1: {r: 0, g: 0, b: 0, a: 0}
-  color2: {r: 0, g: 0, b: 0, a: 0}
+  CurColorChangeType: 0
+  smoothStepThreshold: 0.2
+  smoothStrength: 0.2
+  colors:
+  - {r: 1, g: 0.9004333, b: 0.794, a: 1}
+  - {r: 0, g: 0, b: 0, a: 0}
