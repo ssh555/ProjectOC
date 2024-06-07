@@ -203,7 +203,7 @@ namespace ProjectOC.RestaurantNS
                 
                 foreach (WorkerNS.Worker worker in workers)
                 {
-                    if (worker != null)
+                    if (worker != null && worker.APCurrent < worker.APMax)
                     {
                         List<Tuple<float, int>> dists = positions.Select((position, index) => Tuple.Create(Vector3.Distance(worker.transform.position, position), index)).ToList();
                         List<int> indexs = dists.OrderBy(tuple => tuple.Item1).Select(tuple => tuple.Item2).ToList();
