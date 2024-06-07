@@ -40,11 +40,11 @@ namespace ProjectOC.MissionNS
         }
 
         public MissionTransport CreateTransportMission(MissionTransportType transportType, IDataObj data, int missionNum, 
-            IMissionObj initiator, MissionInitiatorType initiatorType, int replaceIndex=-1, bool reserveEmpty=false)
+            IMissionObj initiator, MissionInitiatorType initiatorType, int replaceIndex=-1, bool reserveEmpty=false, int outputThreshold = 0)
         {
             if (data != null && missionNum > 0 && initiator != null)
             {
-                MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType, replaceIndex, reserveEmpty);
+                MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType, replaceIndex, reserveEmpty, outputThreshold);
                 MissionTransports.Add(mission);
                 return mission;
             }
@@ -101,7 +101,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.IStore, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.IStore, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission, 1, true, true);
                 foreach (var kv in result)
                 {
                     StoreNS.IStore store = kv.Key;

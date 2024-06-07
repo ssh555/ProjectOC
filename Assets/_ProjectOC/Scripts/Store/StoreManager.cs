@@ -63,8 +63,11 @@ namespace ProjectOC.StoreNS
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Dictionary<IStore, int> GetPutOutStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
+        public Dictionary<IStore, int> GetPutOutStore(MissionNS.MissionTransport mission, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
+            DataNS.IDataObj data = mission.Data;
+            int amount = mission.NeedAssignNum;
+            bool flag = data is ML.Engine.InventorySystem.CreatureItem;
             Dictionary<IStore, int> result = new Dictionary<IStore, int>();
             if (data != null && amount > 0)
             {
@@ -77,6 +80,10 @@ namespace ProjectOC.StoreNS
                         int storeAmount = store.DataContainer.GetAmount(data.GetDataID(), DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
+                            if (flag && store.DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem creature && creature.Output < mission.OutputThreshold)
+                            {
+                                continue;
+                            }
                             if (resultAmount + storeAmount >= amount)
                             {
                                 result.Add(store, amount - resultAmount);
