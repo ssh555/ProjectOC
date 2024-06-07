@@ -178,7 +178,6 @@ public class UISelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanel
     private UIMineProNode uIMineProNode;
     public UIMineProNode UIMineProNode { get {  return uIMineProNode; } set { uIMineProNode = value; } }
     #endregion
-
     public override void Refresh()
     {
         if (!this.objectPool.IsLoadFinish())
