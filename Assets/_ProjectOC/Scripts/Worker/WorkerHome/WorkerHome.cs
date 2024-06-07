@@ -183,7 +183,7 @@ namespace ProjectOC.WorkerNS
         public Action<int> OnWorkerMoodChangeEvent;
         public void OnWorkerMoodChangeEventInvoke(int value)
         {
-            OnWorkerMoodChangeEvent.Invoke(value);
+            OnWorkerMoodChangeEvent?.Invoke(value);
         }
         public void SetWorkerRelateData()
         {
