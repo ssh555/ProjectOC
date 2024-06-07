@@ -7,6 +7,43 @@ namespace ProjectOC.StoreNS.UI
 {
     public class UICreatureStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
+        #region Str
+        private const string str = "";
+        private const string strStore = "Store";
+        private const string strViewport = "Viewport";
+        private const string strSelect = "Select";
+        private const string strSelected = "Selected";
+        private const string strTopTitle = "TopTitle";
+        private const string strText = "Text";
+        private const string strIcon = "Icon";
+        private const string strDesc = "Desc";
+        private const string strBotKeyTips = "BotKeyTips";
+        private const string strKeyTips = "KeyTips";
+        private const string strKeyTips1 = "KeyTips1";
+        private const string strKT_Remove = "KT_Remove";
+        private const string strKT_Add = "KT_Add";
+        private const string strKT_FastAdd = "KT_FastAdd";
+        private const string strName = "Name";
+        private const string strPriority = "Priority";
+        private const string strKT_ChangeItem = "KT_ChangeItem";
+        private const string strNeedAmount = "NeedAmount";
+        private const string strPrefab_Store_UI_ItemTemplate = "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab";
+        private const string strActivity = "Activity";
+        private const string strGender = "Gender";
+        private const string strDiscard = "Discard";
+        private const string strChangeCreature = "ChangeCreature";
+        private const string strOutput = "Output";
+        private const string strOutputIcon = "OutputIcon";
+        private const string strItemDesc = "ItemDesc";
+        private const string strState = "State";
+        private const string strMale = "Male";
+        private const string strFemale = "Female";
+        private const string strActivityIcon = "ActivityIcon";
+        private const string strPrefab_Store_UI_CreatureTemplate = "Prefab_Store_UI/Prefab_Store_UI_CreatureTemplate.prefab";
+        private const string strTex2D_Worker_UI_GenderMale = "Tex2D_Worker_UI_GenderMale";
+        private const string strTex2D_Worker_UI_GenderFemale = "Tex2D_Worker_UI_GenderFemale";
+        #endregion
+
         #region Data
         #region Mode
         public enum Mode
@@ -60,15 +97,15 @@ namespace ProjectOC.StoreNS.UI
         protected override void InitBtnInfo()
         {
             ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
-            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strStore).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_CreatureTemplate.prefab", () => { synchronizer.Check(); });
+            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), strPrefab_Store_UI_CreatureTemplate, () => { synchronizer.Check(); });
 
-            ItemDatas = new List<string>() { "" };
+            ItemDatas = new List<string>() { str };
             ItemDatas.AddRange(ManagerNS.LocalGameManager.Instance.StoreManager.GetCreatureStoreIconItems());
-            ItemBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeCreature").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            ItemBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strChangeCreature).Find(strSelect).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             ItemBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { synchronizer.Check(); });
+            ItemBtnList.ChangBtnNum(ItemDatas.Count, strPrefab_Store_UI_ItemTemplate, () => { synchronizer.Check(); });
         }
         protected void UpdateBtnInfo()
         {
@@ -76,7 +113,7 @@ namespace ProjectOC.StoreNS.UI
             ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(1, () => { IsInitBtnList = true; Refresh(); });
             if (DataBtnList.BtnCnt != Store.DataContainer.GetCapacity())
             {
-                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_CreatureTemplate.prefab", () => { synchronizer.Check(); });
+                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), strPrefab_Store_UI_CreatureTemplate, () => { synchronizer.Check(); });
             }
             else { synchronizer.Check(); }
         }
@@ -90,12 +127,12 @@ namespace ProjectOC.StoreNS.UI
             {
                 if (Priority != null)
                 {
-                    Priority.Find("Selected").gameObject.SetActive(false);
+                    Priority.Find(strSelected).gameObject.SetActive(false);
                 }
                 Store.TransportPriority = value;
                 Text_Priority.text = PanelTextContent.TransportPriority[(int)Store.TransportPriority];
-                Priority = transform.Find("TopTitle").Find("Priority").GetChild((int)Store.TransportPriority);
-                Priority.Find("Selected").gameObject.SetActive(true);
+                Priority = transform.Find(strTopTitle).Find(strPriority).GetChild((int)Store.TransportPriority);
+                Priority.Find(strSelected).gameObject.SetActive(true);
             }
         }
         private TMPro.TextMeshProUGUI Text_Title;
@@ -110,12 +147,12 @@ namespace ProjectOC.StoreNS.UI
         {
             base.Start();
             InitTextContentPathData();
-            Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            Text_Priority = transform.Find("TopTitle").Find("Priority").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            Store_UI = transform.Find("Store");
-            ChangeCreature_UI = transform.Find("ChangeCreature");
-            KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
-            KeyTips1 = transform.Find("BotKeyTips").Find("KeyTips1");
+            Text_Title = transform.Find(strTopTitle).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            Text_Priority = transform.Find(strTopTitle).Find(strPriority).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            Store_UI = transform.Find(strStore);
+            ChangeCreature_UI = transform.Find(strChangeCreature);
+            KeyTips = transform.Find(strBotKeyTips).Find(strKeyTips);
+            KeyTips1 = transform.Find(strBotKeyTips).Find(strKeyTips1);
             IsInit = true;
         }
         #endregion
@@ -134,6 +171,7 @@ namespace ProjectOC.StoreNS.UI
             public ML.Engine.TextContent.KeyTip NextPriority;
             public ML.Engine.TextContent.KeyTip ChangeItem;
             public ML.Engine.TextContent.KeyTip FastAdd;
+            public ML.Engine.TextContent.KeyTip Add;
             public ML.Engine.TextContent.KeyTip Remove;
             public ML.Engine.TextContent.KeyTip Return;
             public ML.Engine.TextContent.KeyTip Confirm;
@@ -153,16 +191,16 @@ namespace ProjectOC.StoreNS.UI
         {
             Store.DataContainer.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
-            tempSprite.Add("", transform.Find("Store").Find("Icon").GetComponent<Image>().sprite);
-            tempSprite.Add("Male", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale"));
-            tempSprite.Add("Female", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale"));
+            tempSprite.Add(str, transform.Find(strStore).Find(strIcon).GetComponent<Image>().sprite);
+            tempSprite.Add(strMale, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_GenderMale));
+            tempSprite.Add(strFemale, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_GenderFemale));
             base.Enter();
         }
         protected override void Exit()
         {
             Store.DataContainer.OnDataChangeEvent -= Refresh;
             Store.IsInteracting = false;
-            tempSprite.Remove("");
+            tempSprite.Remove(str);
             foreach (var s in tempSprite.Values)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
@@ -204,7 +242,7 @@ namespace ProjectOC.StoreNS.UI
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
                 int dataIndex = DataIndex;
-                if (CurMode == Mode.Store && offset.y < 0)
+                if (CurMode == Mode.Store && offset.y < 0 && !string.IsNullOrEmpty(Store.CreatureItemID))
                 {
                     CurMode = Mode.Creature;
                 }
@@ -220,6 +258,11 @@ namespace ProjectOC.StoreNS.UI
             if (CurMode == Mode.Store)
             {
                 Store.FastAdd();
+                Refresh();
+            }
+            else if (CurMode == Mode.Creature && !Store.DataContainer.HaveSetData(DataIndex))
+            {
+                Store.AddCreature(DataIndex);
                 Refresh();
             }
         }
@@ -266,13 +309,14 @@ namespace ProjectOC.StoreNS.UI
             KeyTips.gameObject.SetActive(CurMode == Mode.Store || CurMode == Mode.Creature);
             KeyTips1.gameObject.SetActive(CurMode == Mode.ChangeItem);
 
-            Store_UI.Find("Icon").Find("Selected").gameObject.SetActive(CurMode == Mode.Store);
+            Store_UI.Find(strIcon).Find(strSelected).gameObject.SetActive(CurMode == Mode.Store);
 
             if (CurMode == Mode.Store || CurMode == Mode.Creature)
             {
-                KeyTips.Find("KT_ChangeItem").gameObject.SetActive(CurMode == Mode.Store);
-                KeyTips.Find("KT_FastAdd").gameObject.SetActive(CurMode == Mode.Store);
-                KeyTips.Find("KT_Remove").gameObject.SetActive(CurMode == Mode.Creature && Store.DataContainer.HaveSetData(DataIndex));
+                KeyTips.Find(strKT_ChangeItem).gameObject.SetActive(CurMode == Mode.Store);
+                KeyTips.Find(strKT_FastAdd).gameObject.SetActive(CurMode == Mode.Store && !string.IsNullOrEmpty(Store.CreatureItemID));
+                KeyTips.Find(strKT_Remove).gameObject.SetActive(CurMode == Mode.Creature && Store.DataContainer.HaveSetData(DataIndex));
+                KeyTips.Find(strKT_Add).gameObject.SetActive(CurMode == Mode.Creature && !Store.DataContainer.HaveSetData(DataIndex));
                 LayoutRebuilder.ForceRebuildLayoutImmediate(KeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
             }
         }
@@ -290,19 +334,19 @@ namespace ProjectOC.StoreNS.UI
                 {
                     tempSprite[key] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(key);
                 }
-                Store_UI.Find("Icon").GetComponent<Image>().sprite = tempSprite[key];
+                Store_UI.Find(strIcon).GetComponent<Image>().sprite = tempSprite[key];
                 for (int i = 0; i < DataBtnList.BtnCnt; ++i)
                 {
                     bool notNull = Store.DataContainer.HaveSetData(i);
                     var creature = notNull ? Store.DataContainer.GetData(i) as ML.Engine.InventorySystem.CreatureItem : null;
                     Transform item = DataBtnList.GetBtn(i).transform;
-                    item.Find("OutputIcon").gameObject.SetActive(notNull);
-                    item.Find("Output").gameObject.SetActive(notNull);
-                    item.Find("ActivityIcon").gameObject.SetActive(notNull);
-                    item.Find("Activity").gameObject.SetActive(notNull);
-                    item.Find("Gender").gameObject.SetActive(notNull && creature.Gender != Gender.None);
-                    item.Find("State").gameObject.SetActive(notNull && Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageAll) == 0);
-                    item.Find("State").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_WaitPutIn;
+                    item.Find(strOutputIcon).gameObject.SetActive(notNull);
+                    item.Find(strOutput).gameObject.SetActive(notNull);
+                    item.Find(strActivityIcon).gameObject.SetActive(notNull);
+                    item.Find(strActivity).gameObject.SetActive(notNull);
+                    item.Find(strGender).gameObject.SetActive(notNull && creature.Gender != Gender.None);
+                    item.Find(strState).gameObject.SetActive(notNull && Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageReserve) > 0);
+                    item.Find(strState).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_WaitPutIn;
                     if (notNull)
                     {
                         string itemID = creature.ID;
@@ -310,14 +354,14 @@ namespace ProjectOC.StoreNS.UI
                         {
                             tempSprite[itemID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(itemID);
                         }
-                        item.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
-                        item.Find("Output").GetComponent<TMPro.TextMeshProUGUI>().text = creature.Output.ToString();
-                        item.Find("Activity").GetComponent<TMPro.TextMeshProUGUI>().text = creature.Activity.ToString();
-                        item.Find("Gender").GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite["Male"] : tempSprite["Female"];
+                        item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[itemID];
+                        item.Find(strOutput).GetComponent<TMPro.TextMeshProUGUI>().text = creature.Output.ToString();
+                        item.Find(strActivity).GetComponent<TMPro.TextMeshProUGUI>().text = creature.Activity.ToString();
+                        item.Find(strGender).GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite[strMale] : tempSprite[strFemale];
                     }
                     else
                     {
-                        item.Find("Icon").GetComponent<Image>().sprite = tempSprite[""];
+                        item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
                     }
                 }
             }
@@ -327,7 +371,7 @@ namespace ProjectOC.StoreNS.UI
                 {
                     var uiItemData = ItemBtnList.GetBtn(i);
                     string itemID = ItemDatas[i];
-                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                    var img = uiItemData.transform.Find(strIcon).GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
@@ -346,34 +390,34 @@ namespace ProjectOC.StoreNS.UI
                 {
                     tempSprite[productID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(productID);
                 }
-                ChangeCreature_UI.Find("Desc").Find("Icon").GetComponent<Image>().sprite = tempSprite[productID];
+                ChangeCreature_UI.Find(strDesc).Find(strIcon).GetComponent<Image>().sprite = tempSprite[productID];
                 bool isValidItemID = ML.Engine.InventorySystem.ItemManager.Instance.IsValidItemID(productID);
-                ChangeCreature_UI.Find("Desc").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ?
+                ChangeCreature_UI.Find(strDesc).Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ?
                     ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(productID) : PanelTextContent.text_Empty;
-                ChangeCreature_UI.Find("Desc").Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ?
+                ChangeCreature_UI.Find(strDesc).Find(strItemDesc).GetComponent<TMPro.TextMeshProUGUI>().text = isValidItemID ?
                     ML.Engine.InventorySystem.ItemManager.Instance.GetItemDescription(productID) : PanelTextContent.text_Empty;
                 #region Output
-                ChangeCreature_UI.Find("Desc").Find("Output").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_GetBreed;
+                ChangeCreature_UI.Find(strDesc).Find(strOutput).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_GetBreed;
                 string proProductID = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(proRecipeID).id;
                 if (!tempSprite.ContainsKey(proProductID))
                 {
                     tempSprite[proProductID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(proProductID);
                 }
-                ChangeCreature_UI.Find("Desc").Find("Output").Find("Icon").GetComponent<Image>().sprite = tempSprite[proProductID];
-                ChangeCreature_UI.Find("Desc").Find("Output").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text =
+                ChangeCreature_UI.Find(strDesc).Find(strOutput).Find(strIcon).GetComponent<Image>().sprite = tempSprite[proProductID];
+                ChangeCreature_UI.Find(strDesc).Find(strOutput).Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text =
                     ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(proProductID);
                 #endregion
 
                 #region Discard
-                ChangeCreature_UI.Find("Desc").Find("Discard").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_GetDiscard;
+                ChangeCreature_UI.Find(strDesc).Find(strDiscard).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_GetDiscard;
                 if (!tempSprite.ContainsKey(discardID))
                 {
                     tempSprite[discardID] = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(discardID);
                 }
-                ChangeCreature_UI.Find("Desc").Find("Discard").Find("Icon").GetComponent<Image>().sprite = tempSprite[discardID];
-                ChangeCreature_UI.Find("Desc").Find("Discard").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text =
+                ChangeCreature_UI.Find(strDesc).Find(strDiscard).Find(strIcon).GetComponent<Image>().sprite = tempSprite[discardID];
+                ChangeCreature_UI.Find(strDesc).Find(strDiscard).Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text =
                     ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(discardID);
-                ChangeCreature_UI.Find("Desc").Find("Discard").Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>().text = discardNum.ToString();
+                ChangeCreature_UI.Find(strDesc).Find(strDiscard).Find(strNeedAmount).GetComponent<TMPro.TextMeshProUGUI>().text = discardNum.ToString();
                 #endregion
                 #endregion
             }

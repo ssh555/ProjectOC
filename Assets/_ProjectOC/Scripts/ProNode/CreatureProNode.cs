@@ -17,6 +17,7 @@ namespace ProjectOC.ProNodeNS
         public int DiscardStack => HasCreature ? DataContainer.GetAmount(DataContainer.GetCapacity() - 1, DataNS.DataOpType.Storage) : 0;
         public int DiscardReserve;
         public CreatureProNode(ProNodeTableData config) : base(config) { OnDataChangeEvent += CheckDiscardReserve; }
+        private const string str = "";
         public bool ChangeCreature(ML.Engine.InventorySystem.CreatureItem creature)
         {
             lock (this)
@@ -32,7 +33,7 @@ namespace ProjectOC.ProNodeNS
                     ChangeData(capacity-1, new DataNS.ItemIDDataObj(creature.Discard.id), false, false);
                     DataContainer.ChangeAmount(capacity-2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                 }
-                else { ChangeRecipe(""); }
+                else { ChangeRecipe(str); }
                 return true;
             }
         }
@@ -41,9 +42,9 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff()
         {
-            return ManagerNS.LocalGameManager.Instance != null && HasCreature ? 
-                EffBase + Creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
-                EffBase;
+            return (ManagerNS.LocalGameManager.Instance != null && HasCreature) ? 
+                (EffBase + Creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff) : 
+                (EffBase);
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { if (HasCreature) { for (int i = 1; i < DataContainer.GetCapacity() - 2; i++) { FastAdd(i); } } }
@@ -74,8 +75,16 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, 
+                    var list = (this as MissionNS.IMissionObj).GetMissions(data);
+                    if (list.Count > 0)
+                    {
+                        list[0].ChangeMissionNum(list[0].MissionNum + missionNum);
+                    }
+                    else
+                    {
+                        ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode,
                         data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    }
                 }
             }
             if (StackReserve > 0)
@@ -89,7 +98,8 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Output <= OutputThreshold && (this as MissionNS.IMissionObj).GetMissionNum(creature, false) == 0)
+                if (creature.Output <= OutputThreshold && (DiscardStackAll < Creature.Discard.num * StackMax)
+                    && (this as MissionNS.IMissionObj).GetMissionNum(creature.ID) == 0)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
@@ -154,10 +164,11 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasCreature)
             {
-                int cur = DiscardReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(DataContainer.GetCapacity() - 1), false) - DiscardStack;
+                int index = DataContainer.GetCapacity() - 1;
+                int cur = DiscardReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(index), false) - DiscardStack;
                 if (cur > 0)
                 {
-                    foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(DataContainer.GetData(DataContainer.GetCapacity() - 1), false))
+                    foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(DataContainer.GetData(index), false))
                     {
                         int needAssignNum = mission.NeedAssignNum;
                         int missionNum = mission.MissionNum;

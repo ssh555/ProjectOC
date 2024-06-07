@@ -52,10 +52,16 @@ namespace ProjectOC.MissionNS
             Mission.AddTransport(this);
             Source.AddTransport(this);
             Target.AddTransport(this);
-            SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
-
             bool isReplaceData = mission.ReplaceIndex >= 0;
-            if (!isReplaceData) { TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty); }
+            if (isReplaceData)
+            {
+                SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum, isReplaceData, this);
+            }
+            else
+            {
+                SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
+                TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty);
+            }
             Worker = worker;
             if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0)) { End(); }
             else

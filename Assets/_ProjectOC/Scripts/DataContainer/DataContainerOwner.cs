@@ -46,6 +46,10 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Set
         public void ChangeCapacity(int capacity, int dataCapacity)
         {
@@ -109,44 +113,57 @@ namespace ProjectOC.DataNS
         public List<MissionNS.Transport> Transports { get; set; } = new List<MissionNS.Transport>();
         public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;
+        public int GetReservePutIn(IDataObj data) { return DataContainer.GetAmount(data, DataOpType.EmptyReserve); }
+        public int GetReservePutOut(IDataObj data) { return DataContainer.GetAmount(data, DataOpType.StorageReserve); }
+        public Dictionary<IDataObj, int> GetReservePutIn() { return DataContainer.GetAmount(DataOpType.EmptyReserve); }
+        public Dictionary<IDataObj, int> GetReservePutOut() { return DataContainer.GetAmount(DataOpType.StorageReserve); }
         public abstract void PutIn(int index, IDataObj data, int amount);
         public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false)
         {
             if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, needCanIn: true, needSort: ChangeDataAutoSort) < 0) { return 0; }
-            return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true);
+            return DataContainer.ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, needCanIn: true, exceed: true);
         }
         public int RemoveReservePutIn(IDataObj data, int amount, bool removeEmpty = false)
         {
-            amount = ChangeAmount(data, amount, DataOpType.Empty, DataOpType.EmptyReserve);
-            if (removeEmpty) { RemoveDataWithReserveEmptyIndex(data); }
+            amount = DataContainer.ChangeAmount(data, amount, DataOpType.Empty, DataOpType.EmptyReserve);
+            if (removeEmpty) { DataContainer.RemoveDataWithEmptyIndex(data, ChangeDataAutoSort); }
             return amount;
         }
         public int PutOut(IDataObj data, int amount, bool removeEmpty = false)
         {
-            amount = ChangeAmount(data, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
-            if (removeEmpty) { RemoveDataWithReserveEmptyIndex(data); }
+            amount = DataContainer.ChangeAmount(data, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
+            if (removeEmpty) { DataContainer.RemoveDataWithEmptyIndex(data, ChangeDataAutoSort); }
             return amount;
         }
-        private void RemoveDataWithReserveEmptyIndex(IDataObj data)
+        public int ReservePutOut(IDataObj data, int amount, bool recplaceData = false, MissionNS.Transport transport = null)
         {
-            List<int> indexs = DataContainer.GetIndexs(data);
-            if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0 && GetAmount(data, DataOpType.EmptyReserve) == 0)
+            if (recplaceData && transport != null)
             {
-                ChangeData(indexs[0], null, false, false);
+                Dictionary<IDataObj, int> result = DataContainer.ChangeAmountForUniqueData(data?.GetDataID() ?? str, amount,
+                    DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
+                int cnt = 0;
+                if (result.Count > 0)
+                {
+                    foreach (var kv in result)
+                    {
+                        transport.Data = kv.Key;
+                        cnt += kv.Value;
+                    }
+                }
+                return cnt;
             }
-            else { Debug.Log("RemoveDataWithReserveEmptyIndex Error"); }
+            else
+            {
+                return DataContainer.ChangeAmount(data, amount, DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
+            }
         }
-        public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        public bool PutIn(IDataObj data, int amount)
         {
-            return DataContainer.ChangeAmount(data, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
+            return DataContainer.ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve) == amount;
         }
-        public int GetAmount(IDataObj data, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        public int RemoveReservePutOut(IDataObj data, int amount)
         {
-            return DataContainer.GetAmount(data, type, needCanIn, needCanOut);
-        }
-        public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
-        {
-            return DataContainer.GetAmount(type, needCanIn, needCanOut);
+            return DataContainer.ChangeAmount(data, amount, DataOpType.Storage, DataOpType.StorageReserve);
         }
         #endregion
 
@@ -157,11 +174,17 @@ namespace ProjectOC.DataNS
             {
                 if (item is IDataObj dataObj)
                 {
-                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    if (DataContainer.GetAmount(dataObj, DataOpType.Empty) > 0)
+                    {
+                        return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    }
                 }
                 else
                 {
-                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    if (DataContainer.GetAmount(item.ID, DataOpType.Empty) > 0)
+                    {
+                        return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
+                    }
                 }
             }
             return false;

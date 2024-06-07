@@ -8,8 +8,9 @@ namespace ProjectOC.DataNS
     {
         [LabelText("ŒÔ∆∑ID"), ReadOnly, ShowInInspector]
         private string ID;
+        private const string str = "";
         public ItemIDDataObj(string id) { ID = id; }
-        public string GetDataID() { return ID ?? ""; }
+        public string GetDataID() { return ID ?? str; }
         public int GetDataWeight()
         {
             return ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ItemManager.GetWeight(ID) : 0;
@@ -40,7 +41,7 @@ namespace ProjectOC.DataNS
         { 
             return ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ID, num); 
         }
-        public int CompareTo(IDataObj other)
+        public int DataCompareTo(IDataObj other)
         {
             if (other == null) { return -1; }
             return GetDataID().CompareTo(other.GetDataID());

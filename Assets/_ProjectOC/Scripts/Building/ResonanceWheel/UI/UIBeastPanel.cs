@@ -176,8 +176,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Expel_performed(InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("ÇýÖðÒþÊÞ", "ÒþÊÞ½«ÓÀ¾ÃÏûÊ§£¡", null, () => {
-                LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
-                this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
+                //TODO ·ÀÖ¹ÔÚµ¯´°½çÃæworker±»Ïû³ý±¨´í
+                try
+                {
+                    Workers[CurrentBeastIndex].StopHomeTimer();
+                    LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
+                    this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
+                }
+                catch { }
             }));
         }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

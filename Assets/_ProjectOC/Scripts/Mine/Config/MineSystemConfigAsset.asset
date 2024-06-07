@@ -22,14 +22,14 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    MainIslandSpeed: 0.5
+    MainIslandSpeed: 25
     MainIslandInitPos: {x: 65, y: 66}
-    MiningCircleRadius: 3
+    MiningCircleRadius: 1.5
     IslandRudderSensitivity: 2
     IslandRudderInitZoomRate: 0.5
     IslandRudderZoomSpeed: 1
-    IslandRudderZoomInLimit: 2
-    IslandRudderZoomOutLimit: 0.5
+    IslandRudderZoomInLimit: 4
+    IslandRudderZoomOutLimit: 0.8
     SelectMineralSourcesSensitivity: 2
     SelectMineralSourcesInitZoomRate: 0.5
     SelectMineralSourcesZoomSpeed: 1
@@ -40,3 +40,6 @@ MonoBehaviour:
     SmallMapZoomSpeed: 1
     SmallMapZoomInLimit: 2
     SmallMapZoomOutLimit: 0.5
+    SmallMineScale: 0.25
+    MidMineScale: 0.5
+    BigMineScale: 0.8

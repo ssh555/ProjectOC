@@ -7,6 +7,63 @@ namespace ProjectOC.StoreNS.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
+        #region Str
+        private const string str = "";
+        private const string strStore = "Store";
+        private const string strViewport = "Viewport";
+        private const string strSelect = "Select";
+        private const string strSelected = "Selected";
+        private const string strTopTitle = "TopTitle";
+        private const string strText = "Text";
+        private const string strIcon = "Icon";
+        private const string strDesc = "Desc";
+        private const string strBotKeyTips = "BotKeyTips";
+        private const string strKeyTips = "KeyTips";
+        private const string strKeyTips1 = "KeyTips1";
+        private const string strKT_Remove1 = "KT_Remove1";
+        private const string strKT_Remove10 = "KT_Remove10";
+        private const string strKT_FastAdd = "KT_FastAdd";
+        private const string strAmount = "Amount";
+        private const string strCur = "Cur";
+        private const string strCur1 = "Cur1";
+        private const string strCur2 = "Cur2";
+        private const string strName = "Name";
+        private const string strPriority = "Priority";
+        private const string strChangeItem = "ChangeItem";
+        private const string strUpgrade = "Upgrade";
+        private const string strRaw = "Raw";
+        private const string strBuild = "Build";
+        private const string strLevel = "Level";
+        private const string strLvOld = "LvOld";
+        private const string strLvNew = "LvNew";
+        private const string strNone = "None";
+        private const string strKeyTips2 = "KeyTips2";
+        private const string strProgressBar1 = "ProgressBar1";
+        private const string strProgressBar2 = "ProgressBar2";
+        private const string strProgressBar3 = "ProgressBar3";
+        private const string strKT_ChangeItem = "KT_ChangeItem";
+        private const string strKT_Switch = "KT_Switch";
+        private const string strKT_Upgrade = "KT_Upgrade";
+        private const string strMax = "Max";
+        private const string strAdd = "Add";
+        private const string strRemove = "Remove";
+        private const string strBackground3 = "Background3";
+        private const string strNeedAmount = "NeedAmount";
+        private const string str0 = "0";
+        private const string strLv = "Lv";
+        private const string strDesc1 = "Desc1";
+        private const string strTick = "Tick";
+        private const string strKT_UpgradeConfirm = "KT_UpgradeConfirm";
+        private const string strImage = "Image";
+        private const string strBtnBackground = "BtnBackground";
+        private const string strBtnBackground1 = "BtnBackground1";
+        private const string strLvColon = "Lv: ";
+        private const string strLvColonMax = "Lv: Max";
+        private const string strPrefab_Store_UI_DataTemplate = "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab";
+        private const string strPrefab_Store_UI_ItemTemplate = "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab";
+        private const string strPrefab_Store_UI_UpgradeRawTemplate = "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab";
+        #endregion
+
         #region Data
         #region Mode
         public enum Mode
@@ -69,21 +126,21 @@ namespace ProjectOC.StoreNS.UI
         protected override void InitBtnInfo()
         {
             ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
-            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strStore).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
+            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), strPrefab_Store_UI_DataTemplate, () => { synchronizer.Check(); });
 
-            ItemDatas = new List<string>() { "" };
+            ItemDatas = new List<string>() { str };
             ItemDatas.AddRange(ManagerNS.LocalGameManager.Instance.StoreManager.GetStoreIconItems());
-            ItemBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeItem").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            ItemBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strChangeItem).Find(strSelect).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             ItemBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { synchronizer.Check(); });
+            ItemBtnList.ChangBtnNum(ItemDatas.Count, strPrefab_Store_UI_ItemTemplate, () => { synchronizer.Check(); });
 
             if (HasUpgrade)
             {
                 var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
-                RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+                RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strUpgrade).Find(strRaw).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+                RawBtnList.ChangBtnNum(raw.Count, strPrefab_Store_UI_UpgradeRawTemplate, () => { synchronizer.Check(); });
             }
             else { synchronizer.Check(); }
         }
@@ -93,13 +150,13 @@ namespace ProjectOC.StoreNS.UI
             ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
             if (DataBtnList.BtnCnt != Store.DataContainer.GetCapacity())
             {
-                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
+                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), strPrefab_Store_UI_DataTemplate, () => { synchronizer.Check(); });
             }
             else { synchronizer.Check(); }
             var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
             if (HasUpgrade && RawBtnList.BtnCnt != raw.Count)
             {
-                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+                RawBtnList.ChangBtnNum(raw.Count, strPrefab_Store_UI_UpgradeRawTemplate, () => { synchronizer.Check(); });
             }
             else { synchronizer.Check(); }
         }
@@ -113,12 +170,12 @@ namespace ProjectOC.StoreNS.UI
             {
                 if (Priority != null)
                 {
-                    Priority.Find("Selected").gameObject.SetActive(false);
+                    Priority.Find(strSelected).gameObject.SetActive(false);
                 }
                 Store.TransportPriority = value;
                 Text_Priority.text = PanelTextContent.TransportPriority[(int)Store.TransportPriority];
-                Priority = transform.Find("TopTitle").Find("Priority").GetChild((int)Store.TransportPriority);
-                Priority.Find("Selected").gameObject.SetActive(true);
+                Priority = transform.Find(strTopTitle).Find(strPriority).GetChild((int)Store.TransportPriority);
+                Priority.Find(strSelected).gameObject.SetActive(true);
             }
         }
         private TMPro.TextMeshProUGUI Text_Title;
@@ -135,16 +192,16 @@ namespace ProjectOC.StoreNS.UI
         {
             base.Start();
             InitTextContentPathData();
-            Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            StoreIcon = transform.Find("TopTitle").Find("Icon").GetComponent<Image>();
-            Text_Priority = transform.Find("TopTitle").Find("Priority").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            Text_Title = transform.Find(strTopTitle).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            StoreIcon = transform.Find(strTopTitle).Find(strIcon).GetComponent<Image>();
+            Text_Priority = transform.Find(strTopTitle).Find(strPriority).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
 
-            Upgrade = transform.Find("Upgrade");
-            Upgrade_Build = Upgrade.Find("Build");
-            Upgrade_LvOld = Upgrade.Find("Level").Find("LvOld");
-            Upgrade_LvNew = Upgrade.Find("Level").Find("LvNew");
+            Upgrade = transform.Find(strUpgrade);
+            Upgrade_Build = Upgrade.Find(strBuild);
+            Upgrade_LvOld = Upgrade.Find(strLevel).Find(strLvOld);
+            Upgrade_LvNew = Upgrade.Find(strLevel).Find(strLvNew);
 
-            KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
+            KeyTips = transform.Find(strBotKeyTips).Find(strKeyTips);
             IsInit = true;
         }
         #endregion
@@ -188,14 +245,14 @@ namespace ProjectOC.StoreNS.UI
         {
             Store.DataContainer.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
-            tempSprite.Add("", transform.Find("TopTitle").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add(str, transform.Find(strTopTitle).Find(strIcon).GetComponent<Image>().sprite);
             base.Enter();
         }
         protected override void Exit()
         {
             Store.DataContainer.OnDataChangeEvent -= Refresh;
             Store.IsInteracting = false;
-            tempSprite.Remove("");
+            tempSprite.Remove(str);
             foreach (var s in tempSprite.Values)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
@@ -360,27 +417,27 @@ namespace ProjectOC.StoreNS.UI
         #region UI
         protected void SetUIActive()
         {
-            transform.Find("Store").gameObject.SetActive(CurMode == Mode.Store);
-            transform.Find("ChangeItem").gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            transform.Find(strStore).gameObject.SetActive(CurMode == Mode.Store);
+            transform.Find(strChangeItem).gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
             Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
             KeyTips.gameObject.SetActive(CurMode == Mode.Store);
-            transform.Find("BotKeyTips").Find("KeyTips1").gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
-            transform.Find("BotKeyTips").Find("KeyTips2").gameObject.SetActive(CurMode == Mode.Upgrade);
+            transform.Find(strBotKeyTips).Find(strKeyTips1).gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            transform.Find(strBotKeyTips).Find(strKeyTips2).gameObject.SetActive(CurMode == Mode.Upgrade);
 
             bool IsStoreModeChangeItem = CurStoreMode == StoreMode.ChangeItem;
-            KeyTips.Find("KT_ChangeItem").gameObject.SetActive(IsStoreModeChangeItem);
-            KeyTips.Find("KT_Remove1").gameObject.SetActive(IsStoreModeChangeItem);
-            KeyTips.Find("KT_Remove10").gameObject.SetActive(IsStoreModeChangeItem);
-            KeyTips.Find("KT_FastAdd").gameObject.SetActive(IsStoreModeChangeItem);
-            KeyTips.Find("KT_Switch").gameObject.SetActive(!IsStoreModeChangeItem);
-            transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
+            KeyTips.Find(strKT_ChangeItem).gameObject.SetActive(IsStoreModeChangeItem);
+            KeyTips.Find(strKT_Remove1).gameObject.SetActive(IsStoreModeChangeItem);
+            KeyTips.Find(strKT_Remove10).gameObject.SetActive(IsStoreModeChangeItem);
+            KeyTips.Find(strKT_FastAdd).gameObject.SetActive(IsStoreModeChangeItem);
+            KeyTips.Find(strKT_Switch).gameObject.SetActive(!IsStoreModeChangeItem);
+            transform.Find(strTopTitle).Find(strKT_Upgrade).gameObject.SetActive(HasUpgrade);
         }
 
         public override void Refresh()
         {
             if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !IsInitBtnList) { return; }
             CurPriority = Store.TransportPriority;
-            Store.WorldIconItemID = Store.WorldIconItemID ?? "";
+            Store.WorldIconItemID = Store.WorldIconItemID ?? str;
             if (!tempSprite.ContainsKey(Store.WorldIconItemID))
             {
                 tempSprite[Store.WorldIconItemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(Store.WorldIconItemID);
@@ -395,36 +452,36 @@ namespace ProjectOC.StoreNS.UI
                     var uiStoreData = DataBtnList.GetBtn(i);
                     string itemID = Store.DataContainer.GetID(i);
                     int maxCapacity = Store.DataContainer.GetAmount(i, DataNS.DataOpType.MaxCapacity);
-                    var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
+                    var img = uiStoreData.transform.Find(strIcon).GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
                     img.sprite = tempSprite[itemID];
-                    uiStoreData.transform.Find("Select").gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
-                    var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-                    nametext.text = itemID != "" ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID) : PanelTextContent.text_Empty;
+                    uiStoreData.transform.Find(strSelect).gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
+                    var nametext = uiStoreData.transform.Find(strName).GetComponent<TMPro.TextMeshProUGUI>();
+                    nametext.text = itemID != str ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID) : PanelTextContent.text_Empty;
                     // Amount
                     int amount = Store.DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
                     int amountMax = maxCapacity;
-                    var AmountCur = uiStoreData.transform.Find("Amount").Find("Cur").GetComponent<TMPro.TextMeshProUGUI>();
-                    var AmountMax = uiStoreData.transform.Find("Amount").Find("Max").GetComponent<TMPro.TextMeshProUGUI>();
+                    var AmountCur = uiStoreData.transform.Find(strAmount).Find(strCur).GetComponent<TMPro.TextMeshProUGUI>();
+                    var AmountMax = uiStoreData.transform.Find(strAmount).Find(strMax).GetComponent<TMPro.TextMeshProUGUI>();
                     AmountCur.text = amount.ToString();
                     AmountMax.text = amountMax.ToString();
 
                     #region ProgressBar
-                    Transform progressBar1 = uiStoreData.transform.Find("ProgressBar1");
-                    RectTransform bar1Cur1 = progressBar1.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform bar1Cur2 = progressBar1.Find("Cur1").GetComponent<RectTransform>();
-                    RectTransform bar1Cur3 = progressBar1.Find("Cur2").GetComponent<RectTransform>();
-                    Transform progressBar2 = uiStoreData.transform.Find("ProgressBar2");
-                    RectTransform bar2Cur1 = progressBar2.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform bar2Cur2 = progressBar2.Find("Cur1").GetComponent<RectTransform>();
-                    RectTransform bar2Cur3 = progressBar2.Find("Cur2").GetComponent<RectTransform>();
-                    Transform progressBar3 = uiStoreData.transform.Find("ProgressBar3");
-                    RectTransform bar3Cur1 = progressBar3.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform bar3Cur2 = progressBar3.Find("Cur1").GetComponent<RectTransform>();
-                    RectTransform bar3Cur3 = progressBar3.Find("Cur2").GetComponent<RectTransform>();
+                    Transform progressBar1 = uiStoreData.transform.Find(strProgressBar1);
+                    RectTransform bar1Cur1 = progressBar1.Find(strCur).GetComponent<RectTransform>();
+                    RectTransform bar1Cur2 = progressBar1.Find(strCur1).GetComponent<RectTransform>();
+                    RectTransform bar1Cur3 = progressBar1.Find(strCur2).GetComponent<RectTransform>();
+                    Transform progressBar2 = uiStoreData.transform.Find(strProgressBar2);
+                    RectTransform bar2Cur1 = progressBar2.Find(strCur).GetComponent<RectTransform>();
+                    RectTransform bar2Cur2 = progressBar2.Find(strCur1).GetComponent<RectTransform>();
+                    RectTransform bar2Cur3 = progressBar2.Find(strCur2).GetComponent<RectTransform>();
+                    Transform progressBar3 = uiStoreData.transform.Find(strProgressBar3);
+                    RectTransform bar3Cur1 = progressBar3.Find(strCur).GetComponent<RectTransform>();
+                    RectTransform bar3Cur2 = progressBar3.Find(strCur1).GetComponent<RectTransform>();
+                    RectTransform bar3Cur3 = progressBar3.Find(strCur2).GetComponent<RectTransform>();
                     List<RectTransform> cur1 = new List<RectTransform>() { bar1Cur1, bar2Cur1, bar3Cur1 };
                     List<RectTransform> cur2 = new List<RectTransform>() { bar1Cur2, bar2Cur2, bar3Cur2 };
                     List<RectTransform> cur3 = new List<RectTransform>() { bar1Cur3, bar2Cur3, bar3Cur3 };
@@ -442,10 +499,11 @@ namespace ProjectOC.StoreNS.UI
                     }
 
                     int level = Store.Level + 1;
-                    progressBar1.Find("None").gameObject.SetActive(level < 1);
-                    progressBar2.Find("None").gameObject.SetActive(level < 2);
-                    progressBar3.Find("None").gameObject.SetActive(level < 3);
+                    progressBar1.Find(strNone).gameObject.SetActive(level < 1);
+                    progressBar2.Find(strNone).gameObject.SetActive(level < 2);
+                    progressBar3.Find(strNone).gameObject.SetActive(level < 3);
                     float storage = level * (float)amount / amountMax;
+                    storage = storage <= 3 ? storage : 3;
                     int storageStage = (int)storage;
                     for (int stage = 0; stage < storageStage; stage++)
                     {
@@ -458,6 +516,7 @@ namespace ProjectOC.StoreNS.UI
                         cur1[curStage].sizeDelta = new Vector2(400 * curPos, cur1[curStage].sizeDelta.y);
                     }
                     float storageReserve = level * (float)Store.DataContainer.GetAmount(i, DataNS.DataOpType.StorageReserve) / amountMax;
+                    storageReserve = storageReserve <= 3 ? storageReserve : 3;
                     int storageReserveStage = (int)(storage + storageReserve);
                     for (int stage = curStage; stage < storageReserveStage; stage++)
                     {
@@ -470,6 +529,7 @@ namespace ProjectOC.StoreNS.UI
                         cur2[curStage].sizeDelta = new Vector2(400 * curPos, cur2[curStage].sizeDelta.y);
                     }
                     float emptyReserve = level * (float)Store.DataContainer.GetAmount(i, DataNS.DataOpType.EmptyReserve) / amountMax;
+                    emptyReserve = emptyReserve <= 3 ? emptyReserve : 3;
                     int emptyReserveStage = (int)(storage + storageReserve + emptyReserve);
                     for (int stage = curStage; stage < emptyReserveStage; stage++)
                     {
@@ -483,14 +543,14 @@ namespace ProjectOC.StoreNS.UI
                     }
                     #endregion
                     // Add and Remove
-                    uiStoreData.transform.Find("Add").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
-                    uiStoreData.transform.Find("Remove").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
-                    uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(Store.DataContainer.GetCanIn(i));
-                    uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(Store.DataContainer.GetCanOut(i));
+                    uiStoreData.transform.Find(strAdd).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
+                    uiStoreData.transform.Find(strRemove).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
+                    uiStoreData.transform.Find(strAdd).Find(strTick).gameObject.SetActive(Store.DataContainer.GetCanIn(i));
+                    uiStoreData.transform.Find(strRemove).Find(strTick).gameObject.SetActive(Store.DataContainer.GetCanOut(i));
                     // Selected
-                    var selectIcon = uiStoreData.transform.Find("Select");
-                    var selectAdd = uiStoreData.transform.Find("Add").Find("Select");
-                    var selectARemove = uiStoreData.transform.Find("Remove").Find("Select");
+                    var selectIcon = uiStoreData.transform.Find(strSelect);
+                    var selectAdd = uiStoreData.transform.Find(strAdd).Find(strSelect);
+                    var selectARemove = uiStoreData.transform.Find(strRemove).Find(strSelect);
                     bool isCurIndex = (DataIndex == i);
                     selectIcon.gameObject.SetActive(isCurIndex && CurStoreMode == StoreMode.ChangeItem);
                     selectAdd.gameObject.SetActive(isCurIndex && CurStoreMode == StoreMode.ChangeIn);
@@ -503,7 +563,7 @@ namespace ProjectOC.StoreNS.UI
                 {
                     var uiItemData = ItemBtnList.GetBtn(i);
                     string itemID = ItemDatas[i];
-                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                    var img = uiItemData.transform.Find(strIcon).GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
@@ -520,8 +580,8 @@ namespace ProjectOC.StoreNS.UI
                 {
                     tempSprite[buildID] = ML.Engine.BuildingSystem.BuildingManager.Instance.GetBuildIcon(buildID);
                 }
-                Upgrade_Build.Find("Icon").GetComponent<Image>().sprite = tempSprite[buildID];
-                Upgrade_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.BuildingSystem.BuildingManager.Instance.GetName(buildCID) ?? "";
+                Upgrade_Build.Find(strIcon).GetComponent<Image>().sprite = tempSprite[buildID];
+                Upgrade_Build.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.BuildingSystem.BuildingManager.Instance.GetName(buildCID) ?? str;
                 #endregion
 
                 #region Raw
@@ -534,21 +594,21 @@ namespace ProjectOC.StoreNS.UI
                     string itemID = raw[i].id;
                     int need = raw[i].num;
                     int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
-                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                    var img = uiItemData.transform.Find(strIcon).GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
                     img.sprite = tempSprite[itemID];
 
-                    uiItemData.transform.Find("Background3").gameObject.SetActive(current < need);
+                    uiItemData.transform.Find(strBackground3).gameObject.SetActive(current < need);
 
-                    var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-                    var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                    var needtext = uiItemData.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
-                    uiItemData.transform.Find("Background3").gameObject.SetActive(current < need);
+                    var nametext = uiItemData.transform.Find(strName).GetComponent<TMPro.TextMeshProUGUI>();
+                    var amounttext = uiItemData.transform.Find(strAmount).GetComponent<TMPro.TextMeshProUGUI>();
+                    var needtext = uiItemData.transform.Find(strNeedAmount).GetComponent<TMPro.TextMeshProUGUI>();
+                    uiItemData.transform.Find(strBackground3).gameObject.SetActive(current < need);
                     flagUpgradeBtn = current >= need;
-                    if (itemID != "")
+                    if (itemID != str)
                     {
                         nametext.text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID);
                         amounttext.text = current.ToString();
@@ -557,40 +617,40 @@ namespace ProjectOC.StoreNS.UI
                     else
                     {
                         nametext.text = PanelTextContent.text_Empty;
-                        amounttext.text = "0";
-                        needtext.text = "0";
+                        amounttext.text = str0;
+                        needtext.text = str0;
                     }
                 }
-                Upgrade.Find("BtnBackground1").gameObject.SetActive(flagUpgradeBtn);
+                Upgrade.Find(strBtnBackground1).gameObject.SetActive(flagUpgradeBtn);
                 #endregion
 
                 #region Level
-                Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + Store.Level.ToString();
+                Upgrade_LvOld.Find(strLv).GetComponent<TMPro.TextMeshProUGUI>().text = strLvColon + Store.Level.ToString();
                 int capacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Store.Level];
                 int dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Store.Level];
-                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
-                Upgrade_LvOld.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
+                Upgrade_LvOld.Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
+                Upgrade_LvOld.Find(strDesc1).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
 
                 if (Store.Level + 1 <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
                 {
-                    Upgrade.Find("BtnBackground").gameObject.SetActive(true);
-                    Upgrade.Find("KT_UpgradeConfirm").gameObject.SetActive(true);
+                    Upgrade.Find(strBtnBackground).gameObject.SetActive(true);
+                    Upgrade.Find(strKT_UpgradeConfirm).gameObject.SetActive(true);
 
-                    Upgrade_Build.Find("Image").gameObject.SetActive(true);
-                    Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (Store.Level + 1).ToString();
+                    Upgrade_Build.Find(strImage).gameObject.SetActive(true);
+                    Upgrade_LvNew.Find(strLv).GetComponent<TMPro.TextMeshProUGUI>().text = strLvColon + (Store.Level + 1).ToString();
                     capacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Store.Level + 1];
                     dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Store.Level + 1];
-                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
-                    Upgrade_LvNew.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
+                    Upgrade_LvNew.Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
+                    Upgrade_LvNew.Find(strDesc1).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
                 }
                 else
                 {
-                    Upgrade.Find("BtnBackground").gameObject.SetActive(false);
-                    Upgrade.Find("BtnBackground1").gameObject.SetActive(false);
-                    Upgrade.Find("KT_UpgradeConfirm").gameObject.SetActive(false);
+                    Upgrade.Find(strBtnBackground).gameObject.SetActive(false);
+                    Upgrade.Find(strBtnBackground1).gameObject.SetActive(false);
+                    Upgrade.Find(strKT_UpgradeConfirm).gameObject.SetActive(false);
 
-                    Upgrade_Build.Find("Image").gameObject.SetActive(false);
-                    Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: MAX";
+                    Upgrade_Build.Find(strImage).gameObject.SetActive(false);
+                    Upgrade_LvOld.Find(strLv).GetComponent<TMPro.TextMeshProUGUI>().text = strLvColonMax;
                     Upgrade_LvNew.gameObject.SetActive(false);
                 }
                 #endregion

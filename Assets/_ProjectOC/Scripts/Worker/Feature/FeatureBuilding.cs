@@ -39,8 +39,8 @@ namespace ProjectOC.WorkerNS
         }
         public void Clear()
         {
-            CancleExchange();
-            CancleCorrect();
+            CancelExchange();
+            CancelCorrect();
             (Seats[0] as IWorkerContainer).RemoveWorker();
             (Seats[1] as IWorkerContainer).RemoveWorker();
             (Seat as IWorkerContainer).RemoveWorker();
@@ -112,7 +112,7 @@ namespace ProjectOC.WorkerNS
                 IsExchangeEnd = false;
             }
         }
-        public void CancleExchange()
+        public void CancelExchange()
         {
             if (!IsExchangeStart)
             {
@@ -225,7 +225,7 @@ namespace ProjectOC.WorkerNS
                 IsCorrectEnd = false;
             }
         }
-        public void CancleCorrect()
+        public void CancelCorrect()
         {
             if (!IsCorrectStart)
             {

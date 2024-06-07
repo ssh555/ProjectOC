@@ -22,6 +22,11 @@ namespace ProjectOC.StoreNS
                 if (CreatureItemID != itemID) { ClearData(false); }
                 CreatureItemID = itemID;
             }
+            else
+            {
+                CreatureItemID = "";
+                ClearData(false);
+            }
         }
         public void FastAdd()
         {
@@ -37,6 +42,22 @@ namespace ProjectOC.StoreNS
                             ChangeData(index, creature);
                             DataContainer.ChangeAmount(creature, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                         }
+                    }
+                }
+            }
+        }
+        public void AddCreature(int index)
+        {
+            if (!string.IsNullOrEmpty(CreatureItemID) && DataContainer.IsValidIndex(index))
+            {
+                foreach (var item in ManagerNS.LocalGameManager.Instance.Player.GetInventory().GetItemList())
+                {
+                    if (item.ID == CreatureItemID && item is ML.Engine.InventorySystem.CreatureItem creature
+                        && ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(item))
+                    {
+                        ChangeData(index, creature);
+                        DataContainer.ChangeAmount(creature, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                        return;
                     }
                 }
             }

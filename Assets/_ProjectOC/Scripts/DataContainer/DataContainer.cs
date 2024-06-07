@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProjectOC.DataNS 
+namespace ProjectOC.DataNS
 {
     [LabelText("数据容器"), Serializable]
     public class DataContainer
@@ -86,10 +86,14 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Get
         public int GetCapacity() { return Datas?.Length ?? 0; }
         public bool IsValidIndex(int index) { return Datas != null && 0 <= index && index < Datas.Length; }
-        public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : ""; }
+        public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : str; }
         public IDataObj GetData(int index) { return IsValidIndex(index) ? Datas[index].GetData() : null; }
         public bool GetCanIn(int index) { return IsValidIndex(index) && Datas[index].CanIn; }
         public bool GetCanOut(int index) { return IsValidIndex(index) && Datas[index].CanOut; }
@@ -118,7 +122,7 @@ namespace ProjectOC.DataNS
         }
         public List<int> GetIndexs(IDataObj data, bool needSort = false)
         {
-            string id = data?.GetDataID() ?? "";
+            string id = data?.GetDataID() ?? str;
             if (!string.IsNullOrEmpty(id) && IndexDict.ContainsKey(id))
             {
                 HashSet<int> indexs = new HashSet<int>(IndexDict[id]);
@@ -184,6 +188,17 @@ namespace ProjectOC.DataNS
                 }
             }
             return result;
+        }
+        public IDataObj GetData(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            foreach (int index in GetIndexs(id))
+            {
+                if (Datas[index].HaveSetData && Datas[index].GetAmount(type) > 0 && (!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                {
+                    return Datas[index].GetData();
+                }
+            }
+            return null;
         }
         public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
@@ -371,6 +386,15 @@ namespace ProjectOC.DataNS
                 return index;
             }
         }
+
+        public void RemoveDataWithEmptyIndex(IDataObj data, bool needSort = false)
+        {
+            List<int> indexs = GetIndexs(data);
+            if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0 && GetAmount(data, DataOpType.EmptyReserve) == 0)
+            {
+                ChangeData(indexs[0], null, needSort);
+            }
+        }
         /// <summary>
         /// 修改存储的数据
         /// </summary>
@@ -380,7 +404,7 @@ namespace ProjectOC.DataNS
         {
             lock (this)
             {
-                string id = data?.GetDataID() ?? "";
+                string id = data?.GetDataID() ?? str;
                 (IDataObj, int) result = (null, 0);
                 if (IsValidIndex(index))
                 {
@@ -405,15 +429,7 @@ namespace ProjectOC.DataNS
                     }
                     if (needSort)
                     {
-                        Array.Sort(Datas, (x, y) =>
-                        {
-                            var xData = x.GetData();
-                            var yData = y.GetData();
-                            if (xData == null && yData == null) return 0;
-                            if (xData == null) return 1;
-                            if (yData == null) return -1;
-                            return xData.CompareTo(yData);
-                        });
+                        Array.Sort(Datas, new SortForData());
                     }
                     OnDataChangeEvent?.Invoke();
                 }
@@ -427,7 +443,7 @@ namespace ProjectOC.DataNS
         {
             lock (this)
             {
-                string id = data.GetDataID() ?? "";
+                string id = data.GetDataID() ?? str;
                 if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
                 {
                     int removeNum = GetAmount(data, removeType, needCanIn, needCanOut);
@@ -492,6 +508,43 @@ namespace ProjectOC.DataNS
                     return amount - num;
                 }
                 return 0;
+            }
+        }
+        public Dictionary<IDataObj, int> ChangeAmountForUniqueData(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        {
+            lock (this)
+            {
+                Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
+                if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
+                {
+                    int removeNum = GetAmount(id, removeType, needCanIn, needCanOut);
+                    if (!exceed && removeNum == 0 && (!complete || removeNum < amount)) { return result; }
+                    int num = amount;
+                    int temp = -1;
+                    foreach (int index in GetIndexs(id, true))
+                    {
+                        if ((!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                        {
+                            temp = temp == -1 ? index : temp;
+                            int cur = Datas[index].GetAmount(removeType);
+                            cur = cur <= num ? cur : num;
+                            Datas[index].ChangeAmount(addType, cur);
+                            Datas[index].ChangeAmount(removeType, -cur);
+                            num -= cur;
+                            result.Add(Datas[index].GetData(), cur);
+                            if (num <= 0) { break; }
+                        }
+                    }
+                    if (exceed && num > 0 && temp >= 0)
+                    {
+                        Datas[temp].ChangeAmount(addType, num);
+                        Datas[temp].ChangeAmount(removeType, -num);
+                        result.Add(Datas[temp].GetData(), num);
+                        num = 0;
+                    }
+                    OnDataChangeEvent?.Invoke();
+                }
+                return result;
             }
         }
         public int ChangeAmount(int index, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true)

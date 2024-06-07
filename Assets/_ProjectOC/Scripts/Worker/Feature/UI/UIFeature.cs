@@ -8,6 +8,68 @@ namespace ProjectOC.WorkerNS.UI
 {
     public class UIFeature : ML.Engine.UI.UIBasePanel<FeaturePanel>
     {
+        #region Str
+        private const string str = "";
+        private const string strExchange = "Exchange";
+        private const string strFeature = "Feature";
+        private const string strViewport = "Viewport";
+        private const string strCommon = "Common";
+        private const string strChangeWorker = "ChangeWorker";
+        private const string strPrefab_Worker_UI_FeatureTemplate = "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab";
+        private const string strSelect = "Select";
+        private const string strPrefab_Worker_UI_FeatureWorkerTemplate = "Prefab_Worker_UI/Prefab_Worker_UI_FeatureWorkerTemplate.prefab";
+        private const string strTopTitle = "TopTitle";
+        private const string strText = "Text";
+        private const string strCorrect = "Correct";
+        private const string strChangeCorrect = "ChangeCorrect";
+        private const string strBotKeyTips = "BotKeyTips";
+        private const string strKeyTips = "KeyTips";
+        private const string strTex2D_Worker_UI_Empty = "Tex2D_Worker_UI_Empty";
+        private const string strNewLine = "\n";
+        private const string strExchangeBig = "ExchangeBig";
+        private const string strCorrectBig = "CorrectBig";
+        private const string strKT_See = "KT_See";
+        private const string strKT_NoSee = "KT_NoSee";
+        private const string strSub = "Sub";
+        private const string strKT_Confirm = "KT_Confirm";
+        private const string strKT_Back = "KT_Back";
+        private const string strNormal = "Normal";
+        private const string strSpecific = "Specific";
+        private const string strIcon = "Icon";
+        private const string strIconNew = "IconNew";
+        private const string strIconAllow = "IconAllow";
+        private const string strIconBan = "IconBan";
+        private const string strDescIcon = "DescIcon";
+        private const string strDesc = "Desc";
+        private const string strEffectDesc = "EffectDesc";
+        private const string strSelected = "Selected";
+        private const string strAmount = "Amount";
+        private const string strCur = "Cur";
+        private const string strNeed = "Need";
+        private const string strBack2 = "Back2";
+        private const string strName = "Name";
+        private const string strBtnConfirm = "BtnConfirm";
+        private const string strTextExchange = "TextExchange";
+        private const string strWorker = "Worker";
+        private const string strTextCorrect = "TextCorrect";
+        private const string strBar = "Bar";
+        private const string strKT_ConfirmRun = "KT_ConfirmRun";
+        private const string strBtnCancle = "BtnCancle";
+        private const string strWarn = "Warn";
+        private const string strWarn1 = "Warn1";
+        private const string strWarn2 = "Warn2";
+        private const string strKT_ConfirmRunCorrect = "KT_ConfirmRunCorrect";
+        private const string strKT_CancleRun = "KT_CancleRun";
+        private const string strKT_CancleRunCorrect = "KT_CancleRunCorrect";
+        private const string strBtnConfirmResult = "BtnConfirmResult";
+        private const string strBtnCancleResult = "BtnCancleResult";
+        private const string strTime = "Time";
+        private const string strItem = "Item";
+        private const string strItemDesc = "ItemDesc";
+        private const string strmin = "min";
+        private const string strs = "s";
+        #endregion
+
         #region Data
         #region Mode
         public enum Mode
@@ -34,7 +96,7 @@ namespace ProjectOC.WorkerNS.UI
                 if (IsChangeWorker)
                 {
                     Workers.Clear();
-                    Workers.Add("");
+                    Workers.Add(str);
                     Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSortWorkerIDForFeatureUI());
                     IsInitBtnList = false;
                     WorkerBtnList.ChangBtnNum(Workers.Count, null, () => { IsInitBtnList = true; Refresh(); });
@@ -117,14 +179,14 @@ namespace ProjectOC.WorkerNS.UI
         protected override void InitBtnInfo()
         {
             Synchronizer synchronizer = new Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
-            ExchangeFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Exchange").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            CommonFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Common").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            ChangeWorkerFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            ExchangeFeatureBtnList.ChangBtnNum(3, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab", () => { synchronizer.Check(); });
-            CommonFeatureBtnList.ChangBtnNum(3, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab", () => { synchronizer.Check(); });
-            ChangeWorkerFeatureBtnList.ChangBtnNum(3, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab", () => { synchronizer.Check(); });
-            WorkerBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>(),
-                "Prefab_Worker_UI/Prefab_Worker_UI_FeatureWorkerTemplate.prefab");
+            ExchangeFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strExchange).Find(strFeature).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            CommonFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strCommon).Find(strFeature).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            ChangeWorkerFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strChangeWorker).Find(strFeature).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            ExchangeFeatureBtnList.ChangBtnNum(3, strPrefab_Worker_UI_FeatureTemplate, () => { synchronizer.Check(); });
+            CommonFeatureBtnList.ChangBtnNum(3, strPrefab_Worker_UI_FeatureTemplate, () => { synchronizer.Check(); });
+            ChangeWorkerFeatureBtnList.ChangBtnNum(3, strPrefab_Worker_UI_FeatureTemplate, () => { synchronizer.Check(); });
+            WorkerBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strChangeWorker).Find(strSelect).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>(),
+                strPrefab_Worker_UI_FeatureWorkerTemplate);
             WorkerBtnList.OnSelectButtonChanged += () => { Refresh(); };
             WorkerBtnList.ChangBtnNum(0, null, () => { synchronizer.Check(); });
         }
@@ -172,14 +234,14 @@ namespace ProjectOC.WorkerNS.UI
         protected override void Start()
         {
             base.Start();
-            Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            Select = transform.Find("Select");
-            Common = transform.Find("Common");
-            Exchange = transform.Find("Exchange");
-            Correct = transform.Find("Correct");
-            ChangeWorker = transform.Find("ChangeWorker");
-            ChangeCorrect = transform.Find("ChangeCorrect");
-            KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
+            Text_Title = transform.Find(strTopTitle).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            Select = transform.Find(strSelect);
+            Common = transform.Find(strCommon);
+            Exchange = transform.Find(strExchange);
+            Correct = transform.Find(strCorrect);
+            ChangeWorker = transform.Find(strChangeWorker);
+            ChangeCorrect = transform.Find(strChangeCorrect);
+            KeyTips = transform.Find(strBotKeyTips).Find(strKeyTips);
             IsInit = true;
         }
         #endregion
@@ -195,7 +257,7 @@ namespace ProjectOC.WorkerNS.UI
             FeatBuild.OnExchangeEndEvent += Refresh;
             FeatBuild.OnCorrectEndEvent += Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
-            tempSprite.Add("", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Empty"));
+            tempSprite.Add(str, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_Empty));
             var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             tempSprite.Add(config.FeatTransCostItemID, ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(config.FeatTransCostItemID));
             tempSprite.Add(config.FeatUpCostItemID, ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(config.FeatUpCostItemID));
@@ -312,15 +374,15 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + "\n" + PanelTextContent.textCancleResultDesc, null, null,
-                            () => { FeatBuild.CancleExchange(); }));
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + strNewLine + PanelTextContent.textCancleResultDesc, null, null,
+                            () => { FeatBuild.CancelExchange(); }));
                 }
                 else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + "\n" + PanelTextContent.textCancleResultDesc, null, null,
-                            () => { FeatBuild.CancleCorrect(); }));
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + strNewLine + PanelTextContent.textCancleResultDesc, null, null,
+                            () => { FeatBuild.CancelCorrect(); }));
                 }
                 else
                 {
@@ -393,11 +455,11 @@ namespace ProjectOC.WorkerNS.UI
         {
             if (CurMode == Mode.Exchange && FeatBuild.IsExchange)
             {
-                FeatBuild.CancleExchange();
+                FeatBuild.CancelExchange();
             }
             else if (CurMode == Mode.Correct && FeatBuild.IsCorrect)
             {
-                FeatBuild.CancleCorrect();
+                FeatBuild.CancelCorrect();
             }
             Refresh();
         }
@@ -411,39 +473,39 @@ namespace ProjectOC.WorkerNS.UI
             Correct.gameObject.SetActive(IsCorrect);
             ChangeWorker.gameObject.SetActive(IsChangeWorker);
             ChangeCorrect.gameObject.SetActive(CurMode == Mode.ChangeCorrect);
-            Select.Find("Exchange").gameObject.SetActive(!isExchange);
-            Select.Find("ExchangeBig").gameObject.SetActive(isExchange);
-            Select.Find("Correct").gameObject.SetActive(isExchange);
-            Select.Find("CorrectBig").gameObject.SetActive(!isExchange);
+            Select.Find(strExchange).gameObject.SetActive(!isExchange);
+            Select.Find(strExchangeBig).gameObject.SetActive(isExchange);
+            Select.Find(strCorrect).gameObject.SetActive(isExchange);
+            Select.Find(strCorrectBig).gameObject.SetActive(!isExchange);
             bool canSee = CanSee();
             bool canConfirm = CanBtnConfirm();
             bool canBack = CanBtnBack();
-            KeyTips.Find("KT_See").gameObject.SetActive(canSee && !IsSeeInfo);
-            KeyTips.Find("KT_NoSee").gameObject.SetActive(canSee && IsSeeInfo);
-            KeyTips.Find("Sub").gameObject.SetActive(canConfirm || canBack);
-            KeyTips.Find("Sub").Find("KT_Confirm").gameObject.SetActive(canConfirm);
-            KeyTips.Find("Sub").Find("KT_Back").gameObject.SetActive(canBack);
+            KeyTips.Find(strKT_See).gameObject.SetActive(canSee && !IsSeeInfo);
+            KeyTips.Find(strKT_NoSee).gameObject.SetActive(canSee && IsSeeInfo);
+            KeyTips.Find(strSub).gameObject.SetActive(canConfirm || canBack);
+            KeyTips.Find(strSub).Find(strKT_Confirm).gameObject.SetActive(canConfirm);
+            KeyTips.Find(strSub).Find(strKT_Back).gameObject.SetActive(canBack);
             LayoutRebuilder.ForceRebuildLayoutImmediate(KeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
-            LayoutRebuilder.ForceRebuildLayoutImmediate(KeyTips.Find("Sub").GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(KeyTips.Find(strSub).GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
         }
         public void ClearFeatureBtnList(ML.Engine.UI.UIBtnList btnList)
         {
             for (int i = 0; i < 3; i++)
             {
                 Transform btn = btnList.GetBtn(i).transform;
-                btn.Find("Normal").gameObject.SetActive(!IsSeeInfo);
-                btn.Find("Specific").gameObject.SetActive(IsSeeInfo);
-                Transform feat = IsSeeInfo ? btn.Find("Specific") : btn.Find("Normal");
-                feat.Find("Icon").gameObject.SetActive(false);
-                feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = "";
-                feat.Find("IconNew").gameObject.SetActive(false);
-                feat.Find("IconAllow").gameObject.SetActive(false);
-                feat.Find("IconBan").gameObject.SetActive(false);
+                btn.Find(strNormal).gameObject.SetActive(!IsSeeInfo);
+                btn.Find(strSpecific).gameObject.SetActive(IsSeeInfo);
+                Transform feat = IsSeeInfo ? btn.Find(strSpecific) : btn.Find(strNormal);
+                feat.Find(strIcon).gameObject.SetActive(false);
+                feat.Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = str;
+                feat.Find(strIconNew).gameObject.SetActive(false);
+                feat.Find(strIconAllow).gameObject.SetActive(false);
+                feat.Find(strIconBan).gameObject.SetActive(false);
                 if (IsSeeInfo)
                 {
-                    feat.Find("DescIcon").gameObject.SetActive(false);
-                    feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = "";
-                    feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = "";
+                    feat.Find(strDescIcon).gameObject.SetActive(false);
+                    feat.Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text = str;
+                    feat.Find(strEffectDesc).GetComponent<TMPro.TextMeshProUGUI>().text = str;
                 }
             }
         }
@@ -457,10 +519,10 @@ namespace ProjectOC.WorkerNS.UI
                 for (int i = 0; i < seat.FeatureIDs.Count; i++)
                 {
                     string featID = seat.FeatureIDs[i];
-                    Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find("Specific") : btnList.GetBtn(i).transform.Find("Normal");
-                    feat.Find("IconNew").gameObject.SetActive(checkNew && seat.IsChanged[i]);
-                    feat.Find("IconAllow").gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
-                    feat.Find("IconBan").gameObject.SetActive(!checkNew && checkCanCorrect && !featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find(strSpecific) : btnList.GetBtn(i).transform.Find(strNormal);
+                    feat.Find(strIconNew).gameObject.SetActive(checkNew && seat.IsChanged[i]);
+                    feat.Find(strIconAllow).gameObject.SetActive(!checkNew && checkCanCorrect && featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
+                    feat.Find(strIconBan).gameObject.SetActive(!checkNew && checkCanCorrect && !featManager.GetCanCorrect(featID, FeatBuild.CorrectType));
                 }
             }
         }
@@ -473,26 +535,26 @@ namespace ProjectOC.WorkerNS.UI
                 for (int i = 0; i < featIDs.Count; i++)
                 {
                     string featID = featIDs[i];
-                    Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find("Specific") : btnList.GetBtn(i).transform.Find("Normal");
+                    Transform feat = IsSeeInfo ? btnList.GetBtn(i).transform.Find(strSpecific) : btnList.GetBtn(i).transform.Find(strNormal);
                     if (!string.IsNullOrEmpty(featID))
                     {
                         string iconName = featManager.GetIcon(featID);
-                        feat.Find("Icon").gameObject.SetActive(!string.IsNullOrEmpty(iconName));
+                        feat.Find(strIcon).gameObject.SetActive(!string.IsNullOrEmpty(iconName));
                         if (!string.IsNullOrEmpty(iconName))
                         {
                             if (!tempSprite.ContainsKey(iconName))
                             {
                                 tempSprite.Add(iconName, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(iconName));
                             }
-                            feat.Find("Icon").GetComponent<Image>().sprite = tempSprite[iconName];
+                            feat.Find(strIcon).GetComponent<Image>().sprite = tempSprite[iconName];
                         }
-                        feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetName(featID);
+                        feat.Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetName(featID);
                         if (IsSeeInfo)
                         {
-                            feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
-                            feat.Find("DescIcon").gameObject.SetActive(true);
-                            feat.Find("DescIcon").GetComponent<Image>().color = featManager.GetColorForUI(featID);
-                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = 
+                            feat.Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
+                            feat.Find(strDescIcon).gameObject.SetActive(true);
+                            feat.Find(strDescIcon).GetComponent<Image>().color = featManager.GetColorForUI(featID);
+                            feat.Find(strEffectDesc).GetComponent<TMPro.TextMeshProUGUI>().text = 
                                 $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
                         }
                     }
@@ -505,20 +567,20 @@ namespace ProjectOC.WorkerNS.UI
             {
                 tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
             }
-            transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : tempSprite[""];
-            transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? "";
-            transform.Find("Selected").gameObject.SetActive(isSelect);
+            transform.Find(strIcon).GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : tempSprite[str];
+            transform.Find(str).GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? str;
+            transform.Find(strSelected).gameObject.SetActive(isSelect);
         }
         public void RefreshItem(Transform transform, string id, int cur, int need, bool isSelect = false)
         {
-            transform.Find("Icon").GetComponent<Image>().sprite = tempSprite[id];
-            transform.Find("Amount").Find("Cur").GetComponent<TMPro.TextMeshProUGUI>().text = cur.ToString();
-            transform.Find("Amount").Find("Need").GetComponent<TMPro.TextMeshProUGUI>().text = need.ToString();
-            transform.Find("Amount").Find("Back2").gameObject.SetActive(cur < need);
-            transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(id);
-            if (transform.Find("Selected") != null)
+            transform.Find(strIcon).GetComponent<Image>().sprite = tempSprite[id];
+            transform.Find(strAmount).Find(strCur).GetComponent<TMPro.TextMeshProUGUI>().text = cur.ToString();
+            transform.Find(strAmount).Find(strNeed).GetComponent<TMPro.TextMeshProUGUI>().text = need.ToString();
+            transform.Find(strAmount).Find(strBack2).gameObject.SetActive(cur < need);
+            transform.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(id);
+            if (transform.Find(strSelected) != null)
             {
-                transform.Find("Selected").gameObject.SetActive(isSelect);
+                transform.Find(strSelected).gameObject.SetActive(isSelect);
             }
         }
         public override void Refresh()
@@ -527,8 +589,8 @@ namespace ProjectOC.WorkerNS.UI
             FeatureManager featManager = ManagerNS.LocalGameManager.Instance.FeatureManager;
             var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             Text_Title.text = PanelTextContent.textTitle;
-            Select.Find("TextExchange").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textExchange;
-            Select.Find("TextCorrect").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textCorrect;
+            Select.Find(strTextExchange).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textExchange;
+            Select.Find(strTextCorrect).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textCorrect;
             SetUIActive();
             if (IsOnMain)
             {
@@ -539,52 +601,52 @@ namespace ProjectOC.WorkerNS.UI
                 FeatureSeat seat = isExchange ? FeatBuild.Seats[1] : FeatBuild.Seat;
                 bool checkCanCorrect = !isExchange && !isEnd;
                 RefreshFeatureBtnList(CommonFeatureBtnList, seat, isEnd, checkCanCorrect);
-                RefreshWorker(Common.Find("Worker"), seat.Worker, (CurChangeMode == ChangeMode.Index2 && isStart));
-                Common.Find("Bar").gameObject.SetActive(isRun);
+                RefreshWorker(Common.Find(strWorker), seat.Worker, (CurChangeMode == ChangeMode.Index2 && isStart));
+                Common.Find(strBar).gameObject.SetActive(isRun);
                 bool canRun = isExchange ? FeatBuild.CanExchangeReal : FeatBuild.CanCorrectReal;
-                Common.Find("BtnConfirm").gameObject.SetActive(isStart);
-                Common.Find("BtnConfirm").Find("Back2").gameObject.SetActive(!canRun);
-                Common.Find("BtnConfirm").Find("KT_ConfirmRun").gameObject.SetActive(isExchange);
-                Common.Find("BtnConfirm").Find("KT_ConfirmRunCorrect").gameObject.SetActive(!isExchange);
-                Common.Find("BtnCancle").gameObject.SetActive(isRun);
-                Common.Find("BtnCancle").Find("KT_CancleRun").gameObject.SetActive(isExchange);
-                Common.Find("BtnCancle").Find("KT_CancleRunCorrect").gameObject.SetActive(!isExchange);
-                Common.Find("BtnConfirmResult").gameObject.SetActive(isEnd);
-                Common.Find("BtnCancleResult").gameObject.SetActive(isEnd);
+                Common.Find(strBtnConfirm).gameObject.SetActive(isStart);
+                Common.Find(strBtnConfirm).Find(strBack2).gameObject.SetActive(!canRun);
+                Common.Find(strBtnConfirm).Find(strKT_ConfirmRun).gameObject.SetActive(isExchange);
+                Common.Find(strBtnConfirm).Find(strKT_ConfirmRunCorrect).gameObject.SetActive(!isExchange);
+                Common.Find(strBtnCancle).gameObject.SetActive(isRun);
+                Common.Find(strBtnCancle).Find(strKT_CancleRun).gameObject.SetActive(isExchange);
+                Common.Find(strBtnCancle).Find(strKT_CancleRunCorrect).gameObject.SetActive(!isExchange);
+                Common.Find(strBtnConfirmResult).gameObject.SetActive(isEnd);
+                Common.Find(strBtnCancleResult).gameObject.SetActive(isEnd);
 
-                Common.Find("Warn").gameObject.SetActive(!canRun);
+                Common.Find(strWarn).gameObject.SetActive(!canRun);
                 bool haveSelectWorker = seat.HaveWorker && (!isExchange || FeatBuild.Seats[0].HaveWorker);
                 string itemID = isExchange ? config.FeatTransCostItemID : featManager.GetFeatureCorrectItemID(FeatBuild.CorrectType);
                 int cur = ManagerNS.LocalGameManager.Instance.Player.InventoryItemAmount(itemID);
                 int need = isExchange ? config.FeatTransCostItemNum : featManager.GetFeatureCorrectItemNum(FeatBuild.CorrectType);
                 bool haveEnoughItem = cur >= need;
-                Common.Find("Warn").Find("Warn1").gameObject.SetActive(!haveSelectWorker);
-                Common.Find("Warn").Find("Warn2").gameObject.SetActive(!haveEnoughItem);
-                Common.Find("Warn").Find("Warn1").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textWarnSelectWorker;
-                Common.Find("Warn").Find("Warn2").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = 
+                Common.Find(strWarn).Find(strWarn1).gameObject.SetActive(!haveSelectWorker);
+                Common.Find(strWarn).Find(strWarn2).gameObject.SetActive(!haveEnoughItem);
+                Common.Find(strWarn).Find(strWarn1).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textWarnSelectWorker;
+                Common.Find(strWarn).Find(strWarn2).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = 
                     isExchange ? PanelTextContent.textWarnLackExchangeItem : PanelTextContent.textWarnLackCorrectItem;
-                LayoutRebuilder.ForceRebuildLayoutImmediate(Common.Find("Warn").GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
-                Common.Find("Time").gameObject.SetActive(!isEnd);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(Common.Find(strWarn).GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
+                Common.Find(strTime).gameObject.SetActive(!isEnd);
                 if (isStart)
                 {
                     int time = isExchange ? config.FeatTransTime : featManager.GetFeatureCorrectTime(FeatBuild.CorrectType);
                     int minute = time / 60;
                     int second = time % 60;
-                    Common.Find("Time").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = 
-                        (isExchange ? PanelTextContent.textExchangeTimePrefix: PanelTextContent.textCorrectTimePrefix) + minute + "min" + second + "s";
+                    Common.Find(strTime).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = 
+                        (isExchange ? PanelTextContent.textExchangeTimePrefix: PanelTextContent.textCorrectTimePrefix) + minute + strmin + second + strs;
                 }
                 if (CurMode == Mode.Exchange)
                 {
                     RefreshFeatureBtnList(ExchangeFeatureBtnList, FeatBuild.Seats[0], FeatBuild.IsExchangeEnd);
-                    RefreshWorker(Exchange.Find("Worker"), FeatBuild.Seats[0].Worker, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsExchangeStart));
-                    RefreshItem(Exchange.Find("Item"), itemID, cur, need);
+                    RefreshWorker(Exchange.Find(strWorker), FeatBuild.Seats[0].Worker, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsExchangeStart));
+                    RefreshItem(Exchange.Find(strItem), itemID, cur, need);
                 }
                 else if (CurMode == Mode.Correct)
                 {
-                    RefreshItem(Correct.Find("Item"), itemID, cur, need, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsCorrectStart));
-                    Correct.Find("ItemDesc").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(itemID);
-                    Correct.Find("ItemDesc").Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemDescription(itemID);
-                    Correct.Find("ItemDesc").Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetEffectDescription(itemID);
+                    RefreshItem(Correct.Find(strItem), itemID, cur, need, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsCorrectStart));
+                    Correct.Find(strItemDesc).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(itemID);
+                    Correct.Find(strItemDesc).Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemDescription(itemID);
+                    Correct.Find(strItemDesc).Find(strEffectDesc).GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetEffectDescription(itemID);
                 }
             }
             else if (IsChangeWorker)
@@ -599,13 +661,13 @@ namespace ProjectOC.WorkerNS.UI
                         {
                             tempSprite[key.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(key);
                         }
-                        uiworker.Find("Icon").GetComponent<Image>().sprite = tempSprite[key.ToString()];
+                        uiworker.Find(strIcon).GetComponent<Image>().sprite = tempSprite[key.ToString()];
                     }
                     else
                     {
-                        uiworker.Find("Icon").GetComponent<Image>().sprite = tempSprite[""];
+                        uiworker.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
                     }
-                    uiworker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerName(Workers[i]);
+                    uiworker.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerName(Workers[i]);
                 }
                 Worker selectWorker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorker(Workers[WorkerIndex]);
                 if (selectWorker != null)
@@ -621,16 +683,16 @@ namespace ProjectOC.WorkerNS.UI
             {
                 for (int i = 1; i <= 4; i++)
                 {
-                    ChangeCorrect.Find("Item" + i).GetComponent<Image>().sprite = tempSprite[featManager.GetFeatureCorrectItemID(FeatBuild.CorrectType)];
-                    ChangeCorrect.Find("Item" + i).Find("Selected").gameObject.SetActive(i == ChangeCorrectSelectIndex + 1);
+                    ChangeCorrect.Find(strItem + i).GetComponent<Image>().sprite = tempSprite[featManager.GetFeatureCorrectItemID(FeatBuild.CorrectType)];
+                    ChangeCorrect.Find(strItem + i).Find(strSelected).gameObject.SetActive(i == ChangeCorrectSelectIndex + 1);
                 }
                 FeatureCorrectType correctType = (FeatureCorrectType)ChangeCorrectSelectIndex;
                 string itemID = ManagerNS.LocalGameManager.Instance.FeatureManager.GetFeatureCorrectItemID(correctType);
-                ChangeCorrect.Find("ItemDesc").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text =
+                ChangeCorrect.Find(strItemDesc).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text =
                     ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(itemID);
-                ChangeCorrect.Find("ItemDesc").Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text =
+                ChangeCorrect.Find(strItemDesc).Find(strDesc).GetComponent<TMPro.TextMeshProUGUI>().text =
                     ManagerNS.LocalGameManager.Instance.ItemManager.GetItemDescription(itemID);
-                ChangeCorrect.Find("ItemDesc").Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text =
+                ChangeCorrect.Find(strItemDesc).Find(strEffectDesc).GetComponent<TMPro.TextMeshProUGUI>().text =
                     ManagerNS.LocalGameManager.Instance.ItemManager.GetEffectDescription(itemID);
             }
         }
@@ -640,12 +702,13 @@ namespace ProjectOC.WorkerNS.UI
         {
             int minute = (int)(time / 60);
             int second = (int)time % 60;
-            Common.Find("Time").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = minute + "min" + second + "s";
-            var bar = Common.Find("Bar").Find("Cur").GetComponent<RectTransform>();
+            Common.Find(strTime).Find(strText).GetComponent<TMPro.TextMeshProUGUI>().text = minute + strmin + second + strs;
+            var bar = Common.Find(strBar).Find(strCur).GetComponent<RectTransform>();
             int total = CurMode == Mode.Exchange ?
                 ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatTransTime :
                 ManagerNS.LocalGameManager.Instance.FeatureManager.GetFeatureCorrectTime(FeatBuild.CorrectType);
             float sizeDeltaX = (float)(470 * (1 - time / total));
+            sizeDeltaX = sizeDeltaX <= 470 ? sizeDeltaX : 470;
             bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
         }
         #endregion

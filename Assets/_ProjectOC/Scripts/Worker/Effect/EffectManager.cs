@@ -37,8 +37,9 @@ namespace ProjectOC.WorkerNS
         public Effect SpawnEffect(string id) { return IsValidID(id) ? new Effect(EffectTableDict[id]) : default(Effect); }
         #endregion
         #region Getter
+        private const string str = "";
         public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) && EffectTableDict.ContainsKey(id); }
-        public string GetName(string id) { return IsValidID(id) ? EffectTableDict[id].Name : ""; }
+        public string GetName(string id) { return IsValidID(id) ? EffectTableDict[id].Name : str; }
         public EffectType GetEffectType(string id) { return IsValidID(id) ? EffectTableDict[id].Type : EffectType.None; }
         #endregion
     }

@@ -8,11 +8,12 @@ namespace ProjectOC.RestaurantNS
     [LabelText("²ÍÌü"), Serializable]
     public class Restaurant : DataNS.DataContainerOwner
     {
+        private const string str = "";
         #region Data
         [LabelText("ÊÀ½ç²ÍÌü"), ReadOnly, NonSerialized]
         public WorldRestaurant WorldRestaurant;
         [ShowInInspector, ReadOnly]
-        public string UID => WorldRestaurant?.InstanceID ?? "";
+        public string UID => WorldRestaurant?.InstanceID ?? str;
         [LabelText("×ùÎ»"), ShowInInspector, ReadOnly]
         private RestaurantSeat[] Seats;
         #endregion
@@ -107,7 +108,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     datas.Add(new RestaurantData(items[i].ID, i, items[i].GetAmount(DataNS.DataOpType.Storage)));
                 }
-                datas.Sort(new RestaurantData());
+                datas.Sort(new SortForRestaurantData());
                 foreach (RestaurantData data in datas)
                 {
                     if (data.HaveFood)

@@ -26,9 +26,7 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff() 
         {
-            return ManagerNS.LocalGameManager.Instance != null && Creature1 != null ? 
-                EffBase + Creature1.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
-                EffBase;
+            return EffBase;
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { FastAdd(1); }
@@ -37,8 +35,6 @@ namespace ProjectOC.ProNodeNS
         {
             if (HasRecipe)
             {
-                //if (DataContainer.GetData(0) is ML.Engine.InventorySystem.CreatureItem) { return false; }
-                //if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0) { return false; }
                 foreach (var kv in Recipe.Raw) { if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; } }
                 if (!HasCreature) { return false; }
                 if (DiscardStackAll >= Creature1.Discard.num * StackMax) { return false; }
@@ -57,7 +53,16 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    var list = (this as MissionNS.IMissionObj).GetMissions(data);
+                    if (list.Count > 0)
+                    {
+                        list[0].ChangeMissionNum(list[0].MissionNum + missionNum);
+                    }
+                    else
+                    {
+                        ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
+                            (MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    }
                 }
             }
             if (StackReserve > 0)
@@ -80,36 +85,41 @@ namespace ProjectOC.ProNodeNS
                 ML.Engine.InventorySystem.Item item = Recipe.Composite(this);
                 if (item is ML.Engine.InventorySystem.CreatureItem creature)
                 {
-                    int output1 = Creature1.Output;
-                    int output2 = Creature2.Output;
-                    int low = -3 + output1 <= output2 ? output1 : output2;
-                    int high = 3 + output1 <= output2 ? output2 : output1;
-                    List<int> bounds = new List<int>();
-                    for (int i = 0; i < 5; i++)
+                    bool flag = false;
+                    if (DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) == 0)
                     {
-                        bounds.Add((4 * low + (high - low) * i) / 4);
-                    }
-                    List<int> ranges = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.OutputRanges;
-                    int output = 0;
-                    int rand = UnityEngine.Random.Range(1, 101);
-                    for (int i = 0; i < 4; i++)
-                    {
-                        if (ranges[i] <= rand && rand <= ranges[i + 1] - 1)
+                        int output1 = Creature1.Output;
+                        int output2 = Creature2.Output;
+                        int low = -3 + output1 <= output2 ? output1 : output2;
+                        int high = 3 + output1 <= output2 ? output2 : output1;
+                        List<int> bounds = new List<int>();
+                        for (int i = 0; i < 5; i++)
                         {
-                            output = UnityEngine.Random.Range(bounds[i], bounds[i + 1] + 1);
-                            break;
+                            bounds.Add((4 * low + (high - low) * i) / 4);
+                        }
+                        List<int> ranges = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.OutputRanges;
+                        int output = 0;
+                        int rand = UnityEngine.Random.Range(1, 101);
+                        for (int i = 0; i < 4; i++)
+                        {
+                            if (ranges[i] <= rand && rand <= ranges[i + 1] - 1)
+                            {
+                                output = UnityEngine.Random.Range(bounds[i], bounds[i + 1] + 1);
+                                break;
+                            }
+                        }
+                        output = output <= 0 ? 0 : output;
+                        output = output >= 50 ? 50 : output;
+                        if (output >= OutputThreshold)
+                        {
+                            creature.Output = output;
+                            ChangeData(0, creature);
+                            DataContainer.ChangeAmount(0, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                            StackReserve = 1;
+                            flag = true;
                         }
                     }
-                    output = output <= 0 ? 0 : output;
-                    output = output >= 50 ? 50 : output;
-                    if (output >= OutputThreshold || DataContainer.GetAmount(0, DataNS.DataOpType.StorageAll) > 0)
-                    {
-                        creature.Output = output;
-                        ChangeData(0, creature);
-                        DataContainer.ChangeAmount(0, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
-                        StackReserve = 1;
-                    }
-                    else
+                    if (!flag)
                     {
                         int discardNum = creature.Discard.num;
                         DataContainer.ChangeAmount(4, discardNum, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
@@ -134,6 +144,7 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Method
+        private const string str = "";
         public bool ChangeCreature(int index, ML.Engine.InventorySystem.CreatureItem creature)
         {
             lock (this)
@@ -151,28 +162,24 @@ namespace ProjectOC.ProNodeNS
                         DataContainer.ChangeAmount(2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                         return true;
                     }
-                    else { ChangeRecipe(""); }
+                    else { ChangeRecipe(str); }
                 }
                 else
                 {
-                    if (HasRecipe && creature != null && creature != Creature1)
+                    var creature1 = Creature1;
+                    if (HasRecipe && creature != null)
                     {
-                        ChangeData(3, creature);
-                        DataContainer.ChangeAmount(3, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
-                        return true;
+                        if (creature != creature1 && creature.ID == creature1.ID && (creature1.Gender == Gender.None || creature1.Gender != creature.Gender))
+                        {
+                            StopProduce();
+                            ChangeData(3, creature);
+                            DataContainer.ChangeAmount(3, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                            return true;
+                        }
                     }
-                    else { ChangeData(3, null); }
+                    else { StopProduce(); ChangeData(3, null); }
                 }
                 return false;
-            }
-        }
-
-        public void Remove()
-        {
-            if (HasCreature)
-            {
-                StackReserve = 0;
-                ChangeData(0, null);
             }
         }
 

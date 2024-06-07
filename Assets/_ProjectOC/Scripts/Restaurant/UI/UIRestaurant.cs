@@ -10,6 +10,40 @@ namespace ProjectOC.RestaurantNS.UI
 {
     public class UIRestaurant : ML.Engine.UI.UIBasePanel<RestaurantPanel>
     {
+        #region Str
+        private const string str = "";
+        private const string strRestaurant = "Restaurant";
+        private const string strFood = "Food";
+        private const string strViewport = "Viewport";
+        private const string strChangeFood = "ChangeFood";
+        private const string strSelect = "Select";
+        private const string strTopTitle = "TopTitle";
+        private const string strText = "Text";
+        private const string strIcon = "Icon";
+        private const string strDesc = "Desc";
+        private const string strBotKeyTips = "BotKeyTips";
+        private const string strKeyTips = "KeyTips";
+        private const string strKeyTips1 = "KeyTips1";
+        private const string strContainer = "Container";
+        private const string strUIRestaurantData = "UIRestaurantData";
+        private const string strKT_Remove1 = "KT_Remove1";
+        private const string strKT_Remove10 = "KT_Remove10";
+        private const string strKT_FastAdd = "KT_FastAdd";
+        private const string strAmount = "Amount";
+        private const string strMaxCapacity = "MaxCapacity";
+        private const string strBar = "Bar";
+        private const string strCur = "Cur";
+        private const string strName = "Name";
+        private const string strPriority1 = "Priority1";
+        private const string strPriority2 = "Priority2";
+        private const string strItemDesc = "ItemDesc";
+        private const string strEffectDesc = "EffectDesc";
+        private const string strWeight = "Weight";
+
+        private const string strPrefab_Restaurant_UI_DataTemplate = "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab";
+        private const string strPrefab_Restaurant_UI_FoodTemplate = "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab";
+        #endregion
+
         #region Data
         #region Mode
         public enum Mode
@@ -57,19 +91,19 @@ namespace ProjectOC.RestaurantNS.UI
         #region BtnList
         private ML.Engine.UI.UIBtnList DataBtnList;
         private int DataIndex => DataBtnList?.GetCurSelectedPos1() ?? 0;
-        List<string> FoodItemIDs = new List<string>() { "" };
+        List<string> FoodItemIDs = new List<string>();
         private ML.Engine.UI.UIBtnList FoodBtnList;
         private int FoodIndex => FoodBtnList?.GetCurSelectedPos1() ?? 0;
         private bool IsInitBtnList = false;
         protected override void InitBtnInfo()
         {
             Synchronizer synchronizer = new Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
-            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Restaurant").Find("Food").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strRestaurant).Find(strFood).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, 
-                "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
+            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum,
+                strPrefab_Restaurant_UI_DataTemplate, () => { synchronizer.Check(); });
 
-            FoodBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeFood").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
+            FoodBtnList = new ML.Engine.UI.UIBtnList(transform.Find(strChangeFood).Find(strSelect).Find(strViewport).GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             FoodBtnList.OnSelectButtonChanged += () => { Refresh(); };
             List<string> itemIDs = ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID().ToList();
             foreach (var itemID in itemIDs)
@@ -78,9 +112,11 @@ namespace ProjectOC.RestaurantNS.UI
                 {
                     FoodItemIDs.Add(itemID);
                 }
+                FoodItemIDs = ML.Engine.InventorySystem.ItemManager.Instance.SortItemIDs(FoodItemIDs);
             }
+            FoodItemIDs.Insert(0, str);
             itemIDs = ML.Engine.InventorySystem.ItemManager.Instance.SortItemIDs(itemIDs);
-            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab", () => { synchronizer.Check(); });
+            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, strPrefab_Restaurant_UI_FoodTemplate, () => { synchronizer.Check(); });
         }
         #endregion
 
@@ -113,10 +149,10 @@ namespace ProjectOC.RestaurantNS.UI
         protected override void Start()
         {
             base.Start();
-            Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            Food_Desc = transform.Find("ChangeFood").Find("Desc");
-            BotKeyTips = transform.Find("BotKeyTips").Find("KeyTips");
-            BotKeyTips1 = transform.Find("BotKeyTips").Find("KeyTips1");
+            Text_Title = transform.Find(strTopTitle).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            Food_Desc = transform.Find(strChangeFood).Find(strDesc);
+            BotKeyTips = transform.Find(strBotKeyTips).Find(strKeyTips);
+            BotKeyTips1 = transform.Find(strBotKeyTips).Find(strKeyTips1);
             IsInit = true;
         }
         #endregion
@@ -125,13 +161,13 @@ namespace ProjectOC.RestaurantNS.UI
         protected override void Enter()
         {
             Restaurant.DataContainer.OnDataChangeEvent += Refresh;
-            tempSprite.Add("", transform.Find("Restaurant").Find("Food").Find("Viewport").Find("Container").Find("UIRestaurantData").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add(str, transform.Find(strRestaurant).Find(strFood).Find(strViewport).Find(strContainer).Find(strUIRestaurantData).Find(strIcon).GetComponent<Image>().sprite);
             base.Enter();
         }
         protected override void Exit()
         {
             Restaurant.DataContainer.OnDataChangeEvent -= Refresh;
-            tempSprite.Remove("");
+            tempSprite.Remove(str);
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
@@ -228,14 +264,14 @@ namespace ProjectOC.RestaurantNS.UI
         #region UI
         protected void SetUIActive()
         {
-            transform.Find("Restaurant").gameObject.SetActive(CurMode == Mode.Restaurant);
-            transform.Find("ChangeFood").gameObject.SetActive(CurMode == Mode.ChangeFood);
+            transform.Find(strRestaurant).gameObject.SetActive(CurMode == Mode.Restaurant);
+            transform.Find(strChangeFood).gameObject.SetActive(CurMode == Mode.ChangeFood);
             bool hasSetFood = (CurMode == Mode.Restaurant && Restaurant.DataContainer.HaveSetData(DataIndex));
             BotKeyTips.gameObject.SetActive(CurMode == Mode.Restaurant);
             BotKeyTips1.gameObject.SetActive(CurMode == Mode.ChangeFood);
-            BotKeyTips.Find("KT_Remove1").gameObject.SetActive(hasSetFood);
-            BotKeyTips.Find("KT_Remove10").gameObject.SetActive(hasSetFood);
-            BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(hasSetFood);
+            BotKeyTips.Find(strKT_Remove1).gameObject.SetActive(hasSetFood);
+            BotKeyTips.Find(strKT_Remove10).gameObject.SetActive(hasSetFood);
+            BotKeyTips.Find(strKT_FastAdd).gameObject.SetActive(hasSetFood);
             LayoutRebuilder.ForceRebuildLayoutImmediate(BotKeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
         }
         public override void Refresh()
@@ -255,18 +291,20 @@ namespace ProjectOC.RestaurantNS.UI
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
-                    uidata.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
-                    uidata.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = amount.ToString();
-                    uidata.Find("MaxCapacity").GetComponent<TMPro.TextMeshProUGUI>().text = maxCapacity.ToString();
-                    var bar = uidata.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                    float sizeDeltaX = uidata.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * amount / maxCapacity;
+                    uidata.Find(strIcon).GetComponent<Image>().sprite = tempSprite[itemID];
+                    uidata.Find(strAmount).GetComponent<TMPro.TextMeshProUGUI>().text = amount.ToString();
+                    uidata.Find(strMaxCapacity).GetComponent<TMPro.TextMeshProUGUI>().text = maxCapacity.ToString();
+                    var bar = uidata.Find(strBar).Find(strCur).GetComponent<RectTransform>();
+                    float percent = ((float)amount) / ((float)maxCapacity);
+                    percent = percent <= 1 ? percent : 1;
+                    float sizeDeltaX = uidata.Find(strBar).GetComponent<RectTransform>().sizeDelta.x * percent;
                     bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
 
                     string name = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID);
-                    uidata.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(name) ? name : PanelTextContent.textEmpty;
-                    uidata.Find("Priority1").gameObject.SetActive(i == 0);
-                    uidata.Find("Priority1").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textNo1;
-                    uidata.Find("Priority2").gameObject.SetActive(i == 1);
+                    uidata.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(name) ? name : PanelTextContent.textEmpty;
+                    uidata.Find(strPriority1).gameObject.SetActive(i == 0);
+                    uidata.Find(strPriority1).Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textNo1;
+                    uidata.Find(strPriority2).gameObject.SetActive(i == 1);
                 }
             }
             else if (CurMode == Mode.ChangeFood)
@@ -278,16 +316,16 @@ namespace ProjectOC.RestaurantNS.UI
                     {
                         tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
-                    FoodBtnList.GetBtn(i).transform.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
+                    FoodBtnList.GetBtn(i).transform.Find(strIcon).GetComponent<Image>().sprite = tempSprite[itemID];
                 }
                 string curItemID = FoodItemIDs[FoodIndex];
-                Food_Desc.Find("Icon").GetComponent<Image>().sprite = FoodBtnList.GetBtn(FoodIndex).transform.Find("Icon").GetComponent<Image>().sprite;
-                Food_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(curItemID);
-                Food_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemDescription(curItemID) ?? "";
-                Food_Desc.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetEffectDescription(curItemID) ?? "";
+                Food_Desc.Find(strIcon).GetComponent<Image>().sprite = FoodBtnList.GetBtn(FoodIndex).transform.Find(strIcon).GetComponent<Image>().sprite;
+                Food_Desc.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(curItemID);
+                Food_Desc.Find(strItemDesc).GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemDescription(curItemID) ?? str;
+                Food_Desc.Find(strEffectDesc).GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.InventorySystem.ItemManager.Instance.GetEffectDescription(curItemID) ?? str;
                 int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(curItemID);
                 weight = weight > 0 ? weight : 0;
-                Food_Desc.Find("Weight").GetComponent<TMPro.TextMeshProUGUI>().text = weight.ToString();
+                Food_Desc.Find(strWeight).GetComponent<TMPro.TextMeshProUGUI>().text = weight.ToString();
             }
         }
         #endregion
