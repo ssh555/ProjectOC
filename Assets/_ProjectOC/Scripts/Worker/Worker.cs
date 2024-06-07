@@ -239,6 +239,7 @@ namespace ProjectOC.WorkerNS
         }
         public void OnDestroy()
         {
+            ClearDestination();
             if (ManagerNS.LocalGameManager.Instance != null)
             {
                 ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
