@@ -574,6 +574,8 @@ namespace ProjectOC.ProNodeNS.UI
                     int output2 = creature.Output;
                     int low = -3 + (output1 <= output2 ? output1 : output2);
                     int high = 3 + (output1 <= output2 ? output2 : output1);
+                    low = low >= 0 ? low : 0;
+                    high = high <= 50 ? high : 50;
                     Creature_Recipe.Find(strOutputValue).GetComponent<TMPro.TextMeshProUGUI>().text = $"{low}~{high}";
                 }
                 bool isValidCreature = creature != null;
