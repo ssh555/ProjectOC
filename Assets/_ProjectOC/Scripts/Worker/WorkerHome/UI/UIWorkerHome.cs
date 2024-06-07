@@ -197,10 +197,6 @@ namespace ProjectOC.WorkerNS.UI
         protected override void UnregisterInput()
         {
             Home.OnWorkerMoodChangeEvent -= RefreshMood;
-            if (Home.HaveWorker)
-            {
-                Home.Worker.OnMoodChangeEvent -= RefreshMood;
-            }
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -210,10 +206,6 @@ namespace ProjectOC.WorkerNS.UI
         protected override void RegisterInput()
         {
             Home.OnWorkerMoodChangeEvent += RefreshMood;
-            if (Home.HaveWorker)
-            {
-                Home.Worker.OnMoodChangeEvent += RefreshMood;
-            }
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
