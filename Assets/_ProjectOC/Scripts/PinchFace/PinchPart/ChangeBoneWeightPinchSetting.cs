@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
+    [System.Serializable]
     public class ChangeBoneWeightPinchSetting :MonoBehaviour, IPinchSettingComp
     {
         public int Index { get; }

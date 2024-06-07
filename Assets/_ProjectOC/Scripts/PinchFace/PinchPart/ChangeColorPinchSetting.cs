@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
+    [System.Serializable]
     public class ChangeColorPinchSetting : MonoBehaviour,IPinchSettingComp
     {
         [System.Flags,Serializable]
@@ -45,12 +46,30 @@ namespace ProjectOC.PinchFace
 
         public void Apply(PinchPartType2 _type2,PinchPartType3 _type3,CharacterModelPinch _modelPinch)
         {
-            if (_type2 == PinchPartType2.HairFront)
+            //还没有初始化
+            if (colors.Length == 0)
             {
-                Apply(PinchPartType2.HairBack,PinchPartType3.HB_HairBack,_modelPinch);
-                Apply(PinchPartType2.HairBraid,PinchPartType3.HB_HairBraid,_modelPinch);
+                Color color1 = _modelPinch.GetType2Color(_type2, 0);
+                if (color1 != Color.clear)
+                {
+                    colors[0] = color1;
+                }
+                else
+                {
+                    colors[0] = new Color(0.3f, 0.3f, 0.3f);
+                }
+                Color color2 = _modelPinch.GetType2Color(_type2, 1);
+                if (color2 != Color.clear)
+                {
+                    colors[1] = color2;
+                }
+                else
+                {
+                    colors[1] = new Color(0.3f, 0.3f, 0.3f);
+                }
             }
-
+            
+            
             _modelPinch.ChangeColor(_type2,colors[0],0);
             if (_type2 == PinchPartType2.HairBack || _type2 == PinchPartType2.HairFront)
             {

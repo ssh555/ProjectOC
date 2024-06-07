@@ -10,6 +10,7 @@ using ProjectOC.ManagerNS;
 using ProjectOC.PinchFace;
 using ProjectOC.PinchFace.Config;
 using ProjectOC.StoreNS.UI;
+using Sirenix.OdinInspector;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,7 +22,8 @@ using Object = System.Object;
 
 namespace  ProjectOC.PinchFace
 {
-    public class PinchPart :ISaveData
+    [System.Serializable]
+    public class PinchPart:ISaveData
     {
         public string SavePath { get; set; }
         public string SaveName { get; set; }
@@ -33,6 +35,8 @@ namespace  ProjectOC.PinchFace
             return null;
         }
 
+     
+
 
         #region 引用和变量
         private PinchFaceManager PinchFaceManager;
@@ -40,11 +44,17 @@ namespace  ProjectOC.PinchFace
         private UIPinchFacePanel PinchFacePanel;
         private SpriteAtlas SA_PinchPart=>PinchFacePanel.SA_PinchPart;
         private PinchDataConfig Config => PinchFaceManager.Config;
-        private PinchPartData pinchPartData;
+        public PinchPartData pinchPartData;
         public PinchPartType2 PinchPartType2 => pinchPartData.PinchPartType2;
         public PinchPartType3 PinchPartType3 => pinchPartData.PinchPartType3;
+        
         public List<IPinchSettingComp> pinchSettingComps => pinchPartData.pinchSettingComps;
         private ChangeColorPinchSetting  colorSettingComp = null;
+        private ChangeTypePinchSetting typeSettingComp = null;
+        private ChangeTexturePinchSetting textureSettingComp = null;
+        private ChangeTransformPinchSetting transformSettingComp = null;
+        private ChangeBoneWeightPinchSetting boneWeightSettingComp = null;
+        
         
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
@@ -58,6 +68,48 @@ namespace  ProjectOC.PinchFace
         //外部引用
 
         #region Init
+        public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2,Transform _containerTransf)
+        {
+            //PinchType2 的通用Assets
+            Init();
+            if(pinchPartData == null)
+                pinchPartData = new PinchPartData(_type2, _type3);
+            containerTransf = _containerTransf;
+            PinchFacePanel = _PinchFacePanel;
+        }
+
+        public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2, IPinchSettingComp[] _settingComps,Transform _containerTransf)
+            :this(_PinchFacePanel,_type3,_type2, _containerTransf)
+        {
+            pinchPartData.pinchSettingComps = _settingComps.ToList();
+            foreach (var _pinchSettingComp in pinchPartData.pinchSettingComps)
+            {
+                switch (_pinchSettingComp)
+                {
+                    case ChangeColorPinchSetting color:
+                        colorSettingComp = color;
+                        break;
+                    case ChangeTypePinchSetting type:
+                        typeSettingComp = type;
+                        break;
+                    case ChangeTexturePinchSetting texture:
+                        textureSettingComp = texture;
+                        break;
+                    case ChangeTransformPinchSetting transform:
+                        transformSettingComp = transform;
+                        break;
+                    case ChangeBoneWeightPinchSetting boneWeight:
+                        boneWeightSettingComp = boneWeight;
+                        break;
+                }
+            }
+        }
+
+        public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2, PinchPartData _pinchPartData,Transform _containerTransf)
+            :this(_PinchFacePanel,_type3,_type2, _containerTransf)
+        {
+            pinchPartData = _pinchPartData;
+        }
 
         private void Init()
         {
@@ -84,25 +136,7 @@ namespace  ProjectOC.PinchFace
         }
         
         //控制_pinchSettingComps Buttons的生成
-        public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2, IPinchSettingComp[] _settingComps,Transform _containerTransf)
-        {
-            //PinchType2 的通用Assets
-            Init();
-            pinchPartData = new PinchPartData(_type2, _type3);
-            pinchPartData.pinchSettingComps = _settingComps.ToList();
-            foreach (var _pinchSettingComp in pinchPartData.pinchSettingComps)
-            {
-                if (_pinchSettingComp.GetType() == typeof(ChangeColorPinchSetting))
-                {
-                    colorSettingComp = _pinchSettingComp as ChangeColorPinchSetting;
-                    break;
-                }
-            }
-            
-            
-            containerTransf = _containerTransf;
-            PinchFacePanel = _PinchFacePanel;
-        }
+
         
         // public void PinchFaceCallBack()
         // {
@@ -125,26 +159,7 @@ namespace  ProjectOC.PinchFace
         // }
         
         
-        public void ApplyPinchSetting(CharacterModelPinch _modelPinch)
-        {
-            foreach (var _comp in pinchSettingComps)
-            {
-                //每个PinchType
-                if (_comp.GetType() == typeof(ChangeTypePinchSetting))
-                {
-                    (_comp as ChangeTypePinchSetting).ApplyType(PinchPartType2,PinchPartType3,_modelPinch,this);
-                    return;
-                }
-            }
-        }
 
-        public void ApplyTypeCallBack(CharacterModelPinch _modelPinch)
-        {
-            foreach (var _pinchSettingComp in pinchSettingComps)
-            {
-                _pinchSettingComp.Apply(PinchPartType2,PinchPartType3,_modelPinch);
-            }
-        }
         
         #endregion
         #region PinchPart&&UI Process
@@ -287,47 +302,42 @@ namespace  ProjectOC.PinchFace
 
             void ProcessChangeTypeHandle(AsyncOperationHandle<GameObject> _handle)
             {
-                
-                _handle.Completed += (handle) =>
+                if (PinchPartType3 == PinchPartType3.HF_HairFront)
                 {
-                    
-                    //继承颜色
-                    Color color1 = ModelPinch.GetType2Color(PinchPartType2, 0);
-                    if (color1 != Color.clear)
+                    _handle.Completed += (handle) =>
                     {
-                        colorSettingComp.colors[0] = color1;
-                    }
-                    Color color2 = ModelPinch.GetType2Color(PinchPartType2, 1);
-                    if (color2 != Color.clear)
-                    {
-                        colorSettingComp.colors[1] = color2;
-                    }
-                    //刷新骨骼权重
-                    if (PinchPartType3 == PinchPartType3.HF_HairFront)
-                    {
-                        ChangeColorPinchSetting _colorPinchSetting = handle.Result.GetComponent<ChangeColorPinchSetting>();
+                        //查找分色方式
+
+                        ChangeColorPinchSetting _colorPinchSetting =
+                            handle.Result.GetComponent<ChangeColorPinchSetting>();
                         //Braid 暂不需要
-                        if(_colorPinchSetting != null)
+                        if (_colorPinchSetting != null)
                             curColorChangeType |= _colorPinchSetting.colorChangeType;
                         _isInit--;
                         if (_isInit == 0)
                         {
                             RefreshColorType();
+                            _typeSetting.ApplyOtherComp(ModelPinch, pinchPartData);
                         }
-                    }
-                    
-                };
+                    };
+
+                }
+                else
+                {
+                    _typeSetting.ApplyOtherComp(ModelPinch,pinchPartData);
+                }
             }
         }
         
         
         
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="boneWeightTypes"></param>
+        /// 生成骨骼调整UI
         /// 身体部分，可能会生成多条
         /// 初始加载的时候是模型原始缩放数值，第二次加载是更换后数值，应该需要加载数值
+        /// </summary>
+        /// <param name="boneWeightTypes"></param>
+        
         public void GenerateBoneWeightUI(ChangeBoneWeightPinchSetting _boneWeightPinchSetting)
         {
             int _counter = sortCount;
@@ -345,23 +355,27 @@ namespace  ProjectOC.PinchFace
                     int _index = i;
                     ChangeBoneWeightPinchSetting.BoneWeightData _boneWeightData = _boneWeightPinchSetting.BoneWeightDatas[i];
                     BoneWeightType _boneWeightType = _boneWeightData.boneWeightType;
-
-                    GenerateSliderAndSetting(boneWeightDic[_boneWeightType], Action_ScaleSlider);
-                    
+                    //缩放
+                    GenerateSliderAndSetting(boneWeightDic[_boneWeightType], Action_ScaleSlider,
+                        PinchFaceManager.pinchFaceHelper.RemapValue(_boneWeightPinchSetting.BoneWeightDatas[i].currentScaleValue.x, 
+                        _boneWeightData.scaleValueRange,new Vector2(1, 100)));
+                    //偏移
                     if ((_boneWeightData.boneWeightChangeType &
                          ChangeBoneWeightPinchSetting.BoneWeightChangeType.Offset) != 0)
                     {
-                        GenerateSliderAndSetting(boneWeightDic[_boneWeightType]+"偏移", Action_OffsetSilder);
+                        GenerateSliderAndSetting(boneWeightDic[_boneWeightType]+"偏移", Action_OffsetSilder
+                            ,PinchFaceManager.pinchFaceHelper.RemapValue(_boneWeightPinchSetting.BoneWeightDatas[i].currentOffsetValue.y, 
+                                _boneWeightData.offsetValueRange,new Vector2(1, 100)));
                     }
                     
                     
-                    void GenerateSliderAndSetting(string _text,UnityAction<float> _action)
+                    void GenerateSliderAndSetting(string _text,UnityAction<float> _action,float _curValue)
                     {
                         var _sliderGo = GameObject.Instantiate(sliderTemplate, sliderTemplate.transform.parent);
                         CustomSelectedSlider _slider = _sliderGo.GetComponentInChildren<CustomSelectedSlider>();
                         _sliderGo.transform.Find("Button").name = _text;
                         
-                        _slider.SetSliderConfig(_text,_action);
+                        _slider.SetSliderConfig(_text,_action,_curValue);
                     }
                     
                     //_value 1~100 ->
@@ -447,7 +461,6 @@ namespace  ProjectOC.PinchFace
                 _container2.GetComponentInChildren<SelectedButton>().onClick.AddListener(() =>
                 {
                     GenerateColorUI2(_colorSetting,colorPanelIndex,_counter);
-                    
                     //删除并解绑这个
                     GameObject.Destroy(_trans.gameObject);
                 });
@@ -458,7 +471,7 @@ namespace  ProjectOC.PinchFace
                 }
                 
                 GenerateUICallBack(_trans,_counter);
-                _container2.Find("ColorView").GetComponent<Image>().color = ModelPinch.GetType2Color(PinchPartType2);
+                _container2.Find("ColorView").GetComponent<Image>().color = ModelPinch.GetType2Color(PinchPartType2,colorPanelIndex);
 
 
             };
@@ -470,7 +483,6 @@ namespace  ProjectOC.PinchFace
         /// <param name="_color"></param>
         public void GenerateColorUI2(ChangeColorPinchSetting _colorSetting,int colorPanelIndex = 0,int _counter = -1)
         {
-
             //to-do color2 的counter应该是继承删除的_counter
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[4])
                 .Completed += (handle) =>
@@ -572,7 +584,9 @@ namespace  ProjectOC.PinchFace
                 if (_btn != btnTemplate.transform)
                 {
                     _btn.gameObject.SetActive(false);
-                    GameObject.Destroy(_btn.gameObject);   
+                    _btn.GetComponent<SelectedButton>().Interactable = false;
+                    _btn.name = "todelete";
+                    GameObject.Destroy(_btn.gameObject);
                 }
             }
             GenerateColorTypeButtons(_colorSetting);
@@ -582,9 +596,12 @@ namespace  ProjectOC.PinchFace
             
             void GenerateColorTypeButtons(ChangeColorPinchSetting _colorSetting)
             {
-                bool couldInherit = false;
+                
+                int inheritIndex = 0;
+                
                 for (int i = 0; i < 5; i++)
                 {
+                    bool couldInherit = false;
                     int _index = i;
                     if (((int)curColorChangeType & (1<< _index)) != 0)
                     {
@@ -611,26 +628,23 @@ namespace  ProjectOC.PinchFace
                             containerTransf.GetChild(6).gameObject.SetActive(true);
                             containerTransf.GetChild(7).gameObject.SetActive(true);
                             containerTransf.GetChild(8).gameObject.SetActive(true);
-                            if (curColorType == 0)
+                            if (CurColorType == 0)
                             {
                                 containerTransf.GetChild(6).gameObject.SetActive(false);
                                 containerTransf.GetChild(7).gameObject.SetActive(false);
                                 containerTransf.GetChild(8).gameObject.SetActive(false);
                             }
-                            else if (curColorType == 1 || curColorType == 2)
+                            else if (CurColorType == 1 || CurColorType == 2)
                             {
                                 containerTransf.GetChild(8).gameObject.SetActive(false);
                             }
                         });
                     }
-                    //继承
-                    int inheritIndex = 0;
+                    //继承,
                     if (couldInherit)
                         inheritIndex = CurColorType;
-                    
-                    btnTemplate.transform.parent.Find($"ColorType_{inheritIndex}").GetComponent<SelectedButton>().onClick.Invoke();
                 }
-                
+                btnTemplate.transform.parent.Find($"ColorType_{inheritIndex}").GetComponent<SelectedButton>().onClick.Invoke();
                 //重新生成BtnList,初始的时候没有Container
                 // if (PinchFacePanel.UIBtnListContainer.UIBtnLists.Count > 4)
                 // {
@@ -646,7 +660,7 @@ namespace  ProjectOC.PinchFace
             }
         }
         
-        
+        //暂时只有头发部分需要
         public void GenerateColorGradualSlider(ChangeColorPinchSetting _colorSetting)
         {
             int _counter = sortCount;
@@ -655,11 +669,16 @@ namespace  ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 //加入 生成的Slider
+                string shaderParam1 = "_smoothStepThreshold",shaderParam2 = "_smoothStrength";
                 Transform _trans = handle.Result.transform;
                 GameObject sliderTemplate = _trans.Find("Container/Pinch_SliderTemplate").gameObject;
                 GameObject _slider2 = GameObject.Instantiate(sliderTemplate, sliderTemplate.transform.parent);
-                SettingSlider(sliderTemplate, "渐变位置",Action_ScaleSlider1);
-                SettingSlider(_slider2, "渐变程度",Action_ScaleSlider2);
+                
+
+                float startValue1 = ModelPinch.GetMaterial(PinchPartType2).GetFloat(shaderParam1) * 100f;
+                float startValue2 = ModelPinch.GetMaterial(PinchPartType2).GetFloat(shaderParam2) * 100f;
+                SettingSlider(sliderTemplate, "渐变位置",Action_ScaleSlider1,startValue1);
+                SettingSlider(_slider2, "渐变程度",Action_ScaleSlider2,startValue2);
                 
                 
                 //_value 1~100 ->
@@ -746,14 +765,16 @@ namespace  ProjectOC.PinchFace
                 float _value1 = _transformSetting.curValue.x,
                     _value2 = _transformSetting.curValue.y;
                 
-                SettingSlider(_slider1.gameObject, "位置调整X",Action_ScaleSlider1);
+                SettingSlider(_slider1.gameObject, "位置调整X",Action_ScaleSlider1
+                    ,PinchFaceManager.pinchFaceHelper.RemapValue(_transformSetting.curValue.x,_transformSetting.pinchRangeX, new Vector2(1, 100)));
                 if (PinchPartType2 == PinchPartType2.EarTop)
                 {
                     _slider2.gameObject.SetActive(false);
                 }
                 else
                 {
-                    SettingSlider(_slider2.gameObject, "位置调整Y",Action_ScaleSlider2);
+                    SettingSlider(_slider2.gameObject, "位置调整Y",Action_ScaleSlider2
+                        ,PinchFaceManager.pinchFaceHelper.RemapValue(_transformSetting.curValue.y,_transformSetting.pinchBraidRangeY, new Vector2(1, 100)));
                 }
                 
                 //_value 1~100 ->
@@ -777,11 +798,11 @@ namespace  ProjectOC.PinchFace
                 GenerateUICallBack(_trans,_counter);
             };
         }
-        void SettingSlider(GameObject _sliderGo,string _text,UnityAction<float> _action)
+        void SettingSlider(GameObject _sliderGo,string _text,UnityAction<float> _action,float curValue)
         {
             CustomSelectedSlider _slider = _sliderGo.GetComponentInChildren<CustomSelectedSlider>();
             _sliderGo.transform.Find("Button").name = _text;
-            _slider.SetSliderConfig(_text,_action);
+            _slider.SetSliderConfig(_text,_action,curValue);
         }
         private void GenerateUIPre()
         {
@@ -809,19 +830,39 @@ namespace  ProjectOC.PinchFace
         #endregion
         
         #region 数据存储相关
-
+        
         public class PinchPartData
         {
             public PinchPartType2 PinchPartType2 { get; private set; }
             public PinchPartType3 PinchPartType3 { get; private set; }
-            
             public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
-
+            
             public PinchPartData(PinchPartType2 _type2, PinchPartType3 _type3)
             {
                 PinchPartType2 = _type2;
                 PinchPartType3 = _type3;
             }
+            
+            public void ApplyPinchSetting(CharacterModelPinch _modelPinch)
+            {
+                foreach (var _comp in pinchSettingComps)
+                {
+                    //每个PinchType
+                    if (_comp.GetType() == typeof(ChangeTypePinchSetting))
+                    {
+                        (_comp as ChangeTypePinchSetting).ApplyType(_modelPinch,this);
+                        return;
+                    }
+                }
+                //没有Type的情况
+                foreach (var _comp in pinchSettingComps)
+                {
+                    _comp.Apply(PinchPartType2,PinchPartType3,_modelPinch);
+                }
+            }
+
+            
+            
         }
         #endregion
     }

@@ -58,7 +58,7 @@ namespace ProjectOC.PinchFace
                     continue;
                 }
                 childTransforms[i].transform.SetSiblingIndex(i);
-                UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>();
+                UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>(true);
                 btnListInitors.AddRange(btnLists);
             }
             

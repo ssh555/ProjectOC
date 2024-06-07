@@ -48,7 +48,7 @@ namespace ML.Engine.Event
             string[] idSplit = p1[0].Split("_");
             string buildingTypeStr = idSplit[2];
             BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
-            int _level = 1;
+            int _level = 0;
             if (idSplit.Length == 4)
             {
                 _level = int.Parse(idSplit[3]);
@@ -64,7 +64,7 @@ namespace ML.Engine.Event
             string[] idSplit = p1[0].Split("_");
             string buildingTypeStr = idSplit[2];
             BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
-            int _level = 1;
+            int _level = 0;
             if (idSplit.Length == 4)
             {
                 _level = int.Parse(idSplit[3]);
