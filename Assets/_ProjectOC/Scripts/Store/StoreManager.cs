@@ -101,6 +101,37 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+        public Dictionary<IStore, int> GetPutOutStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
+        {
+            Dictionary<IStore, int> result = new Dictionary<IStore, int>();
+            if (data != null && amount > 0)
+            {
+                int resultAmount = 0;
+                List<IStore> stores = GetStores(priorityType);
+                foreach (IStore store in stores)
+                {
+                    if (!judgeInteracting || !store.IsInteracting)
+                    {
+                        int storeAmount = store.DataContainer.GetAmount(data.GetDataID(), DataNS.DataOpType.Storage, false, judgeCanOut);
+                        if (storeAmount > 0)
+                        {
+                            if (resultAmount + storeAmount >= amount)
+                            {
+                                result.Add(store, amount - resultAmount);
+                                resultAmount = amount;
+                                break;
+                            }
+                            else
+                            {
+                                result.Add(store, storeAmount);
+                                resultAmount += storeAmount;
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
