@@ -363,7 +363,10 @@ namespace ProjectOC.StoreNS.UI
                     }
                     else
                     {
-                        item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
+                        if (tempSprite.ContainsKey(str))
+                        {
+                            item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
+                        }
                     }
                 }
             }
