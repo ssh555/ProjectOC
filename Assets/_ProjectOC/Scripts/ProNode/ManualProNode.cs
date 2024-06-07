@@ -120,7 +120,6 @@ namespace ProjectOC.ProNodeNS
         {
             if (Worker != null)
             {
-                Worker.SetTimeStatusAll(WorkerNS.TimeStatus.Work_OnDuty);
                 Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent, GetContainerType());
                 Worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
                 Worker.OnAPChangeEvent += OnWorkerAPChangeEvent;

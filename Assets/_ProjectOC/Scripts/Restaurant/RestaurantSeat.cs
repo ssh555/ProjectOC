@@ -53,7 +53,7 @@ namespace ProjectOC.RestaurantNS
             {
                 Worker.AlterMood(mood.Item2);
             }
-            if (Worker.APCurrent >= Worker.APRelaxThreshold || !Restaurant.HaveFood)
+            if (Worker.APCurrent >= Worker.APRelaxThreshold || Worker.APCurrent >= Worker.APMax || !Restaurant.HaveFood)
             {
                 WorkerNS.Worker worker = Worker;
                 (this as WorkerNS.IWorkerContainer).RemoveWorker();

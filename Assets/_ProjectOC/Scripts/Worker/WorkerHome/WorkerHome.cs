@@ -181,18 +181,22 @@ namespace ProjectOC.WorkerNS
             (this as IWorkerContainer).OnArriveSetPosition(worker, transform.position + new Vector3(0, 2f, 0));
         }
         public Action<int> OnWorkerMoodChangeEvent;
+        public void OnWorkerMoodChangeEventInvoke(int value)
+        {
+            OnWorkerMoodChangeEvent?.Invoke(value);
+        }
         public void SetWorkerRelateData()
         {
             if (HaveWorker)
             {
-                Worker.OnAPChangeEvent += OnWorkerMoodChangeEvent;
+                Worker.OnAPChangeEvent += OnWorkerMoodChangeEventInvoke;
             }
         }
         public void RemoveWorkerRelateData()
         {
             if (HaveWorker)
             {
-                Worker.OnAPChangeEvent -= OnWorkerMoodChangeEvent;
+                Worker.OnAPChangeEvent -= OnWorkerMoodChangeEventInvoke;
             }
         }
 

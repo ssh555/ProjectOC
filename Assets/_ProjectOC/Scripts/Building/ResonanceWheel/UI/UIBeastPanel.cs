@@ -110,6 +110,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.RegisterInput();
         }
 
+        public override void OnPause()
+        {
+            this.UnregisterInput();
+        }
+
         public override void OnEnter()
         {
             base.OnEnter();
@@ -425,21 +430,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 
                 for (int i = 0; i < workerTimeStatus.Length; i++)
                 {
-                    //Debug.Log("34 " + i);
                     Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
                         case TimeStatus.Relax:
-                            //Debug.Log("workerTimeStatus Relax");
                             img.color = UnityEngine.Color.green;
                             break;
-                        case TimeStatus.Work_Transport:
-                            //Debug.Log("workerTimeStatus Work_Transport");
+                        case TimeStatus.Work:
                             img.color = UnityEngine.Color.blue;
-                            break;
-                        case TimeStatus.Work_OnDuty:
-                            //Debug.Log("workerTimeStatus Work_OnDuty");
-                            img.color = UnityEngine.Color.yellow;
                             break;
                     }
                 }
@@ -558,9 +556,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     if (worker.TimeArrangement.Status[time] == TimeStatus.Relax)
                     {
-                        worker.SetTimeStatus(time, TimeStatus.Work_Transport);
+                        worker.SetTimeStatus(time, (TimeStatus)TimeStatus.Work);
                     }
-                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work_Transport)
+                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work)
                     {
                         worker.SetTimeStatus(time, TimeStatus.Relax);
                     }
