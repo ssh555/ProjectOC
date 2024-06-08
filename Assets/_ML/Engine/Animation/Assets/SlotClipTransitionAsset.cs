@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace ML.Engine.Animation
 {
@@ -12,14 +14,15 @@ namespace ML.Engine.Animation
         /// <inheritdoc/>
         [Serializable]
         public new class UnShared :
-            UnShared<ClipTransitionAsset, SlotClipTransition, ClipState>,
-            ClipState.ITransition
+            UnShared<ClipTransitionAsset, SlotClipTransition, SlotClipState>,
+            SlotClipState.ITransition
         { }
 
         public SlotClipTransition transition;
+
         public override ITransition GetTransition()
         {
-            var events = ((IAssetHasEvents)this).GetEventsOptional();
+            var events = ((IAssetHasEvents)this).GetEventsOptional(transition.Speed >= 0);
             transition.Events.CopyFrom(events);
 
             return transition;
@@ -60,22 +63,50 @@ namespace ML.Engine.Animation
     }
 
     [Serializable]
-    public class SlotClipTransition : ClipTransition
+    public class SlotClipTransition : ClipTransition, SlotClipState.ITransition
     {
         [SerializeField]
         private AvatarMask _slot;
         public ref AvatarMask Slot => ref _slot;
 
+        SlotClipState ITransition<SlotClipState>.State => this.State as SlotClipState;
+
         public override void Apply(AnimancerState state)
         {
             base.Apply(state);
-            BaseState.Layer.SetMask(_slot);
-            BaseState.Events.OnEnd += OnSlotEnd;
+            BaseState.Layer.SetMask(Slot);
         }
 
-        private void OnSlotEnd()
+        public override ClipState CreateState()
         {
-            BaseState.Layer.SetMask(null);
+            return (this as ITransition<SlotClipState>).CreateState();
+        }
+
+        SlotClipState ITransition<SlotClipState>.CreateState()
+        {
+#if UNITY_ASSERTIONS
+            if (Clip == null)
+                throw new ArgumentException(
+                    $"Unable to create {nameof(ClipState)} because the {nameof(ClipTransition)}.{nameof(Clip)} is null.");
+#endif
+
+            var state = new SlotClipState(Clip);
+            return state;
+        }
+    }
+
+    [Serializable]
+    public class SlotClipState : ClipState
+    {
+        public new interface ITransition : ITransition<SlotClipState> { }
+        public SlotClipState(AnimationClip _clip) : base(_clip)
+        {
+        }
+
+        protected override void OnStartFade()
+        {
+            base.OnStartFade();
+            Layer.SetMask(null);
         }
     }
 

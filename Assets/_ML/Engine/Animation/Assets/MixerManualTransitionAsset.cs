@@ -24,7 +24,7 @@ namespace ML.Engine.Animation
         public WeightMixerTransition transition;
         public override ITransition GetTransition()
         {
-            var events = ((IAssetHasEvents)this).GetEventsOptional();
+            var events = ((IAssetHasEvents)this).GetEventsOptional(transition.Speed >= 0);
             transition.Events.CopyFrom(events);
 
             return transition;

@@ -61,6 +61,10 @@ namespace ML.Engine.Animation
         public virtual float Length { get; }
         public virtual float FrameLength => FrameRate * Length;
 
+        //public override AnimancerState CreateState()
+        //{
+        //    return GetTransition().CreateState();
+        //}
 
         /// <summary>
         /// 用于预览不带事件的Transition
@@ -129,13 +133,11 @@ namespace ML.Engine.Animation
         public float FrameLength
         { get; }
 
-        public AnimancerEvent.Sequence GetEventsOptional()
+        public AnimancerEvent.Sequence GetEventsOptional(bool speedIsPositive)
         {
             //Events.Sort((a, b) => a.NormalizedTime.CompareTo(b.NormalizedTime));
 
             var timeCount = Events.Count;
-            if (timeCount == 0)
-                return null;
 
             var _Events = new AnimancerEvent.Sequence(timeCount);
 
@@ -147,11 +149,14 @@ namespace ML.Engine.Animation
             }
             // EndEvent
             Action endcallback = GetInvoker(EndEvent.UnityEvents);
-            _Events.EndEvent = new AnimancerEvent(EndEvent.NormalizedTime, endcallback);
+            _Events.EndEvent = new AnimancerEvent(float.IsNaN(EndEvent.NormalizedTime) ? (speedIsPositive ? 1 : 0) : EndEvent.NormalizedTime, endcallback);
             return _Events;
         }
 
-        public static Action GetInvoker(UnityEvent callback) => HasPersistentCalls(callback) ? callback.Invoke : AnimancerEvent.DummyCallback;
+        //public static Action GetInvoker(UnityEvent callback) => HasPersistentCalls(callback) ? callback.Invoke : AnimancerEvent.DummyCallback;
+        public static Action GetInvoker(UnityEvent callback) => HasPersistentCalls(callback) ? callback.Invoke : DummyNull;
+
+        public static void DummyNull() { }
 
         public static bool HasPersistentCalls(UnityEvent callback)
         {

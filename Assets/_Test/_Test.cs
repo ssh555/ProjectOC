@@ -9,15 +9,22 @@ using UnityEngine;
 public class _Test : MonoBehaviour
 {
     [SerializeField]
-    public ML.Engine.Animation.ClipTransitionAsset.UnShared _clip;
-    public ML.Engine.Animation.ClipTransitionAsset _modifyclip;
+    public AnimationAssetBase _clip;
+    public AnimationAssetBase _clip2;
 
     public AnimancerComponent _animancer;
 
+    public AvatarMask Mask;
+
     private void Awake()
     {
-        _clip.Events.AddCallback("TestEvent", DebugLog);
-        _animancer.Play(_clip, 0, FadeMode.FromStart);
+        //_clip.Events.AddCallback("TestEvent", DebugLog);
+        _animancer.Layers[0].ApplyAnimatorIK = false;
+        _animancer.Layers[0].ApplyFootIK = false;
+        //_animancer.Layers[0].SetMask(Mask);
+        _animancer.Play(_clip, 0.25f, FadeMode.FromStart);
+
+        //Invoke("Play", 3);
     }
 
     [Button("Play")]
@@ -32,10 +39,7 @@ public class _Test : MonoBehaviour
         //{
         //    _animancer.Playable.DestroyGraph();
         //};
-
-        _modifyclip.transition.Events.SetNormalizedTime(0, 0.23f);
-
-
+        _animancer.Play(_clip2, 0.25f, FadeMode.FromStart);
     }
 
 

@@ -388,10 +388,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c19e81b48b5134c818fcd10cc20b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clip:
-    _Asset: {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
-  _modifyclip: {fileID: 0}
+  _clip: {fileID: 11400000, guid: 37391e17bec56644db3baa07b0e73569, type: 2}
+  _clip2: {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
   _animancer: {fileID: 126086831}
+  Mask: {fileID: 31900000, guid: 37391e17bec56644db3baa07b0e73569, type: 2}
 --- !u!114 &126086831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2551
 --- !u!114 &247120247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2853,6 +2853,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
       propertyPath: m_Name
       value: Model_Player_Stable Sword Outward Slash (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1092408308860062549, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
       propertyPath: m_LocalPosition.x
