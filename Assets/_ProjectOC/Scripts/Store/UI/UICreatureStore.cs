@@ -359,7 +359,10 @@ namespace ProjectOC.StoreNS.UI
                         int activity = creature.Activity;
                         activity = activity >= 0 ? activity : 0;
                         item.Find(strActivity).GetComponent<TMPro.TextMeshProUGUI>().text = activity.ToString();
-                        item.Find(strGender).GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite[strMale] : tempSprite[strFemale];
+                        if (tempSprite.ContainsKey(strMale) && tempSprite.ContainsKey(strFemale))
+                        {
+                            item.Find(strGender).GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite[strMale] : tempSprite[strFemale];
+                        }
                     }
                     else
                     {
