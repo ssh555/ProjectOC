@@ -16,7 +16,7 @@ namespace ML.Engine.Animation
     {
         [Serializable]
         public new class UnShared :
-            UnShared<MixerManualTransitionAsset, ManualMixerTransition, ManualMixerState>,
+            UnShared<MixerManualTransitionAsset, WeightMixerTransition, ManualMixerState>,
             ManualMixerState.ITransition
         { }
 

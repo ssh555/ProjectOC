@@ -50,6 +50,12 @@ namespace ML.Editor.Animation
 
         }
 
+        public override void OnInspectorGUI()
+        {
+            //DrawInEditorWindow();
+            EditorGUILayout.LabelField("请双击打开 Animation Window 进行编辑与查看");
+            //base.OnInspectorGUI();
+        }
     }
 
     [System.Serializable]
