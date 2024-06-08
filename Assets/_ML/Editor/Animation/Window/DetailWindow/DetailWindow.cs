@@ -46,6 +46,7 @@ namespace ML.Editor.Animation
 
         private void OnGUI()
         {
+            AnimationWindow.GetCurrentEvent = Event.current;
             GUILayout.Space(AnimancerGUI.StandardSpacing * 2);
 
             // 可能无用

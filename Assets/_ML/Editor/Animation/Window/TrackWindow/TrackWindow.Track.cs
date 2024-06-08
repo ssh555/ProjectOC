@@ -95,6 +95,11 @@ namespace ML.Editor.Animation
                         ShowContextMenu();
                     }
                 }
+
+                //if(Event.current.control && Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.S)
+                //{
+                //    SaveData();
+                //}
             }
 
             /// <summary>
@@ -148,6 +153,14 @@ namespace ML.Editor.Animation
                 if (this.Siganls.Remove(signal))
                 {
                     signal.OnDelete();
+                }
+            }
+
+            public void SaveData()
+            {
+                foreach (var signal in Siganls)
+                {
+                    signal.SaveData();
                 }
             }
         }
@@ -204,9 +217,14 @@ namespace ML.Editor.Animation
                 {
                     DetailWindow.Instance.CurSelection = this;
                 }
+                else if(Event.current.type == EventType.MouseDown && !PaintRect.Contains(Event.current.mousePosition))
+                {
+                    Instance.Repaint();
+                    DetailWindow.Instance.CurSelection = null;
+                }
 
                 // ±»Ñ¡ÖÐ
-                if(this.IsSelected)
+                if (this.IsSelected)
                 {
                     Event currentEvent = Event.current;
 
@@ -317,6 +335,11 @@ namespace ML.Editor.Animation
             public virtual void OnDeselected()
             {
                 IsSelected = false;
+            }
+
+            public virtual void SaveData()
+            {
+
             }
         }
     }

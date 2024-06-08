@@ -162,6 +162,8 @@ namespace ML.Editor.Animation
 #else
             base.OnGUI();
 #endif
+            AnimationWindow.GetCurrentEvent = Event.current;
+
             _Scene.OnGUI();
 
             //Settings.ShowSkybox = sceneViewState.showSkybox;

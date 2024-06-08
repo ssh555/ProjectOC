@@ -477,11 +477,13 @@ namespace ML.Editor.Animation
                 {
                     // 警告
                     var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();
-                    var normalizedEndTime = state.Events.NormalizedEndTime;
+                    //var normalizedEndTime = state.Events.NormalizedEndTime;
+                    var end = state.Events.EndEvent;
                     // 清空事件 -> 预览动画时不执行Event
                     state.Events = null;
                     // 恢复当前播放时间
-                    state.Events.NormalizedEndTime = normalizedEndTime;
+                    //state.Events.NormalizedEndTime = normalizedEndTime;
+                    state.Events.EndEvent = end;
                     warnings.Enable();
                 }
             }
@@ -675,9 +677,9 @@ namespace ML.Editor.Animation
 
                 // 警告
                 var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();
-                targetState.NormalizedTime = 0;
+                //targetState.NormalizedTime = 0;
                 // 播放结束事件
-                targetState.NormalizedEndTime = 1;
+                //targetState.NormalizedEndTime = 1;
                 targetState.Events.OnEnd = () =>
                 {
                     // 播放下一个动画 Next Animation
@@ -692,8 +694,6 @@ namespace ML.Editor.Animation
                         //// TODO: 不可访问
                         //animancer.Layers[0].IncrementCommandCount();
                         animancer.PauseGraph();
-                        targetState.NormalizedTime = 1;
-                        //Debug.Log(targetState.NormalizedTime + " " + targetState.NormalizedEndTime);
                     }
                 };
                 warnings.Enable();

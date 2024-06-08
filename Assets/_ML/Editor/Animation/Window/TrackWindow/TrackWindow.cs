@@ -35,6 +35,7 @@ namespace ML.Editor.Animation
 
         private void OnGUI()
         {
+            AnimationWindow.GetCurrentEvent = Event.current;
             if (AnimationWindow.Instance != null && AnimationWindow.Instance.AssetEditor != null)
             {
                 DrawTrackMenuGUI();

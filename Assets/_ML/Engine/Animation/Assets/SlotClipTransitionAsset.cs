@@ -14,7 +14,7 @@ namespace ML.Engine.Animation
         /// <inheritdoc/>
         [Serializable]
         public new class UnShared :
-            UnShared<ClipTransitionAsset, SlotClipTransition, SlotClipState>,
+            UnShared<SlotClipTransitionAsset, SlotClipTransition, SlotClipState>,
             SlotClipState.ITransition
         { }
 

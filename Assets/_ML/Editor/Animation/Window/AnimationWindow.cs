@@ -19,6 +19,8 @@ namespace ML.Editor.Animation
 
         private static object _container;
 
+        public static Event GetCurrentEvent;
+
         public PreviewWindow previewWindow => PreviewWindow.Instance;
         public TrackWindow trackWindow => TrackWindow.Instance;
         public DetailWindow detailWindow => DetailWindow.Instance;
@@ -48,6 +50,8 @@ namespace ML.Editor.Animation
             {
                 return;
             }
+
+
             // 创建最外层容器
             _container = ML.Editor.EditorContainerWindow.CreateInstance();
             // 创建分屏容器
@@ -123,6 +127,7 @@ namespace ML.Editor.Animation
 
         private void OnGUI()
         {
+            GetCurrentEvent = Event.current;
             // 选中的资产
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("选中的资产", GUILayout.Width(100));
@@ -167,6 +172,7 @@ namespace ML.Editor.Animation
                 _instance = this;
             }
             AssemblyReloadEvents.afterAssemblyReload += AssemblyReloadEvents_afterAssemblyReload;
+            EditorApplication.update += SaveData;
         }
 
 
@@ -187,6 +193,20 @@ namespace ML.Editor.Animation
             {
                 _instance = null;
             }
+            EditorApplication.update -= SaveData;
+        }
+
+        public void  SaveData()
+        {
+            Event e = GetCurrentEvent;
+            if (SelectedAsset != null && e != null && e.keyCode == KeyCode.S && e.control)
+            {
+                Debug.Log("Animation Window : Save Selected Animation Asset");
+                e.Use();
+                EditorUtility.SetDirty(SelectedAsset);
+                AssetDatabase.SaveAssetIfDirty(SelectedAsset);
+            }
+
         }
 
 

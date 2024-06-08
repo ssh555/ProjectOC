@@ -388,7 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69c19e81b48b5134c818fcd10cc20b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clip: {fileID: 11400000, guid: 37391e17bec56644db3baa07b0e73569, type: 2}
+  _clip: {fileID: 11400000, guid: 388497fffb5c13e4ab6f2e83f10239f7, type: 2}
   _clip2: {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
   _animancer: {fileID: 126086831}
   Mask: {fileID: 31900000, guid: 37391e17bec56644db3baa07b0e73569, type: 2}
@@ -4720,5 +4720,5 @@ SceneRoots:
   - {fileID: 1070531145}
   - {fileID: 1543815890}
   - {fileID: 126086832}
-  - {fileID: 247120249}
   - {fileID: 1586974547}
+  - {fileID: 247120249}
