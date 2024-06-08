@@ -68,7 +68,6 @@ namespace ML.Editor.Animation
 
                 #region 时间轴 -> 使用秒数时间
                 EditorGUILayout.Space();
-
                 DoAnimTimelineGUI(asset.transition, _endEventProperty.GetValue<IAssetHasEvents.AssetEvent>().NormalizedTime, length, frameRate);
                 EditorGUILayout.Space();
                 #endregion
