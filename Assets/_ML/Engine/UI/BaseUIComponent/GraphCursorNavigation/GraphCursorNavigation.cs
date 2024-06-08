@@ -515,6 +515,13 @@ namespace ML.Engine.UI
             this.uiBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             this.isEnable = false;
+
+            if (NavagateMapTimer != null)
+            {
+                ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(NavagateMapTimer);
+                NavagateMapTimer = null;
+            }
+            
         }
 
         public void InitUIBtnList()
