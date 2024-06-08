@@ -143,7 +143,7 @@ namespace ProjectOC.ProNodeNS
         }
         public override void PutIn(int index, DataNS.IDataObj data, int amount)
         {
-            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && index == DataContainer.GetCapacity() - 2 && amount == 1)
+            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && (index == (DataContainer.GetCapacity() - 2)) && amount == 1)
             {
                 var formula = Creature.Discard;
                 ChangeData(index, item, false);

@@ -332,6 +332,7 @@ namespace ProjectOC.ProNodeNS.UI
                     else if (offset.x != 0) 
                     {
                         alterMode = offset.x;
+                        OnAlterTimerEndEvent();
                         AlterTimer.Reset(0.2f);
                     }
                 }
