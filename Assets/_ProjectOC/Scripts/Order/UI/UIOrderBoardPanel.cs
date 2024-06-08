@@ -430,8 +430,6 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 });
                 isNeedRefreshOrderNormalDelegation = false;
             }
-            
-            
         }
         else if(FunctionIndex != 1 || OrderDelegationIndex != 1)
         {
@@ -490,8 +488,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = needNum.ToString();
                 }
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.RequireList[i].id);
-
-
+                slot.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(orderTableData.RequireList[i].id);
             }
             //RewardList
             var RewardList = this.OrderDelegationOrderInfo.Find("RewardList");
@@ -503,6 +500,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
                 slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ItemReward[i].num.ToString();
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
+                slot.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(orderTableData.ItemReward[i].id);
             }
             //°´Å¥Òþ²Ø
 
@@ -660,6 +658,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = num.ToString();
                 }
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(id);
+                slot.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(id);
             }
             //RewardList
             var RewardList = this.AcceptedOrderOrderInfo.Find("RewardList");
@@ -671,6 +670,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
                 slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ItemReward[i].num.ToString();
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
+                slot.transform.Find("ItemIcon").GetComponent<Image>().sprite = ItemManager.Instance.GetItemSprite(orderTableData.ItemReward[i].id);
             }
             RewardList.Find("Text2").gameObject.SetActive(orderTableData.OrderType == OrderType.Urgent);
             RewardList.Find("Text2").GetComponent<TextMeshProUGUI>().text = "x2";

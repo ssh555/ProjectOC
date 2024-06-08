@@ -3257,6 +3257,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6766391083885518499, guid: f5fb2d1bbf0897f468d28438d0f946e2, type: 3}
+      propertyPath: Margin.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766391083885518499, guid: f5fb2d1bbf0897f468d28438d0f946e2, type: 3}
+      propertyPath: Margin.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766391083885518499, guid: f5fb2d1bbf0897f468d28438d0f946e2, type: 3}
       propertyPath: ZoomInLimit
       value: 3
       objectReference: {fileID: 0}

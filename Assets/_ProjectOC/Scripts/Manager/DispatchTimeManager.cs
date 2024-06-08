@@ -1,4 +1,7 @@
 using Sirenix.OdinInspector;
+using System;
+using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
 
 namespace ProjectOC.ManagerNS
 {
@@ -63,7 +66,56 @@ namespace ProjectOC.ManagerNS
                     OnDayChangedAction?.Invoke(CurrentDay);
                 }
             }
+
+            UpdateDelegationAction();
+
         }
+        #region 委托事件管理
+        private List<DelegationAction> DelegationActions = new ();
+        struct DelegationAction
+        {
+            public int day;
+            public int hour;
+            public Action Action;
+
+            public DelegationAction(int day,int hour, Action Action)
+            {
+                this.day = day;
+                this.hour = hour;
+                this.Action = Action;
+            }
+
+        }
+
+        /// <summary>
+        /// 某天某小时触发的事件
+        /// </summary>
+        public void AddDelegationAction(int day,int hour,Action action)
+        {
+            DelegationActions.Add(new DelegationAction(day, hour, action));
+        }
+        /// <summary>
+        /// 当天触发的事件
+        /// </summary>
+        public void AddDelegationAction(int hour, Action action)
+        {
+            DelegationActions.Add(new DelegationAction(CurrentDay, hour, action));
+        }
+
+        private void UpdateDelegationAction()
+        {
+            for (int i = 0; i < DelegationActions.Count; i++) 
+            {
+                if (DelegationActions[i].day == CurrentDay && DelegationActions[i].hour == CurrentHour)
+                {
+                    DelegationActions[i].Action?.Invoke();
+                    DelegationActions.Remove(DelegationActions[i]);
+                }
+            }
+        }
+        #endregion
+
+
     }
 }
 
