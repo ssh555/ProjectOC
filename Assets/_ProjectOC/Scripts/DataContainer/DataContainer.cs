@@ -399,6 +399,7 @@ namespace ProjectOC.DataNS
             if (needSort)
             {
                 Array.Sort(Datas, new SortForData());
+                ResetIndexDict();
             }
         }
         /// <summary>
@@ -436,6 +437,7 @@ namespace ProjectOC.DataNS
                     if (needSort)
                     {
                         Array.Sort(Datas, new SortForData());
+                        ResetIndexDict();
                     }
                     OnDataChangeEvent?.Invoke();
                 }

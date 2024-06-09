@@ -359,6 +359,7 @@ namespace ProjectOC.ProNodeNS.UI
                 else if (offset.y != 0 && CurMode == Mode.Output)
                 {
                     alterMode = offset.y;
+                    OnAlterTimerEndEvent();
                     AlterTimer.Reset(0.2f);
                 }
                 Refresh();
