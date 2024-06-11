@@ -27,7 +27,7 @@ namespace ML.Editor.Animation
         /// <summary>
         /// 用于在AnimationWindow窗口中绘制常规配置项(不包括Track)
         /// </summary>
-        public virtual void DrawInEditorWindow()
+        public virtual void DrawInEditorWindow(EditorWindow window)
         {
             //Debug.LogWarning($"{this.target.GetType()} 没有实现Editor");
             DrawDefaultInspector();

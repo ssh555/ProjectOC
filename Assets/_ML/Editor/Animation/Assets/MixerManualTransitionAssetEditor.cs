@@ -1,5 +1,6 @@
 using Animancer;
 using Animancer.Editor;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 using ML.Engine.Animation;
 using System;
 using System.Collections;
@@ -13,7 +14,7 @@ using static UnityEditor.VersionControl.Asset;
 namespace ML.Editor.Animation
 {
     //[UnityEditor.CustomEditor(typeof(MixerManualTransitionAsset), true)]
-    public class MixerTransitionAssetEditor<T> : AnimationAssetBaseEditor
+    public abstract class MixerTransitionAssetEditor<T> : AnimationAssetBaseEditor
         where T : AnimationAssetBase, IAssetHasEvents
     {
         protected string _WeightsField => GetWeightsField();
@@ -39,8 +40,13 @@ namespace ML.Editor.Animation
 
         // [Animation Speed Weight Sync]
         protected ReorderableList _AnimationList { get; set; }
+
+        protected ITransitionDetailed transition { get; set; }
+
+        protected abstract float FadeDuration { get; set; }
+        
         public override void Init()
-        {
+{
             asset = target as T;
             eventTrack = new EventTrack(asset);
             var p = serializedObject.FindProperty("transition");
@@ -68,8 +74,13 @@ namespace ML.Editor.Animation
                 drawFooterCallback = DoChildListFooterGUI,
             };
             _AnimationList.serializedProperty = CurrentAnimations;
+            InitTransition();
         }
 
+        /// <summary>
+        /// 必须初始化transition
+        /// </summary>
+        public abstract void InitTransition();
 
         public override void DrawTrackGUI()
         {
@@ -78,41 +89,40 @@ namespace ML.Editor.Animation
 
         protected bool bShowFadeDuration = true;
         protected bool bEndTime = true;
-        public override void DrawInEditorWindow()
+        public override void DrawInEditorWindow(EditorWindow window)
         {
-            base.DrawDefaultInspector();
-            //serializedObject.Update();
+            serializedObject.Update();
 
-            //float length = asset.Length;
-            //float frameRate = asset.FrameRate;
-            //float speed = asset.transition.Speed;
+            float length = asset.Length;
+            float frameRate = asset.FrameRate;
+            float speed = transition.Speed;
 
-            //// 速度
-            //// Speed -> 播放速度
-            //DoSpeedGUI(asset.transition);
+            // 速度
+            // Speed -> 播放速度
+            DoSpeedGUI(transition);
 
-            //#region 时间轴 -> 使用秒数时间
-            //EditorGUILayout.Space();
-            //DoAnimTimelineGUI(asset.transition, asset.EndEvent.NormalizedTime, length, frameRate);
-            //EditorGUILayout.Space();
-            //#endregion
+            #region 时间轴 -> 使用秒数时间
+            EditorGUILayout.Space();
+            DoAnimTimelineGUI(transition, asset.EndEvent.NormalizedTime, length, frameRate);
+            EditorGUILayout.Space();
+            #endregion
 
-            //// 过渡时间
-            //// Fade Duration -> 过渡时间
-            //asset.transition.FadeDuration = DoFadeDurationGUI(asset.transition, length, frameRate, ref bShowFadeDuration);
+            // 过渡时间
+            // Fade Duration -> 过渡时间
+            FadeDuration = DoFadeDurationGUI(transition, length, frameRate, ref bShowFadeDuration);
 
-            //// 结束时间
-            //DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);
+            // 结束时间
+            DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);
 
-            //// Animations[动画、Speed、Weight、Sync]
-            //// Animation -> ObjectField
-            //// Speed -> Toggle + FloatField
-            //// Weight -> FloatField[0, 1]
-            //// Sync -> Toggle
-            //// 保证数组长度一致，以动画为准
-            //_AnimationList.DoLayoutList();
+            // Animations[动画、Speed、Weight、Sync]
+            // Animation -> ObjectField
+            // Speed -> Toggle + FloatField
+            // Weight -> FloatField[0, 1]
+            // Sync -> Toggle
+            // 保证数组长度一致，以动画为准
+            _AnimationList.DoLayoutList();
 
-            //serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();
         }
 
 
@@ -741,41 +751,11 @@ namespace ML.Editor.Animation
     [UnityEditor.CustomEditor(typeof(MixerManualTransitionAsset), true)]
     public class MixerManualTransitionAssetEditor : MixerTransitionAssetEditor<MixerManualTransitionAsset>
     {
-        public override void DrawInEditorWindow()
+        protected override float FadeDuration { get => asset.transition.FadeDuration; set => asset.transition.FadeDuration = value; }
+
+        public override void InitTransition()
         {
-            serializedObject.Update();
-
-            float length = asset.Length;
-            float frameRate = asset.FrameRate;
-            float speed = asset.transition.Speed;
-
-            // 速度
-            // Speed -> 播放速度
-            DoSpeedGUI(asset.transition);
-
-            #region 时间轴 -> 使用秒数时间
-            EditorGUILayout.Space();
-            DoAnimTimelineGUI(asset.transition, asset.EndEvent.NormalizedTime, length, frameRate);
-            EditorGUILayout.Space();
-            #endregion
-
-            // 过渡时间
-            // Fade Duration -> 过渡时间
-            asset.transition.FadeDuration = DoFadeDurationGUI(asset.transition, length, frameRate, ref bShowFadeDuration);
-
-            // 结束时间
-            DoEndTimeGUI(_endEventProperty, length, frameRate, (float.IsNaN(speed) || speed >= 0) ? 1 : 0, ref bEndTime);
-
-            // Animations[动画、Speed、Weight、Sync]
-            // Animation -> ObjectField
-            // Speed -> Toggle + FloatField
-            // Weight -> FloatField[0, 1]
-            // Sync -> Toggle
-            // 保证数组长度一致，以动画为准
-            _AnimationList.DoLayoutList();
-
-            serializedObject.ApplyModifiedProperties();
+            transition = asset.transition;
         }
-
     }
 }

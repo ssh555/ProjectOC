@@ -145,7 +145,7 @@ namespace ML.Editor.Animation
             }
             if (assetEditor != null)
             {
-                assetEditor.DrawInEditorWindow();
+                assetEditor.DrawInEditorWindow(this);
             }
             else if (SelectedAsset)
             {

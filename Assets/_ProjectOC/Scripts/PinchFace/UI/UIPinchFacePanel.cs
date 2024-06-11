@@ -269,7 +269,7 @@ namespace ProjectOC.PinchFace
         private string pinchFaceSAPath = "SA_UI_PinchFace/SA_PinchFace.spriteatlasv2";
         private const int commonType3Count = 4;
         private int IsInit = 0;
-        private bool NeedInitPinchPart = false;
+        //private bool NeedInitPinchPart = false;
         private PinchPartType2 curType2;
         public PinchPartType2 CurType2
         {
@@ -301,7 +301,7 @@ namespace ProjectOC.PinchFace
             int _pinchPartTypeCount = _racePinchData.pinchPartType3s.Count + commonType3Count;
             if (pinchParts == null)
             {
-                NeedInitPinchPart = true;
+                //NeedInitPinchPart = true;
                 pinchParts = new List<PinchPart>();
                 for (int i = 0; i < _pinchPartTypeCount; i++)
                 {

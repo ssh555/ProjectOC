@@ -23,7 +23,7 @@ namespace ML.Editor.Animation
 
         }
 
-        public override void DrawInEditorWindow()
+        public override void DrawInEditorWindow(EditorWindow window)
         {
             serializedObject.Update();
 

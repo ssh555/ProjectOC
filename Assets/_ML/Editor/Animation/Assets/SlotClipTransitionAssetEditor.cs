@@ -41,7 +41,7 @@ namespace ML.Editor.Animation
         private bool bEndTime = true;
 
 
-        public override void DrawInEditorWindow()
+        public override void DrawInEditorWindow(EditorWindow window)
         {
             serializedObject.Update();
 

@@ -22,7 +22,7 @@ namespace ML.Editor.Animation
             _FalseAnimationProperty = serializedObject.FindProperty("falseTransition");
             _TrueAnimationProperty = serializedObject.FindProperty("trueTransition");
         }
-        public override void DrawInEditorWindow()
+        public override void DrawInEditorWindow(EditorWindow window)
         {
             serializedObject.Update();
 
