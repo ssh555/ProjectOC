@@ -36,13 +36,16 @@ namespace ML.Editor.Animation
             Debug.Log(transition);
         }
 
+        private Vector2 scrollPosition;
         public override void DrawInEditorWindow(EditorWindow window)
         {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             serializedObject.Update();
             base.DrawInEditorWindow(window);
             DoThresholdGraphGUI(window);
 
             serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.EndScrollView();
         }
 
         protected void DoThresholdGraphGUI(EditorWindow window)

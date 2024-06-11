@@ -25,8 +25,10 @@ namespace ML.Editor.Animation
             timeline = new Timeline(DefaultValue, CurrentWeights);
         }
 
+        private Vector2 scrollPosition;
         public override void DrawInEditorWindow(EditorWindow window)
         {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             serializedObject.Update();
 
             base.DrawInEditorWindow(window);
@@ -34,6 +36,7 @@ namespace ML.Editor.Animation
             DoThresholdGraphGUI(window);
 
             serializedObject.ApplyModifiedProperties();
+            EditorGUILayout.EndScrollView();
         }
 
         public override void InitTransition()
@@ -68,7 +71,7 @@ namespace ML.Editor.Animation
             /// <summary>
             /// 时间轴缩放
             /// </summary>
-            public float timelineScale = 1f;
+            public Vector2 timelineScale = new Vector2(1, 1);
 
             /// <summary>
             /// 最小刻度高度
@@ -106,53 +109,59 @@ namespace ML.Editor.Animation
 
             public void DrawTimelineGUI(EditorWindow window)
             {
-                scrollPositon = EditorGUILayout.BeginScrollView(scrollPositon, alwaysShowHorizontal: false, alwaysShowVertical: false, GUILayout.Height(65), GUILayout.ExpandWidth(true));
-
-                // 计算轴宽度
+                // 计算轴宽高
                 int size = Weights.arraySize;
                 // 权重值
-                float[] weights = new float[size];
-                float minW = float.MaxValue, maxW = float.MinValue;
+                Vector2[] weights = new Vector2[size];
+                Vector2 minW = Vector2.one * float.MaxValue, maxW = Vector2.one * float.MinValue;
                 for (int i = 0; i < size; ++i)
                 {
-                    weights[i] = Weights.GetArrayElementAtIndex(i).floatValue;
-                    minW = Mathf.Min(minW, weights[i]);
-                    maxW = Mathf.Max(maxW, weights[i]);
+                    weights[i] = Weights.GetArrayElementAtIndex(i).vector2Value;
+                    minW.x = Mathf.Min(minW.x, weights[i].x);
+                    maxW.x = Mathf.Max(maxW.x, weights[i].x);
+                    minW.y = Mathf.Min(minW.y, weights[i].y);
+                    maxW.y = Mathf.Max(maxW.y, weights[i].y);
                 }
-                // 轴宽度
-                float timelineWidth = (maxW - minW + 2) * weightRatio * timelineScale * 5;
+                // 轴宽高
+                Vector2 timelineSize = (maxW - minW + Vector2.one * 2) * weightRatio * timelineScale * 5;
+
+                scrollPositon = EditorGUILayout.BeginScrollView(scrollPositon, alwaysShowHorizontal: false, alwaysShowVertical: false, GUILayout.Height(window.position.width), GUILayout.ExpandWidth(true));
+
                 // 区域
-                Rect area = GUILayoutUtility.GetRect(timelineWidth, 50);
-                EditorGUI.DrawRect(area, backgroundColor);
-                float showWidth = window.position.width;
-                if (area.width <= timelineWidth)
+                Rect area = GUILayoutUtility.GetRect(timelineSize.x, timelineSize.y);
+                Vector2 showSize = window.position.size;
+                if (area.width <= timelineSize.x)
                 {
-                    area = new Rect(area.center.x - timelineWidth * 0.5f, area.y, timelineWidth, 50);
+                    area = new Rect(area.center.x - timelineSize.x * 0.5f, area.y, timelineSize.x, area.height);
                 }
-                // 上中心零点
-                Vector2 topcenter = area.center;
-                topcenter.y = area.y;
+                if(area.height <= timelineSize.y)
+                {
+                    area = new Rect(area.x, area.center.y - timelineSize.y * 0.5f, area.width, timelineSize.y);
+                }
+                area.width = area.height = Mathf.Max(area.width, area.height);
+                EditorGUI.DrawRect(area, backgroundColor);
+                // 中心零点
+                Vector2 center = area.center;
 
-
-                // 绘制时间轴刻度 -> 包括小数
-                int tickCount = Mathf.FloorToInt(area.width / (tickSpacing * timelineScale));
+                #region 水平时间轴刻度
+                int tickCount = Mathf.FloorToInt(area.width / (tickSpacing * timelineScale.x));
                 float lastx = -tickInternal;
                 // 上一次绘制的值
-                float lastTX = -tickTimeInternal / timelineScale - 2;
+                float lastTX = -tickTimeInternal / timelineScale .x- 2;
                 // [-tickCount/2, +tickCount/2]
                 int halftickCount = tickCount / 2;
                 for (int i = -halftickCount; i <= halftickCount; ++i)
                 {
-                    float x = topcenter.x + i * tickSpacing * timelineScale;
+                    float x = center.x + i * tickSpacing * timelineScale.x;
                     if (x - lastx < tickInternal)
                     {
                         continue;
                     }
-                    float height = Mathf.Lerp(minTickHeight, maxTickHeight, timelineScale);
+                    float height = Mathf.Lerp(minTickHeight, maxTickHeight, timelineScale.x);
 
                     if (x - lastTX >= tickTimeInternal)
                     {
-                        GUI.Label(new Rect(x, topcenter.y + area.height - height - 10, 50, 20), (i * 0.1f).ToString("F1"));
+                        GUI.Label(new Rect(x, center.y - height - 10, 50, 20), (i * 0.1f).ToString("F1"));
                         timelineColor = Color.white;
                         lastTX = x;
                     }
@@ -161,19 +170,58 @@ namespace ML.Editor.Animation
                         height *= 0.5f;
                         timelineColor = new Color(1, 1, 1, 0.7f);
                     }
-                    EditorGUI.DrawRect(new Rect(x, topcenter.y + area.height - height, 1, height), timelineColor);
+                    EditorGUI.DrawRect(new Rect(x, center.y - height, 1, height), timelineColor);
                     lastx = x;
                 }
 
+                #endregion
+
+                #region 垂直时间轴刻度
+                tickCount = Mathf.FloorToInt(area.width / (tickSpacing * timelineScale.y));
+                float lasty = -tickInternal;
+                // 上一次绘制的值
+                float lastTY = -tickTimeInternal / timelineScale.y - 2;
+                // [-tickCount/2, +tickCount/2]
+                halftickCount = tickCount / 2;
+                for (int i = -halftickCount; i <= halftickCount; ++i)
+                {
+                    float y = center.y + i * tickSpacing * timelineScale.y;
+                    if (y - lasty < tickInternal)
+                    {
+                        continue;
+                    }
+                    float width = Mathf.Lerp(minTickHeight, maxTickHeight, timelineScale.y);
+
+                    if (y - lastTY >= tickTimeInternal)
+                    {
+                        GUI.Label(new Rect(center.x + 10, y, 50, 20), (i * 0.1f).ToString("F1"));
+                        timelineColor = Color.white;
+                        lastTY = y;
+                    }
+                    else
+                    {
+                        width *= 0.5f;
+                        timelineColor = new Color(1, 1, 1, 0.7f);
+                    }
+                    EditorGUI.DrawRect(new Rect(center.x, y, width, 1), timelineColor);
+                    lasty = y;
+                }
+
+
+                #endregion
+
+
+
+                #region 权重值|默认值
                 // 绘制时间轴光标 -> 默认值
-                float cursorX = topcenter.x + DefaultValue.floatValue * tickSpacing * timelineScale * 10;
+                Vector2 cursor = center + DefaultValue.vector2Value * tickSpacing * timelineScale * 10;
                 if (isInitScroll == false)
                 {
                     isInitScroll = true;
-                    scrollPositon.x = cursorX + (timelineWidth - showWidth) * 0.5f;
+                    scrollPositon = cursor + (timelineSize - showSize) * 0.5f;
                 }
-                Rect cursorRect = new Rect(cursorX - 4, topcenter.y, 10, 30);
-                Texture2D cursorTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/Cursor.png");
+                Texture2D cursorTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/SquareCursor.png");
+                Rect cursorRect = new Rect(cursor.x - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, cursor.y - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, 20 * Mathf.Max(timelineScale.x, timelineScale.y), 20 * Mathf.Max(timelineScale.x, timelineScale.y));
                 timelineColor = GUI.color;
                 GUI.color = selected == -1 ? Color.red : Color.white;
                 GUI.DrawTexture(cursorRect, cursorTexture);
@@ -181,8 +229,8 @@ namespace ML.Editor.Animation
                 if (selected == -1)
                 {
                     GUI.color = Color.white;
-                    Rect rect = new Rect(cursorX, topcenter.y, 30, 10);
-                    EditorGUI.LabelField(rect, (DefaultValue.floatValue).ToString("F2"));
+                    Rect rect = new Rect(cursorRect.x + cursorRect.width, cursorRect.y - cursorRect.height, 100, 50);
+                    EditorGUI.LabelField(rect, (DefaultValue.vector2Value).ToString("F2"));
                 }
                 GUI.color = timelineColor;
 
@@ -191,8 +239,8 @@ namespace ML.Editor.Animation
                 Rect[] weightRects = new Rect[size];
                 for (int i = 0; i < size; ++i)
                 {
-                    float weightX = topcenter.x + Weights.GetArrayElementAtIndex(i).floatValue * tickSpacing * timelineScale * 10;
-                    Rect rect = new Rect(weightX - 4, topcenter.y, 10, 20);
+                    Vector2 weight = center + Weights.GetArrayElementAtIndex(i).vector2Value * tickSpacing * timelineScale * 10;
+                    Rect rect = new Rect(weight.x - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, weight.y - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, 20 * Mathf.Max(timelineScale.x, timelineScale.y), 20 * Mathf.Max(timelineScale.x, timelineScale.y));
                     weightRects[i] = rect;
                     timelineColor = GUI.color;
                     GUI.color = selected == i ? Color.red : Color.white;
@@ -201,17 +249,28 @@ namespace ML.Editor.Animation
                     if (selected == i)
                     {
                         GUI.color = Color.white;
-                        rect = new Rect(weightX, topcenter.y, 30, 10);
-                        EditorGUI.LabelField(rect, (Weights.GetArrayElementAtIndex(i).floatValue).ToString("F2"));
+                        rect = new Rect(rect.x + rect.width, rect.y - rect.height, 100, 50);
+                        EditorGUI.LabelField(rect, (Weights.GetArrayElementAtIndex(i).vector2Value).ToString("F2"));
                     }
                     GUI.color = timelineColor;
                 }
+                #endregion
 
                 // 处理鼠标滚轮缩放
                 if (Event.current.type == EventType.ScrollWheel)
                 {
-                    timelineScale -= Event.current.delta.y * 0.01f;
-                    timelineScale = Mathf.Max(0.1f, timelineScale);
+                    // 按住Alt为垂直
+                    if (Event.current.alt)
+                    {
+                        timelineScale.y -= Event.current.delta.y * 0.01f;
+                        timelineScale.y = Mathf.Max(0.1f, timelineScale.y);
+                    }
+                    // 按住Ctrl为水平
+                    else if (Event.current.control)
+                    {
+                        timelineScale.x -= Event.current.delta.y * 0.01f;
+                        timelineScale.x = Mathf.Max(0.1f, timelineScale.x);
+                    }
                     window.Repaint();
                 }
 
@@ -250,14 +309,14 @@ namespace ML.Editor.Animation
                     // 拖动默认值
                     if (selected == -1)
                     {
-                        DefaultValue.floatValue = (mpos.x - topcenter.x) / timelineScale / tickSpacing / 10;
+                        DefaultValue.vector2Value = (mpos - center) / timelineScale / tickSpacing / 10;
                         window.Repaint();
                         currentEvent.Use();
                     }
                     // 拖动权重值
                     else if (selected >= 0)
                     {
-                        Weights.GetArrayElementAtIndex(selected).floatValue = (mpos.x - topcenter.x) / timelineScale / tickSpacing / 10;
+                        Weights.GetArrayElementAtIndex(selected).vector2Value = (mpos - center) / timelineScale / tickSpacing / 10;
                         window.Repaint();
                         currentEvent.Use();
                     }
