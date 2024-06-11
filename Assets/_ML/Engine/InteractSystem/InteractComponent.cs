@@ -20,6 +20,8 @@ namespace ML.Engine.InteractSystem
         public int lateTickPriority { get; set; }
         public virtual void Tick(float deltatime)
         {
+            if(Camera.main == null)
+                return;
             // 射线检测可交互物
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit[] hits = Physics.RaycastAll(ray, range, layerMask);
