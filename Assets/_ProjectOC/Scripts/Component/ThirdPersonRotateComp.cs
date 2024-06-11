@@ -24,20 +24,13 @@ namespace ProjectOC.Player
         /// </summary>
         [LabelText("摄像机")]
         public CinemachineVirtualCamera VCamera;
-
+        [LabelText("LookAt目标")]
+        public Transform TargetTransf;
+        public Cinemachine3rdPersonFollow Cinemachine3Rd => VCamera.GetCinemachineComponent<Cinemachine3rdPersonFollow>();
         #region Property|Field
-        [LabelText("摄像机 X 轴旋转")]
-        public Transform VCamRotX;
-        [LabelText("摄像机 Y 轴旋转")]
-        public Transform VCamRotY;
-        [LabelText("摄像机 Z 轴旋转")]
-        public Transform VCamRotZ;
-
         /// <summary>
         /// 摄像机视点中心
         /// </summary>
-        [LabelText("摄像机视点中心")]
-        public Transform VCamViewer;
 
         /// <summary>
         /// X 方向旋转速度
@@ -45,6 +38,9 @@ namespace ProjectOC.Player
         [LabelText("X 方向旋转速度"), ShowInInspector]
         public float rotSpeedX;
 
+        private float cinemachineTargetYaw;
+        private float cinemachineTargetPitch;
+        
         /// <summary>
         /// Y 方向旋转速度
         /// </summary>
@@ -62,8 +58,8 @@ namespace ProjectOC.Player
         public bool bEnableDeltaTime = true;
 
         #region 相机跟随
-        
-        private float SpringCurLength = 0.1f;
+        [LabelText("当前长度")]
+        public float SpringCurLength = 0.1f;
         [LabelText("弹簧臂伸缩速度")]
         public float scrollSpeed = 0.001f;
         [LabelText("弹簧臂长最大"),Range(0,10)] 
@@ -93,39 +89,27 @@ namespace ProjectOC.Player
         #region Tick
         public void LateTick(float deltatime)
         {
-            if (!this.bRotEnable)
+            if (this.bRotEnable)
             {
-                return;
+                //相机轴旋转
+                if (bSpringScaleEnable)
+                {
+                    float mouseScroll = this.MouseScroll.ReadValue<float>() * scrollSpeed;
+                    SpringCurLength =  Mathf.Clamp(SpringCurLength + mouseScroll,SpringMinLength,SpringMaxLength);
+                    Cinemachine3Rd.CameraDistance = SpringCurLength;
+                    // Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
+                    // VCamera.transform.localPosition = camPos;
+                }
+                
+                // 旋转Y轴、X轴
+                float mouseX = this.MouseXInput.ReadValue<float>() * rotSpeedX * (bEnableDeltaTime ? Time.deltaTime : 1);
+                float mouseY = this.MouseYInput.ReadValue<float>() * rotSpeedY * (bEnableDeltaTime ? Time.deltaTime : 1) * (bInVerseRotX ? -1 : 1);
+                cinemachineTargetYaw += mouseX;
+                cinemachineTargetPitch += mouseY;
             }
-            #region 相机跟随
-
-            if (bSpringScaleEnable)
-            {
-                float mouseScroll = this.MouseScroll.ReadValue<float>() * scrollSpeed;
-                SpringCurLength =  Mathf.Clamp(SpringCurLength + mouseScroll,SpringMinLength,SpringMaxLength);
-                Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
-                VCamera.transform.localPosition = camPos;
-            }
-            #endregion
-            
-            #region 跟随鼠标旋转
-            // 锁定鼠标
-            //Cursor.lockState = CursorLockMode.Locked;
-
-            // 获得鼠标当前位置的X和Y
-            // 旋转Y轴
-            float mouseX = this.MouseXInput.ReadValue<float>() * rotSpeedX * (bEnableDeltaTime ? Time.deltaTime : 1);
-            this.VCamRotY.localRotation *= Quaternion.Euler(0f, mouseX, 0f);
-
-            // 旋转X轴
-            float mouseY = this.MouseYInput.ReadValue<float>() * rotSpeedY * (bEnableDeltaTime ? Time.deltaTime : 1);
-
-
-            this.VCamRotX.localRotation *= Quaternion.Euler(mouseY * (bInVerseRotX ? -1 : 1), 0f, 0f);
-            this.VCamRotX.localRotation = this.ClampRotationAroundXAxis(this.VCamRotX.localRotation);
-            //this.ConstrainCamera();
-            #endregion
-
+            cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            cinemachineTargetPitch = ClampAngle(cinemachineTargetPitch, this.rotXMin, this.rotXMax);
+            TargetTransf.rotation = Quaternion.Euler(cinemachineTargetPitch,cinemachineTargetYaw, 0.0f);
         }
         #endregion
 
@@ -145,14 +129,17 @@ namespace ProjectOC.Player
             q.x = Mathf.Tan(0.5f * Mathf.Deg2Rad * angleX) * q.w;
             return q;
         }
-
-
-        //private void ConstrainCamera()
-        //{
-        //    Vector3 point = this.VCamViewer.InverseTransformPoint(this.VCamera.transform.position);
-        //    point = point.normalized * this.radius;
-        //    this.VCamera.transform.position = this.VCamViewer.TransformPoint(point);
-        //}
+        private float ClampAngle(float lfAngle, float lfMin, float lfMax)
+        {
+            if (lfAngle < -360f) lfAngle += 360f;
+            if (lfAngle > 360f) lfAngle -= 360f;
+            return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+        
+        public void Init()
+        {
+            VCamera.transform.SetParent(null);
+        }
 
         public void RegisterTick(int priority)
         {
