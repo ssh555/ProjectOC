@@ -12,13 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ea2079214cffd648a261993a6bb7995, type: 3}
   m_Name: Anim_MMT_Test
   m_EditorClassIdentifier: 
-  manualMixerTransition:
+  transition:
     _FadeDuration: 0.25
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
     _Speed: 1
-    _Animations: []
+    _Animations:
+    - {fileID: 7400000, guid: 51c82bb2598591143a29868a334b640b, type: 2}
+    - {fileID: 7400000, guid: 50faf38ee494dd844b6d252ed131f3bb, type: 2}
     _Speeds: []
     _SynchronizeChildren: 
+    _Weights:
+    - 0.5
+    - 0.5
+  _Events: []
+  _EndEvent:
+    Name: 
+    NormalizedTime: NaN
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []

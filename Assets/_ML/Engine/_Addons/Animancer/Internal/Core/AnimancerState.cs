@@ -509,7 +509,6 @@ namespace Animancer
                     // but Weight changes wouldn't so the Time and Weight would be out of sync. For example, if an
                     // event plays a state, the old state would be stopped back at Time 0 but its Weight would not yet
                     // be 0 so it would show its first frame before the new animation takes effect.
-
                     if (AnimancerPlayable.IsRunningPostUpdate(root))
                     {
                         _MustSetTime = true;

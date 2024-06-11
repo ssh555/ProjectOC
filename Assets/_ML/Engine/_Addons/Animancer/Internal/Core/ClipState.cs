@@ -106,7 +106,6 @@ namespace Animancer
         }
 
         /************************************************************************************************************************/
-
         /// <summary>Creates and assigns the <see cref="AnimationClipPlayable"/> managed by this node.</summary>
         protected override void CreatePlayable(out Playable playable)
         {

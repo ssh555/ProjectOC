@@ -12,4 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c1b6265969f5164aafa06e54c822123, type: 3}
   m_Name: Anim_M1DT_Test
   m_EditorClassIdentifier: 
-  mixerTransition1D: {fileID: 0}
+  transition:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations:
+    - {fileID: 7400000, guid: d96a14275256792448be420173652545, type: 2}
+    - {fileID: 7400000, guid: d10aede4e48ea9c45a7b4432af957776, type: 2}
+    - {fileID: 7400000, guid: f94a539a810026c41b3a2f23dedef614, type: 2}
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds:
+    - 0
+    - 0.5
+    - 1
+    _DefaultParameter: 1
+    _ExtrapolateSpeed: 1
+  _Events: []
+  _EndEvent:
+    Name: 
+    NormalizedTime: NaN
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []

@@ -8,11 +8,11 @@ namespace ML.Engine.UI.Text
     [System.Serializable]
     public sealed class MLTextMeshProUGUI : TMPro.TextMeshProUGUI
     {
-        [LabelText("是否本地化"), SerializeField, HideInInspector]
-        private bool IsLocalize = false;
+        //[LabelText("是否本地化"), SerializeField, HideInInspector]
+        //private bool IsLocalize = false;
 
-        [LabelText("本地化ID"), SerializeField, HideInInspector]
-        private string localizeID;
+        //[LabelText("本地化ID"), SerializeField, HideInInspector]
+        //private string localizeID;
 
 //        public override string text
 //        {

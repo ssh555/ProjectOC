@@ -265,6 +265,15 @@ namespace Animancer
                     transition.Apply(state.GetChild(i));
         }
 
+        /// <summary>
+        /// TODO : ÐÞ¸ÄÁËAnimancer
+        /// </summary>
+        /// <param name="state"></param>
+        protected void ParentApply(AnimancerState state)
+        {
+            base.Apply(state);
+        }
+
         /************************************************************************************************************************/
 
         /// <summary>Adds the <see cref="Animations"/> to the collection.</summary>
