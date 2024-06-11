@@ -162,6 +162,8 @@ namespace ML.Editor.Animation
 #else
             base.OnGUI();
 #endif
+            AnimationWindow.GetCurrentEvent = Event.current;
+
             _Scene.OnGUI();
 
             //Settings.ShowSkybox = sceneViewState.showSkybox;
@@ -206,8 +208,7 @@ namespace ML.Editor.Animation
             {
                 if (SelectedAsset == null)
                     return null;
-
-                return SelectedAsset.GetTransition();
+                return SelectedAsset.GetPreviewTransition();
             }
         }
 
@@ -215,6 +216,7 @@ namespace ML.Editor.Animation
         {
             DestroySelectedAsset();
             _selectedAsset = asset;
+            //_selectedAsset = ML.Engine.Utility.DeepCopyUtility.DeepCopy<AnimationAssetBase>(asset);
             _Scene.OnSelectedAssetChanged();
         }
 

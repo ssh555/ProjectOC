@@ -59,25 +59,6 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public int GetRandomIndex(List<int> weights)
-        {
-            int totalWeight = 0;
-            foreach (int weight in weights)
-            {
-                totalWeight += weight;
-            }
-            int num = UnityEngine.Random.Range(0, totalWeight+1);
-            int cur = 0;
-            for (int i = 0; i < weights.Count; i++)
-            {
-                cur += weights[i];
-                if (num <= cur)
-                {
-                    return i;
-                }
-            }
-            return 0;
-        }
         public List<Feature> CreateFeature(WorkerCategory category)
         {
             return CreateFeature(Config.FeatureMax, Config.FeatureOdds, category);
@@ -92,7 +73,7 @@ namespace ProjectOC.WorkerNS
                 Debug.Log($"Error featureMax.Count: {featureMax.Count} featureOdds.Count:{featureOdds.Count}"); 
                 return result;
             }
-            int maxFeatureNum = GetRandomIndex(featureMax);
+            int maxFeatureNum = ML.Engine.MathNS.Math.GetRandomIndex(featureMax);
             if (RaceDict.ContainsKey(category))
             {
                 result.Add(SpawnFeature(RaceDict[category]));
@@ -103,7 +84,7 @@ namespace ProjectOC.WorkerNS
             for (int i = 0; i < maxFeatureNum; i++)
             {
                 if (buffs.Count == 0 && debuffs.Count == 0) { break; }
-                int index = GetRandomIndex(featureOdds);
+                int index = ML.Engine.MathNS.Math.GetRandomIndex(featureOdds);
                 HashSet<string> sets;
                 if (buffs.Count > 0 && debuffs.Count > 0)
                 {

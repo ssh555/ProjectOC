@@ -140,6 +140,41 @@ namespace ML.Editor.Animation
                 }
             }
 
+            public float Length
+            {
+                get
+                {
+                    var state = Instance._Scene.Animancer.States.Current;
+                    float length = state.Clip == null ? 1 : state.Clip.length;
+                    for (int i = 0; i < state.ChildCount; ++i)
+                    {
+                        float tmp = state.GetChild(i).Clip == null ? 1 : state.GetChild(i).Clip.length;
+                        if (tmp > length)
+                        {
+                            length = tmp;
+                        }
+                    }
+                    return length;
+                }
+            }
+
+            public float FrameRate
+            {
+                get
+                {
+                    var state = Instance._Scene.Animancer.States.Current;
+                    float frameRate = state.Clip == null ? 1 : state.Clip.frameRate;
+                    for(int i = 0; i < state.ChildCount; ++i)
+                    {
+                        float tmp = state.GetChild(i).Clip == null ? 1 : state.GetChild(i).Clip.frameRate;
+                        if(tmp > frameRate)
+                        {
+                            frameRate = tmp;
+                        }
+                    }
+                    return frameRate;
+                }
+            }
 
 
             /// <summary>
@@ -442,11 +477,13 @@ namespace ML.Editor.Animation
                 {
                     // 警告
                     var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();
-                    var normalizedEndTime = state.Events.NormalizedEndTime;
+                    //var normalizedEndTime = state.Events.NormalizedEndTime;
+                    var end = state.Events.EndEvent;
                     // 清空事件 -> 预览动画时不执行Event
                     state.Events = null;
                     // 恢复当前播放时间
-                    state.Events.NormalizedEndTime = normalizedEndTime;
+                    //state.Events.NormalizedEndTime = normalizedEndTime;
+                    state.Events.EndEvent = end;
                     warnings.Enable();
                 }
             }
@@ -533,14 +570,14 @@ namespace ML.Editor.Animation
             /// <summary>
             /// 回退动画一帧
             /// </summary>
-            private void StepBackward()
-                => StepTime(-AnimancerSettings.FrameStep);
+            public void StepBackward()
+                => StepTime(-(1 / FrameRate));
 
             /// <summary>
             /// 前进动画一帧
             /// </summary>
-            private void StepForward()
-                => StepTime(AnimancerSettings.FrameStep);
+            public void StepForward()
+                => StepTime((1 / FrameRate));
 
             /// <summary>
             /// 基于当前动画更改时间步长
@@ -562,10 +599,36 @@ namespace ML.Editor.Animation
             }
 
             /// <summary>
+            /// 回到第一帧
+            /// </summary>
+            public void StepToFirstKey()
+            {
+                // 尝试播放
+                if (!TryShowTransitionPaused(out _, out _, out var state))
+                    return;
+
+                // 应用当前TimeOffset
+                NormalizedTime = 0;
+            }
+
+            /// <summary>
+            /// 到最后一帧
+            /// </summary>
+            public void StepToLastKey()
+            {
+                // 尝试播放
+                if (!TryShowTransitionPaused(out _, out _, out var state))
+                    return;
+
+                // 应用当前TimeOffset
+                NormalizedTime = 1;
+            }
+
+            /// <summary>
             /// 基于 Previous Animation 播放当前动画
             /// </summary>
             /// <param name="animancer"></param>
-            private void PlaySequence(AnimancerPlayable animancer)
+            public void PlaySequence(AnimancerPlayable animancer)
             {
                 if (_PreviousAnimation != null && _PreviousAnimation.length > 0)
                 {
@@ -603,17 +666,20 @@ namespace ML.Editor.Animation
                 // 获取旧的播放状态
                 animancer.States.TryGet(transition, out var oldState);
 
+                // 销毁旧状态
+                if (oldState != null)
+                    oldState.Destroy();
+
                 // 播放新的动画的状态
                 var targetState = animancer.Play(transition);
                 OnPlayAnimation();
 
-                // 销毁旧状态
-                if (oldState != null && oldState != targetState)
-                    oldState.Destroy();
 
                 // 警告
                 var warnings = OptionalWarning.UnsupportedEvents.DisableTemporarily();
+                //targetState.NormalizedTime = 0;
                 // 播放结束事件
+                //targetState.NormalizedEndTime = 1;
                 targetState.Events.OnEnd = () =>
                 {
                     // 播放下一个动画 Next Animation
@@ -625,8 +691,9 @@ namespace ML.Editor.Animation
                     }
                     else
                     {
-                        // TODO : 不可访问
+                        //// TODO: 不可访问
                         //animancer.Layers[0].IncrementCommandCount();
+                        animancer.PauseGraph();
                     }
                 };
                 warnings.Enable();
@@ -690,6 +757,10 @@ namespace ML.Editor.Animation
                     if (AnimancerPlayable.Current.States.TryGet(transition, out var state))
                     {
                         PreviewWindow.Instance._Animations._NormalizedTime = state.NormalizedTime;
+                        if(state.IsPlaying)
+                        {
+                            TrackWindow.Instance.Repaint();
+                        }
                     }
 
                 }
