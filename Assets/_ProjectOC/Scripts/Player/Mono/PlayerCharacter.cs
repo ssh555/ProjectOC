@@ -82,15 +82,17 @@ namespace ProjectOC.Player
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
-            
+            this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
             this.playerTerrainDetect.gameObject.AddComponent<PlayerTerrainDetect>().SetMoveSetting(this.moveAbility.moveSetting);
 
             if(this.thirdPersonRotateComp == null)
             {
                 this.thirdPersonRotateComp = new ThirdPersonRotateComp();
             }
+            this.thirdPersonRotateComp.Init();
             this.thirdPersonRotateComp.RegisterTick(0);
             this.thirdPersonRotateComp.RuntimeSetMouseInput(this.playerInputActions.MouseX, this.playerInputActions.MouseY,this.playerInputActions.MouseScroll);
+            //moveAbility.Viewer = thirdPersonRotateComp.VCamera.transform;
 
 
             this.moveStateController = new StateController(0);
@@ -99,7 +101,7 @@ namespace ProjectOC.Player
 
             this.moveStateController.SetStateMachine(moveStateMachine);
 
-            this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
+            
 
             this.playerInputActions.Enable();
 
