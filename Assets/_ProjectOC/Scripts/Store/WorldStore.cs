@@ -6,9 +6,10 @@ namespace ProjectOC.StoreNS
     {
         [LabelText("ÕæÊµ²Ö¿â"), ShowInInspector, ReadOnly]
         public Store RealStore => Store as Store;
+        private const string str = "Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab";
         public override void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab",
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(str,
                 ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false).Completed += (handle) =>
                 {
                     UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();

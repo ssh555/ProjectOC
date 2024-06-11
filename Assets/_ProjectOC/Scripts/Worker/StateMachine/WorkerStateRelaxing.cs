@@ -50,7 +50,7 @@ namespace ProjectOC.WorkerNS
                             ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
                         }
 
-                        if (!worker.HaveDestination && !worker.HaveRestaurantSeat)
+                        if (!worker.HaveDestination && !worker.HaveRestaurantSeat && !worker.HaveTransport)
                         {
                             if (worker.HaveHome && !worker.GetContainer(WorkerContainerType.Home).IsArrive)
                             {

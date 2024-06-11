@@ -19,7 +19,6 @@ Shader "Universal Render Pipeline/Shader_Common_HairColorSplit"
             Tags
             {
                 "LightMode" = "UniversalForward"
-                //"LightMode" = "UniversalGBuffer"
             }
             HLSLPROGRAM  //URP ³ÌÐò¿é¿ªÊ¼
 			#pragma target 4.5

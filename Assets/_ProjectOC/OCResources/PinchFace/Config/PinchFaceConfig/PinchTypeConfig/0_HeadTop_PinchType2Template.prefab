@@ -81,7 +81,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorChangeType: 1
   CurColorChangeType: 0
-  param1: 0
-  param2: 0
-  color1: {r: 0, g: 0, b: 0, a: 0}
-  color2: {r: 0, g: 0, b: 0, a: 0}
+  smoothStepThreshold: 0.2
+  smoothStrength: 0.2
+  colors:
+  - {r: 0.2235294, g: 0.77254903, b: 0.6224054, a: 1}
+  - {r: 0, g: 0, b: 0, a: 0}

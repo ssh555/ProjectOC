@@ -153,6 +153,18 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        private const string strEff = "Eff";
+        private const string strExpRate = "ExpRate";
+        private const string strLevelCurrent = "LevelCurrent";
+        private const string strWorkerLeaveIsland = "一只隐兽已经离开岛屿！";
+        private const string strWorkerWillLeaveIsland = "一只隐兽将在3分钟后离开岛屿！";
+        private const string strTex2D_Worker_UI_LowMood = "Tex2D_Worker_UI_LowMood";
+        private const string strTex2D_Worker_UI_LowAP = "Tex2D_Worker_UI_LowAP";
+        private const string strTex2D_Worker_UI_LowAPMood = "Tex2D_Worker_UI_LowAPMood";
+        #endregion
+
         #region Init OnDestroy
         public void Init(WorkerEcho workerEcho = null, WorkerCategory category = WorkerCategory.None)
         {
@@ -220,13 +232,14 @@ namespace ProjectOC.WorkerNS
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
-            ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject("", transform, 
+            ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(str, transform, 
                 new Vector3(0, transform.GetComponent<CapsuleCollider>().height * 1.5f, 0),
                 Quaternion.Euler(Vector3.zero), Vector3.one,
                 ManagerNS.LocalGameManager.Instance.Player.currentCharacter.transform);
         }
         public void OnDestroy()
         {
+            ClearDestination();
             if (ManagerNS.LocalGameManager.Instance != null)
             {
                 ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
@@ -234,88 +247,56 @@ namespace ProjectOC.WorkerNS
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
 
-            timerFishInNest?.End();
-            timerForNoHome?.End();
-
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
             foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
             {
                 container?.RemoveWorker();
             }
+            timerFishInNest?.End();
+            timerForNoHome?.End();
         }
         #endregion
 
         #region IEffectObj
         public List<Effect> Effects { get; set; } = new List<Effect>();
+
         public void ApplyEffect(Effect effect)
         {
             if (effect.EffectType != EffectType.AlterWorkerVariable) { Debug.Log("type != AlterWorkerVariable"); return; }
             bool flag = true;
-            if (effect.ParamStr == "APMax")
+            if (Enum.TryParse(effect.ParamStr, out EffectEnum value))
             {
-                APMax += effect.ParamInt;
+                switch (value)
+                {
+                    case EffectEnum.APMax: APMax += effect.ParamInt; break;
+                    case EffectEnum.CanArrange: CanArrange = effect.ParamBool; break;
+                    case EffectEnum.CanReverse: CanReverse = effect.ParamBool; break;
+                    case EffectEnum.Eff_AllSkill: Eff_AllSkill += effect.ParamInt; break;
+                    case EffectEnum.EMCost: EMCost += effect.ParamInt; break;
+                    case EffectEnum.EMRecover: EMRecover += effect.ParamInt; break;
+                    case EffectEnum.FactorAPCost: FactorAPCost += effect.ParamFloat; break;
+                    case EffectEnum.FactorEatTime: FactorEatTime += effect.ParamFloat; break;
+                    case EffectEnum.FactorWalkSpeed: FactorWalkSpeed += effect.ParamFloat; break;
+                    case EffectEnum.ModifyBURMax: ModifyBURMax += effect.ParamInt; break;
+                    case EffectEnum.ModifyEatTime: ModifyEatTime += effect.ParamFloat; break;
+                    case EffectEnum.ModifyWalkSpeed: ModifyWalkSpeed += effect.ParamFloat; break;
+                    default: flag = false; break;
+                }
             }
-            else if (effect.ParamStr == "CanArrange")
-            {
-                CanArrange = effect.ParamBool;
-            }
-            else if (effect.ParamStr == "CanReverse")
-            {
-                CanReverse = effect.ParamBool;
-            }
-            else if (effect.ParamStr == "Eff_AllSkill")
-            {
-                Eff_AllSkill += effect.ParamInt;
-            }
-            else if (effect.ParamStr == "EMCost")
-            {
-                EMCost += effect.ParamInt;
-            }
-            else if (effect.ParamStr == "EMRecover")
-            {
-                EMRecover += effect.ParamInt;
-            }
-            else if (effect.ParamStr == "FactorAPCost")
-            {
-                FactorAPCost += effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "FactorEatTime")
-            {
-                FactorEatTime += effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "FactorWalkSpeed")
-            {
-                FactorWalkSpeed += effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "ModifyBURMax")
-            {
-                ModifyBURMax += effect.ParamInt;
-            }
-            else if (effect.ParamStr == "ModifyEatTime")
-            {
-                ModifyEatTime += effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "ModifyWalkSpeed")
-            {
-                ModifyWalkSpeed += effect.ParamFloat;
-            }
-            else
-            {
-                flag = false;
-            }
+            else { flag = false; }
             if (!flag && effect.ParamStr.Contains('_') && Enum.TryParse(effect.ParamStr.Split('_')[1], out SkillType skillType))
             {
                 flag = true;
-                if (effect.ParamStr.StartsWith("Eff"))
+                if (effect.ParamStr.StartsWith(strEff))
                 {
                     Skill[skillType] = Skill[skillType].AlterEff(effect.ParamInt);
                 }
-                else if (effect.ParamStr.StartsWith("ExpRate"))
+                else if (effect.ParamStr.StartsWith(strExpRate))
                 {
                     Skill[skillType] = Skill[skillType].AlterExpRate(effect.ParamInt);
                 }
-                else if (effect.ParamStr.StartsWith("LevelCurrent"))
+                else if (effect.ParamStr.StartsWith(strLevelCurrent))
                 {
                     Skill[skillType] = Skill[skillType].ChangeLevel(effect.ParamInt);
                 }
@@ -337,66 +318,36 @@ namespace ProjectOC.WorkerNS
         {
             if (effect.EffectType != EffectType.AlterWorkerVariable) { Debug.Log("type != AlterWorkerVariable"); return; }
             Effects.Remove(effect);
-            if (effect.ParamStr == "APMax")
+            if (Enum.TryParse(effect.ParamStr, out EffectEnum value))
             {
-                APMax -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "CanArrange")
-            {
-                CanArrange = !effect.ParamBool;
-            }
-            else if (effect.ParamStr == "CanReverse")
-            {
-                CanReverse = !effect.ParamBool;
-            }
-            else if (effect.ParamStr == "Eff_AllSkill")
-            {
-                Eff_AllSkill -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "EMCost")
-            {
-                EMCost -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "EMRecover")
-            {
-                EMRecover -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "FactorAPCost")
-            {
-                FactorAPCost -= effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "FactorEatTime")
-            {
-                FactorEatTime -= effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "FactorWalkSpeed")
-            {
-                FactorWalkSpeed -= effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "ModifyBURMax")
-            {
-                ModifyBURMax -= effect.ParamInt;
-            }
-            else if (effect.ParamStr == "ModifyEatTime")
-            {
-                ModifyEatTime -= effect.ParamFloat;
-            }
-            else if (effect.ParamStr == "ModifyWalkSpeed")
-            {
-                ModifyWalkSpeed -= effect.ParamFloat;
+                switch (value)
+                {
+                    case EffectEnum.APMax: APMax -= effect.ParamInt; break;
+                    case EffectEnum.CanArrange: CanArrange = !effect.ParamBool; break;
+                    case EffectEnum.CanReverse: CanReverse = !effect.ParamBool; break;
+                    case EffectEnum.Eff_AllSkill: Eff_AllSkill -= effect.ParamInt; break;
+                    case EffectEnum.EMCost: EMCost -= effect.ParamInt; break;
+                    case EffectEnum.EMRecover: EMRecover -= effect.ParamInt; break;
+                    case EffectEnum.FactorAPCost: FactorAPCost -= effect.ParamFloat; break;
+                    case EffectEnum.FactorEatTime: FactorEatTime -= effect.ParamFloat; break;
+                    case EffectEnum.FactorWalkSpeed: FactorWalkSpeed -= effect.ParamFloat; break;
+                    case EffectEnum.ModifyBURMax: ModifyBURMax -= effect.ParamInt; break;
+                    case EffectEnum.ModifyEatTime: ModifyEatTime -= effect.ParamFloat; break;
+                    case EffectEnum.ModifyWalkSpeed: ModifyWalkSpeed -= effect.ParamFloat; break;
+                }
             }
 
             if (effect.ParamStr.Contains('_') && Enum.TryParse(effect.ParamStr.Split('_')[1], out SkillType skillType))
             {
-                if (effect.ParamStr.StartsWith("Eff"))
+                if (effect.ParamStr.StartsWith(strEff))
                 {
                     Skill[skillType] = Skill[skillType].AlterEff(-effect.ParamInt);
                 }
-                else if (effect.ParamStr.StartsWith("ExpRate"))
+                else if (effect.ParamStr.StartsWith(strExpRate))
                 {
                     Skill[skillType] = Skill[skillType].AlterExpRate(-effect.ParamInt);
                 }
-                else if (effect.ParamStr.StartsWith("LevelCurrent"))
+                else if (effect.ParamStr.StartsWith(strLevelCurrent))
                 {
                     Skill[skillType] = Skill[skillType].ChangeLevel(0);
                 }
@@ -699,7 +650,7 @@ namespace ProjectOC.WorkerNS
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                         GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, 
-                            new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null, 
+                            new UIManager.SideBarUIData(strWorkerLeaveIsland, null, 
                             ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                     };
                     timerForNoHome.OnUpdateEvent += PushNoticeUI;
@@ -713,7 +664,7 @@ namespace ProjectOC.WorkerNS
             if (Mathf.Abs((float)remainTime - 180) < 1) 
             {
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, 
-                    new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, 
+                    new UIManager.SideBarUIData(strWorkerWillLeaveIsland, null, 
                     ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                 timerForNoHome.OnUpdateEvent -= PushNoticeUI;
             }
@@ -876,9 +827,9 @@ namespace ProjectOC.WorkerNS
                 LastTickPosition = curPos;
             }
             bool inSeq = ManagerNS.LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
-            string icon = HaveSetEMLowEffect ? "Tex2D_Worker_UI_LowMood" : "";
-            icon = inSeq ? "Tex2D_Worker_UI_LowAP" : icon;
-            icon = HaveSetEMLowEffect && inSeq ? "Tex2D_Worker_UI_LowAPMood" : icon;
+            string icon = HaveSetEMLowEffect ? strTex2D_Worker_UI_LowMood : str;
+            icon = inSeq ? strTex2D_Worker_UI_LowAP : icon;
+            icon = HaveSetEMLowEffect && inSeq ? strTex2D_Worker_UI_LowAPMood : icon;
             var itemIcon = GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>();
             if (itemIcon != null)
             {

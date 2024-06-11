@@ -28,7 +28,7 @@
 				<Bus Id="3991942870" Name="Music"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3190558387" Type="User" Language="SFX" Hash="{A9A0700F-C00C-B07E-FBA2-C4D5A767A5FF}">
+		<SoundBank Id="3190558387" Type="User" Language="SFX" Hash="{5A23655A-A1F6-25E0-F5E3-86B3983202BE}">
 			<ShortName>Temp</ShortName>
 			<Path>Temp.bnk</Path>
 			<Media>
@@ -39,6 +39,10 @@
 				<File Id="158127460" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>wave.wav</ShortName>
 					<CachePath>SFX/wave_FBC78EF0.wem</CachePath>
+				</File>
+				<File Id="187490933" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>TempBGM2.wav</ShortName>
+					<CachePath>SFX/TempBGM2_FBC78EF0.wem</CachePath>
 				</File>
 				<File Id="230924643" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Sprint.wav</ShortName>
@@ -109,6 +113,7 @@
 			<Events>
 				<Event Id="412724365" Name="BGM" DurationType="Infinite">
 					<MediaRefs>
+						<MediaRef Id="187490933"/>
 						<MediaRef Id="405863425"/>
 					</MediaRefs>
 				</Event>
@@ -164,5 +169,5 @@
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{4679001C-5C2A-C469-F62A-08CD95AC8DA0}</FileHash>
+	<FileHash>{91D4E8CC-DB5B-11A1-B397-8AA01B0DFAF4}</FileHash>
 </SoundBanksInfo>

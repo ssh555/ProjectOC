@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e48dd5fedc41bd4468042466b0676715, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureIndex: -1
 --- !u!114 &5149175071535902403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,7 +59,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorChangeType: 1
-  param1: 0
-  param2: 0
-  color1: {r: 0, g: 0, b: 0, a: 0}
-  color2: {r: 0, g: 0, b: 0, a: 0}
+  CurColorChangeType: 0
+  smoothStepThreshold: 0.2
+  smoothStrength: 0.2
+  colors:
+  - {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 1}
+  - {r: 0, g: 0, b: 0, a: 0}

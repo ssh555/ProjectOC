@@ -53,11 +53,11 @@ namespace ProjectOC.RestaurantNS
             {
                 Worker.AlterMood(mood.Item2);
             }
-            if (Worker.APCurrent >= Worker.APRelaxThreshold || !Restaurant.HaveFood)
+            if (Worker.APCurrent >= Worker.APRelaxThreshold || Worker.APCurrent >= Worker.APMax || !Restaurant.HaveFood)
             {
                 WorkerNS.Worker worker = Worker;
                 (this as WorkerNS.IWorkerContainer).RemoveWorker();
-                if (!Restaurant.HaveFood && Worker.APCurrent < Worker.APRelaxThreshold)
+                if (!Restaurant.HaveFood && worker.APCurrent < worker.APRelaxThreshold)
                 {
                     manager.AddWorker(worker);
                 }
@@ -82,7 +82,7 @@ namespace ProjectOC.RestaurantNS
         public string GetUID() { return Restaurant.UID; }
         public WorkerNS.WorkerContainerType GetContainerType() { return WorkerNS.WorkerContainerType.Relax; }
         public Transform GetTransform() { return Socket; }
-
+        private const string str = "";
         public void RemoveWorkerRelateData()
         {
             if (IsEat)
@@ -92,7 +92,7 @@ namespace ProjectOC.RestaurantNS
                     (ManagerNS.LocalGameManager.Instance.RestaurantManager.Food_ItemID(FoodID));
                 ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(item);
             }
-            FoodID = "";
+            FoodID = str;
         }
 
         public void OnArriveEvent(WorkerNS.Worker worker)

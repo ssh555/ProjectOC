@@ -86,10 +86,14 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
+        #region Str
+        private const string str = "";
+        #endregion
+
         #region Get
         public int GetCapacity() { return Datas?.Length ?? 0; }
         public bool IsValidIndex(int index) { return Datas != null && 0 <= index && index < Datas.Length; }
-        public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : ""; }
+        public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : str; }
         public IDataObj GetData(int index) { return IsValidIndex(index) ? Datas[index].GetData() : null; }
         public bool GetCanIn(int index) { return IsValidIndex(index) && Datas[index].CanIn; }
         public bool GetCanOut(int index) { return IsValidIndex(index) && Datas[index].CanOut; }
@@ -118,7 +122,7 @@ namespace ProjectOC.DataNS
         }
         public List<int> GetIndexs(IDataObj data, bool needSort = false)
         {
-            string id = data?.GetDataID() ?? "";
+            string id = data?.GetDataID() ?? str;
             if (!string.IsNullOrEmpty(id) && IndexDict.ContainsKey(id))
             {
                 HashSet<int> indexs = new HashSet<int>(IndexDict[id]);
@@ -385,10 +389,17 @@ namespace ProjectOC.DataNS
 
         public void RemoveDataWithEmptyIndex(IDataObj data, bool needSort = false)
         {
-            List<int> indexs = GetIndexs(data);
-            if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0 && GetAmount(data, DataOpType.EmptyReserve) == 0)
+            foreach (int index in GetIndexs(data))
             {
-                ChangeData(indexs[0], null, needSort);
+                if (GetAmount(index, DataOpType.StorageAll) == 0 && GetAmount(index, DataOpType.EmptyReserve) == 0)
+                {
+                    ChangeData(index, null);
+                }
+            }
+            if (needSort)
+            {
+                Array.Sort(Datas, new SortForData());
+                ResetIndexDict();
             }
         }
         /// <summary>
@@ -400,7 +411,7 @@ namespace ProjectOC.DataNS
         {
             lock (this)
             {
-                string id = data?.GetDataID() ?? "";
+                string id = data?.GetDataID() ?? str;
                 (IDataObj, int) result = (null, 0);
                 if (IsValidIndex(index))
                 {
@@ -426,6 +437,7 @@ namespace ProjectOC.DataNS
                     if (needSort)
                     {
                         Array.Sort(Datas, new SortForData());
+                        ResetIndexDict();
                     }
                     OnDataChangeEvent?.Invoke();
                 }
@@ -439,7 +451,7 @@ namespace ProjectOC.DataNS
         {
             lock (this)
             {
-                string id = data.GetDataID() ?? "";
+                string id = data.GetDataID() ?? str;
                 if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
                 {
                     int removeNum = GetAmount(data, removeType, needCanIn, needCanOut);

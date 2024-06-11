@@ -90,6 +90,7 @@ namespace ProjectOC.WorkerNS
 
         public void ExpelWorker(int index)
         {
+            Workers[index].Worker.StopHomeTimer();
             ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[index].Worker);
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(Workers[index].Timer);
             Workers[index] = null;

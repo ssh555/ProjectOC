@@ -230,6 +230,7 @@ namespace ProjectOC.MineSystem
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<MineSystemConfigAsset>("Config_Mine").Completed += (handle) =>
                 {
                     mineSystemConfig = new MineSystemConfig(handle.Result.Config);
+                    mineSystemConfig.MainIslandSpeed /= 100;
                     Init();
                 };
             }

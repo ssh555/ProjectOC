@@ -34,7 +34,7 @@ namespace ProjectOC.WorkerNS
         {
             for (int i = 0; i < 24; i++)
             {
-                Status[i] = Status[i] == TimeStatus.Relax ? TimeStatus.Work_OnDuty : TimeStatus.Relax;
+                Status[i] = Status[i] == TimeStatus.Relax ? TimeStatus.Work : TimeStatus.Relax;
             }
         }
     }

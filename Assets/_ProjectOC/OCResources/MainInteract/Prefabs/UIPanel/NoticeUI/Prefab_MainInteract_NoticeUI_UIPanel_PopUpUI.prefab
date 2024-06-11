@@ -97,7 +97,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 666.58, y: 92.897}
+  m_SizeDelta: {x: 800, y: 92.897}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8247387733407214583
 CanvasRenderer:
@@ -385,7 +385,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -450,6 +450,9 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
+    isBanMouse: 0
+    scrollRect: {fileID: 0}
 --- !u!1 &4513888980492734937
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5417514, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.40768707, g: 0.695, b: 0.068805024, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -762,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.13899969, b: 0, a: 1}
+  m_Color: {r: 0.73, g: 0.23045906, b: 0.15037999, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

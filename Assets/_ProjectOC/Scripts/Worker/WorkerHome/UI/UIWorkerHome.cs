@@ -8,12 +8,44 @@ using ML.Engine.Extension;
 using ML.Engine.Manager;
 using static ProjectOC.WorkerNS.UI.UIWorkerHome;
 using System.Linq;
+using BehaviorDesigner.Runtime.Tasks.Movement;
 
 namespace ProjectOC.WorkerNS.UI
 {
     public class UIWorkerHome : ML.Engine.UI.UIBasePanel<WorkerHomePanel>
     {
-        #region 数据
+        #region Str
+        private const string strViewport = "Viewport";
+        private const string strSelect = "Select";
+        private const string strTopTitle = "TopTitle";
+        private const string strText = "Text";
+        private const string strBotKeyTips = "BotKeyTips";
+        private const string strKeyTips = "KeyTips";
+        private const string strIcon = "Icon";
+        private const string strSelected = "Selected";
+        private const string strCur = "Cur";
+        private const string strName = "Name";
+        private const string strHome = "Home";
+        private const string strBar = "Bar";
+        private const string strMood = "Mood";
+        private const string strValue = "Value";
+        private const string strContent = "Content";
+        private const string strUIItemTemplate = "UIItemTemplate";
+        private const string strMain = "Main";
+        private const string strHasHome = "HasHome";
+        private const string strNoHome = "NoHome";
+        private const string strWorkerHome = "WorkerHome";
+        private const string strTex2D_Worker_UI_HasHome = "Tex2D_Worker_UI_HasHome";
+        private const string strTex2D_Worker_UI_NoHome = "Tex2D_Worker_UI_NoHome";
+        private const string strTex2D_Worker_UI_WorkerHome = "Tex2D_Worker_UI_WorkerHome";
+        private const string strcoloryellow = "<color=yellow>";
+        private const string strcolor = "</color>";
+        private const string strKT_Confirm = "KT_Confirm";
+        private const string strHomeIcon = "HomeIcon";
+        private const string strTitle = "Title";
+        #endregion
+
+        #region Data
         private TMPro.TextMeshProUGUI Text_Title;
         private Sprite EmptySprite;
         private GridLayoutGroup GridLayout;
@@ -121,13 +153,13 @@ namespace ProjectOC.WorkerNS.UI
         {
             base.Start();
             InitTextContentPathData();
-            Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            GridLayout = transform.Find("Home").Find("Select").Find("Viewport").Find("Content").GetComponent<GridLayoutGroup>();
-            UIItemTemplate = GridLayout.transform.Find("UIItemTemplate");
+            Text_Title = transform.Find(strTopTitle).Find(strText).GetComponent<TMPro.TextMeshProUGUI>();
+            GridLayout = transform.Find(strHome).Find(strSelect).Find(strViewport).Find(strContent).GetComponent<GridLayoutGroup>();
+            UIItemTemplate = GridLayout.transform.Find(strUIItemTemplate);
             UIItemTemplate.gameObject.SetActive(false);
-            EmptySprite = UIItemTemplate.Find("Icon").GetComponent<Image>().sprite;
-            HomeMain = transform.Find("Home").Find("Main");
-            KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
+            EmptySprite = UIItemTemplate.Find(strIcon).GetComponent<Image>().sprite;
+            HomeMain = transform.Find(strHome).Find(strMain);
+            KeyTips = transform.Find(strBotKeyTips).Find(strKeyTips);
             IsInit = true;
         }
         #endregion
@@ -135,9 +167,9 @@ namespace ProjectOC.WorkerNS.UI
         #region Override Internal
         protected override void Enter()
         {
-            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_HasHome");
-            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
-            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
+            tempSprite[strHasHome] = LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_HasHome);
+            tempSprite[strNoHome] = LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_NoHome);
+            tempSprite[strWorkerHome] = LocalGameManager.Instance.WorkerManager.GetSprite(strTex2D_Worker_UI_WorkerHome);
             LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             IsInitWorkers = false;
             base.Enter();
@@ -165,10 +197,6 @@ namespace ProjectOC.WorkerNS.UI
         protected override void UnregisterInput()
         {
             Home.OnWorkerMoodChangeEvent -= RefreshMood;
-            if (Home.HaveWorker)
-            {
-                Home.Worker.OnMoodChangeEvent -= RefreshMood;
-            }
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -178,10 +206,6 @@ namespace ProjectOC.WorkerNS.UI
         protected override void RegisterInput()
         {
             Home.OnWorkerMoodChangeEvent += RefreshMood;
-            if (Home.HaveWorker)
-            {
-                Home.Worker.OnMoodChangeEvent += RefreshMood;
-            }
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -202,7 +226,7 @@ namespace ProjectOC.WorkerNS.UI
             {
                 if (Home.HaveWorker)
                 {
-                    string text = PanelTextContent.textConfirmPre + "<color=yellow>" + CurrentWorker.Name + "</color>" + PanelTextContent.textConfirmPost;
+                    string text = PanelTextContent.textConfirmPre + strcoloryellow + CurrentWorker.Name + strcolor + PanelTextContent.textConfirmPost;
                     GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null,
                         () =>
                         {
@@ -245,7 +269,7 @@ namespace ProjectOC.WorkerNS.UI
                 IsInitWorkers = true;
             }
 
-            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null && CurrentWorker != Home.Worker);
+            this.KeyTips.Find(strKT_Confirm).gameObject.SetActive(CurrentWorker != null && CurrentWorker != Home.Worker);
 
             #region Select
             int delta = tempUIItems.Count - Workers.Count;
@@ -279,14 +303,14 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     tempSprite[worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
                 }
-                item.transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : EmptySprite;
+                item.transform.Find(strIcon).GetComponent<Image>().sprite = worker != null ? tempSprite[worker.Category.ToString()] : EmptySprite;
                 // Name
-                item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(worker?.Name) ? worker.Name : PanelTextContent.textEmpty;
+                item.transform.Find(strName).GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(worker?.Name) ? worker.Name : PanelTextContent.textEmpty;
                 // HomeIcon
-                item.transform.Find("HomeIcon").GetComponent<Image>().sprite = worker != null && worker.HaveHome ? tempSprite["HasHome"] : tempSprite["NoHome"];
+                item.transform.Find(strHomeIcon).GetComponent<Image>().sprite = worker != null && worker.HaveHome ? tempSprite[strHasHome] : tempSprite[strNoHome];
 
                 bool isSelected = CurrentWorker == worker;
-                item.transform.Find("Selected").gameObject.SetActive(isSelected);
+                item.transform.Find(strSelected).gameObject.SetActive(isSelected);
                 if (isSelected)
                 {
                     cur = item;
@@ -337,26 +361,26 @@ namespace ProjectOC.WorkerNS.UI
             bool hasHome = Worker != null && Worker.HaveHome;
 
             string text = Worker != null ? Worker.Name : PanelTextContent.textEmpty;
-            HomeMain.Find("Title").GetComponent<TMPro.TextMeshProUGUI>().text = "<color=yellow>" + text + "</color>" + PanelTextContent.textHomePost;
+            HomeMain.Find(strTitle).GetComponent<TMPro.TextMeshProUGUI>().text = strcoloryellow + text + strcolor + PanelTextContent.textHomePost;
 
             if (hasHome && !tempSprite.ContainsKey(Worker.Category.ToString()))
             {
                 tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
             }
-            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasHome ? tempSprite[Worker.Category.ToString()] : tempSprite["WorkerHome"];
+            HomeMain.Find(strIcon).GetComponent<Image>().sprite = hasHome ? tempSprite[Worker.Category.ToString()] : tempSprite[strWorkerHome];
 
-            HomeMain.Find("Bar").gameObject.SetActive(hasHome);
-            HomeMain.Find("Mood").gameObject.SetActive(hasHome);
-            HomeMain.Find("Value").gameObject.SetActive(hasHome);
+            HomeMain.Find(strBar).gameObject.SetActive(hasHome);
+            HomeMain.Find(strMood).gameObject.SetActive(hasHome);
+            HomeMain.Find(strValue).gameObject.SetActive(hasHome);
             if (hasHome)
             {
-                var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
+                var bar = HomeMain.Find(strBar).Find(strCur).GetComponent<RectTransform>();
                 float percent = ((float)Worker.EMCurrent) / ((float)Worker.EMMax);
                 percent = percent <= 1 ? percent : 1;
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
+                float sizeDeltaX = HomeMain.Find(strBar).GetComponent<RectTransform>().sizeDelta.x * percent;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
-                HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
-                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
+                HomeMain.Find(strMood).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
+                HomeMain.Find(strValue).GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
             }
         }
 
@@ -371,20 +395,20 @@ namespace ProjectOC.WorkerNS.UI
             {
                 tempSprite[Worker.Category.ToString()] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Worker.Category);
             }
-            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite[Worker.Category.ToString()] : tempSprite["WorkerHome"];
+            HomeMain.Find(strIcon).GetComponent<Image>().sprite = hasWorker ? tempSprite[Worker.Category.ToString()] : tempSprite[strWorkerHome];
 
-            HomeMain.Find("Bar").gameObject.SetActive(hasWorker);
-            HomeMain.Find("Mood").gameObject.SetActive(hasWorker);
-            HomeMain.Find("Value").gameObject.SetActive(hasWorker);
+            HomeMain.Find(strBar).gameObject.SetActive(hasWorker);
+            HomeMain.Find(strMood).gameObject.SetActive(hasWorker);
+            HomeMain.Find(strValue).gameObject.SetActive(hasWorker);
             if (hasWorker)
             {
-                var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
+                var bar = HomeMain.Find(strBar).Find(strCur).GetComponent<RectTransform>();
                 float percent = ((float)Worker.EMCurrent) / ((float)Worker.EMMax);
                 percent = percent <= 1 ? percent : 1;
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * percent;
+                float sizeDeltaX = HomeMain.Find(strBar).GetComponent<RectTransform>().sizeDelta.x * percent;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
-                HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
-                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
+                HomeMain.Find(strMood).GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
+                HomeMain.Find(strValue).GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
             }
         }
         #endregion
