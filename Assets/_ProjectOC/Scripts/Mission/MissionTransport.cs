@@ -38,11 +38,12 @@ namespace ProjectOC.MissionNS
         }
         [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;
+        public int OutputThreshold;
         #endregion
 
         #region Method
         public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, 
-            MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false)
+            MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false, int outputThreshold = 0)
         {
             if (data == null) { return; }
             Type = type;
@@ -53,6 +54,7 @@ namespace ProjectOC.MissionNS
             MissionInitiatorType = initiatorType;
             ReplaceIndex = replaceIndex;
             ReserveEmpty = reserveEmpty;
+            OutputThreshold = outputThreshold;
         }
         public bool AddTransport(Transport transport)
         {

@@ -25,8 +25,9 @@ namespace ProjectOC.ProNodeNS
                 if (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature)) { return false; }
                 OutputThreshold = 0;
                 DiscardReserve = 0;
-                if (creature != null && ChangeRecipe(creature.ProRecipeID))
+                if (creature != null)
                 {
+                    ChangeRecipe(creature.ProRecipeID);
                     DataContainer.AddCapacity(2, new List<int> { 1, creature.Discard.num * StackMax });
                     int capacity = DataContainer.GetCapacity();
                     ChangeData(capacity-2, creature, false, false);
@@ -42,9 +43,9 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff()
         {
-            return ManagerNS.LocalGameManager.Instance != null && HasCreature ? 
-                EffBase + Creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
-                EffBase;
+            return (ManagerNS.LocalGameManager.Instance != null && HasCreature) ? 
+                (EffBase + Creature.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff) : 
+                (EffBase);
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { if (HasCreature) { for (int i = 1; i < DataContainer.GetCapacity() - 2; i++) { FastAdd(i); } } }
@@ -75,8 +76,16 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, 
+                    var list = (this as MissionNS.IMissionObj).GetMissions(data);
+                    if (list.Count > 0)
+                    {
+                        list[0].ChangeMissionNum(list[0].MissionNum + missionNum);
+                    }
+                    else
+                    {
+                        ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode,
                         data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    }
                 }
             }
             if (StackReserve > 0)
@@ -90,11 +99,12 @@ namespace ProjectOC.ProNodeNS
             var creature = Creature;
             if (creature != null)
             {
-                if (creature.Output <= OutputThreshold && (this as MissionNS.IMissionObj).GetMissionNum(creature.ID, false) == 0)
+                if (creature.Output <= OutputThreshold && (DiscardStackAll < Creature.Discard.num * StackMax)
+                    && (this as MissionNS.IMissionObj).GetMissionNum(creature.ID) == 0)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
-                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true);
+                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true, OutputThreshold);
                 }
                 if (DiscardReserve > 0)
                 {
@@ -120,7 +130,8 @@ namespace ProjectOC.ProNodeNS
             if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
             {
                 int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
-                creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
+                int output = creature.Output - ((descValue <= creature.Output) ? descValue : creature.Output);
+                creature.Output = output >= 0 ? output : 0;
             }
             // 下一次生产
             if (!StartProduce()) { StopProduce(); }
@@ -132,7 +143,7 @@ namespace ProjectOC.ProNodeNS
         }
         public override void PutIn(int index, DataNS.IDataObj data, int amount)
         {
-            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && index == DataContainer.GetCapacity() - 2 && amount == 1)
+            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && (index == (DataContainer.GetCapacity() - 2)) && amount == 1)
             {
                 var formula = Creature.Discard;
                 ChangeData(index, item, false);

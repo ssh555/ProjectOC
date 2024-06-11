@@ -356,12 +356,20 @@ namespace ProjectOC.StoreNS.UI
                         }
                         item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[itemID];
                         item.Find(strOutput).GetComponent<TMPro.TextMeshProUGUI>().text = creature.Output.ToString();
-                        item.Find(strActivity).GetComponent<TMPro.TextMeshProUGUI>().text = creature.Activity.ToString();
-                        item.Find(strGender).GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite[strMale] : tempSprite[strFemale];
+                        int activity = creature.Activity;
+                        activity = activity >= 0 ? activity : 0;
+                        item.Find(strActivity).GetComponent<TMPro.TextMeshProUGUI>().text = activity.ToString();
+                        if (tempSprite.ContainsKey(strMale) && tempSprite.ContainsKey(strFemale))
+                        {
+                            item.Find(strGender).GetComponent<Image>().sprite = creature.Gender == Gender.Male ? tempSprite[strMale] : tempSprite[strFemale];
+                        }
                     }
                     else
                     {
-                        item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
+                        if (tempSprite.ContainsKey(str))
+                        {
+                            item.Find(strIcon).GetComponent<Image>().sprite = tempSprite[str];
+                        }
                     }
                 }
             }

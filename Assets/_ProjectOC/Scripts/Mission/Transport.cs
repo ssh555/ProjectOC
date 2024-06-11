@@ -45,6 +45,8 @@ namespace ProjectOC.MissionNS
         {
             if (mission.Data == null) { return; }
             Data = mission.Data;
+            Worker = worker;
+            Worker.Transport = this;
             Mission = mission;
             Source = source;
             Target = target;
@@ -62,11 +64,9 @@ namespace ProjectOC.MissionNS
                 SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
                 TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty);
             }
-            Worker = worker;
             if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0)) { End(); }
             else
             {
-                Worker.Transport = this;
                 Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
             }
         }
@@ -90,15 +90,18 @@ namespace ProjectOC.MissionNS
         private void OnSourceArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveSource = true;
-            worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
+            bool flag = worker.Transport.PutOutSource();
+            if (flag)
+            {
+                worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
+            }
         }
         private void OnTargetArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveTarget = true;
             worker.Transport.PutInTarget();
         }
-        public void PutOutSource()
+        public bool PutOutSource()
         {
             int weight = Data.GetDataWeight();
             int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : SoureceReserveNum;
@@ -112,8 +115,13 @@ namespace ProjectOC.MissionNS
                 {
                     SoureceReserveNum -= Source.RemoveReservePutOut(Data, SoureceReserveNum);
                 }
+                return true;
             }
-            else { End(); }
+            else 
+            { 
+                End();
+                return false;
+            }
         }
         public void PutInTarget()
         {
@@ -125,18 +133,23 @@ namespace ProjectOC.MissionNS
                 if (Mission.ReplaceIndex >= 0) { Target.PutIn(Mission.ReplaceIndex, Data, FinishNum); }
                 else { Target.PutIn(Data, FinishNum); }
                 Worker.SettleTransport();
-                End();
+                End(false);
                 Mission.FinishNum += FinishNum;
+                if (Worker != null)
+                {
+                    Worker.Transport = null;
+                    Worker.ClearDestination();
+                }
             }
             else { End(); }
         }
-        public void End()
+        public void End(bool clearWorker=true)
         {
             if (CurNum > 0)
             {
                 Data.ConvertToWorldObj(CurNum, Worker.transform);
             }
-            if (Worker != null)
+            if (clearWorker && Worker != null)
             {
                 Worker.Transport = null;
                 Worker.ClearDestination();

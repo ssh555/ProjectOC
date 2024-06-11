@@ -20,6 +20,7 @@ public class UISelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanel
         this.cursorNavigation = this.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
         var Content = this.cursorNavigation.transform.Find("Scroll View").Find("Viewport").Find("Content");
         this.MainIsland = Content.Find("MainIsland").GetComponent<RectTransform>();
+        this.MainIsland.gameObject.SetActive(false);
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
     }
@@ -60,22 +61,24 @@ public class UISelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanel
     #region Internal
     private void InitData()
     {
-        GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
-        {
-            BigMapInstanceTrans = handle.Result.transform;
-            NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
-            BlockRegions = BigMapInstanceTrans.Find("BlockRegion");
-            BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
-            BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-            referenceRectTransform = handle.Result.transform.Find("NormalRegion").transform as RectTransform;
-            this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.SelectMineralSourcesSensitivity;
-            this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.SelectMineralSourcesZoomSpeed;
-            this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.SelectMineralSourcesZoomInLimit;
-            this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.SelectMineralSourcesZoomOutLimit;
-            this.cursorNavigation.CurZoomRate = MM.MineSystemConfig.SelectMineralSourcesInitZoomRate;
-            RefreshOnZoomMap();
-            this.Refresh();
-        };
+        var BigMapInstance = GameObject.Instantiate(MM.BigMapInstance);
+
+/*        GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
+        {*/
+        BigMapInstanceTrans = BigMapInstance.transform;
+        NormalRegions = BigMapInstanceTrans.Find("NormalRegion");
+        BlockRegions = BigMapInstanceTrans.Find("BlockRegion");
+        BigMapInstanceTrans.SetParent(this.cursorNavigation.Content.Find("BigMap"));
+        BigMapInstanceTrans.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        referenceRectTransform = BigMapInstance.transform.Find("NormalRegion").transform as RectTransform;
+        this.cursorNavigation.NavagationSpeed = MM.MineSystemConfig.SelectMineralSourcesSensitivity;
+        this.cursorNavigation.ZoomSpeed = MM.MineSystemConfig.SelectMineralSourcesZoomSpeed;
+        this.cursorNavigation.ZoomInLimit = MM.MineSystemConfig.SelectMineralSourcesZoomInLimit;
+        this.cursorNavigation.ZoomOutLimit = MM.MineSystemConfig.SelectMineralSourcesZoomOutLimit;
+        this.cursorNavigation.CurZoomRate = MM.MineSystemConfig.SelectMineralSourcesInitZoomRate;
+        RefreshOnZoomMap();
+        this.Refresh();
+/*        };*/
 
         //初始化主岛的位置
         this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
@@ -178,7 +181,6 @@ public class UISelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanel
     private UIMineProNode uIMineProNode;
     public UIMineProNode UIMineProNode { get {  return uIMineProNode; } set { uIMineProNode = value; } }
     #endregion
-
     public override void Refresh()
     {
         if (!this.objectPool.IsLoadFinish())

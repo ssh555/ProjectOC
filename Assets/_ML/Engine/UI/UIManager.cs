@@ -18,6 +18,7 @@ namespace ML.Engine.UI
             InitUIPrefabInstance<PopUpUI>(this.PopUpUIPrefabPath);
             InitUIPrefabInstance<FloatTextUI>(this.FloatTextUIPrefabPath);
             InitUIPrefabInstance<BtnUI>(this.BtnUIPrefabPath);
+            InitUIPrefabInstance<InputFieldUI>(this.InputFieldPrefabPath);
         }
 
         public Canvas GetCanvas
@@ -170,15 +171,17 @@ namespace ML.Engine.UI
         private string PopUpUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_PopUpUI.prefab";
         private string FloatTextUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_FloatTextUI.prefab";
         private string BtnUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_BtnUI.prefab";
+        private string InputFieldPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_InputFieldUI.prefab";
         [ShowInInspector]
-        private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
+        private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab,InputFieldPrefab;
 
         public enum NoticeUIType
         {
             FloatTextUI = 0,
             PopUpUI,
             SideBarUI,
-            BtnUI
+            BtnUI,
+            InputFieldUI
         }
 
         private void InitUIPrefabInstance<T>(string prefabPath) where T : INoticeUI
@@ -202,6 +205,10 @@ namespace ML.Engine.UI
                 else if (typeof(T) == typeof(BtnUI))
                 {
                     this.BtnUIPrefab = prefab;
+                }
+                else if (typeof(T) == typeof(InputFieldUI))
+                {
+                    this.InputFieldPrefab = prefab;
                 }
                 prefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
                 prefab.GetComponent<T>().SaveAsInstance();
@@ -249,7 +256,25 @@ namespace ML.Engine.UI
                 CancelAction = cancelAction;
             }
         }
+        public struct InputFieldUIData
+        {
+            public string msg1;
+            public string msg2;
+            public List<Sprite> spriteList;
+            public UnityAction<string,string> ConfirmAction;
+            public UnityAction CancelAction;
 
+            // ¹¹Ôìº¯Êý
+            public InputFieldUIData(string message1, string message2, List<Sprite> sprites, UnityAction<string,string> confirmAction,UnityAction cancelAction = null)
+            {
+                msg1 = message1;
+                msg2 = message2;
+                spriteList = sprites;
+                ConfirmAction = confirmAction;
+                CancelAction = cancelAction;
+            }
+        }
+        
         public struct SideBarUIData
         {
             public string msg1;
@@ -304,13 +329,23 @@ namespace ML.Engine.UI
                     panelGo = GameObject.Instantiate(this.PopUpUIPrefab);
                     PopUpUIData popUpData = (PopUpUIData)(object)data;
                     panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
-
                     
                     GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false);
                     GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
 
                     panelGo.transform.SetParent(GameManager.Instance.UIManager.normalPanel, false);
                     break;
+                case NoticeUIType.InputFieldUI:
+                    panelGo = GameObject.Instantiate(this.InputFieldPrefab);
+                    InputFieldUIData inputFieldData = (InputFieldUIData)(object)data;
+                    panelGo.GetComponent<InputFieldUI>().CopyInstance(inputFieldData);
+                    
+                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel(false);
+                    GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<InputFieldUI>());
+                    
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.normalPanel, false);
+                    break;
+                
                 case NoticeUIType.SideBarUI:
                     panelGo = GameObject.Instantiate(this.SideBarUIPrefab);
                     SideBarUIData sideBarData = (SideBarUIData)(object)data;

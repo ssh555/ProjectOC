@@ -359,6 +359,7 @@ namespace ProjectOC.ProNodeNS.UI
                 else if (offset.y != 0 && CurMode == Mode.Output)
                 {
                     alterMode = offset.y;
+                    OnAlterTimerEndEvent();
                     AlterTimer.Reset(0.2f);
                 }
                 Refresh();
@@ -390,12 +391,10 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (CurMode != Mode.ChangeCreature)
             {
-                if (ProNode.HasRecipe)
-                {
-                    ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, ProNode.WorldProNode.transform,
+                string id = ProNode.HasRecipe ? ProNode.Recipe.Product.id : str;
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(id, ProNode.WorldProNode.transform,
                     new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one,
                     (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
-                }
                 UIMgr.PopPanel();
             }
             else

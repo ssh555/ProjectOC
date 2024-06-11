@@ -1081,9 +1081,7 @@ namespace ML.Engine.UI
             btn.SetPreAndPostInteract(preAction, postAction);
             Action<InputAction.CallbackContext> buttonClickAction = (context) =>
             {
-                Debug.Log("btn "+btn);
                 preAction?.Invoke(); 
-                Debug.Log("btn "+btn.onClick);
                 btn.onClick.Invoke(); 
                 postAction?.Invoke();
             };

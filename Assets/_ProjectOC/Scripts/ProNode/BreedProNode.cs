@@ -26,9 +26,7 @@ namespace ProjectOC.ProNodeNS
         #region Override
         public override int GetEff() 
         {
-            return ManagerNS.LocalGameManager.Instance != null && Creature1 != null ? 
-                EffBase + Creature1.Output * ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff : 
-                EffBase;
+            return EffBase;
         }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { FastAdd(1); }
@@ -55,7 +53,16 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    var list = (this as MissionNS.IMissionObj).GetMissions(data);
+                    if (list.Count > 0)
+                    {
+                        list[0].ChangeMissionNum(list[0].MissionNum + missionNum);
+                    }
+                    else
+                    {
+                        ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
+                            (MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    }
                 }
             }
             if (StackReserve > 0)
@@ -164,12 +171,13 @@ namespace ProjectOC.ProNodeNS
                     {
                         if (creature != creature1 && creature.ID == creature1.ID && (creature1.Gender == Gender.None || creature1.Gender != creature.Gender))
                         {
+                            StopProduce();
                             ChangeData(3, creature);
                             DataContainer.ChangeAmount(3, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                             return true;
                         }
                     }
-                    else { ChangeData(3, null); }
+                    else { StopProduce(); ChangeData(3, null); }
                 }
                 return false;
             }

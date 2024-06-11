@@ -2257,6 +2257,11 @@ MonoBehaviour:
       btnlist1type: 7
       btnlist2type: 4
       linktype: 1
+    - btnlist1: 3
+      btnlist2: 0
+      btnlist1type: 7
+      btnlist2type: 4
+      linktype: 1
     isLoop: 0
     isHorizontal: 0
     scrollRect: {fileID: 0}

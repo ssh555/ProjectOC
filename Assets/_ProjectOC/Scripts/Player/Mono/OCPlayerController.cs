@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using ML.PlayerCharacterNS;
+using ProjectOC.ManagerNS;
+using ProjectOC.PinchFace;
 using UnityEngine;
 
 namespace ProjectOC.Player
@@ -35,7 +37,11 @@ namespace ProjectOC.Player
                 currentCharacter = playerCharacter;
                 SpawnedCharacters.Add(playerCharacter);
                 playerCharacter.OnSpawn(this);
-
+                if (LocalGameManager.Instance.PinchFaceManager.Config != null)
+                {
+                    CharacterModelPinch _modelPinch = playerCharacter.GetComponentInChildren<CharacterModelPinch>();
+                    _modelPinch.SetPinchPartDatas(null,true);
+                }
                 mainCamera.enabled = true;
             };
             return playerCharacter as ICharacter;

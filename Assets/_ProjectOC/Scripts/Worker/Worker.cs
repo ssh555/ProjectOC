@@ -239,6 +239,7 @@ namespace ProjectOC.WorkerNS
         }
         public void OnDestroy()
         {
+            ClearDestination();
             if (ManagerNS.LocalGameManager.Instance != null)
             {
                 ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
@@ -246,15 +247,14 @@ namespace ProjectOC.WorkerNS
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
 
-            timerFishInNest?.End();
-            timerForNoHome?.End();
-
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
             foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
             {
                 container?.RemoveWorker();
             }
+            timerFishInNest?.End();
+            timerForNoHome?.End();
         }
         #endregion
 
