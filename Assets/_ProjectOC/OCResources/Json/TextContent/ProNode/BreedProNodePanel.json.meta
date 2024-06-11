@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/_Test/Model_Player_Stable Sword Outward Slash.prefab.meta
+guid: fc08de676604593488341b8c7cd7615a
+PrefabImporter:
+========
 guid: ac76837f1264b714280bcb43c027ef3b
 TextScriptImporter:
+>>>>>>>> Programmer:Assets/_ProjectOC/OCResources/Json/TextContent/ProNode/BreedProNodePanel.json.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

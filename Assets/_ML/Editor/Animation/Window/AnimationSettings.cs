@@ -62,15 +62,15 @@ namespace ML.Editor.Animation
         }
 
         [SerializeField]
-        private PreviewWindow.Settings _PreviewWindow;
-        internal static PreviewWindow.Settings PreviewWindow => Instance._PreviewWindow;
+        private PreviewWindow.Settings _Settings;
+        internal static PreviewWindow.Settings PreviewWindow => Instance._Settings;
 
 
         protected virtual void OnEnable()
         {
-            if (_PreviewWindow == null)
-                _PreviewWindow = new PreviewWindow.Settings();
-            _PreviewWindow.SetBasePropertyPath(nameof(_PreviewWindow));
+            if (_Settings == null)
+                _Settings = new PreviewWindow.Settings();
+            _Settings.SetBasePropertyPath(nameof(_Settings));
         }
 
         public static new void SetDirty() => EditorUtility.SetDirty(_Instance);

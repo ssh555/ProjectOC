@@ -276,7 +276,7 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         } 
     }
 
-    [ShowInInspector]
+    //[ShowInInspector]
     private string curSelectedOrderInstanceIDInAcceptedOrder
     {
         get

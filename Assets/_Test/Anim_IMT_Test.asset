@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fd26aeb3e318c44a7ac88448de10c6, type: 3}
+  m_Name: Anim_IMT_Test
+  m_EditorClassIdentifier: 
+  DefaultValue: 3
+  IsRandom: 0
+  transitions:
+  - {fileID: 11400000, guid: 8568aad43e825784595ba1d8f60172f7, type: 2}
+  - {fileID: 11400000, guid: 4f02a018b1d35914d92dcee2944e6c72, type: 2}
+  - {fileID: 11400000, guid: cdb5bab9ba763b64b85ccbdcaad2c062, type: 2}
+  - {fileID: 11400000, guid: 86ed24414deed9144a2f7f1f3c9ed1dc, type: 2}

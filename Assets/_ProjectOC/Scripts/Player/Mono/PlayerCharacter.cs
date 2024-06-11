@@ -125,7 +125,7 @@ namespace ProjectOC.Player
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
                 // to-do : ´ýÓÅ»¯
-                interactComponent.Enable();
+                interactComponent.Enable(true);
             };
 
             //StartCoroutine(__DelayInit__());

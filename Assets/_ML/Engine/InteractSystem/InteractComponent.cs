@@ -129,10 +129,13 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.gameObject.SetActive(false);
             }
         }
-        public void Enable()
+        public void Enable(bool ForceEnable = false)
         {
-            //不处于建造模式 且 不处于空中才能Enable
-            if (BuildingManager.Instance.Mode != BuildingMode.None) return;
+            if (!ForceEnable)
+            {
+                //不处于建造模式 且 不处于空中才能Enable
+                if (BuildingManager.Instance.Mode != BuildingMode.None) return;
+            }
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
         #endregion

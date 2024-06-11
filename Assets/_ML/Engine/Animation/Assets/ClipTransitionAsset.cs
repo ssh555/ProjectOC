@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace ML.Engine.Animation
 {
-    [CreateAssetMenu(menuName = "ML/Animation/Clip/Clip Transition", order = Strings.AssetMenuOrder + 0)]
-    public class ClipTransitionAsset : AnimationAssetBase
+    [Serializable, CreateAssetMenu(menuName = "ML/Animation/Clip/Clip Transition", order = Strings.AssetMenuOrder + 0)]
+    public class ClipTransitionAsset : AnimationAssetBase, IAssetHasEvents
     {
         /// <inheritdoc/>
         [Serializable]
@@ -17,11 +17,48 @@ namespace ML.Engine.Animation
             ClipState.ITransition
         { }
 
-        public ClipTransition clipTransition;
+        public ClipTransition transition;
         public override ITransition GetTransition()
         {
-            return clipTransition;
+            var events = ((IAssetHasEvents)this).GetEventsOptional(transition.Speed >= 0);
+            transition.Events.CopyFrom(events);
+
+            return transition;
         }
+
+        public override ITransition GetPreviewTransition()
+        {
+            return transition;
+        }
+
+        #region IAssetHasEvents
+        [SerializeField]
+        protected List<IAssetHasEvents.AssetEvent> _Events;
+        public List<IAssetHasEvents.AssetEvent> Events => _Events;
+
+        public override float FrameRate
+        {
+            get
+            {
+                return transition.Clip == null ? 24 : transition.Clip.frameRate;
+            }
+        }
+
+        public override float Length
+        {
+            get
+            {
+                return transition.Clip == null ? 0.01f : transition.Clip.length;
+            }
+        }
+
+
+        [SerializeField]
+        protected IAssetHasEvents.AssetEvent _EndEvent;
+        public IAssetHasEvents.AssetEvent EndEvent => _EndEvent;
+
+        #endregion
+
     }
 
 }
