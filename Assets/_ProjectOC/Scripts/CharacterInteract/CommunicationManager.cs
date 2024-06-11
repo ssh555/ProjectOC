@@ -3,8 +3,6 @@ using ProjectOC.ManagerNS;
 using System;
 using System.Collections.Generic;
 
-
-
 namespace ProjectOC.CharacterInteract
 {
     [System.Serializable]
@@ -52,12 +50,12 @@ namespace ProjectOC.CharacterInteract
             Mission = 0,
             Normal
         }
-
-        public class MessageInfo
+        public class MessageInfo : IComparable<MessageInfo>
         {
             public string MsgID;
             public bool isRead;
             public MessageType messageType;
+            public int ReceiveOrder;
             public int DelayedTime;
             public CounterDownTimer DelayTriggerTimer;
             public Action OnReplyCharacter;
@@ -71,6 +69,26 @@ namespace ProjectOC.CharacterInteract
                 this.DelayedTime = 1;
                 this.DelayTriggerTimer = new CounterDownTimer(LocalGameManager.Instance.DispatchTimeManager.TimeScale * 60 * DelayedTime, autocycle: false, autoStart: false);
                 this.OnReplyCharacter = OnReplyCharacter;
+            }
+
+            public int CompareTo(MessageInfo other)
+            {
+                //主线短信排在最前
+                int result = messageType.CompareTo(other.messageType);
+                if (result != 0)
+                {
+                    return result;
+                }
+
+                //如果未读普通短信排其次
+                result = -isRead.CompareTo(other.isRead);
+                if (result != 0)
+                {
+                    return result;
+                }
+
+                //已读短信按照时间顺序排列，越早的短信排在越下面。
+                return -ReceiveOrder.CompareTo(other.ReceiveOrder);
             }
         }
         /// <summary>
