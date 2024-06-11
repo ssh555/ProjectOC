@@ -145,18 +145,18 @@ namespace ProjectOC.WorkerNS
         {
             List<int> result = new List<int>(6);
             double mean = Config.SkillStdMean;
-            double standardDeviation = System.Math.Sqrt(Config.SkillStdDev);
-            double beta = (mean - Config.SkillStdLowBound) / standardDeviation;
-            double alpha = (Config.SkillStdHighBound - mean) / standardDeviation;
+            double std = System.Math.Sqrt(Config.SkillStdDev);
+            double beta = (mean - Config.SkillStdLowBound) / std;
+            double alpha = (Config.SkillStdHighBound - mean) / std;
             double u = UnityEngine.Random.Range(0f, 1f);
             int k;
             if (u < alpha / (alpha + beta))
             {
-                k = (int)(Config.SkillStdHighBound - standardDeviation * System.Math.Log((1 - u) * alpha / alpha + u * (alpha / beta)));
+                k = (int)(Config.SkillStdHighBound - std * System.Math.Log((1 - u) * alpha / alpha + u * (alpha / beta)));
             }
             else
             {
-                k = (int)(Config.SkillStdLowBound + standardDeviation * System.Math.Log(u * beta / (1 - u) * beta + (1 - u) * (beta / alpha)));
+                k = (int)(Config.SkillStdLowBound + std * System.Math.Log(u * beta / (1 - u) * beta + (1 - u) * (beta / alpha)));
             }
             k = System.Math.Min(k, 60);
             k = System.Math.Max(k, 0);
