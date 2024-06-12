@@ -128,7 +128,7 @@ ModelImporter:
     - boneName: Upper Leg.L
       humanName: LeftUpperLeg
       limit:
-        min: {x: -60, y: -60, z: -90}
+        min: {x: -60, y: -60, z: -70}
         max: {x: 60, y: 60, z: 25}
         value: {x: 0, y: 0, z: 0}
         length: 0
@@ -416,7 +416,7 @@ ModelImporter:
     - boneName: Upper Leg.R
       humanName: RightUpperLeg
       limit:
-        min: {x: -60, y: -60, z: -90}
+        min: {x: -60, y: -60, z: -70}
         max: {x: 60, y: 60, z: 25}
         value: {x: 0, y: 0, z: 0}
         length: 0
@@ -2157,10 +2157,10 @@ ModelImporter:
       position: {x: -0, y: 5.954822e-10, z: 0.013623045}
       rotation: {x: -0.000000022351742, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    armTwist: 0.488
-    foreArmTwist: 0.482
+    armTwist: 0.328
+    foreArmTwist: 0.936
     upperLegTwist: 0.5
-    legTwist: 0.5
+    legTwist: 0.456
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0

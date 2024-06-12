@@ -126,7 +126,7 @@ namespace ML.Engine.InventorySystem
             //ÐÞ¸ÄUI
             inCollective = false;
             //Character.playerModelStateController.modelAnimator.Play("Idle_0");
-            Character.playerModelStateController.modelAnimator.CrossFade("Idle_0",animFadeTime);
+            Character.playerModelStateController.modelAnimator.CrossFade("Idle Walk Run Blend",animFadeTime);
 
 
             Destroy(OutlineGameObejct);
