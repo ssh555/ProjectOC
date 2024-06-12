@@ -1,4 +1,5 @@
 using ML.Engine.Timer;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,19 @@ namespace ML.Engine.MonitorEvent
     /// <summary>
     /// 该类用于处理监听事件 监听满足某个条件则触发相应的函数
     /// </summary>
+    [System.Serializable]
     public sealed class MonitorEventManager : ML.Engine.Manager.GlobalManager.IGlobalManager, ITickComponent
     {
         /// <summary>
         /// 当前的监听事件列表
         /// </summary>
+        [ShowInInspector]
         private List<MonitorEvent> monitorEvents;
 
         /// <summary>
         /// 更新中途的监听事件列表
         /// </summary>
+        [ShowInInspector]
         private List<MonitorEvent> tmpMonitorEvents;
         private int monitorEventCnt { get { return monitorEvents.Count; } }
         /// <summary>
@@ -26,9 +30,9 @@ namespace ML.Engine.MonitorEvent
         /// </summary>
         private int TaskCnt;
         /// <summary>
-        /// 当前剩余未处理的MonitorEvent数
+        /// 当前处理的MonitorEvent数
         /// </summary>
-        private int curRemainTaskCnt;
+        private int curTaskCnt;
         /// <summary>
         /// 两帧之间的真实时间
         /// </summary>
@@ -49,22 +53,52 @@ namespace ML.Engine.MonitorEvent
         /// 当前更新剩余时间
         /// </summary>
         private float RemainRealTime;
+
+        private int curCnt = 0;
         public void OnRegister()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             monitorEvents = new List<MonitorEvent>();
-            LastEndRealTime = 0;
+            tmpMonitorEvents = new List<MonitorEvent>();
+            LastEndRealTime = -1;
             RemainRealTime = RefreshInterval;
+            curTaskCnt = 0;
+            //GameManager.Instance.StartCoroutine(AddMonitorEvent(20000));
         }
+
+        public void OnUnregister()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
+        }
+
+/*        private IEnumerator AddMonitorEvent(int num)
+        {
+            yield return new WaitForSeconds(5);
+            
+            for (int i = 0; i < num; i++)
+            {
+                RegisterMonitorEvent(() => { return false; }, null);
+            }
+            Debug.Log($"加入 {num}个");
+        }*/
+
+
         #region Tick
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
 
-        public void Tick(float deltatime)
+        public void FixedTick(float deltatime)
         {
-            if (monitorEventCnt == 0) return;
+            if (monitorEventCnt == 0 && tmpMonitorEvents.Count == 0) return;
 
-            if (RemainRealTime > 0)
+            if(LastEndRealTime < 0)
+            {
+                LastEndRealTime = Time.realtimeSinceStartup;
+                return;
+            }
+
+            if (RemainRealTime > 0) 
             {
                 RealTimeIntervalBetweenTwoFrame = Time.realtimeSinceStartup - LastEndRealTime;
 
@@ -73,42 +107,48 @@ namespace ML.Engine.MonitorEvent
                 if(RemainRealTime - RealTimeIntervalBetweenTwoFrame<=0)
                 {
                     //将剩余的全部处理
-                    for (int i = 0; i < monitorEventCnt; ++i)
+                    //var tc = 0;
+                    for (int i = curTaskCnt; i < monitorEventCnt; ++i)
+                    {
+                        if (monitorEvents[curTaskCnt].Check() == 0)
+                        {
+                            tmpMonitorEvents.Add(monitorEvents[i]);
+                        }
+                        ++curTaskCnt;
+                        //++tc;
+                    }
+                    ++curCnt;
+                    //Debug.Log($"{RemainRealTime} {RealTimeIntervalBetweenTwoFrame} {curCnt}最后帧 {Time.realtimeSinceStartup} 处理了{tc}个 总共处理了{curTaskCnt}个");
+                }
+                else
+                {
+                    var RefreshNum = Mathf.CeilToInt(RealTimeIntervalBetweenTwoFrame / RefreshInterval * monitorEventCnt);
+
+                    for (int i = curTaskCnt, j = 0; j < RefreshNum && i < monitorEventCnt; ++i, ++j) 
                     {
                         if (monitorEvents[i].Check() == 0)
                         {
                             tmpMonitorEvents.Add(monitorEvents[i]);
                         }
+                        ++curTaskCnt;
                     }
+                    ++curCnt;
+                    //Debug.Log($"{RemainRealTime} {RealTimeIntervalBetweenTwoFrame} {curCnt}帧 {Time.realtimeSinceStartup} 处理了{RefreshNum}个 总共处理了{curTaskCnt}个");
                 }
-                else
-                {
-                    var divideNum = RemainRealTime / RealTimeIntervalBetweenTwoFrame;
-                    var RefreshNum = Mathf.CeilToInt(monitorEventCnt / divideNum);
-
-                    List<MonitorEvent> topRefreshNumList = monitorEvents.GetRange(0, Mathf.Min(RefreshNum, monitorEventCnt));
-                    monitorEvents.RemoveRange(0, Mathf.Min(RefreshNum, monitorEventCnt));
-
-                    for (int i = 0; i < RefreshNum; ++i)
-                    {
-                        if (topRefreshNumList[i].Check() == 0)
-                        {
-                            tmpMonitorEvents.Add(topRefreshNumList[i]);
-                        }
-                    }
-                }
-                RemainRealTime -= Time.deltaTime;
+                RemainRealTime -= deltatime;
             }
             else
             {
                 //更新完毕 开启下一次更新
+                //Debug.Log("更新完毕 开启下一次更新");
                 //拷贝一份新的
                 monitorEvents = tmpMonitorEvents.ToList();
                 RemainRealTime = RefreshInterval;
-                LastEndRealTime = Time.realtimeSinceStartup;
+                curTaskCnt = 0;
+                curCnt = 0;
                 tmpMonitorEvents.Clear();
             }
-
+            LastEndRealTime = Time.realtimeSinceStartup;
         }
         #endregion
 

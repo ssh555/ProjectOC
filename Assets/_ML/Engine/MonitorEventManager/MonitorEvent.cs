@@ -66,7 +66,6 @@ namespace ML.Engine.MonitorEvent
                         BuffOnAction?.Invoke();
                     }
                 }
-                
             }
             return 0;
         }
