@@ -1,3 +1,4 @@
+using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
@@ -30,6 +31,8 @@ namespace ProjectOC.ClanNS
                 { PersonalityType.Social, new Personality() },
                 { PersonalityType.Basis, new Personality() }
             };
+            // TODO: 初始化Wisdom，Combat，Resilience
+            // TODO: 初始化PersonalityDict
         }
         public int GetTalent(TalentType type)
         {
@@ -67,6 +70,55 @@ namespace ProjectOC.ClanNS
         public void ChangePersonality(PersonalityType type, int value)
         {
             PersonalityDict[type] = PersonalityDict[type].ChangeValue(value);
+        }
+
+        public void RefreshATG()
+        {
+            for (int i = 0; i < TAGS.Count; i++)
+            {
+                bool condition = TAGS[i].CheckCondition(this);
+                if (!TAGS[i].IsActive && condition)
+                {
+                    TAGS[i] = TAGS[i].ChangeActive(true);
+                }
+                else if (TAGS[i].IsActive && !condition)
+                {
+                    TAGS[i] = TAGS[i].ChangeActive(false);
+                }
+            }
+        }
+        public bool CheckPersonalityTAG(PersonalityType type, PersonalityTAG tag)
+        {
+            var personality = PersonalityDict[type];
+            var tagLowHigh = tag.GetPersonality(type);
+            int tagLow = tagLowHigh.Item1;
+            int tagHigh = tagLowHigh.Item2;
+            bool flag1 = personality.Low >= tagLow && personality.Low <= tagHigh;
+            bool flag2 = tagLow >= personality.Low && tagLow <= personality.High;
+            return flag1 || flag2;
+        }
+        public bool CheckPersonalityTAG(PersonalityTAG tag)
+        {
+            return CheckPersonalityTAG(PersonalityType.Thinking, tag) &&
+                CheckPersonalityTAG(PersonalityType.Social, tag) &&
+                CheckPersonalityTAG(PersonalityType.Basis, tag);
+        }
+        public override bool AddTAG(PersonalityTAG tag)
+        {
+            if (CheckPersonalityTAG(tag))
+            {
+                TAGS.Add(tag);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
+                                        new UIManager.SideBarUIData($"氏族成员{Name}新增特征TAG{tag.Name}", null, null));
+                return true;
+            }
+            return false;
+        }
+        public override void RemoveTAG(PersonalityTAG tag)
+        {
+            TAGS.Remove(tag);
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
+                                        new UIManager.SideBarUIData($"氏族成员{Name}失去特征TAG{tag.Name}", null, null));
         }
 
         #region Bed

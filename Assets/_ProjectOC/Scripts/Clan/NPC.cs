@@ -1,5 +1,7 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectOC.ClanNS
 {
@@ -52,6 +54,12 @@ namespace ProjectOC.ClanNS
         public void SetPetName(string name)
         {
             PetName = name;
+        }
+        public abstract bool AddTAG(PersonalityTAG tag);
+        public abstract void RemoveTAG(PersonalityTAG tag);
+        public List<PersonalityTAG> GetTAGS()
+        {
+            return TAGS.OrderBy(x => x, new PersonalityTAG.Sort()).ToList();
         }
     }
 }
