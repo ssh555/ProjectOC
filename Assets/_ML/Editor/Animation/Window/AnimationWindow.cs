@@ -19,6 +19,8 @@ namespace ML.Editor.Animation
 
         private static object _container;
 
+        public static Event GetCurrentEvent;
+
         public PreviewWindow previewWindow => PreviewWindow.Instance;
         public TrackWindow trackWindow => TrackWindow.Instance;
         public DetailWindow detailWindow => DetailWindow.Instance;
@@ -41,13 +43,15 @@ namespace ML.Editor.Animation
         private AnimationAssetBaseEditor assetEditor;
         public AnimationAssetBaseEditor AssetEditor => assetEditor;
 
-        [MenuItem("Window/ML/AnimancerAssetEditor", priority = 0)]
-        public static object ShowWindow()
+        [MenuItem("Window/ML/AnimationWindow", priority = 0)]
+        public static void ShowWindow()
         {
-            if (_container != null)
+            if (_instance != null)
             {
-                return _container;
+                return;
             }
+
+
             // 创建最外层容器
             _container = ML.Editor.EditorContainerWindow.CreateInstance();
             // 创建分屏容器
@@ -108,7 +112,7 @@ namespace ML.Editor.Animation
             EditorContainerWindow.Show(_container, 0, true, false, true);
             EditorContainerWindow.OnResize(_container);
 
-            return _container;
+            return;
         }
 
         public static AnimationWindow OpenWithAsset(AnimationAssetBase asset)
@@ -123,6 +127,7 @@ namespace ML.Editor.Animation
 
         private void OnGUI()
         {
+            GetCurrentEvent = Event.current;
             // 选中的资产
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("选中的资产", GUILayout.Width(100));
@@ -133,10 +138,14 @@ namespace ML.Editor.Animation
             if (SelectedAsset != null && (assetEditor == null || assetEditor.target != SelectedAsset))
             {
                 assetEditor = UnityEditor.Editor.CreateEditor(SelectedAsset) as AnimationAssetBaseEditor;
+                if (assetEditor != null)
+                {
+                    assetEditor.Init();
+                }
             }
             if (assetEditor != null)
             {
-                assetEditor.DrawInEditorWindow();
+                assetEditor.DrawInEditorWindow(this);
             }
             else if (SelectedAsset)
             {
@@ -156,13 +165,48 @@ namespace ML.Editor.Animation
             }
         }
 
+        private void OnEnable()
+        {
+            if(_instance == null)
+            {
+                _instance = this;
+            }
+            AssemblyReloadEvents.afterAssemblyReload += AssemblyReloadEvents_afterAssemblyReload;
+            EditorApplication.update += SaveData;
+        }
+
+
+        private void AssemblyReloadEvents_afterAssemblyReload()
+        {
+            this.Close();
+            this.previewWindow.Close();
+            this.detailWindow.Close();
+            this.trackWindow.Close();
+            _instance = null;
+            OpenWithAsset(SelectedAsset);
+        }
+
         private void OnDisable()
         {
-            _container = null;
+            AssemblyReloadEvents.afterAssemblyReload -= AssemblyReloadEvents_afterAssemblyReload;
             if (_instance == this)
             {
                 _instance = null;
             }
+            EditorApplication.update -= SaveData;
+        }
+
+        public void  SaveData()
+        {
+            Event e = GetCurrentEvent;
+            if (SelectedAsset != null && e != null && e.keyCode == KeyCode.S && e.control)
+            {
+                Debug.Log("Animation Window : Save Selected Animation Asset");
+                e.Use();
+                EditorUtility.SetDirty(SelectedAsset);
+                AssetDatabase.SaveAssetIfDirty(SelectedAsset);
+            }
+
         }
 
 

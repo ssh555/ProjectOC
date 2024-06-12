@@ -7,6 +7,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
+using static UnityEditor.VersionControl.Asset;
 using Object = UnityEngine.Object;
 
 namespace Animancer
@@ -999,11 +1000,23 @@ namespace Animancer
             {
                 _Graph.Play();
                 _IsGraphPlaying = true;
-
+                
 #if UNITY_EDITOR
+                //  TODO : 在Editor下应该使用NormalizedTime
                 // In Edit Mode, unpausing the graph does not work properly unless we force it to change.
                 if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-                    Evaluate(Time.maximumDeltaTime);
+                {
+                    var _stateSpeed = States.Current.Speed;
+                    var _speed = Speed;
+                    Speed = 1;
+                    States.Current.Speed = 1;
+                    //Evaluate(States.Current.NormalizedTime / States.Current.Speed / Speed);
+                    var tmp = States.Current.NormalizedTime;
+                    Evaluate(States.Current.NormalizedTime * States.Current.Length);
+                    Speed = _speed;
+                    States.Current.Speed = _stateSpeed;
+                }
+
 #endif
             }
         }
@@ -1266,10 +1279,8 @@ namespace Animancer
         {
             var previous = Current;
             Current = this;
-
             var previousUpdatables = _CurrentUpdatables;
             _CurrentUpdatables = updatables;
-
             DeltaTime = deltaTime;
 
             var previousUpdatable = _CurrentUpdatable;

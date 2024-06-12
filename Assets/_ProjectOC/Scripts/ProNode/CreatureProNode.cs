@@ -25,8 +25,9 @@ namespace ProjectOC.ProNodeNS
                 if (creature != null && !ManagerNS.LocalGameManager.Instance.Player.GetInventory().RemoveItem(creature)) { return false; }
                 OutputThreshold = 0;
                 DiscardReserve = 0;
-                if (creature != null && ChangeRecipe(creature.ProRecipeID))
+                if (creature != null)
                 {
+                    ChangeRecipe(creature.ProRecipeID);
                     DataContainer.AddCapacity(2, new List<int> { 1, creature.Discard.num * StackMax });
                     int capacity = DataContainer.GetCapacity();
                     ChangeData(capacity-2, creature, false, false);
@@ -103,7 +104,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, 
-                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true);
+                        MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2, true, OutputThreshold);
                 }
                 if (DiscardReserve > 0)
                 {
@@ -142,7 +143,7 @@ namespace ProjectOC.ProNodeNS
         }
         public override void PutIn(int index, DataNS.IDataObj data, int amount)
         {
-            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && index == DataContainer.GetCapacity() - 2 && amount == 1)
+            if (HasCreature && data is ML.Engine.InventorySystem.CreatureItem item && (index == (DataContainer.GetCapacity() - 2)) && amount == 1)
             {
                 var formula = Creature.Discard;
                 ChangeData(index, item, false);

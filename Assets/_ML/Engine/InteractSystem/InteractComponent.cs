@@ -20,6 +20,8 @@ namespace ML.Engine.InteractSystem
         public int lateTickPriority { get; set; }
         public virtual void Tick(float deltatime)
         {
+            if(Camera.main == null)
+                return;
             // 射线检测可交互物
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit[] hits = Physics.RaycastAll(ray, range, layerMask);
@@ -129,10 +131,13 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.gameObject.SetActive(false);
             }
         }
-        public void Enable()
+        public void Enable(bool ForceEnable = false)
         {
-            //不处于建造模式 且 不处于空中才能Enable
-            if (BuildingManager.Instance.Mode != BuildingMode.None) return;
+            if (!ForceEnable)
+            {
+                //不处于建造模式 且 不处于空中才能Enable
+                if (BuildingManager.Instance.Mode != BuildingMode.None) return;
+            }
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
         #endregion

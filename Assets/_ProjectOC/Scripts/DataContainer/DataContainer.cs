@@ -389,10 +389,17 @@ namespace ProjectOC.DataNS
 
         public void RemoveDataWithEmptyIndex(IDataObj data, bool needSort = false)
         {
-            List<int> indexs = GetIndexs(data);
-            if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0 && GetAmount(data, DataOpType.EmptyReserve) == 0)
+            foreach (int index in GetIndexs(data))
             {
-                ChangeData(indexs[0], null, needSort);
+                if (GetAmount(index, DataOpType.StorageAll) == 0 && GetAmount(index, DataOpType.EmptyReserve) == 0)
+                {
+                    ChangeData(index, null);
+                }
+            }
+            if (needSort)
+            {
+                Array.Sort(Datas, new SortForData());
+                ResetIndexDict();
             }
         }
         /// <summary>
@@ -430,6 +437,7 @@ namespace ProjectOC.DataNS
                     if (needSort)
                     {
                         Array.Sort(Datas, new SortForData());
+                        ResetIndexDict();
                     }
                     OnDataChangeEvent?.Invoke();
                 }

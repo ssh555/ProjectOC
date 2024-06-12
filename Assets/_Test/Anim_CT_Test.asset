@@ -12,12 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe72ba3a8b851846b9081b16c339eb0, type: 3}
   m_Name: Anim_CT_Test
   m_EditorClassIdentifier: 
-  clipTransition:
+  transition:
     _FadeDuration: 0.25
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
       _Names: []
-    _Clip: {fileID: 7400000, guid: 4ae6a6e5c9379b94b8c5b5ca31f36f1a, type: 2}
-    _Speed: 1
-    _NormalizedStartTime: NaN
+    _Clip: {fileID: 7400000, guid: 50faf38ee494dd844b6d252ed131f3bb, type: 2}
+    _Speed: 0.1
+    _NormalizedStartTime: 0.5
+  _Events:
+  - Name: TestEvent
+    NormalizedTime: 0.21290322
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []
+  _EndEvent:
+    Name: 
+    NormalizedTime: NaN
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []

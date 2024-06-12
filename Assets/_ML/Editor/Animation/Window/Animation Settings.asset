@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a2b71245eb0b744b88ea3204bef76a, type: 3}
   m_Name: Animation Settings
   m_EditorClassIdentifier: 
-  _PreviewWindow:
+  _Settings:
     _AutoClose: 1
     _SceneLighting: 0
     _ShowSkybox: 0
