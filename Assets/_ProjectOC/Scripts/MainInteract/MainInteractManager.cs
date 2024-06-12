@@ -4,11 +4,14 @@ using ProjectOC.MineSystem;
 using ProjectOC.ProNodeNS;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.MainInteract
 {
-    public class MainInteractManager : ML.Engine.Manager.LocalManager.ILocalManager
+    [System.Serializable]
+    public sealed class MainInteractManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         public enum FunctionEnum
         {
@@ -34,9 +37,7 @@ namespace ProjectOC.MainInteract
 
         public void Init()
         {
-
-
-
+            LoadTableData();
         }
 
         public void OnRegister()
@@ -69,6 +70,25 @@ namespace ProjectOC.MainInteract
             public string Name;
             public string Icon;
             public FunctionEnum Function;
+        }
+        public ML.Engine.ABResources.ABJsonAssetProcessor<MainInteractRingTableData[]> ABJAProcessor;
+        private Dictionary<string, MainInteractRingTableData> mainInteractRingTableDataDic = new ();
+        public List<MainInteractRingTableData> mainInteractRingTableDatas { get
+            {
+                var list = mainInteractRingTableDataDic.Values.ToList();
+                list.Sort((a, b) => { return a.Sort.CompareTo(b.Sort); });
+                return list;
+            } }
+        private void LoadTableData()
+        {
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<MainInteractRingTableData[]>("OCTableData", "MainInteractRing", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.mainInteractRingTableDataDic.Add(data.ID, data);
+                }
+            }, "主交互轮盘数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

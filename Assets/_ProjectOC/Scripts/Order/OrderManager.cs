@@ -4,12 +4,11 @@ using ML.Engine.Timer;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
-
 
 namespace ProjectOC.Order
 {
@@ -706,9 +705,10 @@ namespace ProjectOC.Order
         #endregion
 
         #region Load
+        public ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor;
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
             {
                 //TODO 之后从氏族模块获取
                 OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "Clan1");
@@ -733,12 +733,8 @@ namespace ProjectOC.Order
                     this.OrderTableDataDic.Add(data.ID, data);
                     UnlockOrder(data.ID);
                 }
-
-
-                
             }, "订单数据");
             ABJAProcessor.StartLoadJsonAssetData();
-
         }
         #endregion
 

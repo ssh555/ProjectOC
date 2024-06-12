@@ -27,7 +27,7 @@ namespace ProjectOC.ManagerNS
         public LandMassExpand.BuildPowerIslandManager BuildPowerIslandManager;
         public RestaurantNS.RestaurantManager RestaurantManager;
         public MineSystem.MineSystemManager MineSystemManager;
-
+        public MainInteract.MainInteractManager MainInteractManager;
         public IslandAreaManager IslandAreaManager;
         public Order.OrderManager OrderManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
@@ -64,6 +64,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
             GM.RegisterLocalManager(MineSystemManager);
+            GM.RegisterLocalManager(MainInteractManager);
             GM.RegisterLocalManager(DialogManager);
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
@@ -100,6 +101,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<LandMassExpand.BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
                 GM?.UnregisterLocalManager<MineSystem.MineSystemManager>();
+                GM?.UnregisterLocalManager<MainInteract.MainInteractManager>();
                 GM?.UnregisterLocalManager<LocalGameManager>();
 
                 GM?.UnregisterLocalManager<IslandAreaManager>();
