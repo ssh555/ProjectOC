@@ -220,7 +220,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &251707712846827181
 GameObject:
@@ -294,7 +294,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &355797521008012400
 GameObject:
@@ -418,7 +418,7 @@ MonoBehaviour:
   ID: 27
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
@@ -590,7 +590,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &702715860590506488
 GameObject:
@@ -640,7 +640,7 @@ MonoBehaviour:
   ID: 27
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
@@ -812,7 +812,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1345434771415164370
 GameObject:
@@ -886,7 +886,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1382762520354241502
 GameObject:
@@ -900,7 +900,7 @@ GameObject:
   - component: {fileID: 1037870068935566733}
   - component: {fileID: 7147680284223982896}
   m_Layer: 8
-  m_Name: ActiveSoc (2)
+  m_Name: Pillar2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,7 +1084,7 @@ MonoBehaviour:
   ID: 27
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
@@ -1232,7 +1232,7 @@ MonoBehaviour:
   ID: 27
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
@@ -2413,7 +2413,7 @@ GameObject:
   - component: {fileID: 7014611741989506409}
   - component: {fileID: 1864937766279638659}
   m_Layer: 8
-  m_Name: RootSoc_Beam
+  m_Name: RootSoc_BeamP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2621,7 +2621,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5567169909052862972
 GameObject:
@@ -3879,7 +3879,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8515857152750139466
 GameObject:
@@ -4101,7 +4101,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 0.05, z: 1.5}
+  m_Size: {x: 1.5, y: 0.2, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8721351843365477724
 GameObject:
@@ -4189,7 +4189,7 @@ GameObject:
   - component: {fileID: 3184724073464288195}
   - component: {fileID: 8159637344435920956}
   m_Layer: 8
-  m_Name: ActiveSoc (1)
+  m_Name: Pillar1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
