@@ -10,7 +10,6 @@ namespace ML.Engine.Event
     /// <summary>
     /// 该类用于处理监听事件 监听满足某个条件则触发相应的函数
     /// </summary>
-    [System.Serializable]
     public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager, ITickComponent
     {
         /// <summary>
@@ -136,7 +135,6 @@ namespace ML.Engine.Event
             LastEndRealTime = Time.realtimeSinceStartup;
         }
         #endregion
-
 
         #region Internal
         private void RegisterMonitorEvent(MonitorCondition monitorConditionBuffOn, Action buffOnAction, MonitorCondition monitorConditionBuffOff = null, Action buffOffAction = null)
