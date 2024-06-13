@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ML.Engine.MonitorEvent.MonitorEvent;
-namespace ML.Engine.MonitorEvent
+using static ML.Engine.Event.MonitorEvent;
+namespace ML.Engine.Event
 {
     /// <summary>
     /// 该类用于处理监听事件 监听满足某个条件则触发相应的函数
     /// </summary>
     [System.Serializable]
-    public sealed class MonitorEventManager : ML.Engine.Manager.GlobalManager.IGlobalManager, ITickComponent
+    public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager, ITickComponent
     {
         /// <summary>
         /// 当前的监听事件列表
@@ -55,21 +55,6 @@ namespace ML.Engine.MonitorEvent
         private float RemainRealTime;
 
         private int curCnt = 0;
-        public void OnRegister()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
-            monitorEvents = new List<MonitorEvent>();
-            tmpMonitorEvents = new List<MonitorEvent>();
-            LastEndRealTime = -1;
-            RemainRealTime = RefreshInterval;
-            curTaskCnt = 0;
-            //GameManager.Instance.StartCoroutine(AddMonitorEvent(20000));
-        }
-
-        public void OnUnregister()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
-        }
 
 /*        private IEnumerator AddMonitorEvent(int num)
         {
@@ -152,10 +137,23 @@ namespace ML.Engine.MonitorEvent
         }
         #endregion
 
-        #region External
-        public void RegisterMonitorEvent(MonitorCondition monitorConditionBuffOn, Action buffOnAction, MonitorCondition monitorConditionBuffOff = null, Action buffOffAction = null)
+
+        #region Internal
+        private void RegisterMonitorEvent(MonitorCondition monitorConditionBuffOn, Action buffOnAction, MonitorCondition monitorConditionBuffOff = null, Action buffOffAction = null)
         {
             this.monitorEvents.Add(new MonitorEvent(monitorConditionBuffOn, buffOnAction, monitorConditionBuffOff, buffOffAction));
+        }
+        #endregion
+
+
+        #region External
+        public void RegisterMonitorEvent(string monitorConditionBuffOnConditionStr, string buffOnActionStr, string monitorConditionBuffOffConditionStr, string buffOffActionStr)
+        {
+            RegisterMonitorEvent(
+                monitorConditionBuffOn: () => { return ExecuteCondition(monitorConditionBuffOnConditionStr); },
+                buffOnAction: () => { ExecuteEvent(buffOnActionStr); },
+                monitorConditionBuffOff: () => { return ExecuteCondition(monitorConditionBuffOffConditionStr); },
+                buffOffAction: () => { ExecuteEvent(buffOffActionStr); });
         }
         #endregion
 
