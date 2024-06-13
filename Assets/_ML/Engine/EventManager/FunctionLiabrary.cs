@@ -6,6 +6,7 @@ using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ProjectOC.Player;
 using static ProjectOC.Order.OrderManager;
+using BehaviorDesigner.Runtime.Tasks;
 
 namespace ML.Engine.Event
 {
@@ -58,6 +59,20 @@ namespace ML.Engine.Event
                     PrivateFunctions[MethodName] = method;
                 }
             }
+
+            //Tick Event
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            monitorEvents = new List<MonitorEvent>();
+            tmpMonitorEvents = new List<MonitorEvent>();
+            LastEndRealTime = -1;
+            RemainRealTime = RefreshInterval;
+            curTaskCnt = 0;
+        }
+
+        public void OnUnregister()
+        {
+            //Tick Event
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
         }
         public void ExecuteEvent<T>(string executeString,T target)
         {
@@ -108,6 +123,10 @@ namespace ML.Engine.Event
         }
         public void ExecuteEvent(string executeString)
         {
+            if (string.IsNullOrEmpty(executeString))
+            {
+                throw new Exception();
+            }
             string[] stringFunctions = executeString.Split(";");
             foreach (var item in stringFunctions)
             {
@@ -131,6 +150,10 @@ namespace ML.Engine.Event
 
         public bool ExecuteCondition(string ConditionID)
         {
+            if (string.IsNullOrEmpty(ConditionID))
+            {
+                throw new Exception();
+            }
             if (!ConditionTableDataDic.ContainsKey(ConditionID))
             {
                 Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
@@ -150,6 +173,62 @@ namespace ML.Engine.Event
             parameters[1] = conditionTableData.Param2;
             parameters[2] = conditionTableData.Param3;
 
+            return (bool)method.Invoke(this, parameters);
+        }
+
+        public bool ExecuteCondition<T>(string ConditionID, T target)
+        {
+            if (string.IsNullOrEmpty(ConditionID))
+            {
+                throw new Exception();
+            }
+            if (!ConditionTableDataDic.ContainsKey(ConditionID))
+            {
+                Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
+                return false;
+            }
+
+            ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
+            if (!PublicFunctions.ContainsKey(conditionTableData.CheckType.ToString()))
+            {
+                Debug.LogError("Function '" + conditionTableData.CheckType.ToString() + "' does not exist.");
+                return false;
+            }
+            MethodInfo method = PublicFunctions[conditionTableData.CheckType.ToString()];
+
+            object[] parameters = new object[4];
+            parameters[0] = conditionTableData.Param1;
+            parameters[1] = conditionTableData.Param2;
+            parameters[2] = conditionTableData.Param3;
+            parameters[3] = target;
+            return (bool)method.Invoke(this, parameters);
+        }
+
+        public bool ExecuteCondition<T>(string ConditionID, List<T> target)
+        {
+            if (string.IsNullOrEmpty(ConditionID))
+            {
+                throw new Exception();
+            }
+            if (!ConditionTableDataDic.ContainsKey(ConditionID))
+            {
+                Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
+                return false;
+            }
+
+            ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
+            if (!PublicFunctions.ContainsKey(conditionTableData.CheckType.ToString()))
+            {
+                Debug.LogError("Function '" + conditionTableData.CheckType.ToString() + "' does not exist.");
+                return false;
+            }
+            MethodInfo method = PublicFunctions[conditionTableData.CheckType.ToString()];
+
+            object[] parameters = new object[4];
+            parameters[0] = conditionTableData.Param1;
+            parameters[1] = conditionTableData.Param2;
+            parameters[2] = conditionTableData.Param3;
+            parameters[3] = target;
             return (bool)method.Invoke(this, parameters);
         }
 
@@ -297,6 +376,7 @@ namespace ML.Engine.Event
             ConditionTableDataABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
+
     }
 }
 
