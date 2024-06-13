@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 6177175568748305543}
   - component: {fileID: 6229577386683574168}
   - component: {fileID: 7446438347498083116}
-  - component: {fileID: 5971637760625806502}
+  - component: {fileID: 1243093273020390992}
   m_Layer: 7
   m_Name: Interact_Projector_Base1_1
   m_TagString: Untagged
@@ -184,7 +184,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.775806, y: 2.227497, z: 4.775806}
   m_Center: {x: 0, y: 1.49, z: 0}
---- !u!114 &5971637760625806502
+--- !u!114 &1243093273020390992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5747549775640189457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ecedce2965864b45a9a23e75ce1be6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
