@@ -1,7 +1,6 @@
 using System;
-using static UnityEngine.InputSystem.InputAction;
 
-namespace ML.Engine.MonitorEvent
+namespace ML.Engine.Event
 {
     public class MonitorEvent
     {
