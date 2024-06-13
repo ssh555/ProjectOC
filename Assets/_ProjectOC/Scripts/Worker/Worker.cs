@@ -752,8 +752,9 @@ namespace ProjectOC.WorkerNS
         public bool JudgeHit;
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
+        public float TargetThreshold;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None)
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 0.5f)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -763,6 +764,7 @@ namespace ProjectOC.WorkerNS
                     ContainerDict[key]?.TempRemoveWorker();
                 }
             }
+            TargetThreshold = threshold;
             Agent.isStopped = false;
             Agent.speed = RealWalkSpeed;
             if (Agent.SetDestination(target))
@@ -804,7 +806,7 @@ namespace ProjectOC.WorkerNS
             {
                 Vector3 curPos = transform.position;
                 float dist = Vector3.Distance(curPos, Target);
-                bool hasArrive = dist <= 0.5f;
+                bool hasArrive = dist <= TargetThreshold;
                 if (!hasArrive && JudgeHit && curPos == LastTickPosition)
                 {
                     Vector3 direction = Target - curPos;
