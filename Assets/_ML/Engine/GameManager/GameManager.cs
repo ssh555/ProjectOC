@@ -58,9 +58,6 @@ namespace ML.Engine.Manager
         [SerializeField]
         public Event.FunctionLiabrary EventManager;
 
-        [SerializeField]
-        public MonitorEvent.MonitorEventManager MonitorEventManager;
-
         public EnterPoint EnterPoint { get; private set; }
 
         [SerializeField]
@@ -105,7 +102,6 @@ namespace ML.Engine.Manager
 
             this.SaveManager = this.RegisterGlobalManager<SaveSystem.SaveManager>();
             this.EventManager = this.RegisterGlobalManager<Event.FunctionLiabrary>();
-            this.MonitorEventManager = this.RegisterGlobalManager<MonitorEvent.MonitorEventManager>();
             this.RegisterGlobalManager(this.CharacterManager);
         }
         
