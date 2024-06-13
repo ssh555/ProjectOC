@@ -1,7 +1,6 @@
 using ML.Engine.FSM;
 using System.Collections.Generic;
 
-
 namespace ProjectOC.WorkerNS
 {
     public class WorkerStateRelaxing : State
@@ -69,7 +68,9 @@ namespace ProjectOC.WorkerNS
                                 }
                                 if (positions.Count > 0)
                                 {
-                                    worker.SetDestination(positions[UnityEngine.Random.Range(0, positions.Count)]);
+                                    var pos = positions[UnityEngine.Random.Range(0, positions.Count)];
+                                    pos = new UnityEngine.Vector3(pos.x, pos.y-0.25f, pos.z);
+                                    worker.SetDestination(pos, threshold:4f);
                                 }
                                 TimerForRandomWalk.Reset(2f);
                             }
