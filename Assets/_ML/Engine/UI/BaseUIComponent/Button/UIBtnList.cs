@@ -698,7 +698,6 @@ namespace ML.Engine.UI
             this.UIBtnListContainer?.RefreshEdge();
         }
 
-
         /// <summary>
         /// 传入下标设置二维按钮列表action
         /// </summary>
@@ -1331,7 +1330,6 @@ namespace ML.Engine.UI
 
         public void OnSelectExit()
         {
-
             this.SetCurSelectedNull();
             /*            if (this.uiBtnListContainer == null)
                         {
@@ -1381,7 +1379,6 @@ namespace ML.Engine.UI
                 //解绑父项导航
                 this.uiBtnListContainer.DeBindNavigationInputAction();
             }
-
         }
 
         public void OnExitInner()
@@ -1407,9 +1404,7 @@ namespace ML.Engine.UI
             }
         }
         #endregion
-
     }
-
 }
 
 

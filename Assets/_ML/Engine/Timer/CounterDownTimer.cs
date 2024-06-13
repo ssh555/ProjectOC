@@ -144,10 +144,6 @@ namespace ML.Engine.Timer
                     currentTime = 0;
                     this.OnUpdateEvent?.Invoke(currentTime);
                 }
-
-                
-
-                
                 this.OnEndEvent?.Invoke();
                 return currentTime;
             }
@@ -159,7 +155,6 @@ namespace ML.Engine.Timer
             {
                 currentTime = 0;
             }
-
             this.OnUpdateEvent?.Invoke(currentTime);
             return currentTime;
         }
