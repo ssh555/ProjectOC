@@ -49,7 +49,12 @@ namespace ProjectOC.Player
         {
             // 先更新条件
             // Maybe 可以只值变化时更新一次
-            this.modelAnimator.SetBool(this._inPreJump, moveAbility.IsInPreJump);
+            if (moveAbility.IsInPreJump)
+            {
+                this.modelAnimator.SetTrigger(this._inPreJump);
+                moveAbility.IsInPreJump = false;
+            }
+            // this.modelAnimator.SetTrigger(this._inPreJump, moveAbility.IsInPreJump);
 
             base.Tick(deltatime);
         }

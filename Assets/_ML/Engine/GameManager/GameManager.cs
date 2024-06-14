@@ -62,7 +62,6 @@ namespace ML.Engine.Manager
 
         [SerializeField]
         private CharacterManager _character;
-
         public CharacterManager CharacterManager => _character;
         #endregion
 
