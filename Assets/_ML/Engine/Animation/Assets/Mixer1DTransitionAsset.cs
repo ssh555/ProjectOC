@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ML.Engine.Animation
 {
-    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Mixer 1D Transition", order = Strings.AssetMenuOrder - 1)]
+    [CreateAssetMenu(menuName = "ML/Animation/Mixer/1D Mixer Transition", order = Strings.AssetMenuOrder - 1)]
     public class Mixer1DTransitionAsset : AnimationAssetBase, IAssetHasEvents
     {
         [Serializable]

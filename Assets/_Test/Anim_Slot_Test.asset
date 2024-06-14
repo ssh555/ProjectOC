@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 572c5824395d9ef44a440faf4009e6ac, type: 3}
-  m_Name: Anim_SCT_Test
+  m_Name: Anim_Slot_Test
   m_EditorClassIdentifier: 
   transition:
     _FadeDuration: 0.17500001

@@ -672,6 +672,11 @@ namespace ML.Editor.Animation
 
                 // 播放新的动画的状态
                 var targetState = animancer.Play(transition);
+                if (_PreviousAnimation == null || _PreviousAnimation.length == 0)
+                {
+                    targetState.Weight = 1;
+                }
+
                 OnPlayAnimation();
 
 

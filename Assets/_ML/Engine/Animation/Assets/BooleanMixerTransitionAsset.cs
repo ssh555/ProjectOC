@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ML.Engine.Animation
 {
-    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Boolean Manual Transition", order = Strings.AssetMenuOrder + 1)]
+    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Boolean Mixer Transition", order = Strings.AssetMenuOrder + 1)]
     public class BooleanMixerTransitionAsset : AnimationAssetBase
     {
         public bool Boolean;

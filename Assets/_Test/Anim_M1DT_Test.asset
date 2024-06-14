@@ -28,8 +28,8 @@ MonoBehaviour:
     _Thresholds:
     - 0
     - 0.5
-    - 1
-    _DefaultParameter: 1
+    - 1.0928183
+    _DefaultParameter: 0.19
     _ExtrapolateSpeed: 1
   _Events: []
   _EndEvent:

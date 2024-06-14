@@ -33,7 +33,6 @@ namespace ML.Editor.Animation
         public override void InitTransition()
         {
             transition = asset.transition;
-            Debug.Log(transition);
         }
 
         private Vector2 scrollPosition;
@@ -115,6 +114,7 @@ namespace ML.Editor.Animation
             {
                 scrollPositon = EditorGUILayout.BeginScrollView(scrollPositon, alwaysShowHorizontal: false, alwaysShowVertical : false, GUILayout.Height(65),  GUILayout.ExpandWidth(true));
 
+                #region 绘制区域数据
                 // 计算轴宽度
                 int size = Weights.arraySize;
                 // 权重值
@@ -128,6 +128,12 @@ namespace ML.Editor.Animation
                 }
                 // 轴宽度
                 float timelineWidth = (maxW - minW + 2) * weightRatio * timelineScale * 5;
+                if(size == 0)
+                {
+                    timelineWidth = 2 * weightRatio * timelineScale * 5;
+                    maxW = 1;
+                    minW = -1;
+                }
                 // 区域
                 Rect area = GUILayoutUtility.GetRect(timelineWidth, 50);
                 EditorGUI.DrawRect(area, backgroundColor);
@@ -171,17 +177,20 @@ namespace ML.Editor.Animation
                     EditorGUI.DrawRect(new Rect(x, topcenter.y + area.height - height, 1, height), timelineColor);
                     lastx = x;
                 }
+                #endregion
 
-                // 绘制已有权重值
-
-
-                // 绘制时间轴光标 -> 默认值
+                #region 绘制默认值
                 float cursorX = topcenter.x + DefaultValue.floatValue * tickSpacing * timelineScale * 10;
                 // 赋值ScrollPosition
                 if (isInitScroll == false)
                 {
                     isInitScroll = true;
                     scrollPositon.x = cursorX * tickSpacing * timelineScale * 10 + (timelineWidth - showWidth) * 0.5f;
+
+                    timelineScale = 1 / (maxW - minW + 1);
+                    timelineWidth = (maxW - minW + 2) * weightRatio * timelineScale * 5;
+                    scrollPositon.x = cursorX;// + (timelineSize - showSize) * 0.5f;
+                    scrollPositon.x += (timelineWidth - showWidth) * 0.5f;
                 }
                 Rect cursorRect = new Rect(cursorX - 4, topcenter.y, 10, 30);
                 Texture2D cursorTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/Cursor.png");
@@ -197,7 +206,9 @@ namespace ML.Editor.Animation
                 }
                 GUI.color = timelineColor;
 
-                // 绘制权重值
+                #endregion
+
+                #region 绘制权重值
                 Texture2D weightTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/TriangleCursor.png");
                 Rect[] weightRects = new Rect[size];
                 for(int i = 0; i < size; ++i)
@@ -217,7 +228,9 @@ namespace ML.Editor.Animation
                     }
                     GUI.color = timelineColor;
                 }
+                #endregion
 
+                #region 输入响应事件
                 // 处理鼠标滚轮缩放
                 if (Event.current.type == EventType.ScrollWheel)
                 {
@@ -273,6 +286,13 @@ namespace ML.Editor.Animation
                         currentEvent.Use();
                     }
                 }
+
+                // 双击重置视图
+                if (currentEvent.type == EventType.MouseDown && area.Contains(mpos) && currentEvent.clickCount >= 2)
+                {
+                    isInitScroll = false;
+                }
+                #endregion
 
                 EditorGUILayout.EndScrollView();
             }

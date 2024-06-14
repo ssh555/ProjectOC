@@ -30,9 +30,6 @@ namespace ML.Editor.Animation
             if (asset.montageNames == null)
             {
                 asset.montageNames = new List<MontageName>();
-                Debug.Log("QWQ");
-                EditorUtility.SetDirty(asset);
-                AssetDatabase.SaveAssetIfDirty(asset);
             }
 
 
@@ -54,7 +51,6 @@ namespace ML.Editor.Animation
         public override void DrawTrackGUI()
         {
             eventTrack.DrawTrackGUI();
-
             // MontageTrack
             montageTrack.DrawTrackGUI();
         }
@@ -135,7 +131,7 @@ namespace ML.Editor.Animation
                     }
                 }
                 EditorGUI.BeginChangeCheck();
-                selectedIndex = EditorGUILayout.Popup(selectedIndex, names);
+                selectedIndex = EditorGUILayout.Popup(new GUIContent("Ä¬ÈÏ²¥·Å¶¯»­"), selectedIndex, names);
                 if (EditorGUI.EndChangeCheck())
                 {
                     asset.DefaultName = selectedIndex > 0 ? asset.montageNames[selectedIndex - 1].Name : names[0];
@@ -185,8 +181,13 @@ namespace ML.Editor.Animation
             {
                 var signal = this.CreateSignalOnMouse<MontageTrackSignal>();
                 Montages.Add(signal.Montage);
-                signal.SaveData();
             });
+        }
+
+        public override void DrawTrackGUI()
+        {
+            this.End = _asset.FrameLength;
+            base.DrawTrackGUI();
         }
 
 
@@ -208,16 +209,7 @@ namespace ML.Editor.Animation
             public override void OnDelete()
             {
                 _target.Remove(Montage);
-                SaveData();
             }
-
-            public override void SaveData()
-            {
-                EditorUtility.SetDirty(_asset);
-                AssetDatabase.SaveAssetIfDirty(_asset);
-            }
-
-
         }
     }
 }
