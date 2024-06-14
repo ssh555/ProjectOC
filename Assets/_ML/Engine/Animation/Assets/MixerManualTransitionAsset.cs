@@ -11,7 +11,7 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 
 namespace ML.Engine.Animation
 {
-    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Mixer Manual Transition", order = Strings.AssetMenuOrder + 1)]
+    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Manual Mixer Transition", order = Strings.AssetMenuOrder + 1)]
     public class MixerManualTransitionAsset : AnimationAssetBase, IAssetHasEvents
     {
         [Serializable]

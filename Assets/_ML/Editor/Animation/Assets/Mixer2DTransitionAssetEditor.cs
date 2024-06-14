@@ -125,6 +125,12 @@ namespace ML.Editor.Animation
                 }
                 // Öá¿í¸ß
                 Vector2 timelineSize = (maxW - minW + Vector2.one * 2) * weightRatio * timelineScale * 5;
+                if (size == 0)
+                {
+                    timelineSize = 2 * weightRatio * timelineScale * 5;
+                    maxW = Vector2.one;
+                    minW = Vector2.one * -1;
+                }
 
                 scrollPositon = EditorGUILayout.BeginScrollView(scrollPositon, alwaysShowHorizontal: false, alwaysShowVertical: false, GUILayout.Height(window.position.width), GUILayout.ExpandWidth(true));
 

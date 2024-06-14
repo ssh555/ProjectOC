@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ML.Engine.Animation
 {
-    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Integer Manual Transition", order = Strings.AssetMenuOrder + 1)]
+    [CreateAssetMenu(menuName = "ML/Animation/Mixer/Integer Mixer Transition", order = Strings.AssetMenuOrder + 1)]
     public class IntegerMixerTransitionAsset : AnimationAssetBase
     {
         public int DefaultValue;

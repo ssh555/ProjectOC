@@ -128,6 +128,12 @@ namespace ML.Editor.Animation
                 }
                 // Öá¿í¶È
                 float timelineWidth = (maxW - minW + 2) * weightRatio * timelineScale * 5;
+                if(size == 0)
+                {
+                    timelineWidth = 2 * weightRatio * timelineScale * 5;
+                    maxW = 1;
+                    minW = -1;
+                }
                 // ÇøÓò
                 Rect area = GUILayoutUtility.GetRect(timelineWidth, 50);
                 EditorGUI.DrawRect(area, backgroundColor);
