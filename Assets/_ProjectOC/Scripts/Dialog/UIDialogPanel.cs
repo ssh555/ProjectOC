@@ -44,7 +44,8 @@ namespace ProjectOC.Dialog
             {
                 ClearOptionBtn();
             }
-            _dialogManager.LoadDialogue(currentOptionIndex);
+            
+            _dialogManager.LoadDialogueOption(currentOptionIndex);   
         }
 
         public void PopPanel()
