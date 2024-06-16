@@ -42,9 +42,9 @@ namespace ML.Editor.Animation
             /// <summary>
             /// 轨道标记
             /// </summary>
-            public List<TrackSignal> Siganls = new List<TrackSignal>();
+            private List<TrackSignal> Siganls = new List<TrackSignal>();
 
-            public Rect PaintRect;
+            public Rect PaintRect { get; private set; }
 
             private Vector2 mousepos;
             public virtual void DrawTrackGUI()
@@ -155,14 +155,6 @@ namespace ML.Editor.Animation
                     signal.OnDelete();
                 }
             }
-
-            public void SaveData()
-            {
-                foreach (var signal in Siganls)
-                {
-                    signal.SaveData();
-                }
-            }
         }
 
         /// <summary>
@@ -189,7 +181,7 @@ namespace ML.Editor.Animation
             /// 被选中时的颜色
             /// </summary>
             public Color SelectedColor = Color.red;
-            protected bool IsSelected = false;
+            private bool IsSelected = false;
 
             /// <summary>
             /// 所属轨道
@@ -335,11 +327,6 @@ namespace ML.Editor.Animation
             public virtual void OnDeselected()
             {
                 IsSelected = false;
-            }
-
-            public virtual void SaveData()
-            {
-
             }
         }
     }

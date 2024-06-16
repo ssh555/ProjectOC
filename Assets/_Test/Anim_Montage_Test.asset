@@ -19,15 +19,22 @@ MonoBehaviour:
       _Callbacks: []
       _Names: []
     _Clip: {fileID: 7400000, guid: 4ae6a6e5c9379b94b8c5b5ca31f36f1a, type: 2}
-    _Speed: 0.1
-    _NormalizedStartTime: 0.7
-  DefaultName: QWQ
+    _Speed: 1
+    _NormalizedStartTime: 0.22702703
+  DefaultName: QAQ
   montageNames:
-  - Name: QAQ
+  - Name: QWQ
     NormalizedTime: 0
+  - Name: QAQ
+    NormalizedTime: 0.22702703
   - Name: QWQ
     NormalizedTime: 0.7
-  _Events: []
+  _Events:
+  - Name: TEST
+    NormalizedTime: 0.30585587
+    UnityEvents:
+      m_PersistentCalls:
+        m_Calls: []
   _EndEvent:
     Name: 
     NormalizedTime: NaN

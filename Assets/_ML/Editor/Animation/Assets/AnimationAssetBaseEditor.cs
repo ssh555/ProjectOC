@@ -83,7 +83,12 @@ namespace ML.Editor.Animation
                 }
                 // OnEndEvent需要单独处理 -> 在AnimationWindow面板，EventTrack只处理其他的Event
             }
+        }
 
+        public override void DrawTrackGUI()
+        {
+            this.End = TargetTransition.FrameLength;
+            base.DrawTrackGUI();
         }
 
         /// <summary>
@@ -98,9 +103,6 @@ namespace ML.Editor.Animation
                 var signal = this.CreateSignalOnMouse<EventTrackSignal>();
                 TargetTransition.Events.Add(signal.Event);
                 var asset = (TargetTransition as AnimationAssetBase);
-                // 新建保存数据
-                EditorUtility.SetDirty(asset);
-                AssetDatabase.SaveAssetIfDirty(asset);
             });
         }
 
@@ -118,8 +120,6 @@ namespace ML.Editor.Animation
                 serializedObject.Update();
                 _asset.Events.Remove(Event);
                 serializedObject.ApplyModifiedProperties();
-                EditorUtility.SetDirty(_asset as ScriptableObject);
-                AssetDatabase.SaveAssetIfDirty(_asset as ScriptableObject);
             }
 
             SerializedObject serializedObject;
@@ -146,15 +146,7 @@ namespace ML.Editor.Animation
                 if (EditorGUI.EndChangeCheck())
                 {
                     serializedObject.ApplyModifiedProperties();
-                    EditorUtility.SetDirty(_asset as ScriptableObject);
-                    AssetDatabase.SaveAssetIfDirty(_asset as ScriptableObject);
                 }
-            }
-
-            public override void SaveData()
-            {
-                EditorUtility.SetDirty(_asset as ScriptableObject);
-                AssetDatabase.SaveAssetIfDirty(_asset as ScriptableObject);
             }
         }
     }
