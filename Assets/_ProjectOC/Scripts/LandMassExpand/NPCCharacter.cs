@@ -59,7 +59,7 @@ namespace ProjectOC.NPC
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             DialogManager.CurrentChatNpcModel = this;
-            DialogManager.StartDialogMode(dialogID);
+            DialogManager.StartDialogMode(DialogManager.DialogType.Chat,dialogID);
         }
         
         #endregion
