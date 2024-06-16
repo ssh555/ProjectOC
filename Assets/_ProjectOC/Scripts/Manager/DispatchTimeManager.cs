@@ -102,6 +102,21 @@ namespace ProjectOC.ManagerNS
             DelegationActions.Add(new DelegationAction(CurrentDay, hour, action));
         }
 
+        /// <summary>
+        /// 几天后某小时触发的事件
+        /// </summary>
+        public void AddDelegationActionFromNow(int day, int hour, Action action)
+        {
+            DelegationActions.Add(new DelegationAction(day + CurrentDay, hour, action));
+        }
+        /// <summary>
+        /// 当天触发的事件,几小时后触发
+        /// </summary>
+        public void AddDelegationActionFromNow(int hour, Action action)
+        {
+            DelegationActions.Add(new DelegationAction(CurrentDay,CurrentHour + hour, action));
+        }
+
         private void UpdateDelegationAction()
         {
             for (int i = 0; i < DelegationActions.Count; i++) 
@@ -114,8 +129,6 @@ namespace ProjectOC.ManagerNS
             }
         }
         #endregion
-
-
     }
 }
 

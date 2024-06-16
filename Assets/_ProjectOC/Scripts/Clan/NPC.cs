@@ -38,13 +38,13 @@ namespace ProjectOC.ClanNS
         public NPC()
         {
             var manager = ManagerNS.LocalGameManager.Instance.ClanManager;
-            Name = manager.GetRandomName();
+/*            Name = manager.GetRandomName();
             Gender = manager.GetRandomGender();
             SexPreference = manager.GetRandomSexPreference();
             Age = manager.GetRandomAge();
             RaceType = manager.GetRandomRaceType();
             WorldCognitionID = manager.GetRandomWorldCognitionID();
-            BeliefID = manager.GetRandomBeliefID();
+            BeliefID = manager.GetRandomBeliefID();*/
         }
 
         public void SetName(string name)

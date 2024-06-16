@@ -2,6 +2,7 @@ using ML.Engine.Timer;
 using ProjectOC.ManagerNS;
 using System;
 using System.Collections.Generic;
+using static ProjectOC.CharacterInteract.OCCharacterManager;
 
 namespace ProjectOC.CharacterInteract
 {
@@ -19,6 +20,7 @@ namespace ProjectOC.CharacterInteract
 
         public void Init()
         {
+            MessageTableDataTableDataDic.Add("Message_CharacterFavor_1_1",MessageTableData.defaultTemplate);
         }
 
         public void OnRegister()
@@ -53,6 +55,7 @@ namespace ProjectOC.CharacterInteract
         public class MessageInfo : IComparable<MessageInfo>
         {
             public string MsgID;
+            public string OCChacracterID;
             public bool isRead;
             public MessageType messageType;
             public int ReceiveOrder;
@@ -60,14 +63,19 @@ namespace ProjectOC.CharacterInteract
             public CounterDownTimer DelayTriggerTimer;
             public Action OnReplyCharacter;
 
-            public MessageInfo(string MsgID,MessageType messageType,Action OnReplyCharacter)
+            public MessageInfo(string MsgID,string OCChacracterID,MessageType messageType,Action OnReplyCharacter)
             {
                 this.MsgID = MsgID;
+                this.OCChacracterID = OCChacracterID;
                 this.isRead = false;
                 this.messageType = messageType;
                 //TODO 暂定为游戏时 1小时
                 this.DelayedTime = 1;
                 this.DelayTriggerTimer = new CounterDownTimer(LocalGameManager.Instance.DispatchTimeManager.TimeScale * 60 * DelayedTime, autocycle: false, autoStart: false);
+                DelayTriggerTimer.OnEndEvent += () =>
+                {
+                    LocalGameManager.Instance.CommunicationManager.CheckTrigger(this);
+                };
                 this.OnReplyCharacter = OnReplyCharacter;
             }
 
@@ -90,28 +98,38 @@ namespace ProjectOC.CharacterInteract
                 //已读短信按照时间顺序排列，越早的短信排在越下面。
                 return -ReceiveOrder.CompareTo(other.ReceiveOrder);
             }
+
+            public void StartDelayTime()
+            {
+                DelayTriggerTimer.Start();
+            }
         }
         /// <summary>
         /// 该函数在延时触发计时器结束时触发，交由DispatchTimeManager检测是否到点，到点即触发短信
         /// </summary>
-        private void CheckTrigger()
+        private void CheckTrigger(MessageInfo mi)
         {
-
+            if(MessageTableDataTableDataDic.ContainsKey(mi.MsgID))
+            {
+                LocalGameManager.Instance.DispatchTimeManager.AddDelegationAction(MessageTableDataTableDataDic[mi.MsgID].StartTime, () => {
+                    TriggerMessage(mi);
+                });
+            }
         }
         /// <summary>
         /// 当前已触发的短信数组
         /// </summary>
-        private List<MessageInfo> TriggeredMessageList = new();
+        private Dictionary<string, List<MessageInfo>> TriggeredMessageListDic = new();
 
         /// <summary>
         /// 当前延时的主线短信队列
         /// </summary>
-        private List<MessageInfo> DelayedMissionMessageList = new();
+        private Dictionary<string, List<MessageInfo>> DelayedMissionMessageListDic = new();
 
         /// <summary>
         /// 当前延时的普通短信队列
         /// </summary>
-        private List<MessageInfo> DelayedNormalMessageList = new();
+        private Dictionary<string, List<MessageInfo>> DelayedNormalMessageListDic = new();
 
         /// <summary>
         /// 玩家当前是否在对话
@@ -136,7 +154,64 @@ namespace ProjectOC.CharacterInteract
         /// </summary>
         public void TriggerMessage(MessageInfo mi)
         {
+            if(mi.messageType == MessageType.Mission)
+            {
+                //主线短信默认触发时立刻发送， 若玩家处在对话中，则延时1h后触发
+                if(isInDialog)
+                {
+                    mi.StartDelayTime();
+                    return;
+                }
+                else
+                {
+                    if(!TriggeredMessageListDic.ContainsKey(mi.OCChacracterID))
+                    {
+                        TriggeredMessageListDic[mi.OCChacracterID] = new List<MessageInfo>();
+                    }
+                    TriggeredMessageListDic[mi.OCChacracterID].Add(mi);
+                }
+            }
+            else if(mi.messageType == MessageType.Normal)
+            {
+                if (!TriggeredMessageListDic.ContainsKey(mi.OCChacracterID))
+                {
+                    if(isInDialog)
+                    {
+                        mi.StartDelayTime();
+                        return;
+                    }
+                    else
+                    {
+                        TriggeredMessageListDic[mi.OCChacracterID] = new List<MessageInfo>
+                        {
+                            mi
+                        };
+                    }
+                }
+                else
+                {
+                    //存在该角色的未读信息？
+                    var Mlist = TriggeredMessageListDic[mi.OCChacracterID];
+                    for (int i = 0; i < Mlist.Count; ++i)
+                    {
+                        if (!Mlist[i].isRead) 
+                        {
+                            mi.StartDelayTime();
+                            return;
+                        }
+                    }
 
+                    if (isInDialog)
+                    {
+                        mi.StartDelayTime();
+                        return;
+                    }
+                    else
+                    {
+                        TriggeredMessageListDic[mi.OCChacracterID].Add(mi);
+                    }
+                }
+            }
         }
         /// <summary>
         /// 该函数用于解锁某个角色的联系人
@@ -158,7 +233,10 @@ namespace ProjectOC.CharacterInteract
         /// </summary>
         public void CharacterCallPlayer(string CID)
         {
-
+            if (!ContactorList.Contains(CID))
+            {
+                ContactorList.Add(CID);
+            }
         }
 
         /// <summary>
@@ -166,9 +244,8 @@ namespace ProjectOC.CharacterInteract
         /// </summary>
         public void PlayerCallCharacter(string CID)
         {
-
+            
         }
-
         #endregion
 
         #region Load
@@ -178,7 +255,16 @@ namespace ProjectOC.CharacterInteract
         [System.Serializable]
         public struct MessageTableData
         {
-            
+            public string ID;
+            public int StartTime;
+            public List<string> Content;
+
+            public static MessageTableData defaultTemplate = new MessageTableData()
+            {
+                ID = "Message_CharacterFavor_1_1",
+                StartTime = 5,
+                Content = new List<string>() { "Dialog_BeginnerTutorial_0", "Dialog_BeginnerTutorial_1", "Dialog_BeginnerTutorial_2" , "Dialog_BeginnerTutorial_3" }
+            };
         }
         public ML.Engine.ABResources.ABJsonAssetProcessor<MessageTableData[]> ABJAProcessor;
         private Dictionary<string, MessageTableData> MessageTableDataTableDataDic = new();

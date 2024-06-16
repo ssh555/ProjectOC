@@ -85,7 +85,6 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
         this.OrderDelegationUIBtnListContainer.DisableUIBtnListContainer();
     }
 

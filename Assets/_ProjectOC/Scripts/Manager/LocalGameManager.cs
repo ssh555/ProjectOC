@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using ProjectOC.CharacterInteract;
 
 namespace ProjectOC.ManagerNS
 {
@@ -32,6 +33,8 @@ namespace ProjectOC.ManagerNS
         public Order.OrderManager OrderManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
         public Dialog.DialogManager DialogManager;
+        public CharacterInteract.CommunicationManager CommunicationManager;
+        public CharacterInteract.OCCharacterManager OCCharacterManager;
         public Player.OCPlayerController Player => (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController);
 
 
@@ -55,7 +58,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(EffectManager);
             GM.RegisterLocalManager(FeatureManager);
             GM.RegisterLocalManager(WorkerEchoManager);
-            GM.RegisterLocalManager(ClanManager);
+            //GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
             GM.RegisterLocalManager(ItemManager);
@@ -66,6 +69,8 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(MineSystemManager);
             GM.RegisterLocalManager(MainInteractManager);
             GM.RegisterLocalManager(DialogManager);
+            GM.RegisterLocalManager(CommunicationManager);
+            GM.RegisterLocalManager(OCCharacterManager);
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
         }
@@ -92,7 +97,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<WorkerNS.EffectManager>();
                 GM?.UnregisterLocalManager<WorkerNS.FeatureManager>();
                 GM?.UnregisterLocalManager<WorkerNS.WorkerEchoManager>();
-                GM?.UnregisterLocalManager<ClanNS.ClanManager>();
+                //GM?.UnregisterLocalManager<ClanNS.ClanManager>();
                 GM?.UnregisterLocalManager<ML.Engine.BuildingSystem.MonoBuildingManager>();
                 GM?.UnregisterLocalManager<TechTree.TechTreeManager>();
                 GM?.UnregisterLocalManager<ML.Engine.InventorySystem.ItemManager>();
@@ -109,6 +114,8 @@ namespace ProjectOC.ManagerNS
                 //���ܻ���ǰע�����ر���������ʱ��
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
                 GM?.UnregisterLocalManager<Dialog.DialogManager>();
+                GM?.UnregisterLocalManager<CharacterInteract.CommunicationManager>();
+                GM?.UnregisterLocalManager<CharacterInteract.OCCharacterManager>();
                 Instance = null;
             }
         }
