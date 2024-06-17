@@ -204,14 +204,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Dialog
         public void ShowDialogText(string _text, string _npcName)
         {
-            GameManager.Instance.StartCoroutine(ShowDialogTextCoroutine(_text.Length * 0.1f));
+            GameManager.Instance.StartCoroutine(ShowDialogTextCoroutine(_text, _npcName,_text.Length * 0.1f));
         }
 
-        private IEnumerator ShowDialogTextCoroutine(float delaySec)
+        private IEnumerator ShowDialogTextCoroutine(string _text, string _npcName,float delaySec)
         {
             yield return new WaitForSeconds(delaySec);
-            var tPrefab = this.objectPool.GetNextObject("CharacterMessagePool");
-
+            var tPrefab = this.objectPool.GetNextObject("CharacterMessagePool", ChatListContainer);
+            //tPrefab.transform.Find("")
 
 
         }

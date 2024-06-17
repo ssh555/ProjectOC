@@ -2195,6 +2195,7 @@ MonoBehaviour:
   ContactsPanel: {fileID: 4090372102195342765}
   Function: {fileID: 8449274940973472280}
   FunctionPanel: {fileID: 1857494449065830283}
+  ChatListContainer: {fileID: 6575494766772801813}
   CharacterBioListInitor: {fileID: 8233389213888836579}
 --- !u!1 &5913072055619683678
 GameObject:

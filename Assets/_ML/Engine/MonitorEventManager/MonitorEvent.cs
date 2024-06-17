@@ -41,10 +41,21 @@ namespace ML.Engine.Event
         {
             if(hasBuffOn)
             {
-                if (MonitorConditionDelegateBuffOff.Invoke())
+                if(MonitorConditionDelegateBuffOff != null)
                 {
-                    BuffOffAction?.Invoke();
-                    return 2;
+                    if (MonitorConditionDelegateBuffOff.Invoke())
+                    {
+                        BuffOffAction?.Invoke();
+                        return 2;
+                    }
+                }
+                else
+                {
+                    if (!MonitorConditionDelegateBuffOn.Invoke())
+                    {
+                        BuffOffAction?.Invoke();
+                        return 2;
+                    }
                 }
             }
             else
