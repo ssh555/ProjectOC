@@ -622,6 +622,7 @@ namespace ML.Engine.UI
             foreach (var btnlist in uIBtnLists)
             {
                 btnlist.DeBindInputAction();
+                btnlist.RemoveAllListener();
                 btnlist.DisableBtnList();
             }
             this.DeBindNavigationInputAction();

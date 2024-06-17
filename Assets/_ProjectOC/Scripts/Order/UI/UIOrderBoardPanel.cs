@@ -295,7 +295,6 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             return;
         }
         #region FunctionType
-
         for (int i = 0; i < FunctionType; i++)
         {
             Function.GetChild(i).Find("Selected").gameObject.SetActive(FunctionIndex == i);

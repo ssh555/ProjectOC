@@ -74,54 +74,92 @@ namespace ProjectOC.ManagerNS
         private List<DelegationAction> DelegationActions = new ();
         struct DelegationAction
         {
-            public int day;
-            public int hour;
-            public Action Action;
+            //注册事件时开始的时间
+            private int startDay;
+            public int StartDay { get { return startDay; } }
+            private int startHour;
+            public int StartHour { get { return startHour; } }
+            private int startMin;
+            public int StartMin { get { return startMin; } }
 
-            public DelegationAction(int day,int hour, Action Action)
+            private int day;
+            public int Day { get { return day; } }
+            private int hour;
+            public int Hour { get { return hour; } }
+            private int min;
+            public int Min { get { return min; } }
+            private Action action;
+            public Action Action { get { return action; } }
+
+            public DelegationAction(int day,int hour,int min, Action Action)
             {
+                this.startDay = LocalGameManager.Instance.DispatchTimeManager.CurrentDay;
+                this.startHour = LocalGameManager.Instance.DispatchTimeManager.CurrentHour;
+                this.startMin = LocalGameManager.Instance.DispatchTimeManager.CurrentMinute;
                 this.day = day;
                 this.hour = hour;
-                this.Action = Action;
+                this.min = min;
+                this.action = Action;
             }
-
         }
 
         /// <summary>
-        /// 某天某小时触发的事件
+        /// 几天后某小时某分触发的事件
         /// </summary>
-        public void AddDelegationAction(int day,int hour,Action action)
+        public void AddDelegationActionFromNow(int day, int hour,int min, Action action)
         {
-            DelegationActions.Add(new DelegationAction(day, hour, action));
+            DelegationActions.Add(new DelegationAction(day, hour, min, action));
         }
         /// <summary>
-        /// 当天触发的事件
+        /// 几小时几分后触发
+        /// </summary>
+        public void AddDelegationActionFromNow(int hour, int min, Action action)
+        {
+            DelegationActions.Add(new DelegationAction(0, hour, min, action));
+        }
+
+        /// <summary>
+        /// 几分后触发
+        /// </summary>
+        public void AddDelegationActionFromNow(int min, Action action)
+        {
+            DelegationActions.Add(new DelegationAction(0, 0, min, action));
+        }
+
+        /// <summary>
+        /// 当天某小时触发的事件
         /// </summary>
         public void AddDelegationAction(int hour, Action action)
         {
-            DelegationActions.Add(new DelegationAction(CurrentDay, hour, action));
+            if(hour < CurrentHour)
+            {
+                throw new Exception("触发时间已经过去！");
+            }
+
+            if(CurrentMinute == 0)
+            {
+                AddDelegationActionFromNow(hour - CurrentHour, 0, action);
+            }
+            else
+            {
+                AddDelegationActionFromNow(hour - CurrentHour - 1, 60 - CurrentMinute, action);
+            }
         }
 
-        /// <summary>
-        /// 几天后某小时触发的事件
-        /// </summary>
-        public void AddDelegationActionFromNow(int day, int hour, Action action)
+        private bool CheckIsTimeUp(DelegationAction delegationAction)
         {
-            DelegationActions.Add(new DelegationAction(day + CurrentDay, hour, action));
-        }
-        /// <summary>
-        /// 当天触发的事件,几小时后触发
-        /// </summary>
-        public void AddDelegationActionFromNow(int hour, Action action)
-        {
-            DelegationActions.Add(new DelegationAction(CurrentDay,CurrentHour + hour, action));
+            //计算当前差的时间
+            int gapTime = (1440 * CurrentDay + 60 * CurrentHour + CurrentMinute) - (1440 * delegationAction.StartDay + 60 * delegationAction.StartHour + delegationAction.StartMin);
+            int targetTime = 1440 * delegationAction.Day + 60 * delegationAction.Hour + delegationAction.Min ;
+            UnityEngine.Debug.Log(gapTime + " " + targetTime+" "+ delegationAction.Day+" "+ delegationAction.Hour);
+            return gapTime >= targetTime;
         }
 
         private void UpdateDelegationAction()
         {
             for (int i = 0; i < DelegationActions.Count; i++) 
             {
-                if (DelegationActions[i].day == CurrentDay && DelegationActions[i].hour == CurrentHour)
+                if (CheckIsTimeUp(DelegationActions[i]))
                 {
                     DelegationActions[i].Action?.Invoke();
                     DelegationActions.Remove(DelegationActions[i]);

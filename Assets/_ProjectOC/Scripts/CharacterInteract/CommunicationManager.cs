@@ -1,7 +1,9 @@
 using ML.Engine.Timer;
 using ProjectOC.ManagerNS;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using static ProjectOC.CharacterInteract.OCCharacterManager;
 
 namespace ProjectOC.CharacterInteract
@@ -20,7 +22,8 @@ namespace ProjectOC.CharacterInteract
 
         public void Init()
         {
-            MessageTableDataTableDataDic.Add("Message_CharacterFavor_1_1",MessageTableData.defaultTemplate);
+            MessageTableDataTableDataDic.Add("Message_CharacterFavor_1_1",MessageTableData.defaultTemplate1);
+            MessageTableDataTableDataDic.Add("Message_CharacterFavor_1_2", MessageTableData.defaultTemplate2);
         }
 
         public void OnRegister()
@@ -74,7 +77,7 @@ namespace ProjectOC.CharacterInteract
                 this.DelayTriggerTimer = new CounterDownTimer(LocalGameManager.Instance.DispatchTimeManager.TimeScale * 60 * DelayedTime, autocycle: false, autoStart: false);
                 DelayTriggerTimer.OnEndEvent += () =>
                 {
-                    LocalGameManager.Instance.CommunicationManager.CheckTrigger(this);
+                    LocalGameManager.Instance.CommunicationManager.TriggerMessage(this);
                 };
                 this.OnReplyCharacter = OnReplyCharacter;
             }
@@ -101,6 +104,8 @@ namespace ProjectOC.CharacterInteract
 
             public void StartDelayTime()
             {
+
+                UnityEngine.Debug.Log("开始延时");
                 DelayTriggerTimer.Start();
             }
         }
@@ -112,6 +117,7 @@ namespace ProjectOC.CharacterInteract
             if(MessageTableDataTableDataDic.ContainsKey(mi.MsgID))
             {
                 LocalGameManager.Instance.DispatchTimeManager.AddDelegationAction(MessageTableDataTableDataDic[mi.MsgID].StartTime, () => {
+                    UnityEngine.Debug.Log("短信到点触发");
                     TriggerMessage(mi);
                 });
             }
@@ -119,7 +125,11 @@ namespace ProjectOC.CharacterInteract
         /// <summary>
         /// 当前已触发的短信数组
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, List<MessageInfo>> TriggeredMessageListDic = new();
+
+        private List<MessageInfo> messageInfos = new List<MessageInfo>();
+        public List<MessageInfo> MessageInfos { get { return messageInfos; } }
 
         /// <summary>
         /// 当前延时的主线短信队列
@@ -134,7 +144,7 @@ namespace ProjectOC.CharacterInteract
         /// <summary>
         /// 玩家当前是否在对话
         /// </summary>
-        private bool isInDialog;
+        private bool isInDialog = false;
         public bool IsInDialog { get { return isInDialog; } set { isInDialog = value; } }
         #endregion
 
@@ -154,6 +164,7 @@ namespace ProjectOC.CharacterInteract
         /// </summary>
         public void TriggerMessage(MessageInfo mi)
         {
+            UnityEngine.Debug.Log("TriggerMessage " +mi.MsgID+" "+ mi.OCChacracterID);
             if(mi.messageType == MessageType.Mission)
             {
                 //主线短信默认触发时立刻发送， 若玩家处在对话中，则延时1h后触发
@@ -169,6 +180,8 @@ namespace ProjectOC.CharacterInteract
                         TriggeredMessageListDic[mi.OCChacracterID] = new List<MessageInfo>();
                     }
                     TriggeredMessageListDic[mi.OCChacracterID].Add(mi);
+                    messageInfos.Add(mi);
+                    messageInfos.Sort();
                 }
             }
             else if(mi.messageType == MessageType.Normal)
@@ -186,6 +199,8 @@ namespace ProjectOC.CharacterInteract
                         {
                             mi
                         };
+                        messageInfos.Add(mi);
+                        messageInfos.Sort();
                     }
                 }
                 else
@@ -197,6 +212,7 @@ namespace ProjectOC.CharacterInteract
                         if (!Mlist[i].isRead) 
                         {
                             mi.StartDelayTime();
+                            UnityEngine.Debug.Log("延时 " + mi.OCChacracterID+" "+mi.MsgID);
                             return;
                         }
                     }
@@ -209,6 +225,8 @@ namespace ProjectOC.CharacterInteract
                     else
                     {
                         TriggeredMessageListDic[mi.OCChacracterID].Add(mi);
+                        messageInfos.Add(mi);
+                        messageInfos.Sort();
                     }
                 }
             }
@@ -223,9 +241,10 @@ namespace ProjectOC.CharacterInteract
         /// <summary>
         /// 该函数用于某个角色向玩家发送短信,根据短信种类不同在MessageInfo的构造器里对计时器的初始化有所不同
         /// </summary>
-        public void SendMessage(string MID, MessageType mt, Action action = null)
+        public void SendMessage(string MID,string CID, MessageType mt, Action action = null)
         {
-
+            UnityEngine.Debug.Log("SendMessage " + MID +" "+ CID);
+            CheckTrigger(new MessageInfo(MID, CID, mt, action));
         }
 
         /// <summary>
@@ -246,6 +265,17 @@ namespace ProjectOC.CharacterInteract
         {
             
         }
+
+
+        public List<string> GetMessageContent(string MsgID)
+        {
+            if(MessageTableDataTableDataDic.ContainsKey(MsgID))
+            {
+                return new List<string>(MessageTableDataTableDataDic[MsgID].Content);
+            }
+            return new List<string>();
+        }
+
         #endregion
 
         #region Load
@@ -259,11 +289,18 @@ namespace ProjectOC.CharacterInteract
             public int StartTime;
             public List<string> Content;
 
-            public static MessageTableData defaultTemplate = new MessageTableData()
+            public static MessageTableData defaultTemplate1 = new MessageTableData()
             {
                 ID = "Message_CharacterFavor_1_1",
-                StartTime = 5,
+                StartTime = 2,
                 Content = new List<string>() { "Dialog_BeginnerTutorial_0", "Dialog_BeginnerTutorial_1", "Dialog_BeginnerTutorial_2" , "Dialog_BeginnerTutorial_3" }
+            };
+
+            public static MessageTableData defaultTemplate2 = new MessageTableData()
+            {
+                ID = "Message_CharacterFavor_1_2",
+                StartTime = 2,
+                Content = new List<string>() { "Dialog_BeginnerTutorial_0", "Dialog_BeginnerTutorial_1", "Dialog_BeginnerTutorial_2", "Dialog_BeginnerTutorial_3" }
             };
         }
         public ML.Engine.ABResources.ABJsonAssetProcessor<MessageTableData[]> ABJAProcessor;

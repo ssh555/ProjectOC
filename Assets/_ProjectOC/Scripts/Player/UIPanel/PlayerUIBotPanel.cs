@@ -39,18 +39,15 @@ namespace ProjectOC.Player.UI
             this.Ring = this.transform.Find("Ring");
             this.Ring.gameObject.SetActive(false);
         }
-
         protected override void Start()
         {
             IsInit = true;
             Refresh();
             base.Start();
         }
-
         #endregion
 
         #region Override
-
         protected override void Enter()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
@@ -89,13 +86,10 @@ namespace ProjectOC.Player.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed -= LastTerm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed -= NextTerm_performed;
 
-
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
-
-
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
@@ -208,18 +202,20 @@ namespace ProjectOC.Player.UI
             this.UIBtnListContainer.SetBtnAction("通讯",
             () =>
             {
-                Debug.Log("通讯");
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_CharacterInteract_UIPanel/Prefab_CharacterInteract_UI_CommunicationPanel.prefab").Completed += (handle) =>
+                {
+                    UICommunicationPanel communicationPanel = handle.Result.GetComponent<UICommunicationPanel>();
+                    communicationPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(communicationPanel);
+                };
             }
             );
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-
-
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
         }
 
         private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)

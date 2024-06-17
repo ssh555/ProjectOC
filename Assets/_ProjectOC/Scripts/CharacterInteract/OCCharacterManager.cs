@@ -1,5 +1,7 @@
 using ML.Engine.InventorySystem;
+using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine.TextCore.Text;
@@ -21,6 +23,7 @@ namespace ProjectOC.CharacterInteract
 
         public void Init()
         {
+            CharacterTableDataDic.Add("CharacterFavor_1", CharacterTableData.defaultTemplate);
             CharacterFavorTableDataDic.Add("CharacterFavor_1", CharacterFavorTableData.defaultTemplate);
         }
 
@@ -44,7 +47,7 @@ namespace ProjectOC.CharacterInteract
 
         #region Field & Property
         /// <summary>
-        /// 角色字典
+        /// 已经解锁的角色字典
         /// </summary>
         [ShowInInspector]
         private Dictionary<string, OCCharacter> CharacterDic = new();
@@ -114,7 +117,7 @@ namespace ProjectOC.CharacterInteract
         public void LevelUP(string CID)
         {
             UnityEngine.Debug.Log("LevelUP " + CID);
-            if (!CharacterFavorTableDataDic.ContainsKey(CID)) return;
+            if (!CharacterTableDataDic.ContainsKey(CID)) return;
             if (CharacterDic.ContainsKey(CID)) return;
             this.CharacterDic.Add(CID, new OCCharacter(CharacterFavorTableDataDic[CID]));
         }
@@ -146,6 +149,14 @@ namespace ProjectOC.CharacterInteract
         {
 
         }
+
+        public CharacterTableData GetOCCharacterData(string CID)
+        {
+            if (CharacterTableDataDic.ContainsKey(CID)) return CharacterTableDataDic[CID];
+            throw new Exception();
+        }
+
+
         #endregion
 
         #region Load
@@ -194,10 +205,10 @@ namespace ProjectOC.CharacterInteract
                 FriendStage = 3,
                 IntimateStage = 4,
                 GreetingDelay = (1,1),
-                Greeting = new List<string>(),
+                Greeting = new List<string>() { "Message_CharacterFavor_1_1", "Message_CharacterFavor_1_2" },
 
                 InvitationDelay = (1,1),
-                Invitation = new List<string>(),
+                Invitation = new List<string>() { "Message_CharacterFavor_1_1", "Message_CharacterFavor_1_2" },
                 GiftDelay = 2,
 
                 Gift  = new List<string>(),
@@ -206,19 +217,53 @@ namespace ProjectOC.CharacterInteract
                 TasteFavor = new List<string>()
             };
         }
-        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]> CharacterFavorTableDataABJAProcessor;
         [ShowInInspector]
         private Dictionary<string, CharacterFavorTableData> CharacterFavorTableDataDic = new();
+
+
+        /// <summary>
+        /// 角色表数据
+        /// </summary>
+        [System.Serializable]
+        public struct CharacterTableData
+        {
+            public string ID;
+            public TextContent Name;
+            public TextContent CodeName;
+            public string Icon;
+            public TextContent Race;
+            public TextContent Gender;
+            public TextContent Age;
+            public string Image;
+            public List<string> RoleTag;
+            public List<string> AcgnTag;
+            public List<string> AdjTag;
+            public TextContent WorldCognition;
+            public TextContent Faith;
+            public TextContent Story;
+
+            public static CharacterTableData defaultTemplate = new CharacterTableData()
+            {
+                ID = "CharacterFavor_1",
+                Name = new TextContent("角色1"),
+                CodeName = new TextContent("代号1"),
+            };
+        }
+
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterTableData[]> CharacterTableDataABJAProcessor;
+        [ShowInInspector]
+        private Dictionary<string, CharacterTableData> CharacterTableDataDic = new();
         private void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]>("OCTableData", "MainInteractRing", (datas) =>
+            CharacterFavorTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]>("OCTableData", "MainInteractRing", (datas) =>
             {
                 foreach (var data in datas)
                 {
                     CharacterFavorTableDataDic.Add(data.ID, data);
                 }
             }, "角色好感度数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            CharacterFavorTableDataABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

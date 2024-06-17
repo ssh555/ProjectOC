@@ -117,7 +117,8 @@ namespace ProjectOC.CharacterInteract
         /// <summary>
         /// 日常问候数组 不放回抽取
         /// </summary>
-        public List<string> Greeting;
+        [ShowInInspector]
+        private List<string> Greeting;
         private void StartGreetingTimer()
         {
             Debug.Log("StartGreetingTimer");
@@ -127,12 +128,13 @@ namespace ProjectOC.CharacterInteract
             int randomValue = Random.Range(GreetingDelay.Item1, GreetingDelay.Item2);
             string msgId = Greeting[Random.Range(0, Greeting.Count)];
             Greeting.Remove(msgId);
-            LocalGameManager.Instance.DispatchTimeManager.AddDelegationActionFromNow(randomValue, 0,() =>
+            Debug.Log("Greeting cnt " + Greeting.Count);
+            LocalGameManager.Instance.DispatchTimeManager.AddDelegationActionFromNow(0, 1, 0, () =>
             {
+                Debug.Log("Time UP");
                 if (relation != Relation.Know) return;
                 //发送问候短信
-                CommunicationManager.MessageInfo messageInfo = new CommunicationManager.MessageInfo(msgId, cID, CommunicationManager.MessageType.Normal, null);
-                LocalGameManager.Instance.CommunicationManager.TriggerMessage(messageInfo);
+                LocalGameManager.Instance.CommunicationManager.SendMessage(msgId, cID, CommunicationManager.MessageType.Normal, null);
                 StartGreetingTimer();
             });
         }
@@ -145,12 +147,11 @@ namespace ProjectOC.CharacterInteract
             var InvitationDelay = characterFavorTableData.InvitationDelay;
             int randomValue = Random.Range(InvitationDelay.Item1, InvitationDelay.Item2);
             string msgId = characterFavorTableData.Invitation[Random.Range(0, characterFavorTableData.Invitation.Count)];
-            LocalGameManager.Instance.DispatchTimeManager.AddDelegationActionFromNow(randomValue, 0, () =>
+            LocalGameManager.Instance.DispatchTimeManager.AddDelegationActionFromNow(randomValue, 0, 0, () =>
             {
                 if (relation != Relation.Friend) return;
                 //发送约会短信
-                CommunicationManager.MessageInfo messageInfo = new CommunicationManager.MessageInfo(msgId, cID, CommunicationManager.MessageType.Normal, null);
-                LocalGameManager.Instance.CommunicationManager.TriggerMessage(messageInfo);
+                LocalGameManager.Instance.CommunicationManager.SendMessage(msgId, cID, CommunicationManager.MessageType.Normal, null);
                 StartDatingTimer();
             });
         }

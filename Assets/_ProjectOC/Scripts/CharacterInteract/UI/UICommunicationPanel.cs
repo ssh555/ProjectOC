@@ -1,35 +1,18 @@
-using ML.Engine.Input;
 using ML.Engine.Manager;
-using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
-using UnityEngine.UI;
-using System;
-using static ProjectOC.ResonanceWheelSystem.UI.UIBeastPanel;
 using ML.Engine.Utility;
-using static ML.Engine.UI.UIBtnListContainer;
-using UnityEngine.UIElements;
-using Image = UnityEngine.UI.Image;
-using System.Drawing;
-using Unity.Burst.CompilerServices;
-using UnityEngine.Purchasing;
-using Sirenix.Utilities;
+using static ProjectOC.ResonanceWheelSystem.UI.UICommunicationPanel;
 using TMPro;
-using UnityEditor;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
-using ProjectOC.Order;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class UICommunicationPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
+    public class UICommunicationPanel : ML.Engine.UI.UIBasePanel<CommunicationPanelStruct>
     {
         #region Unity
         public bool IsInit = false;
@@ -37,8 +20,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-
-            
         }
         protected override void Start()
         {
@@ -87,61 +68,42 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
 
-            //驱逐
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed -= Expel_performed;
-
-            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed -= LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed -= NextTerm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-            ML.Engine.Input.InputManager.Instance.Common.Common.RT.performed -= RT_performed;
-
             ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.started -= TurnPage_started;
-
             ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.canceled -= TurnPage_canceled;
 
-            this.BeastList.RemoveAllListener();
-            this.BeastList.DeBindInputAction();
+            this.CharacterBioList.RemoveAllListener();
+            this.CharacterBioList.DeBindInputAction();
+
         }
         protected override void RegisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
-
-            // 驱逐
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed += Expel_performed;
-
-            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed += LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed += NextTerm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-            ML.Engine.Input.InputManager.Instance.Common.Common.RT.performed += RT_performed;
-
             ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.started += TurnPage_started;
-
             ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.canceled += TurnPage_canceled;
 
-            this.BeastList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            this.CharacterBioList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
         }
 
-        private void Expel_performed(InputAction.CallbackContext obj)
-        {
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("驱逐隐兽", "隐兽将永久消失！", null, () => {
-                //TODO 防止在弹窗界面worker被消除报错
-                try
-                {
-                    Workers[CurrentBeastIndex].StopHomeTimer();
-                    LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
-                    this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
-                }
-                catch { }
-            }));
-        }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             UIMgr.PopPanel();
         }
 
-        private void RT_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            SwitchInfoIndex = (SwitchInfoIndex + 1) % SwitchInfo.childCount;
+            FunctionIndex = (FunctionIndex + FunctionType - 1) % FunctionType;
+            this.Refresh();
+        }
+
+        private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            FunctionIndex = (FunctionIndex + 1) % FunctionType;
             this.Refresh();
         }
 
@@ -155,7 +117,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 timer.OnEndEvent += () =>
                 {
                     var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-                    this.DescriptionScrollView.verticalScrollbar.value += vector2.y;
+                    //this.DescriptionScrollView.verticalScrollbar.value += vector2.y;
                 };
             }
         }
@@ -185,80 +147,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        //[ShowInInspector]
-        private int CurrentBeastIndex { get { return this.BeastList.GetCurSelectedPos1(); } }
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform MessagePanel;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform Chat;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform ContactsPanel;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform Function;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform FunctionPanel;
 
-        [ShowInInspector]
-        List<Worker> Workers = new List<Worker>();
-
-        //BeastInfo
-        private Image ProfileImage;
-        private Image GenderImage;
-        private TMPro.TextMeshProUGUI BeastName;
-
-        private TMPro.TextMeshProUGUI APMax;
-        private TMPro.TextMeshProUGUI APMaxNumText;
-        private TMPro.TextMeshProUGUI MoodMax;
-        private TMPro.TextMeshProUGUI MoodMaxNumText;
-        private TMPro.TextMeshProUGUI WalkSpeed;
-        private TMPro.TextMeshProUGUI WalkSpeedNumText;
-
-        private TMPro.TextMeshProUGUI CookEfficiency;
-        private TMPro.TextMeshProUGUI CookEfficiencyNumText;
-        private TMPro.TextMeshProUGUI CollectEfficiency;
-        private TMPro.TextMeshProUGUI CollectEfficiencyNumText;
-        private TMPro.TextMeshProUGUI MagicEfficiency;
-        private TMPro.TextMeshProUGUI MagicEfficiencyNumText;
-        private TMPro.TextMeshProUGUI HandCraftEfficiency;
-        private TMPro.TextMeshProUGUI HandCraftEfficiencyNumText;
-        private TMPro.TextMeshProUGUI IndustryEfficiency;
-        private TMPro.TextMeshProUGUI IndustryEfficiencyNumText;
-        private TMPro.TextMeshProUGUI WeightMax;
-        private TMPro.TextMeshProUGUI WeightMaxNumText;
-
-        private Transform Info1;
-        private Transform Info2;
-        private Transform SwitchInfo;
-        private TMPro.TextMeshProUGUI TimerUI;
-
-        private TMPro.TextMeshProUGUI Cook;
-        private TMPro.TextMeshProUGUI HandCraft;
-        private TMPro.TextMeshProUGUI Industry;
-        private TMPro.TextMeshProUGUI Magic;
-        private TMPro.TextMeshProUGUI Transport;
-        private TMPro.TextMeshProUGUI Collect;
-
-        private ScrollRect DescriptionScrollView;
-
-
-        private Transform KT_ViewMoreInformation;
-        private Transform KT_CancelMoreInformation;
-
-        private int SwitchInfoIndex = 0;
-
-        private FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
-
-        #endregion
-
-        #region Tick
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-
-        public void Tick(float deltatime)
-        {
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if(CurrentBeastIndex >= 0 && CurrentBeastIndex < Workers.Count)
-            {
-                Worker worker = Workers[CurrentBeastIndex];
-                TimerUI.text = worker.MinSec.Item1.ToString() + "Min" + worker.MinSec.Item2.ToString() + "s";
-            }
-        }
-
-        protected override void OnDestroy()
-        {
-            (this as ITickComponent).DisposeTick();
-        }
+        private int FunctionType { get { return Function.childCount; } }
+        private int FunctionIndex = 0;
 
         #endregion
 
@@ -268,11 +169,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 return;
             }
+            #region FunctionType
+            for (int i = 0; i < FunctionType; i++)
+            {
+                Function.GetChild(i).Find("Selected").gameObject.SetActive(FunctionIndex == i);
+                FunctionPanel.GetChild(i).gameObject.SetActive(FunctionIndex == i);
+            }
+            var msgContent = LocalGameManager.Instance.CommunicationManager.GetMessageContent(curSelectedCharacterBioMsgID);
 
+            if(msgContent.Count > 0)
+            {
+                //chat 显示对话
+                
+            }
+            #endregion
 
             #region KeyTip
-            KT_ViewMoreInformation.gameObject.SetActive(SwitchInfoIndex == 0);
-            KT_CancelMoreInformation.gameObject.SetActive(SwitchInfoIndex == 1);
+
             #endregion
 
         }
@@ -282,20 +195,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region TextContent
         [System.Serializable]
-        public struct BeastPanelStruct
+        public struct CommunicationPanelStruct
         {
-            //BeastInfo
-            public TextContent Speed;
 
-            public TextContent Cook;
-            public TextContent HandCraft;
-            public TextContent Industry;
-            public TextContent Magic;
-            public TextContent Transport;
-            public TextContent Collect;
-
-            public KeyTip Expel;
-            public KeyTip Back;
         }
         protected override void InitTextContentPathData()
         {
@@ -307,88 +209,43 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "SA_ResonanceWheel_UI", (handle) =>
-            {
-                string Pre = "Tex2D_Resonance_UI_";
-                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_genderfemale");
-                icon_gendermaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
-            }
-            );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "CharacterBioPool", LocalGameManager.Instance.CommunicationManager.MessageInfos.Count, "Prefab_CharacterInteract_UIPrefab/Prefab_CharacterInteract_UI_CharacterBioInMessage.prefab");
             base.InitObjectPool();
         }
+        [SerializeField, FoldoutGroup("UI")]
+        private UIBtnListInitor CharacterBioListInitor;
         [ShowInInspector]
-        private UIBtnList BeastList;
-        private Dictionary<Worker,SelectedButton> WorkerIndexDic = new Dictionary<Worker, SelectedButton>();
-
-        [ShowInInspector]
-        private UIBtnList DescriptionList;
-        [ShowInInspector]
-        private UIBtnList ScheduleList;
+        private UIBtnList CharacterBioList;
+        private Dictionary<SelectedButton,string> BtnToMsgIDDic = new Dictionary<SelectedButton,string>();
+        private string curSelectedCharacterBioMsgID
+        {
+            get
+            {
+                SelectedButton btn = null;
+                btn = this.CharacterBioList.GetCurSelected();
+                if(btn != null && BtnToMsgIDDic.ContainsKey(btn))
+                {
+                    return BtnToMsgIDDic[btn];
+                }
+                return "";
+            }
+        }
         protected override void InitBtnInfo()
         {
-
-            BeastList = new UIBtnList(this.transform.Find("HiddenBeastInfo1").Find("Info").GetComponentInChildren<UIBtnListInitor>());
-            DescriptionList = new UIBtnList(this.Info2.GetComponentInChildren<UIBtnListInitor>());
-            ScheduleList = new UIBtnList(this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time").GetComponentInChildren<UIBtnListInitor>());
+            CharacterBioList = new UIBtnList(CharacterBioListInitor);
+            this.CharacterBioList.OnSelectButtonChanged += () => { this.Refresh(); };
         }
         protected override void InitBtnInfoAfterInitObjectPool()
         {
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-
             this.objectPool.ResetAllObject();
-
-            for (int i = 0; i < Workers.Count; i++)
+            foreach (var MessageInfo in LocalGameManager.Instance.CommunicationManager.MessageInfos)
             {
-                var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
-                var Name = tPrefab.transform.Find("Bio").Find("Name").GetComponent<TextMeshProUGUI>();
-                tPrefab.transform.Find("Bio").Find("IconImage").GetComponent<Image>().sprite = LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Workers[i].Category);
-
-                Name.text = Workers[i].Name;
-
-                int APStatus = Workers[i].GetAPStatu();
-                var AP = tPrefab.transform.Find("Bio").Find("AP");
-                for (int j = 0; j < AP.childCount - 1; j++)
-                {
-                    AP.GetChild(j).gameObject.SetActive(APStatus == j);
-                }
-                int MoodStatus = Workers[i].GetMoodStatu();
-                var Mood = tPrefab.transform.Find("Bio").Find("Mood");
-                for (int j = 0; j < AP.childCount - 1; j++)
-                {
-                    Mood.GetChild(j).gameObject.SetActive(MoodStatus == j);
-                }
-
-                AP.Find("Number").Find("Text").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
-                Mood.Find("Number").Find("Text").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
-                tPrefab.transform.Find("Bio").Find("IconImage").Find("Image").gameObject.SetActive(!Workers[i].HaveHome);
-                BeastList.AddBtn(tPrefab, BtnSettingAction: (btn) => { WorkerIndexDic.Add(Workers[i], btn); });
-                
+                var tPrefab = this.objectPool.GetNextObject("CharacterBioPool");
+                var data = LocalGameManager.Instance.OCCharacterManager.GetOCCharacterData(MessageInfo.OCChacracterID);
+                tPrefab.transform.Find("Icon").Find("Text1").GetComponent<TextMeshProUGUI>().text = data.CodeName;
+                BtnToMsgIDDic.Add(tPrefab.GetComponent<SelectedButton>(), MessageInfo.MsgID);
+                CharacterBioList.AddBtn(tPrefab, BtnSettingAction: (btn) => {  });
             }
-            this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };
-            this.ScheduleList.SetAllBtnAction(() => {
-
-                if (CurrentBeastIndex == -1) return;
-                Worker worker = Workers[CurrentBeastIndex];
-                int time = ScheduleList.GetCurSelectedPos1();
-                if (worker != null && time != -1) 
-                {
-                    if (worker.TimeArrangement.Status[time] == TimeStatus.Relax)
-                    {
-                        worker.SetTimeStatus(time, (TimeStatus)TimeStatus.Work);
-                    }
-                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work)
-                    {
-                        worker.SetTimeStatus(time, TimeStatus.Relax);
-                    }
-                    this.Refresh();
-                }
-                
-            });
-            
         }
         #endregion
     }
