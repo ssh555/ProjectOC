@@ -3682,6 +3682,133 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""SelectClan"",
+            ""id"": ""b422375c-7050-44b6-a4ae-b85e1e889463"",
+            ""actions"": [
+                {
+                    ""name"": ""Alter"",
+                    ""type"": ""Value"",
+                    ""id"": ""edb5e009-0de5-456b-a742-21993fe3373f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""a55ece55-976b-4f41-8449-688983bcec64"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""bf16cd7b-29c0-4ae0-bf24-54f86585ff14"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5b50b4ed-bd32-448f-b3dd-e8a909811c1b"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8631b689-48a2-4b46-b167-d43a0527149a"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8c1b338c-4b47-44b9-9915-5fbb81c6517e"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""95fcc462-d32b-4240-a61f-f39b1f56a9ad"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8d31e285-002b-40de-a605-f99393b710b7"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ba220be7-3b75-4aed-8cd2-ca51fe25a37d"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""50d67978-735d-48a2-9987-63d028e119c1"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""884534e1-ac74-42b6-b18d-535202f79683"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -3791,6 +3918,9 @@ namespace ProjectOC.Input
             m_IslandRudder_ChangeMapLayer = m_IslandRudder.FindAction("ChangeMapLayer", throwIfNotFound: true);
             m_IslandRudder_RT = m_IslandRudder.FindAction("RT", throwIfNotFound: true);
             m_IslandRudder_LT = m_IslandRudder.FindAction("LT", throwIfNotFound: true);
+            // SelectClan
+            m_SelectClan = asset.FindActionMap("SelectClan", throwIfNotFound: true);
+            m_SelectClan_Alter = m_SelectClan.FindAction("Alter", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -5084,6 +5214,52 @@ namespace ProjectOC.Input
             }
         }
         public IslandRudderActions @IslandRudder => new IslandRudderActions(this);
+
+        // SelectClan
+        private readonly InputActionMap m_SelectClan;
+        private List<ISelectClanActions> m_SelectClanActionsCallbackInterfaces = new List<ISelectClanActions>();
+        private readonly InputAction m_SelectClan_Alter;
+        public struct SelectClanActions
+        {
+            private @PlayerInput m_Wrapper;
+            public SelectClanActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Alter => m_Wrapper.m_SelectClan_Alter;
+            public InputActionMap Get() { return m_Wrapper.m_SelectClan; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(SelectClanActions set) { return set.Get(); }
+            public void AddCallbacks(ISelectClanActions instance)
+            {
+                if (instance == null || m_Wrapper.m_SelectClanActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_SelectClanActionsCallbackInterfaces.Add(instance);
+                @Alter.started += instance.OnAlter;
+                @Alter.performed += instance.OnAlter;
+                @Alter.canceled += instance.OnAlter;
+            }
+
+            private void UnregisterCallbacks(ISelectClanActions instance)
+            {
+                @Alter.started -= instance.OnAlter;
+                @Alter.performed -= instance.OnAlter;
+                @Alter.canceled -= instance.OnAlter;
+            }
+
+            public void RemoveCallbacks(ISelectClanActions instance)
+            {
+                if (m_Wrapper.m_SelectClanActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ISelectClanActions instance)
+            {
+                foreach (var item in m_Wrapper.m_SelectClanActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_SelectClanActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public SelectClanActions @SelectClan => new SelectClanActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -5206,6 +5382,10 @@ namespace ProjectOC.Input
             void OnChangeMapLayer(InputAction.CallbackContext context);
             void OnRT(InputAction.CallbackContext context);
             void OnLT(InputAction.CallbackContext context);
+        }
+        public interface ISelectClanActions
+        {
+            void OnAlter(InputAction.CallbackContext context);
         }
     }
 }

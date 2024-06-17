@@ -1,6 +1,5 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.ClanNS
 {
@@ -8,33 +7,25 @@ namespace ProjectOC.ClanNS
     public struct PersonalityTAG
     {
         public string ID;
-        public string Name;
-        public string Desc;
-        public TAGType Type;
-        public int Level;
-
-        public int Wisdom;
-        public int Combat;
-        public int Resilience;
-        public int ThinkingLow;
-        public int ThinkingHigh;
-        public int SocialLow;
-        public int SocialHigh;
-        public int BasisLow;
-        public int BasisHigh;
-
         public bool IsActive;
+        public PersonalityTAGTableData Data => (ManagerNS.LocalGameManager.Instance != null) ?
+            ManagerNS.LocalGameManager.Instance.ClanManager.GetTAG(ID) : default(PersonalityTAGTableData);
+        public string Name => Data.Name ?? "";
+        public string Desc => Data.Description ?? "";
+        public TAGType Type => Data.Type;
+        public int Level => Data.Level;
 
         public bool CheckCondition(Clan clan)
         {
-            if (clan.Wisdom >= Wisdom && clan.Combat >= Combat && clan.Resilience >= Resilience)
+            PersonalityTAGTableData data = ManagerNS.LocalGameManager.Instance.ClanManager.GetTAG(ID);
+            if (clan.Wisdom >= data.Wisdom && clan.Combat >= data.Combat && clan.Resilience >= data.Resilience)
             {
                 var thinking = clan.PersonalityDict[PersonalityType.Thinking];
                 var social = clan.PersonalityDict[PersonalityType.Social];
                 var basis = clan.PersonalityDict[PersonalityType.Basis];
-                if (thinking.Value >= ThinkingLow && thinking.Value <= ThinkingHigh &&
-                    social.Value >= SocialLow && social.Value <= SocialHigh &&
-                    basis.Value >= BasisLow && basis.Value <= BasisHigh)
+                if (thinking.Value >= data.ThinkingLow && thinking.Value <= data.ThinkingHigh &&
+                    social.Value >= data.SocialLow && social.Value <= data.SocialHigh &&
+                    basis.Value >= data.BasisLow && basis.Value <= data.BasisHigh)
                 {
                     return true;
                 }
@@ -48,14 +39,15 @@ namespace ProjectOC.ClanNS
         }
         public (int, int) GetPersonality(PersonalityType type)
         {
+            PersonalityTAGTableData data = ManagerNS.LocalGameManager.Instance.ClanManager.GetTAG(ID);
             switch (type)
             {
                 case PersonalityType.Thinking:
-                    return (ThinkingLow, ThinkingHigh);
+                    return (data.ThinkingLow, data.ThinkingHigh);
                 case PersonalityType.Social:
-                    return (SocialLow, SocialHigh);
+                    return (data.SocialLow, data.SocialHigh);
                 case PersonalityType.Basis:
-                    return (BasisLow, BasisHigh);
+                    return (data.BasisLow, data.BasisHigh);
             }
             return (0, 0);
         }
@@ -64,13 +56,15 @@ namespace ProjectOC.ClanNS
         {
             public int Compare(PersonalityTAG x, PersonalityTAG y)
             {
-                if (x.Level != y.Level)
+                PersonalityTAGTableData dataX = ManagerNS.LocalGameManager.Instance.ClanManager.GetTAG(x.ID);
+                PersonalityTAGTableData dataY = ManagerNS.LocalGameManager.Instance.ClanManager.GetTAG(y.ID);
+                if (dataX.Level != dataY.Level)
                 {
-                    return y.Level.CompareTo(x.Level);
+                    return dataY.Level.CompareTo(dataX.Level);
                 }
-                if (x.Type != y.Type)
+                if (dataX.Type != dataY.Type)
                 {
-                    return x.Type.CompareTo(y.Type);
+                    return dataX.Type.CompareTo(dataY.Type);
                 }
                 return x.ID.CompareTo(y.ID);
             }
