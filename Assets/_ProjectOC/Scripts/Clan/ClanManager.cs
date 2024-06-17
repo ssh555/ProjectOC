@@ -15,11 +15,6 @@ namespace ProjectOC.ClanNS
         public const string IconLabel = "SA_Clan_UI";
         public void OnRegister() 
         {
-            Clans.Add(new Clan("1", "氏族1"));
-            Clans.Add(new Clan("2", "氏族2"));
-            Clans.Add(new Clan("3", "氏族3"));
-            Clans.Add(new Clan("4", "氏族4"));
-            Clans.Add(new Clan("5", "氏族5"));
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(IconLabel).Completed += (handle) =>
             {
                 iconAtlas = handle.Result;
@@ -27,6 +22,11 @@ namespace ProjectOC.ClanNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ClanConfigAsset>("Config_Clan").Completed += (handle) =>
             {
                 Config = new ClanConfig(handle.Result.Config);
+                Clans.Add(new Clan("1", "氏族1"));
+                Clans.Add(new Clan("2", "氏族2"));
+                Clans.Add(new Clan("3", "氏族3"));
+                Clans.Add(new Clan("4", "氏族4"));
+                Clans.Add(new Clan("5", "氏族5"));
             };
         }
 

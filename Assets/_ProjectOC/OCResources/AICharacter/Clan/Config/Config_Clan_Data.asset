@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22eeee996b71fc24fa4139e5f7b0a98c, type: 3}
+  m_Name: Config_Clan_Data
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Config:
+    GenderWeight:
+    - Gender: 1
+      Weight: 10
+    - Gender: 2
+      Weight: 10
+    - Gender: 3
+      Weight: 10
+    - Gender: 4
+      Weight: 10
+    - Gender: 5
+      Weight: 10
+    SexPreferenceWeight:
+    - SexPreference: 1
+      Weight: 10
+    - SexPreference: 2
+      Weight: 10
+    - SexPreference: 3
+      Weight: 10
+    - SexPreference: 4
+      Weight: 10
+    - SexPreference: 5
+      Weight: 10
+    AgeLow: 0
+    AgeHigh: 100

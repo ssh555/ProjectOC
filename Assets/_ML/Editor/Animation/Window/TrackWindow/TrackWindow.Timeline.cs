@@ -131,7 +131,7 @@ namespace ML.Editor.Animation
                     if (Event.current.type == EventType.ScrollWheel)
                     {
                         timelineScale -= Event.current.delta.y * 0.01f;
-                        timelineScale = Mathf.Max(0.1f, timelineScale);
+                        timelineScale = Mathf.Max(0.0001f, timelineScale);
                         Instance.Repaint();
                     }
                 }

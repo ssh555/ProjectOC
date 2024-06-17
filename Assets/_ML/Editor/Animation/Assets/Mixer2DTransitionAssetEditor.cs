@@ -109,6 +109,7 @@ namespace ML.Editor.Animation
 
             public void DrawTimelineGUI(EditorWindow window)
             {
+                #region 初始区域数据
                 // 计算轴宽高
                 int size = Weights.arraySize;
                 // 权重值
@@ -124,12 +125,19 @@ namespace ML.Editor.Animation
                 }
                 // 轴宽高
                 Vector2 timelineSize = (maxW - minW + Vector2.one * 2) * weightRatio * timelineScale * 5;
+                if (size == 0)
+                {
+                    timelineSize = 2 * weightRatio * timelineScale * 5;
+                    maxW = Vector2.one;
+                    minW = Vector2.one * -1;
+                }
 
                 scrollPositon = EditorGUILayout.BeginScrollView(scrollPositon, alwaysShowHorizontal: false, alwaysShowVertical: false, GUILayout.Height(window.position.width), GUILayout.ExpandWidth(true));
 
                 // 区域
                 Rect area = GUILayoutUtility.GetRect(timelineSize.x, timelineSize.y);
                 Vector2 showSize = window.position.size;
+                showSize.y = showSize.x;
                 if (area.width <= timelineSize.x)
                 {
                     area = new Rect(area.center.x - timelineSize.x * 0.5f, area.y, timelineSize.x, area.height);
@@ -142,6 +150,8 @@ namespace ML.Editor.Animation
                 EditorGUI.DrawRect(area, backgroundColor);
                 // 中心零点
                 Vector2 center = area.center;
+
+                #endregion
 
                 #region 水平时间轴刻度
                 int tickCount = Mathf.FloorToInt(area.width / (tickSpacing * timelineScale.x));
@@ -210,15 +220,20 @@ namespace ML.Editor.Animation
 
                 #endregion
 
-
-
                 #region 权重值|默认值
                 // 绘制时间轴光标 -> 默认值
                 Vector2 cursor = center + DefaultValue.vector2Value * tickSpacing * timelineScale * 10;
                 if (isInitScroll == false)
                 {
                     isInitScroll = true;
-                    scrollPositon = cursor + (timelineSize - showSize) * 0.5f;
+                    timelineScale = (maxW - minW + Vector2.one);
+                    timelineScale.x = 1 / timelineScale.x;
+                    timelineScale.y = 1 / timelineScale.y;
+                    timelineSize = (maxW - minW + Vector2.one * 2) * weightRatio * timelineScale * 5;
+                    scrollPositon = cursor;// + (timelineSize - showSize) * 0.5f;
+                    scrollPositon.x += (Mathf.Max(timelineSize.x, timelineSize.y) - showSize.x) * 0.5f;
+                    scrollPositon.y += (Mathf.Max(timelineSize.x, timelineSize.y) - showSize.y) * 0.5f;
+
                 }
                 Texture2D cursorTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/SquareCursor.png");
                 Rect cursorRect = new Rect(cursor.x - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, cursor.y - 20 * Mathf.Max(timelineScale.x, timelineScale.y) * 0.5f, 20 * Mathf.Max(timelineScale.x, timelineScale.y), 20 * Mathf.Max(timelineScale.x, timelineScale.y));
@@ -235,7 +250,7 @@ namespace ML.Editor.Animation
                 GUI.color = timelineColor;
 
                 // 绘制权重值
-                Texture2D weightTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/TriangleCursor.png");
+                Texture2D weightTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/_ML/Editor/Animation/Window/TrackWindow/CircleCursor.png");
                 Rect[] weightRects = new Rect[size];
                 for (int i = 0; i < size; ++i)
                 {
@@ -256,6 +271,7 @@ namespace ML.Editor.Animation
                 }
                 #endregion
 
+                #region 输入响应事件
                 // 处理鼠标滚轮缩放
                 if (Event.current.type == EventType.ScrollWheel)
                 {
@@ -321,6 +337,14 @@ namespace ML.Editor.Animation
                         currentEvent.Use();
                     }
                 }
+
+                // 双击重置视图
+                if (currentEvent.type == EventType.MouseDown && area.Contains(mpos) && currentEvent.clickCount >= 2)
+                {
+                    isInitScroll = false;
+                }
+
+                #endregion
 
                 EditorGUILayout.EndScrollView();
             }
