@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ProjectOC.ClanNS
 {
-    [LabelText("ÊÏ×å"), System.Serializable]
+    [LabelText("NPC"), System.Serializable]
     public abstract class NPC
     {
         [LabelText("ID"), ReadOnly]
@@ -33,18 +33,19 @@ namespace ProjectOC.ClanNS
         public string Belief => ManagerNS.LocalGameManager.Instance != null ?
             ManagerNS.LocalGameManager.Instance.ClanManager.GetBelief(BeliefID) : "";
 
-        public List<PersonalityTAG> TAGS = new List<PersonalityTAG>();
-
         public NPC()
         {
-            var manager = ManagerNS.LocalGameManager.Instance.ClanManager;
-/*            Name = manager.GetRandomName();
-            Gender = manager.GetRandomGender();
-            SexPreference = manager.GetRandomSexPreference();
-            Age = manager.GetRandomAge();
-            RaceType = manager.GetRandomRaceType();
-            WorldCognitionID = manager.GetRandomWorldCognitionID();
-            BeliefID = manager.GetRandomBeliefID();*/
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                var manager = ManagerNS.LocalGameManager.Instance.ClanManager;
+                Name = manager.GetRandomName();
+                Gender = manager.GetRandomGender();
+                SexPreference = manager.GetRandomSexPreference();
+                Age = manager.GetRandomAge();
+                RaceType = manager.GetRandomRaceType();
+                WorldCognitionID = manager.GetRandomWorldCognitionID();
+                BeliefID = manager.GetRandomBeliefID();
+            }
         }
 
         public void SetName(string name)
@@ -54,12 +55,6 @@ namespace ProjectOC.ClanNS
         public void SetPetName(string name)
         {
             PetName = name;
-        }
-        public abstract bool AddTAG(PersonalityTAG tag);
-        public abstract void RemoveTAG(PersonalityTAG tag);
-        public List<PersonalityTAG> GetTAGS()
-        {
-            return TAGS.OrderBy(x => x, new PersonalityTAG.Sort()).ToList();
         }
     }
 }

@@ -14,6 +14,20 @@ namespace ProjectOC.ClanNS
         public int AgeLow;
         [LabelText("年龄区间上界")]
         public int AgeHigh;
+        [LabelText("才能取值区间")]
+        public List<int> TalentM;
+        [LabelText("才能个体值下界")]
+        public double TalentA;
+        [LabelText("才能个体值上界")]
+        public double TalentB;
+        [LabelText("才能数值乘算系数下界")]
+        public double TalentC;
+        [LabelText("才能数值乘算系数上界")]
+        public double TalentD;
+        [LabelText("才能偏态分布方差")]
+        public double TalentVar;
+        [LabelText("才能偏态分布偏度值")]
+        public double TalentLambda;
 
         public ClanConfig(ClanConfig config)
         {
@@ -23,6 +37,14 @@ namespace ProjectOC.ClanNS
             SexPreferenceWeight.AddRange(config.SexPreferenceWeight);
             AgeLow = config.AgeLow;
             AgeHigh = config.AgeHigh;
+            TalentM = new List<int>();
+            TalentM.AddRange(config.TalentM);
+            TalentA = config.TalentA;
+            TalentB = config.TalentB;
+            TalentC = config.TalentC;
+            TalentD = config.TalentD;
+            TalentVar = config.TalentVar;
+            TalentLambda = config.TalentLambda;
         }
     }
 

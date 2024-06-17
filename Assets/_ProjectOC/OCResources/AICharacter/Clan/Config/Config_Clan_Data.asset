@@ -46,3 +46,10 @@ MonoBehaviour:
       Weight: 10
     AgeLow: 0
     AgeHigh: 100
+    TalentM: 280000001e000000140000000a000000
+    TalentA: 0
+    TalentB: 0.5
+    TalentC: 0
+    TalentD: 1
+    TalentVar: 0.1
+    TalentLambda: 2
