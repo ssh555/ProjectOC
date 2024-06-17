@@ -35,14 +35,17 @@ namespace ProjectOC.ClanNS
 
         public NPC()
         {
-            var manager = ManagerNS.LocalGameManager.Instance.ClanManager;
-            Name = manager.GetRandomName();
-            Gender = manager.GetRandomGender();
-            SexPreference = manager.GetRandomSexPreference();
-            Age = manager.GetRandomAge();
-            RaceType = manager.GetRandomRaceType();
-            WorldCognitionID = manager.GetRandomWorldCognitionID();
-            BeliefID = manager.GetRandomBeliefID();
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                var manager = ManagerNS.LocalGameManager.Instance.ClanManager;
+                Name = manager.GetRandomName();
+                Gender = manager.GetRandomGender();
+                SexPreference = manager.GetRandomSexPreference();
+                Age = manager.GetRandomAge();
+                RaceType = manager.GetRandomRaceType();
+                WorldCognitionID = manager.GetRandomWorldCognitionID();
+                BeliefID = manager.GetRandomBeliefID();
+            }
         }
 
         public void SetName(string name)

@@ -34,19 +34,22 @@ namespace ProjectOC.ClanNS
                 { PersonalityType.Social, new Personality() },
                 { PersonalityType.Basis, new Personality() }
             };
-            List<int> talents = ManagerNS.LocalGameManager.Instance.ClanManager.GetTalentInitValue(Level);
-            if (talents.Count == 3)
+            if (ManagerNS.LocalGameManager.Instance != null)
             {
-                ChangeTalent(TalentType.Wisdom, talents[0]);
-                ChangeTalent(TalentType.Combat, talents[1]);
-                ChangeTalent(TalentType.Resilience, talents[2]);
-            }
-            List<(int, int, int)> personalitys = ManagerNS.LocalGameManager.Instance.ClanManager.GetPersonalityInitValue(Level);
-            if (personalitys.Count == 3)
-            {
-                PersonalityDict.Add(PersonalityType.Thinking, new Personality(personalitys[0]));
-                PersonalityDict.Add(PersonalityType.Social, new Personality(personalitys[1]));
-                PersonalityDict.Add(PersonalityType.Basis, new Personality(personalitys[2]));
+                List<int> talents = ManagerNS.LocalGameManager.Instance.ClanManager.GetTalentInitValue(Level);
+                if (talents.Count == 3)
+                {
+                    ChangeTalent(TalentType.Wisdom, talents[0]);
+                    ChangeTalent(TalentType.Combat, talents[1]);
+                    ChangeTalent(TalentType.Resilience, talents[2]);
+                }
+                List<(int, int, int)> personalitys = ManagerNS.LocalGameManager.Instance.ClanManager.GetPersonalityInitValue(Level);
+                if (personalitys.Count == 3)
+                {
+                    PersonalityDict.Add(PersonalityType.Thinking, new Personality(personalitys[0]));
+                    PersonalityDict.Add(PersonalityType.Social, new Personality(personalitys[1]));
+                    PersonalityDict.Add(PersonalityType.Basis, new Personality(personalitys[2]));
+                }
             }
         }
         public int GetTalent(TalentType type)

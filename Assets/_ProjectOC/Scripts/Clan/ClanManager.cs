@@ -28,54 +28,54 @@ namespace ProjectOC.ClanNS
             {
                 iconAtlas = handle.Result;
             };
-            var ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<PersonaTemplateTableData[]>("OCTableData", "PersonaTemplate", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    PersonaTemplates.Add(data);
-                }
-            }, "人格模板表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
-            var ABJAProcessor1 = new ML.Engine.ABResources.ABJsonAssetProcessor<OCNameTableData[]>("OCTableData", "OCName", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    OCNames.Add(data.Name);
-                }
-            }, "OC名字表数据");
-            ABJAProcessor1.StartLoadJsonAssetData();
-            var ABJAProcessor2 = new ML.Engine.ABResources.ABJsonAssetProcessor<WorldCognitionTableData[]>("OCTableData", "WorldCognition", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    WorldCognitions.Add(data.ID, data);
-                }
-            }, "世界认知表数据");
-            ABJAProcessor2.StartLoadJsonAssetData();
-            var ABJAProcessor3 = new ML.Engine.ABResources.ABJsonAssetProcessor<BeliefTableData[]>("OCTableData", "Belief", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    Beliefs.Add(data.ID, data);
-                }
-            }, "信念表数据");
-            ABJAProcessor3.StartLoadJsonAssetData();
-            var ABJAProcessor4 = new ML.Engine.ABResources.ABJsonAssetProcessor<PersonalityTAGTableData[]>("OCTableData", "PersonalityTAG", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    PersonalityTAGs.Add(data.ID, data);
-                }
-            }, "TAG表数据");
-            ABJAProcessor4.StartLoadJsonAssetData();
-            var ABJAProcessor5 = new ML.Engine.ABResources.ABJsonAssetProcessor<RaceTypeTableData[]>("OCTableData", "RaceType", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    RaceTypes.Add(data.RaceType);
-                }
-            }, "种族类型表数据");
-            ABJAProcessor5.StartLoadJsonAssetData();
+            //var ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<PersonaTemplateTableData[]>("OCTableData", "PersonaTemplate", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        PersonaTemplates.Add(data);
+            //    }
+            //}, "人格模板表数据");
+            //ABJAProcessor.StartLoadJsonAssetData();
+            //var ABJAProcessor1 = new ML.Engine.ABResources.ABJsonAssetProcessor<OCNameTableData[]>("OCTableData", "OCName", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        OCNames.Add(data.Name);
+            //    }
+            //}, "OC名字表数据");
+            //ABJAProcessor1.StartLoadJsonAssetData();
+            //var ABJAProcessor2 = new ML.Engine.ABResources.ABJsonAssetProcessor<WorldCognitionTableData[]>("OCTableData", "WorldCognition", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        WorldCognitions.Add(data.ID, data);
+            //    }
+            //}, "世界认知表数据");
+            //ABJAProcessor2.StartLoadJsonAssetData();
+            //var ABJAProcessor3 = new ML.Engine.ABResources.ABJsonAssetProcessor<BeliefTableData[]>("OCTableData", "Belief", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        Beliefs.Add(data.ID, data);
+            //    }
+            //}, "信念表数据");
+            //ABJAProcessor3.StartLoadJsonAssetData();
+            //var ABJAProcessor4 = new ML.Engine.ABResources.ABJsonAssetProcessor<PersonalityTAGTableData[]>("OCTableData", "PersonalityTAG", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        PersonalityTAGs.Add(data.ID, data);
+            //    }
+            //}, "TAG表数据");
+            //ABJAProcessor4.StartLoadJsonAssetData();
+            //var ABJAProcessor5 = new ML.Engine.ABResources.ABJsonAssetProcessor<RaceTypeTableData[]>("OCTableData", "RaceType", (datas) =>
+            //{
+            //    foreach (var data in datas)
+            //    {
+            //        RaceTypes.Add(data.RaceType);
+            //    }
+            //}, "种族类型表数据");
+            //ABJAProcessor5.StartLoadJsonAssetData();
 
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ClanConfigAsset>("Config_Clan").Completed += (handle) =>
             {
