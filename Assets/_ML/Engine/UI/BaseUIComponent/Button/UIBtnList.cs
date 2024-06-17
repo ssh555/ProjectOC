@@ -1002,7 +1002,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("ButtonInteract " + Hashcode + " " + this.isEnable + " " + this.CurSelected + " " + Time.frameCount);
+            //Debug.Log("ButtonInteract " + Hashcode + " " + this.isEnable + " " + this.CurSelected + " " + Time.frameCount);
             if (this.isEnable == false || this.CurSelected == null) return;
             if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null)
             {

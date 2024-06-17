@@ -34,15 +34,6 @@ namespace ProjectOC.CharacterInteract
             this.Greeting = new List<string>(characterFavorTableData.Greeting);
         }
 
-        public override bool AddTAG(PersonalityTAG tag)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void RemoveTAG(PersonalityTAG tag)
-        {
-            throw new System.NotImplementedException();
-        }
         #region 好感度
         /// <summary>
         /// 好感度总值

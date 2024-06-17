@@ -316,7 +316,7 @@ namespace ML.Engine.Event
                 else
                 {
                     //throw new ArgumentException("Unknown parameter type: " + parameterType);
-                    Debug.Log("Ìø¹ý" + parameterType);
+                    //Debug.Log("Ìø¹ý" + parameterType);
                 }
             }
             return convertedParameters;
