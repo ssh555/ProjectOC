@@ -15,7 +15,7 @@ namespace ProjectOC.ClanNS
 
         #region Data
         [LabelText("关联氏族"), ShowInInspector, ReadOnly]
-        public Clan Clan;
+        public Clan Clan = null;
         [LabelText("是否有关联氏族"), ShowInInspector, ReadOnly]
         public bool HaveClan => Clan != null && !string.IsNullOrEmpty(Clan.ID);
         [LabelText("是否能放置"), ShowInInspector, ReadOnly]

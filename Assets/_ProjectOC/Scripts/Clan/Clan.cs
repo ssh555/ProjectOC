@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ProjectOC.ClanNS
 {
-    [LabelText("ÊÏ×å"), System.Serializable]
+    [LabelText("ÊÏ×å")]
     public class Clan : NPC
     {
         [LabelText("²¡Ö¢½×¶Î"), ReadOnly]
@@ -157,12 +157,6 @@ namespace ProjectOC.ClanNS
         public ClanBed Bed;
         [LabelText("ÊÇ·ñÓµÓÐ´²"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
-
-        public Clan(string id, string name)
-        {
-            ID = id;
-            Name = name;
-        }
 
         public class SortForBed : IComparer<Clan>
         {
