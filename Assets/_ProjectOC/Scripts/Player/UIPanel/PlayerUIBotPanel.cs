@@ -17,7 +17,9 @@ using System.Numerics;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static ML.Engine.UI.UIBtnListContainer;
 using static ProjectOC.Player.UI.PlayerUIBotPanel;
 using Vector3 = UnityEngine.Vector3;
 
@@ -37,21 +39,17 @@ namespace ProjectOC.Player.UI
             this.Ring = this.transform.Find("Ring");
             this.Ring.gameObject.SetActive(false);
         }
-
         protected override void Start()
         {
             IsInit = true;
             Refresh();
             base.Start();
         }
-
         #endregion
 
         #region Override
-
         protected override void Enter()
         {
-            this.UIBtnList.EnableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.player.interactComponent.Enable();
             base.Enter();   
@@ -59,7 +57,6 @@ namespace ProjectOC.Player.UI
 
         protected override void Exit()
         {
-            this.UIBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             //TODO player null
             this.player?.interactComponent.Disable();
@@ -85,20 +82,26 @@ namespace ProjectOC.Player.UI
 
         protected override void UnregisterInput()
         {
-            this.UIBtnList.RemoveAllListener();
+            this.UIBtnListContainer.DisableUIBtnListContainer();
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed -= LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed -= NextTerm_performed;
+
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
-
-
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
 
+
+
         protected override void RegisterInput()
         {
-            this.UIBtnList.SetBtnAction("背包",
+            ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm.performed += LastTerm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed += NextTerm_performed;
+
+            this.UIBtnListContainer.SetBtnAction("背包",
             () =>
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
@@ -111,7 +114,7 @@ namespace ProjectOC.Player.UI
                 };
             }                                                                         
             );
-            this.UIBtnList.SetBtnAction("选项",
+            this.UIBtnListContainer.SetBtnAction("选项",
             () =>
             {
                 GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
@@ -125,7 +128,7 @@ namespace ProjectOC.Player.UI
                 };
             }
             );
-            this.UIBtnList.SetBtnAction("捏脸",
+            this.UIBtnListContainer.SetBtnAction("捏脸",
             () =>
             {
                 // GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
@@ -134,7 +137,7 @@ namespace ProjectOC.Player.UI
                 LocalGameManager.Instance.PinchFaceManager.GeneratePinchRaceUI();
             }
             );
-            this.UIBtnList.SetBtnAction("我的氏族",
+            this.UIBtnListContainer.SetBtnAction("我的氏族",
             () =>
             {
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
@@ -146,7 +149,7 @@ namespace ProjectOC.Player.UI
                 };
             }
             );
-            this.UIBtnList.SetBtnAction("订单管理",
+            this.UIBtnListContainer.SetBtnAction("订单管理",
             () =>
             {
                 GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
@@ -160,13 +163,13 @@ namespace ProjectOC.Player.UI
             );
             
 
-            this.UIBtnList.SetBtnAction("生产管理",
+            this.UIBtnListContainer.SetBtnAction("生产管理",
             () =>
             {
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
             }
             );
-            this.UIBtnList.SetBtnAction("科技树",
+            this.UIBtnListContainer.SetBtnAction("科技树",
             () =>
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
@@ -179,7 +182,7 @@ namespace ProjectOC.Player.UI
                 };
             }
             );
-            this.UIBtnList.SetBtnAction("建造",
+            this.UIBtnListContainer.SetBtnAction("建造",
             () =>
             {
                 if (BuildingManager.Instance.Mode == BuildingMode.None)
@@ -195,33 +198,46 @@ namespace ProjectOC.Player.UI
                 }
             }
             );
+
+            this.UIBtnListContainer.SetBtnAction("通讯",
+            () =>
+            {
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_CharacterInteract_UIPanel/Prefab_CharacterInteract_UI_CommunicationPanel.prefab").Completed += (handle) =>
+                {
+                    UICommunicationPanel communicationPanel = handle.Result.GetComponent<UICommunicationPanel>();
+                    communicationPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.NormalPanel, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(communicationPanel);
+                };
+            }
+            );
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-
-
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
         }
 
         private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.UIBtnList.CanPerformRingNavigation = true;
-            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
-            this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
+            this.UIBtnListContainer.SetIsEnableTrue();
+            this.UIBtnListContainer.SetAllBtnListDoSomething((btnlist) => { btnlist.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed); });
+            this.UIBtnListContainer.FindEnterableUIBtnList();
+            this.UIBtnListContainer.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
                 () => { 
-                    this.UIBtnList.DisableBtnList();
-                    this.UIBtnList.CanPerformRingNavigation = false;
+                    this.UIBtnListContainer.SetIsEnableFalse();
                 }, () => {
                     Ring.gameObject.SetActive(false);
                     (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Enable();
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
-                    this.UIBtnList.SetCurSelectedNull();
-                    this.UIBtnList.DeBindInputAction();
-                    this.UIBtnList.EnableBtnList();
+                    this.UIBtnListContainer.SetAllBtnListDoSomething((btnlist) => { btnlist.SetCurSelectedNull(); });
+                    this.UIBtnListContainer.DisableUIBtnListContainer();
                 });
+            BtnListIndex = 0;
+            for (int i = 0; i < UIBtnListContainer.Parent.childCount; ++i)
+            {
+                UIBtnListContainer.Parent.GetChild(i).gameObject.SetActive(i == BtnListIndex);
+            }
             this.Ring.gameObject.SetActive(true);
             (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Disable();
             this.UIKeyTipList?.RefreshKeyTip();
@@ -240,14 +256,36 @@ namespace ProjectOC.Player.UI
                 Ring.gameObject.SetActive(false);
                 ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                 (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.interactComponent.Enable();
-                this.UIBtnList.SetCurSelectedNull();
-                this.UIBtnList.DeBindInputAction();
             }
+        }
+
+        private void LastTerm_performed(InputAction.CallbackContext context)
+        {
+            BtnListIndex = (BtnListIndex + UIBtnListContainer.UIBtnLists.Count - 1) % UIBtnListContainer.UIBtnLists.Count;
+            this.Refresh();
+        }
+
+        private void NextTerm_performed(InputAction.CallbackContext context)
+        {
+            BtnListIndex = (BtnListIndex + 1) % UIBtnListContainer.UIBtnLists.Count;
+            this.Refresh();
         }
         #endregion
 
         #region UI对象引用
         private Transform Ring;
+        //当前选中btnlist的index
+        private int BtnListIndex = 0;
+
+        public override void Refresh()
+        {
+            this.UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[BtnListIndex]);
+            for(int i=0;i< UIBtnListContainer.Parent.childCount;++i)
+            {
+                UIBtnListContainer.Parent.GetChild(i).gameObject.SetActive(i == BtnListIndex);
+            }
+        }
+
         #endregion
 
         #region TextContent
@@ -270,17 +308,18 @@ namespace ProjectOC.Player.UI
             this.abname = "PlayerUIBotPanel";
             this.description = "PlayerUIBotPanel数据加载完成";
         }
-        private UIBtnList UIBtnList;
+        [ShowInInspector]
+        private UIBtnListContainer UIBtnListContainer;
         protected override void InitBtnInfo()
         {
-            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
-            this.UIBtnList = new UIBtnList(uIBtnListInitor);
+            UIBtnListContainerInitor uiBtnListContainerInitor = this.transform.GetComponentInChildren<UIBtnListContainerInitor>(true);
+            this.UIBtnListContainer = new UIBtnListContainer(uiBtnListContainerInitor);
         }
         private void InitBtnData(PlayerUIBotPanelStruct datas)
         {
             foreach (var tt in datas.Btns)
             {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+                this.UIBtnListContainer.SetAllBtnListDoSomething((btnlist) => { btnlist.SetBtnText(tt.name, tt.description.GetText()); });
             }
         }
         #endregion

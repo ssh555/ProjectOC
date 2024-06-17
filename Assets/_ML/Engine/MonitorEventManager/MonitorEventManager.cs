@@ -143,15 +143,26 @@ namespace ML.Engine.Event
         }
         #endregion
 
-
         #region External
-        public void RegisterMonitorEvent(string monitorConditionBuffOnConditionStr, string buffOnActionStr, string monitorConditionBuffOffConditionStr, string buffOffActionStr)
+        public void RegisterMonitorEvent<T>(string monitorConditionBuffOnConditionStr, string buffOnActionStr, string monitorConditionBuffOffConditionStr, string buffOffActionStr,T target)
         {
-            RegisterMonitorEvent(
+            if(target == null)
+            {
+                RegisterMonitorEvent(
                 monitorConditionBuffOn: () => { return ExecuteCondition(monitorConditionBuffOnConditionStr); },
                 buffOnAction: () => { ExecuteEvent(buffOnActionStr); },
                 monitorConditionBuffOff: () => { return ExecuteCondition(monitorConditionBuffOffConditionStr); },
                 buffOffAction: () => { ExecuteEvent(buffOffActionStr); });
+            }
+            else
+            {
+                RegisterMonitorEvent(
+                monitorConditionBuffOn: () => { return ExecuteCondition(monitorConditionBuffOnConditionStr,target); },
+                buffOnAction: () => { ExecuteEvent(buffOnActionStr, target); },
+                monitorConditionBuffOff: () => { return ExecuteCondition(monitorConditionBuffOffConditionStr, target); },
+                buffOffAction: () => { ExecuteEvent(buffOffActionStr, target); });
+            }
+            
         }
         #endregion
 

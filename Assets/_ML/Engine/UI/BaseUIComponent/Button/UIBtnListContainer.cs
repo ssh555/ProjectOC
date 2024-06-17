@@ -4,11 +4,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using static ML.Engine.UI.UIBtnList;
 using static ML.Engine.UI.UIBtnListContainerInitor;
 
 namespace ML.Engine.UI
@@ -80,6 +82,7 @@ namespace ML.Engine.UI
         public bool IsEmpty { get { return isEmpty; } }
 
         private Transform parent;
+        public Transform Parent { get { return parent; } }
         public void RefreshIsEmpty()
         {
             
@@ -286,6 +289,17 @@ namespace ML.Engine.UI
                         this.gridNavagationInputAction.canceled -= BtnListNavagation;
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 绑定btnlist的响应，解绑由DisableUIBtnListContainer函数处理
+        /// </summary>
+        public void BindButtonInteractInputAction(InputAction ButtonInteractInputAction, BindType bindType, Action preAction = null, Action postAction = null, InputCondition inputCondition = null)
+        {
+            foreach(var btnlist in uIBtnLists)
+            {
+                btnlist.BindButtonInteractInputAction(ButtonInteractInputAction, bindType, preAction, postAction, inputCondition);
             }
         }
 
@@ -608,6 +622,7 @@ namespace ML.Engine.UI
             foreach (var btnlist in uIBtnLists)
             {
                 btnlist.DeBindInputAction();
+                btnlist.RemoveAllListener();
                 btnlist.DisableBtnList();
             }
             this.DeBindNavigationInputAction();
@@ -966,7 +981,40 @@ namespace ML.Engine.UI
                 }
             }
         }
-        
+
+
+        /// <summary>
+        /// 全体btnlist执行action
+        /// </summary>
+        public void SetAllBtnListDoSomething(Action<UIBtnList> action)
+        {
+            foreach (var btnlist in uIBtnLists)
+            {
+                action.Invoke(btnlist);
+            }
+        }
+
+        /// <summary>
+        ///  设置按钮回调 要求组件中所有的btn不重名
+        /// </summary>
+        public void SetBtnAction(string BtnName, UnityAction action)
+        {
+            foreach (var btnlist in uIBtnLists)
+            {
+                if (btnlist.SetBtnAction(BtnName, action)) break;
+            }
+        }
+        /// <summary>
+        /// 设置按钮按键提示文本 要求组件中所有的btn不重名
+        /// </summary>
+        public void SetBtnText(string btnName, string showText)
+        {
+            foreach (var btnlist in uIBtnLists)
+            {
+                if (btnlist.SetBtnText(btnName, showText)) break;
+            }
+        }
+
         /// <summary>
         /// 该函数功能为启用BtnListContainer
         /// </summary>

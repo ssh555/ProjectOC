@@ -15,7 +15,6 @@ namespace ProjectOC.Dialog
     public class DialogManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Register
-
         public void OnRegister()
         {
             LoadTableData();
@@ -95,7 +94,7 @@ namespace ProjectOC.Dialog
 
         public DialogType CurDialogType;
         public DialogProcess CurDialogProcess;
-        public void StartDialogMode(DialogType _dialogType,string _ID)
+        public void StartDialogMode(DialogType _dialogType,string _ID,IDialogPanel dialogPanel = null)
         {
             switch (_dialogType)
             {
@@ -103,7 +102,7 @@ namespace ProjectOC.Dialog
                     CurDialogProcess = new DialogChatProcess(_ID);
                     break;
                 case DialogType.Phone:
-                    CurDialogProcess = new DialogPhoneProcess();
+                    CurDialogProcess = new DialogPhoneProcess(_ID, dialogPanel);
                     break;
             }
         }
@@ -158,9 +157,6 @@ namespace ProjectOC.Dialog
             return _option;
         }
         
-        
-
-        
         private void EndDialogMode()
         {
             CurDialogProcess.EndDialogMode();
@@ -168,9 +164,6 @@ namespace ProjectOC.Dialog
             CurrentChatNpcModel = null;
             CurDialogIndex = -1;
         }
-
         #endregion
-
-
     }   
 }
