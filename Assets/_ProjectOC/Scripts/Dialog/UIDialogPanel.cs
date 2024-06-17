@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace ProjectOC.Dialog
 {
-    public class UIDialogPanel : UIBasePanel<UIDialogPanel.DialogPanelStruct>
+    public class UIDialogPanel : UIBasePanel<UIDialogPanel.DialogPanelStruct>,IDialogPanel
     {
         #region Unity
 

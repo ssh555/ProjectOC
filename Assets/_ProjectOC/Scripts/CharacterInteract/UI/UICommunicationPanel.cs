@@ -10,9 +10,11 @@ using UnityEngine.U2D;
 using ML.Engine.Utility;
 using static ProjectOC.ResonanceWheelSystem.UI.UICommunicationPanel;
 using TMPro;
+using ProjectOC.Dialog;
+using System.Collections;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class UICommunicationPanel : ML.Engine.UI.UIBasePanel<CommunicationPanelStruct>
+    public class UICommunicationPanel : ML.Engine.UI.UIBasePanel<CommunicationPanelStruct>,IDialogPanel
     {
         #region Unity
         public bool IsInit = false;
@@ -157,6 +159,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Transform Function;
         [SerializeField, FoldoutGroup("UI")]
         private Transform FunctionPanel;
+        [SerializeField, FoldoutGroup("UI")]
+        private Transform ChatListContainer;
 
         private int FunctionType { get { return Function.childCount; } }
         private int FunctionIndex = 0;
@@ -180,13 +184,40 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if(msgContent.Count > 0)
             {
                 //chat œ‘ æ∂‘ª∞
-                
+                this.Chat.gameObject.SetActive(true);
+                LocalGameManager.Instance.DialogManager.StartDialogMode(DialogManager.DialogType.Phone, msgContent[0], this);
+            }
+            else
+            {
+                this.Chat.gameObject.SetActive(false);
+                GameManager.Instance.StopCoroutine("ShowDialogTextCoroutine");
             }
             #endregion
 
             #region KeyTip
 
             #endregion
+
+        }
+        #endregion
+
+        #region Dialog
+        public void ShowDialogText(string _text, string _npcName)
+        {
+            GameManager.Instance.StartCoroutine(ShowDialogTextCoroutine(_text.Length * 0.1f));
+        }
+
+        private IEnumerator ShowDialogTextCoroutine(float delaySec)
+        {
+            yield return new WaitForSeconds(delaySec);
+            var tPrefab = this.objectPool.GetNextObject("CharacterMessagePool");
+
+
+
+        }
+
+        public void ShowOption(OptionTableData _optionDatas)
+        {
 
         }
         #endregion
@@ -210,6 +241,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "CharacterBioPool", LocalGameManager.Instance.CommunicationManager.MessageInfos.Count, "Prefab_CharacterInteract_UIPrefab/Prefab_CharacterInteract_UI_CharacterBioInMessage.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "CharacterMessagePool", 20, "Prefab_CharacterInteract_UIPrefab/Prefab_CharacterInteract_UI_CharacterMessage.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "PlayerMessagePool", 20, "Prefab_CharacterInteract_UIPrefab/Prefab_CharacterInteract_UI_PlayerMessage.prefab");
             base.InitObjectPool();
         }
         [SerializeField, FoldoutGroup("UI")]
