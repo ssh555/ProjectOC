@@ -12,22 +12,22 @@ Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 	368468223	Silence	Wwise Silence		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\Silence1\Silence	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	63926730	BGNoise_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\SFX_Noice_YouELin_C797EE82.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise_01		4010708
-	158127460	Wave	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\wave_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Wave		11885936
-	187490933	TempBGM2	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\TempBGM2_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\Music\BGM\temp_BGM2\TempBGM2		46089312
-	230924643	Sprint1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_A4CD14E7.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1		36112
-	299161394	BGNoise	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\SFX_Noice_YouELin_90AEA377.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		4855788
-	386136567	jump_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\jump_AC9FBBAE.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_03		142652
-	405863425	temp_BGM	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\temp_BGM_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\Music\BGM\temp_BGM\temp_BGM		20459668
-	431605116	采集完毕0	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕0_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕0		124740
-	473888039	Sprint1_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_1B32ADAA.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_02		27612
-	552213126	collect	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\collect_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\collect		82928
-	666970874	Sprint1_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_B0505EAB.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_03		30240
-	676272004	Run1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_9AEF8707.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1		35808
-	734542745	jump_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\jump_2CCC47D5.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_02		113160
-	788751720	Run1_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_808FF5F6.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_01		31720
-	835563755	Run1_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_886A081F.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_02		29136
-	872536999	Sprint1_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_8027E0B3.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_01		30240
-	891491632	采集完毕1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕1		183840
-	985401193	Run1_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_4E7075B1.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_03		43336
+	63926730	BGNoise_01	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\SFX_Noice_YouELin_C797EE82.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise_01		4010708
+	158127460	Wave	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\wave_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Wave		11885936
+	187490933	TempBGM2	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\TempBGM2_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\Music\BGM\temp_BGM2\TempBGM2		46089312
+	230924643	Sprint1	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_A4CD14E7.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1		36112
+	299161394	BGNoise	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\SFX_Noice_YouELin_90AEA377.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		4855788
+	386136567	jump_03	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\jump_AC9FBBAE.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_03		142652
+	405863425	temp_BGM	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\temp_BGM_FBC78EF0.wem		\Interactive Music Hierarchy\Default Work Unit\Music\BGM\temp_BGM\temp_BGM		20459668
+	431605116	采集完毕0	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕0_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕0		124740
+	473888039	Sprint1_02	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_1B32ADAA.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_02		27612
+	552213126	collect	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\collect_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\collect		82928
+	666970874	Sprint1_03	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_B0505EAB.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_03		30240
+	676272004	Run1	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_9AEF8707.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1		35808
+	734542745	jump_02	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\jump_2CCC47D5.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_02		113160
+	788751720	Run1_01	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_808FF5F6.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_01		31720
+	835563755	Run1_02	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_886A081F.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_02		29136
+	872536999	Sprint1_01	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Sprint_8027E0B3.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_01		30240
+	891491632	采集完毕1	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕1		183840
+	985401193	Run1_03	C:\Github\Unity\ProjectOC\ProjectOC_WwiseProject\.cache\Mac\SFX\Run_4E7075B1.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_03		43336
 

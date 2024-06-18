@@ -92,6 +92,13 @@ namespace ML.Editor
             if (mInfo == null) return;
             mInfo.Invoke(instance, null);
         }
+
+        public static void Close(object instance)
+        {
+            MethodInfo mInfo = ContainerWindowType.GetMethod("Close", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (mInfo == null) return;
+            mInfo.Invoke(instance, null);
+        }
     }
 
 }

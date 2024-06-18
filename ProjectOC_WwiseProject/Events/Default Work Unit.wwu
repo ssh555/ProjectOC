@@ -99,9 +99,6 @@
 				<Event Name="BGM" ID="{179BB06B-0318-4BDB-8EFD-A96EFA16A9F9}">
 					<ChildrenList>
 						<Action Name="" ID="{8B8D0C2C-FD2C-4DFE-804D-846AF239AC38}" ShortID="480861763">
-							<PropertyList>
-								<Property Name="Delay" Type="Real64" Value="5"/>
-							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="BGM" ID="{F5B05ACE-D501-4E85-9679-6AD8EF709E6D}" WorkUnitID="{5FF7D5CA-FB42-4443-AA25-7BBB254DE27D}"/>

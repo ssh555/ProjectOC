@@ -9,6 +9,7 @@ using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 using Animancer.Editor;
 using System;
+using ML.Engine.SaveSystem;
 
 namespace ML.Editor.Animation
 {
@@ -175,7 +176,6 @@ namespace ML.Editor.Animation
             EditorApplication.update += SaveData;
         }
 
-
         private void AssemblyReloadEvents_afterAssemblyReload()
         {
             this.Close();
@@ -191,12 +191,15 @@ namespace ML.Editor.Animation
             AssemblyReloadEvents.afterAssemblyReload -= AssemblyReloadEvents_afterAssemblyReload;
             if (_instance == this)
             {
+                //_instance.Close();
+
+                EditorContainerWindow.Close(_container);
                 _instance = null;
             }
             EditorApplication.update -= SaveData;
         }
 
-        public void  SaveData()
+        public void SaveData()
         {
             Event e = GetCurrentEvent;
             if (SelectedAsset != null && e != null && e.keyCode == KeyCode.S && e.control)
@@ -206,9 +209,7 @@ namespace ML.Editor.Animation
                 EditorUtility.SetDirty(SelectedAsset);
                 AssetDatabase.SaveAssetIfDirty(SelectedAsset);
             }
-
         }
-
 
         #region ContextMenu
         /// <summary>
@@ -267,4 +268,71 @@ namespace ML.Editor.Animation
         #endregion
     }
 }
+
+
+public class DragSourceWindow : EditorWindow
+{
+    private string objectName = "Drag Me!";
+    private Rect draggableRect = new Rect(10, 10, 100, 20);
+
+    [MenuItem("Window/Drag Source")]
+    public static void ShowWindow()
+    {
+        GetWindow<DragSourceWindow>("Drag Source").name = "Drag Source";
+    }
+
+    private void OnGUI()
+    {
+        EditorGUI.DrawRect(draggableRect, Color.gray);
+        GUI.Label(draggableRect, objectName);
+
+        if (Event.current.type == EventType.MouseDown && draggableRect.Contains(Event.current.mousePosition))
+        {
+            DragAndDrop.PrepareStartDrag();
+            DragAndDrop.objectReferences = new UnityEngine.Object[] { this };
+            DragAndDrop.StartDrag(objectName);
+            Event.current.Use();
+        }
+    }
+}
+
+
+public class DragTargetWindow : EditorWindow
+{
+    private Rect dropArea = new Rect(10, 10, 200, 100);
+
+    [MenuItem("Window/Drag Target")]
+    public static void ShowWindow()
+    {
+        GetWindow<DragTargetWindow>("Drag Target").name = "Drag Target";
+    }
+
+    private void OnGUI()
+    {
+        EditorGUI.DrawRect(dropArea, Color.cyan);
+        GUI.Label(dropArea, "Drop Here!");
+
+        Event currentEvent = Event.current;
+        if (currentEvent.type == EventType.DragUpdated || currentEvent.type == EventType.DragPerform)
+        {
+            if (dropArea.Contains(currentEvent.mousePosition))
+            {
+                DragAndDrop.visualMode = DragAndDropVisualMode.Link;
+                if (currentEvent.type == EventType.DragPerform)
+                {
+                    DragAndDrop.AcceptDrag();
+
+                    foreach (UnityEngine.Object draggedObject in DragAndDrop.objectReferences)
+                    {
+                        Debug.Log("Dropped: " + draggedObject.name);
+                    }
+                }
+
+                Event.current.Use();
+            }
+        }
+    }
+}
+
+
 
