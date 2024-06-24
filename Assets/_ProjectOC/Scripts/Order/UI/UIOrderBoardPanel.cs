@@ -85,7 +85,6 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
         this.OrderDelegationUIBtnListContainer.DisableUIBtnListContainer();
     }
 
@@ -296,7 +295,6 @@ public class UIOrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             return;
         }
         #region FunctionType
-
         for (int i = 0; i < FunctionType; i++)
         {
             Function.GetChild(i).Find("Selected").gameObject.SetActive(FunctionIndex == i);

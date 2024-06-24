@@ -1,10 +1,11 @@
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectOC.ClanNS
 {
-    [LabelText("氏族"), System.Serializable]
+    [LabelText("氏族")]
     public class Clan : NPC
     {
         [LabelText("病症阶段"), ReadOnly]
@@ -23,6 +24,8 @@ namespace ProjectOC.ClanNS
         public Dictionary<PersonalityType, Personality> PersonalityDict;
         #endregion
 
+        public List<PersonalityTAG> TAGS = new List<PersonalityTAG>();
+
         public Clan() : base()
         {
             PersonalityDict = new Dictionary<PersonalityType, Personality>
@@ -31,8 +34,23 @@ namespace ProjectOC.ClanNS
                 { PersonalityType.Social, new Personality() },
                 { PersonalityType.Basis, new Personality() }
             };
-            // TODO: 初始化Wisdom，Combat，Resilience
-            // TODO: 初始化PersonalityDict
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                List<int> talents = ManagerNS.LocalGameManager.Instance.ClanManager.GetTalentInitValue(Level);
+                if (talents.Count == 3)
+                {
+                    ChangeTalent(TalentType.Wisdom, talents[0]);
+                    ChangeTalent(TalentType.Combat, talents[1]);
+                    ChangeTalent(TalentType.Resilience, talents[2]);
+                }
+                List<(int, int, int)> personalitys = ManagerNS.LocalGameManager.Instance.ClanManager.GetPersonalityInitValue(Level);
+                if (personalitys.Count == 3)
+                {
+                    PersonalityDict.Add(PersonalityType.Thinking, new Personality(personalitys[0]));
+                    PersonalityDict.Add(PersonalityType.Social, new Personality(personalitys[1]));
+                    PersonalityDict.Add(PersonalityType.Basis, new Personality(personalitys[2]));
+                }
+            }
         }
         public int GetTalent(TalentType type)
         {
@@ -80,10 +98,14 @@ namespace ProjectOC.ClanNS
                 if (!TAGS[i].IsActive && condition)
                 {
                     TAGS[i] = TAGS[i].ChangeActive(true);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
+                                        new UIManager.SideBarUIData($"氏族成员{Name}新增特征TAG{TAGS[i].Name}", null, null));
                 }
                 else if (TAGS[i].IsActive && !condition)
                 {
                     TAGS[i] = TAGS[i].ChangeActive(false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
+                                        new UIManager.SideBarUIData($"氏族成员{Name}失去特征TAG{TAGS[i].Name}", null, null));
                 }
             }
         }
@@ -103,22 +125,31 @@ namespace ProjectOC.ClanNS
                 CheckPersonalityTAG(PersonalityType.Social, tag) &&
                 CheckPersonalityTAG(PersonalityType.Basis, tag);
         }
-        public override bool AddTAG(PersonalityTAG tag)
+        public bool AddTAG(PersonalityTAG tag)
         {
             if (CheckPersonalityTAG(tag))
             {
                 TAGS.Add(tag);
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
-                                        new UIManager.SideBarUIData($"氏族成员{Name}新增特征TAG{tag.Name}", null, null));
                 return true;
             }
             return false;
         }
-        public override void RemoveTAG(PersonalityTAG tag)
+        public void RemoveTAG(PersonalityTAG tag)
         {
             TAGS.Remove(tag);
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI,
-                                        new UIManager.SideBarUIData($"氏族成员{Name}失去特征TAG{tag.Name}", null, null));
+        }
+        public List<PersonalityTAG> GetTAGS(bool isActive=false)
+        {
+            if (isActive)
+            {
+                var list = TAGS.FindAll(x => x.IsActive);
+                list.Sort(new PersonalityTAG.Sort());
+                return list;
+            }
+            else
+            {
+                return TAGS.OrderBy(x => x, new PersonalityTAG.Sort()).ToList();
+            }
         }
 
         #region Bed
@@ -126,12 +157,6 @@ namespace ProjectOC.ClanNS
         public ClanBed Bed;
         [LabelText("是否拥有床"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
-
-        public Clan(string id, string name)
-        {
-            ID = id;
-            Name = name;
-        }
 
         public class SortForBed : IComparer<Clan>
         {

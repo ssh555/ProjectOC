@@ -19,6 +19,8 @@ namespace ML.Engine.UI
 {
     public class UIBtnList : ISelected
     {
+        [ShowInInspector] public int Hashcode;
+
         #region ISelected
         [ShowInInspector]
         public ISelected LeftUI { get; set; }
@@ -132,6 +134,7 @@ namespace ML.Engine.UI
 
         public UIBtnList(UIBtnListInitor uIBtnListInitor,string prefabPath = null)
         {
+            Hashcode = this.GetHashCode();
             BtnListInitData btnListInitData = uIBtnListInitor.btnListInitData;
             this.parent = uIBtnListInitor.transform;
             this.limitNum = btnListInitData.limitNum;
@@ -709,23 +712,27 @@ namespace ML.Engine.UI
         /// <summary>
         /// 传入字符串设置按钮列表action
         /// </summary>
-        public void SetBtnAction(string BtnName, UnityAction action)
+        public bool SetBtnAction(string BtnName, UnityAction action)
         {
             if (this.SBDic.ContainsKey(BtnName) && !action.IsUnityNull())
             {
                 SBDic[BtnName].onClick.AddListener(action);
+                return true;
             }
+            return false;
         }
 
         /// <summary>
         /// 传入SelectedButton设置按钮列表action
         /// </summary>
-        public void SetBtnAction(SelectedButton selectedButton, UnityAction action)
+        public bool SetBtnAction(SelectedButton selectedButton, UnityAction action)
         {
             if (selectedButton.GetUIBtnList() == this && !action.IsUnityNull())
             {
                 selectedButton.onClick.AddListener(action);
+                return true;
             }
+            return false;
         }
 
         /// <summary>
@@ -895,9 +902,14 @@ namespace ML.Engine.UI
         /// <summary>
         /// 设置按钮按键提示文本
         /// </summary>
-        public void SetBtnText(string btnName, string showText)
+        public bool SetBtnText(string btnName, string showText)
         {
-            SBDic[btnName].transform.Find("BtnText").GetComponent<TextMeshProUGUI>().text = showText;
+            if(SBDic.ContainsKey(btnName))
+            {
+                SBDic[btnName].transform.Find("BtnText").GetComponent<TextMeshProUGUI>().text = showText;
+                return true;
+            }
+            return false;
         }
 
         public void SetBtnText(SelectedButton sb, string showText)
@@ -959,11 +971,10 @@ namespace ML.Engine.UI
         /// <summary>
         /// 轮盘按钮导航回调 轮转按钮规定正上方为下标0
         /// </summary>
-        private bool canPerformRingNavigation = false;
-        public bool CanPerformRingNavigation {  get { return canPerformRingNavigation; } set { canPerformRingNavigation = value; } }
         private void RingNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.isEnable == false || !canPerformRingNavigation) return;
+            //Debug.Log("RingNavigation " + Hashcode + " " + this.isEnable + " " + this.CurSelected);
+            if (this.isEnable == false) return;
             this.NavigationPreAction?.Invoke();
             string actionName = obj.action.name;
             // 使用 ReadValue<T>() 方法获取附加数据
@@ -991,6 +1002,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            //Debug.Log("ButtonInteract " + Hashcode + " " + this.isEnable + " " + this.CurSelected + " " + Time.frameCount);
             if (this.isEnable == false || this.CurSelected == null) return;
             if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null)
             {
@@ -999,7 +1011,6 @@ namespace ML.Engine.UI
                 this.ButtonInteractPostAction?.Invoke();
             }
         }
-
 
         /// <summary>
         /// 该函数功能为绑定按钮导航InputAction的回调函数
@@ -1066,7 +1077,6 @@ namespace ML.Engine.UI
                     this.ButtonInteractInputAction.canceled += this.ButtonInteract;
                     break;
             }
-
         }
 
         /// <summary>

@@ -14,6 +14,12 @@ namespace ProjectOC.ClanNS
             Low = low;
             High = high;
         }
+        public Personality((int, int, int) tuple)
+        {
+            Value = tuple.Item1;
+            Low = tuple.Item2;
+            High = tuple.Item3;
+        }
         public Personality ChangeValue(int value)
         {
             value += Value;

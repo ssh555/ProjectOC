@@ -333,7 +333,7 @@ namespace ProjectOC.Order
         /// </summary>
         public void RefuseOrder(string OrderInstanceID)
         {
-            Debug.Log("OrderInstanceID " + OrderInstanceID + " " + OrderDelegationListDic.ContainsKey(OrderInstanceID));
+            //Debug.Log("OrderInstanceID " + OrderInstanceID + " " + OrderDelegationListDic.ContainsKey(OrderInstanceID));
             if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return;
             Order order = OrderDelegationListDic[OrderInstanceID];
 

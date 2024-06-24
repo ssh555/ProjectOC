@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace ProjectOC.Dialog
 {
-    public class UIDialogPanel : UIBasePanel<UIDialogPanel.DialogPanelStruct>
+    public class UIDialogPanel : UIBasePanel<UIDialogPanel.DialogPanelStruct>,IDialogPanel
     {
         #region Unity
 
@@ -44,7 +44,8 @@ namespace ProjectOC.Dialog
             {
                 ClearOptionBtn();
             }
-            _dialogManager.LoadDialogue(currentOptionIndex);
+            
+            _dialogManager.LoadDialogueOption(currentOptionIndex);   
         }
 
         public void PopPanel()

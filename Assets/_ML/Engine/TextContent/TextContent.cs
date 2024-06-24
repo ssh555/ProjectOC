@@ -8,6 +8,13 @@ namespace ML.Engine.TextContent
 
         public string English;
 
+        public TextContent(string str)
+        {
+            this.Chinese = str;
+            this.English = str;
+        }
+
+
         public string GetText()
         {
             if (Config.language == Config.Language.Chinese)

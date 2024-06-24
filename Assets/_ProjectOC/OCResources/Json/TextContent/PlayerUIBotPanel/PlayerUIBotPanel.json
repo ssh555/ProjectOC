@@ -55,6 +55,13 @@
                 "Chinese" : "建造",
                 "English" : "Build"
             }
+        },
+        {
+            "name" : "通讯",
+            "description" : {
+                "Chinese" : "通讯",
+                "English" : "Communication"
+            }
         }
     ],
     "SelectGrid" : {

@@ -159,6 +159,26 @@ namespace ProjectOC.Player.UI
             }
             );
 
+            //UnlockOCCharacter
+            this.UIBtnList.SetBtnAction("UnlockOCCharacter",
+            () =>
+            {
+                var input1 = this.UIBtnList.GetBtn("UnlockOCCharacter").transform.GetComponentInChildren<TMP_InputField>().text;
+                LocalGameManager.Instance.OCCharacterManager.LevelUP(input1);
+            }
+            );
+
+            //AddFavar
+            this.UIBtnList.SetBtnAction("AddFavar",
+            () =>
+            {
+                var input1 = this.UIBtnList.GetBtn("AddFavar").transform.Find("InputField1").GetComponentInChildren<TMP_InputField>().text;
+                var input2 = this.UIBtnList.GetBtn("AddFavar").transform.Find("InputField2").GetComponentInChildren<TMP_InputField>().text;
+                int offset = int.Parse(input2);
+                LocalGameManager.Instance.OCCharacterManager.AddCharacterFavor(input1, offset);
+            }
+            );
+
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
 
 
@@ -205,7 +225,7 @@ namespace ProjectOC.Player.UI
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
             this.UIBtnList = new UIBtnList(uIBtnListInitor);
-            CustomButton panelButton1 = this.UIBtnList.GetBtn("PanelBtn") as CustomButton;
+            /*CustomButton panelButton1 = this.UIBtnList.GetBtn("PanelBtn") as CustomButton;
             panelButton1.InitBindData(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, (obj) =>
             {
                 var vector2 = obj.ReadValue<UnityEngine.Vector2>();
@@ -216,7 +236,7 @@ namespace ProjectOC.Player.UI
             {
                 var vector2 = obj.ReadValue<UnityEngine.Vector2>();
                 panelButton2.transform.Find("Slider").GetComponent<Slider>().value += vector2.x / 10;
-            });
+            });*/
         }
         private void InitBtnData(PlayerUIPanelStruct datas)
         {

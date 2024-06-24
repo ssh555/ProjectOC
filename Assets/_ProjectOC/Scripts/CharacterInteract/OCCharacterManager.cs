@@ -1,5 +1,11 @@
+using ML.Engine.InventorySystem;
+using ML.Engine.TextContent;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine.TextCore.Text;
+using static ML.Engine.UI.UIBtnListInitor;
 
 namespace ProjectOC.CharacterInteract
 {
@@ -17,6 +23,8 @@ namespace ProjectOC.CharacterInteract
 
         public void Init()
         {
+            CharacterTableDataDic.Add("CharacterFavor_1", CharacterTableData.defaultTemplate);
+            CharacterFavorTableDataDic.Add("CharacterFavor_1", CharacterFavorTableData.defaultTemplate);
         }
 
         public void OnRegister()
@@ -39,9 +47,10 @@ namespace ProjectOC.CharacterInteract
 
         #region Field & Property
         /// <summary>
-        /// 角色字典
+        /// 已经解锁的角色字典
         /// </summary>
-        private Dictionary<string, Character> CharacterDic = new();
+        [ShowInInspector]
+        private Dictionary<string, OCCharacter> CharacterDic = new();
         /// <summary>
         /// 默认获取的好感度
         /// </summary>
@@ -58,14 +67,14 @@ namespace ProjectOC.CharacterInteract
         /// 实际获取的好感度
         /// </summary>
         int RealCharacterFavor;
+        /// 存储当前已经解锁的角色
+        /// </summary>
+        [ShowInInspector]
+        private List<OCCharacter> UnlockedOCCharacters = new();
         /// <summary>
         /// 存储当前上锁的角色ID
         /// </summary>
         private HashSet<string> UpgradeLockSet = new();
-        /// <summary>
-        /// 存储当前已经抽取的问候短信ID
-        /// </summary>
-        private HashSet<string> SentMessageSet = new();
 
         //TODO 管理角色的通讯时间表
 
@@ -94,14 +103,23 @@ namespace ProjectOC.CharacterInteract
         /// </summary>
         public void AddCharacterFavor(string CID, int offset)
         {
+            UnityEngine.Debug.Log("AddCharacterFavor " + CID+" "+ offset);
+            if (!CharacterFavorTableDataDic.ContainsKey(CID)) return;
 
+            if (CharacterDic.ContainsKey(CID))
+            {
+                CharacterDic[CID].AddLevel(offset);
+            }
         }
         /// <summary>
         /// 该函数用于第一个支线任务完成时，将好感度等级由0至1
         /// </summary>
         public void LevelUP(string CID)
         {
-
+            UnityEngine.Debug.Log("LevelUP " + CID);
+            if (!CharacterTableDataDic.ContainsKey(CID)) return;
+            if (CharacterDic.ContainsKey(CID)) return;
+            this.CharacterDic.Add(CID, new OCCharacter(CharacterFavorTableDataDic[CID]));
         }
         /// <summary>
         /// 该函数用于完成支线时，解锁
@@ -131,6 +149,14 @@ namespace ProjectOC.CharacterInteract
         {
 
         }
+
+        public CharacterTableData GetOCCharacterData(string CID)
+        {
+            if (CharacterTableDataDic.ContainsKey(CID)) return CharacterTableDataDic[CID];
+            throw new Exception();
+        }
+
+
         #endregion
 
         #region Load
@@ -140,20 +166,104 @@ namespace ProjectOC.CharacterInteract
         [System.Serializable]
         public struct CharacterFavorTableData
         {
+            public string ID;
+            //好感度需求(2级至5级)
+            public List<(int, int)> FavorRequire;
+            //解锁的支线任务(2级至5级)
+            public List<(int, string)> MissionUnlock;
+            //认识关系转折点
+            public int KnowStage;
+            //朋友关系转折点
+            public int FriendStage;
+            //挚友关系转折点
+            public int IntimateStage;
+            //日常问候延时
+            public (int, int) GreetingDelay;
+            //日常问候
+            public List<string> Greeting;
+            //主动邀约延时
+            public (int, int) InvitationDelay;
+            //主动邀约
+            public List<string> Invitation;
+            //送礼延时
+            public int GiftDelay;
+            //送礼
+            public List<string> Gift;
+            //风景偏好
+            public List<string> SceneFavor;
+            //娱乐偏好
+            public List<string> GameFavor;
+            //口味偏好
+            public List<string> TasteFavor;
 
+            public static CharacterFavorTableData defaultTemplate = new CharacterFavorTableData()
+            {
+                ID = "CharacterFavor_1",
+                FavorRequire = new List<(int, int)>() { (2,2), (3, 4) , (4, 6) , (5, 9) },
+                MissionUnlock = new List<(int, string)>(),
+                KnowStage = 2,
+                FriendStage = 3,
+                IntimateStage = 4,
+                GreetingDelay = (1,1),
+                Greeting = new List<string>() { "Message_CharacterFavor_1_1", "Message_CharacterFavor_1_2" },
+
+                InvitationDelay = (1,1),
+                Invitation = new List<string>() { "Message_CharacterFavor_1_1", "Message_CharacterFavor_1_2" },
+                GiftDelay = 2,
+
+                Gift  = new List<string>(),
+                SceneFavor = new List<string>(),
+                GameFavor = new List<string>(),
+                TasteFavor = new List<string>()
+            };
         }
-        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]> CharacterFavorTableDataABJAProcessor;
+        [ShowInInspector]
         private Dictionary<string, CharacterFavorTableData> CharacterFavorTableDataDic = new();
+
+
+        /// <summary>
+        /// 角色表数据
+        /// </summary>
+        [System.Serializable]
+        public struct CharacterTableData
+        {
+            public string ID;
+            public TextContent Name;
+            public TextContent CodeName;
+            public string Icon;
+            public TextContent Race;
+            public TextContent Gender;
+            public TextContent Age;
+            public string Image;
+            public List<string> RoleTag;
+            public List<string> AcgnTag;
+            public List<string> AdjTag;
+            public TextContent WorldCognition;
+            public TextContent Faith;
+            public TextContent Story;
+
+            public static CharacterTableData defaultTemplate = new CharacterTableData()
+            {
+                ID = "CharacterFavor_1",
+                Name = new TextContent("角色1"),
+                CodeName = new TextContent("代号1"),
+            };
+        }
+
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CharacterTableData[]> CharacterTableDataABJAProcessor;
+        [ShowInInspector]
+        private Dictionary<string, CharacterTableData> CharacterTableDataDic = new();
         private void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]>("OCTableData", "MainInteractRing", (datas) =>
+            CharacterFavorTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CharacterFavorTableData[]>("OCTableData", "MainInteractRing", (datas) =>
             {
                 foreach (var data in datas)
                 {
-
+                    CharacterFavorTableDataDic.Add(data.ID, data);
                 }
             }, "角色好感度数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            CharacterFavorTableDataABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }
