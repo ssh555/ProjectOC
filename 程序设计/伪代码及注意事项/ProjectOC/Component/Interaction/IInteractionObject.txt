@@ -1,0 +1,8 @@
+namespace ProjectOC.Component.Interaction
+{
+    public interface IInteractionObject
+    {
+        ...
+        见 基础\Component\InteractComponent.drawio.png
+    }
+}

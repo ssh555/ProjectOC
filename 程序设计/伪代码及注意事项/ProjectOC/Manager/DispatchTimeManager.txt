@@ -1,0 +1,20 @@
+namespace ProjectOC.Manager
+{
+    // 调度的时间管理器
+    [System.Serializable]
+    public sealed class DispatchTimeManager : ILocalManager
+    {
+        // 时间流速比例 现实1h 游戏1min
+        public float TimeScale = 60;
+
+        // 当前所处时段 [0, 23]
+        public int CurrentTimeFrame {get; private set;} = 0;
+
+        // 计时器 => 时段更新(TimeScale确定) 一天循环24次，一个时段计时一次，计时结束时调用时段更新事件，Loop
+        private CounterDownTimer timer;
+
+        // 时段更新事件
+        public event Action<int> OnTimeFrameChanged;
+    }
+}
+

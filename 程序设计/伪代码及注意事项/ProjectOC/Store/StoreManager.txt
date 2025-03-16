@@ -1,0 +1,12 @@
+namespace ProjectOC.Store
+{
+    [System.Serializable]
+    public sealed class StoreManager : ILocalManager
+    {
+        private Dict<int, Store> storeList;
+
+
+        // to-do => 修饰|用于便于访问的函数接口
+    }
+}
+

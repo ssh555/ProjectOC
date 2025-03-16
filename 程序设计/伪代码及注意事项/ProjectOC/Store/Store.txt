@@ -1,0 +1,118 @@
+namespace ProjectOC.Store
+{
+    /*
+        仓库相关数据数据
+        StoreData
+        ① Dict<StoreType, List<int>> StoreTypeItemData
+            <StoreType, ItemID>
+            对应仓库类型能够存储的ItemID
+        ② int[][] StoreLevelCapacity
+            [Level][2] =>
+            0 -> StoreCapacity数量
+            1 -> StoreCapacity上限增加值
+    */
+
+    public struct StoreCapacity
+    {
+        // 存储的Item的ID，-1为无效值，即空
+        // 只有当此容器存储量为0时，才能更改ItemID
+        int ItemID
+
+        // 实际存放量 => 仅玩家可交互
+        int PlayerStoreCapacity
+
+        // 预留存放量 => 任务占用的存放量，仅搬运Worker可存入将其变为PlayerStoreCapacity
+        int ReservedSttoreCapacity
+
+        // 实际空余量 => 仅玩家可交互
+        int PlayerEmptyCapacity
+
+        // 预留空余量 => 任务占用的取出量，仅搬运Worker可取出将其变为PlayerEmptyCapacity
+        int ReservedEmptyCapacity
+
+        // 最大容量 => 由仓库的Level控制
+        int MaxCapacity
+
+        // 等级满时的最大容量 => 引用固定值
+        const static int MaxLevelCapacity
+    }
+
+    
+
+    [System.Serializable]
+    public class Store
+    {
+        public enum Type : byte
+        {
+            Normal => 储物箱，可存储任何物品的基础仓库
+            Incubator => 恒温箱，可调节温度的仓库
+        }
+
+
+        public Store()
+        {
+            StoreManager.Register(this);
+        }
+
+
+        // 统一使用建筑物实例编号
+        // -1 为 invalid value
+        string ID
+
+        // StoreType决定了能存储哪些Item
+        StoreType Type
+
+        // 仓库等级[1, 3] => 影响仓库存储器的数量及容量
+        int Level
+
+        // 仅[0, StoreLevelCapacity[Level-1][0])索引值有效
+长度为StoreLevelCapacity[2][0] => 待定，还不清楚策划是否更改数量值
+        StoreCapacity[] Stores
+
+        // 搬运优先级
+        CarryPriority Priority
+
+        // 玩家是否正在与此仓库交互
+        // 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
+        bool bIsInteracting
+
+
+        // 存入Item(来自Player的请求)
+        // 返回值为null，表示全部存入
+        // 不为null，表示剩余的没有存入的Item
+        Item AddItemFromPlayer(Item item)
+        {
+            见 仓库.drawio.png 流程图
+        }
+
+        // 移出Item(来自Player的交互请求)
+        // 返回值为取出的Item
+        Item RemoveItemToPlayer(int itemID, int amount)
+        {
+            见 仓库.drawio.png 流程图
+        }
+
+        // 存入来自Worker搬运任务的Item
+        // 不需要返回值，一定能存入
+        void AddItemFromWorker(Item item)
+        {
+            见 仓库.drawio.png 流程图
+        }
+
+        // 移出来自Worker搬运任务的Item
+        // 返回值为移出的Item
+        Item RemoveItemToWorker(int itemID, int amount)
+        {
+            见 仓库.drawio.png 流程图
+        }
+
+        // 仓库存储发生变化时调用
+        // 仓库升级、存入、移出
+        // 参数为当前仓库的<ID, StoreCapacity[]>
+        public event<string, StoreCapacity[]> OnStoreCapacityChanged
+
+
+
+    }
+}
+

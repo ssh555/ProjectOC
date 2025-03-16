@@ -1,0 +1,118 @@
+namespace ProjectOC.Worker
+{
+    [System.Serializable]
+    public sealed class WorkerStateMachine : StateMachine
+    {
+        private FishingState : State
+        {
+            // to-do
+        }
+        
+        private RelaxingState : State
+        {
+            // 是否完成休息
+            public bool isCompleteRelax = false;
+
+            private override ConfigState()
+            {
+                // 配置每个状态内部
+                Relaxing.BindEnterAction((...) => {
+                    isCompleteRelax = false
+
+                    DispatchManager加入事件监听:结束休息时段并且体力高于阈值，则置为true
+
+                    timer(loop) => 休息时暂定每秒回复1%
+                });
+                Relaxing.BindExitAction((...) => {
+                    Exit => isCompleteRelax = false
+
+                    移除Enter加入的Event
+
+                    结束timer
+                });
+                Relaxing.BindUpdateAction((...) => {
+                    to-do : 等待策划设计休息相关
+                    ① 不处于休息时段，则监听体力是否回复至第一阈值，是则置isCompleteRelax为true
+                    ② 体力回复至第二阈值,也置为true
+                });
+            }
+        }
+
+        private WorkingDutyState : State
+        {
+            // 值班处的ID编号，-1表示未值班
+            string DutyDepartmentID => 引用machine
+
+            private override ConfigState()
+            {
+                WorkingDuty.BindUpdateAction((...) => {
+                    // 开始前往对应的生产节点
+                    // 到达后开始运作
+                });
+            }
+        }
+
+        private WorkingCarryState : State
+        {
+            // 搬运任务，为null表示没有任务
+            CarryMission Mission => 引用machine
+            
+            // 搬运的物品的ID
+            // 为-1表示为null
+            int ItemID => 根据machine的PDID引用
+
+            // 这次搬运的数量
+            // 数量由Worker的属性控制，可在这也加上，或者就完全放在Worker的属性里面
+            // 根据这个值，更新worker基础属性的当前负重
+            int CurrentCount;
+
+
+            private override ConfigState()
+            {
+                WorkingCarry.BindUpdateAction((...) => {
+                    控制搬运流程(开始-搬运-任务结束)
+                });
+            }
+        }
+
+        private FishingState Fishing;
+        private WorkingDutyState WorkingDuty;
+        private WorkingCarryState WorkingCarry;
+        private RelaxingState Relaxing;
+
+        // 自己设置值
+        public Worker worker = null;
+
+        // 体力高于第一阈值 => 引用worker基础属性中的第一阈值
+        public bool IsAPAboveFirstThreshold => 引用值
+
+        // 值班处的ID编号，-1表示未值班
+        public string DutyDepartmentID = -1;
+
+        // 值班处的原料是否充足 => 引用PD.
+        public bool IsRawMatSufficient => 引用值
+        
+        // 值班处是否堆积满 => 引用PD.
+        public bool IsStackMax => 引用值
+
+        // 搬运任务，为null表示没有任务
+        public CarryMission Mission = null;
+        
+        // 当前时段的安排 => 引用worker
+        public Status arrangment => 引用值
+
+        // 休息是否完成 => 引用 StateRelaxing.IsCompleteRelax
+        public bool IsCompleteRelax => 引用值
+
+        public WorkerStateMachine()
+        {
+            // State 初始化
+            new ("Name")
+
+            // 连接边
+
+            // 设置初始状态 => Fishing
+        }
+    }
+}
+

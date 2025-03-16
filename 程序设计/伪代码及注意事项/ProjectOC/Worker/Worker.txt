@@ -1,0 +1,239 @@
+namespace ProjectOC.Worker
+{
+    [System.Serializable]
+    public class Worker : MonoBehaviour
+    {
+        public struct TimeArragement
+        {
+            public Status status[24];
+
+            public Status operator[](int index)
+            {
+                return status[index];
+            }
+        }
+
+        public enum Status : byte
+        {
+            Fishing = 0,
+            WorkingCarry = 5,
+            WorkingDuty = 10,
+            Relaxing = 15,
+        }
+
+        public struct BaseProperty
+        {
+            // 体力工作阈值，第一阈值
+            // int APThreshold
+
+            // 体力休息阈值，第二阈值
+            int APRelaxThreshold
+
+            // 体力上限
+            int APMax
+
+            // 当前体力
+            int APCurrent
+
+
+
+            // 每次搬运结算的经验值
+            int ExpPCarry => 引用值
+            // 每次搬运结算消耗的体力值
+            int APCostPCarry => 暂定放在这儿，也可能是外部常量引用
+
+
+
+
+            // 烹饪效率%
+            short EffCooking
+
+            // 手工效率%
+            short EffHandicraft
+            
+            // 重工效率%
+            short EffMachine
+
+            // 科学效率%
+            short EffScience
+
+            // 魔法效率%
+            short EffMagic
+
+            // 移动速度 m/s => AI寻路的速度
+            // to-do : 暂未设计 unity-AI寻路
+            // 场景内bake
+            // worker的GameObject挂载AIAgent
+            // 留出移动接口即可
+            float WalkSpeed
+
+            
+
+            // 当前负重 => Item个数*权重
+            int BURCurrent
+
+            // 负重上限
+            int BURMax
+
+            // 特性 => Worker在生成的时候直接生成Feature
+            // 一直伴随Worker存在
+            // 与前面的基础属性不一致
+            // 前面的基础属性是配表初始化
+            // 特性是随机生成初始化
+            Feature[] Features
+
+            // 刁民的技能
+            // 枚举值可直接作为索引值
+            Skill[] Skills
+        }
+
+        public enum FeatureType : byte
+        {
+            None => 整活特性类型
+            Buff => 增益特性类型
+            Debuff => 减益特性类型
+        }
+
+        public struct Feature
+        {
+            // Feature 池子
+            static Dict<ID, Feature> FeatureDict;
+
+            // 键 Feature_特性类型_序号
+            string ID
+
+            // 特性的中文名称
+            string NameCN
+
+            // 特性的英文名称
+            string NameEN
+
+            // 特性的类型
+            WorkerFeatureType Type
+
+            // 特性效果，肯定是数组
+            WorkerAttributeEffect[] Effects
+
+            // 特性本身的描述性文本
+            string FeatureDescription
+
+            // 特性效果的描述性文本
+            string EffectDescription
+        }
+
+        public struct WorkerAttributeEffect
+        {
+            // 键 Effects_效果名
+            string ID
+
+            // 效果类型
+            WorkerAttributeEffectType Type
+
+            // Param1 => string
+            string PStr
+
+            // Param2 => int
+            int PInt
+
+            // Param3 => float
+            float PFloat
+
+            void ApplyEffectToWorker(Worker)
+            {
+                if-elseif-else => WorkerAttributeEffectType
+                 => 写死应用逻辑
+            }
+        }
+
+        public enum WorkerAttributeEffectType : byte
+        {
+            约定：
+                Set前缀为直接赋值
+                Offset前缀为增量
+            ...
+        }
+
+        public struct Skill
+        {
+            // 键 技能类型
+            PDType Type
+
+            // 中文名称
+            string NameCN
+            
+            // 英文名称
+            string NameEN
+
+            // 技能当前效果,Only One
+            WorkerAttributeEffect Effect
+
+            // 当前效果的数值收益 => 或者更改时一并更改Effect.ParamInt
+            int Figure => 引用Effect参数
+
+            // 技能本身的描述性文本
+            string SkillDesciption
+            
+            // 技能效果的描述性文本
+            string EffectDescription
+
+            // 当前经验
+            // 在达到最高等级前，每次获得经验都要判断一下是否升级
+            // 达到最高等级后不再获得经验
+            int Exp
+
+            // 当前等级
+            int Level
+
+            // 经验获取效率%,初始为100%
+            int EXPRate
+        }
+
+        to-do : 只要有一个这样的映射，可以获取到数据即可，可以考虑写成static放在skill里面, 刁民技能升级 => WorkerSkillLevel
+
+
+        // 每个时段的安排
+        protected TimeArragement TimeArrangement;
+
+        // 当前时段的安排应该所处的状态
+        public Status CurTimeFrameStatus => 引用值
+
+        // 当前实际状态
+        private Status _curStatus;
+        public Status CurStatus
+        {
+            get => _curStatus;
+            set
+            {
+                MissionBroadCastManager.UpdateWorkerStatusList(this, _curStatus, value);
+                _curStatus = value;
+            }
+        }
+
+        // 基础属性值
+        protected BaseProperty BaseProperty
+
+        // 状态机控制器
+        protected StateController stateController;
+
+        // 状态机
+        protected WorkerStateMachine stateMachine;
+
+        public Worker()
+        {
+            // 初始化状态机
+            stateController = new ();
+            stateMachine = new ();
+            stateController.Set(stateMachine);
+
+            // roll点，生成特性
+            // to-do : 按照生成Worker特性的逻辑流程，从池子抽取
+            // to-do : 缺失feature池子
+        }
+
+        Awake()
+        {
+            this.enabled = false;
+        }
+    }
+}
+

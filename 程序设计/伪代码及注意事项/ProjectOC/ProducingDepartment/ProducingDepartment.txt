@@ -1,0 +1,112 @@
+namespace ProjectOC.ProducingDepartment
+{
+    public struct PDType : byte
+    {
+        None = -1,
+        Cooking,
+        HandCraft,
+        Machine,
+        Science,
+        Magic,
+        Carry,
+    }
+
+    public CarryPriority : byte
+    {
+        Normal,
+        Urgency,
+        Alternative,
+    }
+
+    // 挂载于场景内的建筑物
+    // 若后面需求更改为表现与逻辑完全分离，则可以去掉mono
+    [System.Serializable]
+    public abtract class ProducingDepartment : MonoBehaviour, ITickComponent
+    {
+        Awake()
+        {
+            this.enabled = false;
+            Tick.Register
+        }
+
+        // 统一使用建筑物实例编号
+        // -1 为 invalid value
+        public string ID;
+
+        // 生产节点的类型
+        public PDType type;
+
+        // 生产的Item的ID
+        public int ItemID;
+
+        // <原材料ID, 还有多少份>
+        protected List<int, int> RawMats;
+
+        // 搬运优先级
+        CarryPriority Priority;
+
+        // 堆放暂存上限
+        public int MaxStackNum;
+
+        // 当前堆积总值 => 但两个进度条
+        public int CurStackNum => 引用值;
+
+        // 当前已分配给任务但尚未被搬运的堆积值 => Worker只能拿取此项，第二个进度条
+        public int CurStackNumHasAssignToMission{get; protected set;}
+
+        // 当前没有分配给任务的堆积值 => 玩家只能拿取此项，第一个进度条
+        public int CurStackNumNoAssignToMission{get; protected set;}
+        
+        // 堆积搬运阈值，未分配给任务的量达到此值，全部划分给任务，然后生成任务
+        public int StackCarryThreshold;
+
+        //  当原材料可生产的Item份数低于此值时，发布搬运任务
+        // 搬运 MaxStackNum - 此值 份量的原材料到此生产节点
+        public int NeedQuantityThreshold;
+
+
+        // 基础生产效率，单位%
+        short BaseEff;
+        
+        // 实际结算时的生产效率
+        // 若为自动，则等于BaseEff
+        // 若为人工，则等于Worker+BaseEff
+        // 计算公式 => 实际单个花费时间 = PerItemTime / TotalEff
+        short TotalEff;
+
+        public void LateTick(float deltatime)
+        {
+            // to-do
+        }
+
+        public bool IsCanRun()
+        {
+            return 是否正在运行 =>
+                自动 => 原材料是否充足
+                人工 => 原材料是否充足 && 是否分配了Worker
+        }
+
+        public bool IsRunning()
+        {
+            return 是否正在运行 =>
+                自动 => 原材料是否充足
+                人工 => 原材料是否充足 && Worker处于这里 && Worker没有摸鱼
+        }
+
+        public void UpdateMission()
+        {
+            StackCarryThreshold => 生成搬运至仓库的存入任务
+            NeedQuantityThreshold => 生成从仓库取出的原材料任务
+        }
+
+        // 在计时器内部开始运行和结束时进行判断
+        // 每完成一次更新一下任务 UpdateMission
+
+        protected CounterDownTimer timer;
+        // worker 的 结算 => 放置于人工每个Item生产完成时自动结算，不使用OnOneItemProduced
+
+        public event Action<PD, ItemID> OnOneItemProduced;
+
+    }
+}
+

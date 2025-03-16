@@ -1,0 +1,36 @@
+namespace ProjectOC.ProducingDepartment
+{
+    // 调度的时间管理器
+    [System.Serializable]
+    public sealed class ProducingDepartmentManager : ILocalManager
+    {
+        // 实例化生成的生产节点<ID, object>
+        private Dict<string, ProducingDepartmentManager> PDDict;
+
+        // 是否是有效的生产节点ID
+        public bool IsValidID(string ID)
+        {
+
+        }
+        // 对应ID的生产节点是否正在运作
+        public bool IsWorkingID(string ID)
+        {
+            // 不有效直接返回false
+            return IsValidID(ID) || PDDict[ID].bool IsRunning();
+        }
+
+        public string CreateProducingDepartment(PCType type, string ID)
+        {
+            // 若ID已存在，返回fasle
+            // 新建生产节点，返回该生产节点的ID
+            // 还要加入管理队列
+        }
+
+        public PD GetPD(string ID)
+        {
+            // 获取对应ID的PD
+            // 无效就返回null
+        }
+    }
+}
+

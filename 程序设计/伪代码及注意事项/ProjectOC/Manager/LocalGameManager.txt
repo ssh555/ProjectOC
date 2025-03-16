@@ -1,0 +1,31 @@
+namespace ProjectOC.Manager
+{
+    // 调度的时间管理器
+    [System.Serializable]
+    public sealed class LocalGameManager : ILocalManager, MonoBehaviour
+    {
+        public DispatchTimeManager DispatchTimeManager{get; private set;}
+
+        public MissionBroadCastManager MissionBroadCastManager{get; private set;}
+        
+        public ProducingDepartmentManager ProducingDepartmentManager{get; private set;}
+        
+        public StoreManager StoreManager{get; private set;}
+
+        void Start()
+        {
+            GameManager.Register(this);
+
+            DispatchTimeManager = GameManager.Register<DispatchTimeManager>();
+
+            MissionBroadCastManager = GameManager.Register<MissionBroadCastManager>();
+            
+            ProducingDepartmentManager = GameManager.Register<ProducingDepartmentManager>();
+           
+            StoreManager = GameManager.Register<StoreManager>();
+
+
+        }
+    }
+}
+
